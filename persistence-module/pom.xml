@@ -7,7 +7,6 @@
 	</parent>
 	<artifactId>persistence-module</artifactId>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
