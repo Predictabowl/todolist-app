@@ -1,9 +1,9 @@
 package it.aldinucci.todoapp.util;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Set;
-import java.util.function.Function;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -11,7 +11,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 
-import org.assertj.core.api.AbstractThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +30,7 @@ class AutoExceptionValidatorTest {
 	
 	@BeforeEach
 	void setUp() {
-		validator = new AutoExceptionValidator<>();
+		validator = new AutoExceptionValidator<>(Validation.buildDefaultValidatorFactory().getValidator());
 	}
 	
 	@Test

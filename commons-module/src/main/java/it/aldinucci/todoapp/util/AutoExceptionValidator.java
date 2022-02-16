@@ -4,15 +4,19 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
 import javax.validation.Validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class AutoExceptionValidator<T> {
 
 	private Validator validator;
 
-	public AutoExceptionValidator() {
-		this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+	@Autowired
+	public AutoExceptionValidator(Validator validator) {
+		this.validator = validator;
 	}
 	
 	public void validate(T dto) {

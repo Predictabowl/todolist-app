@@ -25,6 +25,7 @@
 		<module>persistence-module</module>
 		<module>configuration-module</module>
 		<module>commons-module</module>
+		<module>web-module</module>
 	</modules>
 
 	<dependencies>
@@ -60,6 +61,11 @@
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>commons-module</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>web-module</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

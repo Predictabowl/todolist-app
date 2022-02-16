@@ -2,9 +2,10 @@ package it.aldinucci.todoapp.application.port.in;
 
 import java.util.List;
 
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 
 public interface LoadAllUserProjectsUsePort {
 
-	public List<Project> load(String userId);
+	public List<Project> load(UserIdDTO userId);
 }

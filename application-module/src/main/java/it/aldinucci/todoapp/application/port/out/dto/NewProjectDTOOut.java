@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.application.port.out;
+package it.aldinucci.todoapp.application.port.out.dto;
 
 import java.util.Objects;
 
@@ -7,15 +7,15 @@ public class NewProjectDTOOut{
 
 	private String name;
 	private String description;
-	private String userId;
+	private String userEmail;
 	
 	public NewProjectDTOOut() {
 	}
 	
-	public NewProjectDTOOut(String name, String userId, String description) {
+	public NewProjectDTOOut(String name, String userEmail, String description) {
 		this.name = name;
 		this.description = description;
-		this.userId = userId;
+		this.userEmail = userEmail;
 	}
 
 	public String getName() {
@@ -34,17 +34,17 @@ public class NewProjectDTOOut{
 		this.description = description;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserEmail() {
+		return userEmail;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, name, userId);
+		return Objects.hash(description, name, userEmail);
 	}
 
 	@Override
@@ -57,13 +57,13 @@ public class NewProjectDTOOut{
 			return false;
 		NewProjectDTOOut other = (NewProjectDTOOut) obj;
 		return Objects.equals(description, other.description) && Objects.equals(name, other.name)
-				&& Objects.equals(userId, other.userId);
+				&& Objects.equals(userEmail, other.userEmail);
 	}
 
 	@Override
 	public String toString() {
-		return "NewProjectDTOOut [name=" + name + ", description=" + description + ", userId=" + userId + "]";
+		return "NewProjectDTOOut [name=" + name + ", description=" + description + ", userEmail=" + userEmail + "]";
 	}
-	
+
 	
 }
