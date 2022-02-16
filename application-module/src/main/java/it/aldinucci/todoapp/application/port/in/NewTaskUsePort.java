@@ -2,7 +2,7 @@ package it.aldinucci.todoapp.application.port.in;
 
 import it.aldinucci.todoapp.domain.Task;
 
-public interface NewTaskPort {
+public interface NewTaskUsePort {
 
-	public Task save(Task task);
+	public Task create(Task task);
 }

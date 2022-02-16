@@ -2,7 +2,7 @@ package it.aldinucci.todoapp.application.port.out;
 
 import it.aldinucci.todoapp.domain.Project;
 
-public interface LoadProjectPort {
+public interface NewProjectDriverPort {
 	
-	public Project loadProject(Long projectId);
+	public Project create(NewProjectDTOOut project);
 }

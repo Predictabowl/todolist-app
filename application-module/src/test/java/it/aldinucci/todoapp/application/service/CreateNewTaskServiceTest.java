@@ -11,18 +11,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import it.aldinucci.todoapp.application.port.in.NewTaskPort;
+import it.aldinucci.todoapp.application.port.out.NewTaskDriverPort;
 import it.aldinucci.todoapp.domain.Task;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {CreateNewTaskService.class})
 class CreateNewTaskServiceTest {
 
+	@MockBean
+	private NewTaskDriverPort port;
+	
 	@Autowired
 	private CreateNewTaskService service;
 	
-	@MockBean
-	private NewTaskPort port;
 	
 	@Test
 	void test_serviceShouldUsePort() {

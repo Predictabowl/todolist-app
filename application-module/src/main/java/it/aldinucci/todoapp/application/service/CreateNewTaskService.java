@@ -5,20 +5,22 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.aldinucci.todoapp.application.port.in.NewTaskPort;
+import it.aldinucci.todoapp.application.port.in.NewTaskUsePort;
+import it.aldinucci.todoapp.application.port.out.NewTaskDriverPort;
 import it.aldinucci.todoapp.domain.Task;
 
 @Service
 @Transactional
-public class CreateNewTaskService {
+class CreateNewTaskService implements NewTaskUsePort{
 
-	@Autowired
-	private final NewTaskPort newTaskPort;
+	private final NewTaskDriverPort newTaskPort;
 	
-	public CreateNewTaskService(NewTaskPort newTaskPort) {
+	@Autowired
+	public CreateNewTaskService(NewTaskDriverPort newTaskPort) {
 		this.newTaskPort = newTaskPort;
 	}
 
+	@Override
 	public Task create(Task task) {
 		return newTaskPort.save(task);
 	}
