@@ -68,7 +68,7 @@ public class Task {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(completed, description, id, name, project);
 	}
 
 	@Override
@@ -80,7 +80,9 @@ public class Task {
 		if (getClass() != obj.getClass())
 			return false;
 		Task other = (Task) obj;
-		return Objects.equals(id, other.id);
+		return completed == other.completed && Objects.equals(description, other.description)
+				&& Objects.equals(id, other.id) && Objects.equals(name, other.name)
+				&& Objects.equals(project, other.project);
 	}
 
 	@Override

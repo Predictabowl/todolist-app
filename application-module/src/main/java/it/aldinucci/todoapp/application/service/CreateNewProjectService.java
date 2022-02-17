@@ -16,7 +16,7 @@ import it.aldinucci.todoapp.domain.Project;
 @Transactional
 class CreateNewProjectService implements NewProjectUsePort {
 
-	private NewProjectDriverPort newProjectDriverPort;
+	private final NewProjectDriverPort newProjectDriverPort;
 
 	private ModelMapper mapper;
 
