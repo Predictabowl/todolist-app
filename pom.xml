@@ -24,6 +24,8 @@
 		<module>application-module</module>
 		<module>persistence-module</module>
 		<module>configuration-module</module>
+		<module>commons-module</module>
+		<module>web-module</module>
 	</modules>
 
 	<dependencies>
@@ -55,6 +57,21 @@
 				<groupId>${project.groupId}</groupId>
 				<artifactId>configuration-module</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>commons-module</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>web-module</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.modelmapper</groupId>
+				<artifactId>modelmapper</artifactId>
+				<version>3.0.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

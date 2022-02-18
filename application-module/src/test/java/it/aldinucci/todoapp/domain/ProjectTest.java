@@ -10,7 +10,7 @@ class ProjectTest {
 	void test_noDuplicateTasks() {
 		Project project = new Project(1L, "test project");
 		Task task1 = new Task(3L, "first task", "test description");
-		Task task2 = new Task(3L, "second task","test description");
+		Task task2 = new Task(3L, "second task","another description");
 		
 		project.getTasks().add(task1);
 		project.getTasks().add(task2);

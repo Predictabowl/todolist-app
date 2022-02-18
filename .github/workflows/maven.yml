@@ -34,4 +34,5 @@ jobs:
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-           run: mvn --batch-mode --update-snapshots verify sonar:sonar -Dsonar.projectKey=Predictabowl_todolist-app
+           #run: mvn --batch-mode --update-snapshots verify sonar:sonar -Dsonar.projectKey=Predictabowl_todolist-app
+           run: mvn --batch-mode --update-snapshots test sonar:sonar -Dsonar.projectKey=Predictabowl_todolist-app
