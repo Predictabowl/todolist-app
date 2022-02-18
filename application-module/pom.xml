@@ -7,6 +7,13 @@
 	</parent>
 	<artifactId>application-module</artifactId>
 
+	<properties>
+		<sonar.exclusions>
+			**/dto/*.*,
+			**/domain/*.*
+		</sonar.exclusions>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

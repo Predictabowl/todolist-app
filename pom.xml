@@ -127,6 +127,8 @@
 						<excludes>
 							<exclude>**/exceptions/*.*</exclude>
 							<exclude>**/TodolistAppApplication.*</exclude>
+							<exclude>**/domain/*.*</exclude>
+							<exclude>**/dto/*.*</exclude>
 						</excludes>
 					</configuration>
 					<executions>
