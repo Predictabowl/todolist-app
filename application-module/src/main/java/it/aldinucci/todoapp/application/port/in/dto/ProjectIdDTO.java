@@ -2,11 +2,11 @@ package it.aldinucci.todoapp.application.port.in.dto;
 
 import java.util.Objects;
 
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Positive;
 
 public class ProjectIdDTO {
 
-	@PositiveOrZero
+	@Positive
 	private Long projectId;
 	
 	public ProjectIdDTO() {

@@ -1,12 +1,13 @@
 package it.aldinucci.todoapp.application.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
-import java.util.List;import org.assertj.core.internal.Lists;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
@@ -16,18 +17,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
-import it.aldinucci.todoapp.application.port.out.LoadAllProjectsDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadProjectsByUserDriverPort;
 import it.aldinucci.todoapp.domain.Project;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {LoadAllProjectsService.class, ModelMapper.class})
-class LoadAllProjectsServiceTest {
+@ContextConfiguration(classes = {LoadUserProjectsService.class, ModelMapper.class})
+class LoadUserProjectsServiceTest {
 
 	@MockBean
-	private LoadAllProjectsDriverPort port;
+	private LoadProjectsByUserDriverPort port;
 	
 	@Autowired
-	private LoadAllProjectsService service;
+	private LoadUserProjectsService service;
 	
 	@Test
 	void test_serviceShouldMap_and_delegateToDriverPort() {

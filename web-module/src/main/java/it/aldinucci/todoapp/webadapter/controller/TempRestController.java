@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.aldinucci.todoapp.application.port.in.NewProjectUsePort;
+import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
 import it.aldinucci.todoapp.domain.Project;
 
@@ -18,7 +18,7 @@ import it.aldinucci.todoapp.domain.Project;
 public class TempRestController {
 	
 	@Autowired
-	private NewProjectUsePort port;
+	private CreateProjectUsePort port;
 	
 	@PostMapping("/new")
 	public Project newProject(@Valid @RequestBody NewProjectDTOIn newProject) {

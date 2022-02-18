@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.adapter.out.persistence;
+package it.aldinucci.todoapp.adapter.out.persistence.learning;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,7 +33,7 @@ class PersistenceLearningTest {
 	}
 	
 	@Test
-	void test() {
+	void test_learning() {
 		ProjectJPA project = new ProjectJPA();
 		project.setName("project name");
 		entityManager.persistAndFlush(project);

@@ -4,5 +4,5 @@ import it.aldinucci.todoapp.domain.Project;
 
 public interface LoadProjectByIdDriverPort {
 
-	public Project loadById(Long id); 
+	public Project loadById(long id); 
 }

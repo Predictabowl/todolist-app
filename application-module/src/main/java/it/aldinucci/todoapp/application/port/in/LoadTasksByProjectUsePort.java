@@ -5,7 +5,9 @@ import java.util.List;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 
-public interface LoadAllProjectTasksUsePort {
-
-	public List<Task> getTasks(ProjectIdDTO projectId);
+public interface LoadTasksByProjectUsePort {
+	
+	
+	public List<Task> load(ProjectIdDTO projectId);
+	
 }

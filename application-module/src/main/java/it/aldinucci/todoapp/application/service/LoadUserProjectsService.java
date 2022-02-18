@@ -2,21 +2,24 @@ package it.aldinucci.todoapp.application.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.aldinucci.todoapp.application.port.in.LoadAllUserProjectsUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
-import it.aldinucci.todoapp.application.port.out.LoadAllProjectsDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadProjectsByUserDriverPort;
 import it.aldinucci.todoapp.domain.Project;
 
 @Service
-public class LoadAllProjectsService implements LoadAllUserProjectsUsePort{
+@Transactional
+public class LoadUserProjectsService implements LoadProjectsByUserUsePort{
 
-	private final LoadAllProjectsDriverPort loadProjectsPort;
+	private final LoadProjectsByUserDriverPort loadProjectsPort;
 	
 	@Autowired
-	public LoadAllProjectsService(LoadAllProjectsDriverPort port) {
+	public LoadUserProjectsService(LoadProjectsByUserDriverPort port) {
 		this.loadProjectsPort = port;
 	}
 	

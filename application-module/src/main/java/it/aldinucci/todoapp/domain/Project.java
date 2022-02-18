@@ -6,6 +6,15 @@ import java.util.Objects;
 
 import org.apache.commons.collections4.list.SetUniqueList;
 
+/**
+ * There's actually no need to make the list of tasks to contains only unique id
+ * because only a new task can be added to a project, and no task can't exist without a project.
+ * If in the future a new service could break this constraint then is that service's
+ * responsibility to upheld this business rule.
+ * @author piero
+ *
+ */
+
 public class Project{
 
 	private Long id;
