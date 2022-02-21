@@ -20,11 +20,9 @@ public class DeleteProjectService implements DeleteProjectByIdUsePort{
 		this.deleteProjectPort = deleteProjectPort;
 	}
 
-
-
 	@Override
-	public boolean delete(ProjectIdDTO id) {
-		return deleteProjectPort.delete(id.getProjectId());
+	public void delete(ProjectIdDTO id) {
+		deleteProjectPort.delete(id.getProjectId());
 	}
 
 }

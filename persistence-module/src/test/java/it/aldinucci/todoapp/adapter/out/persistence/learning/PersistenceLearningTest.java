@@ -2,6 +2,8 @@ package it.aldinucci.todoapp.adapter.out.persistence.learning;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.LinkedList;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
+import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ProjectJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.TaskJPARepository;
 
@@ -34,7 +37,10 @@ class PersistenceLearningTest {
 	
 	@Test
 	void test_learning() {
-		ProjectJPA project = new ProjectJPA();
+		UserJPA user = new UserJPA(null, "mail@email.it", "username", "password", new LinkedList<ProjectJPA>());
+		entityManager.persist(user);
+		
+		ProjectJPA project = new ProjectJPA(null, "test project", new LinkedList<TaskJPA>(), user);
 		project.setName("project name");
 		entityManager.persistAndFlush(project);
 		entityManager.detach(project);

@@ -4,10 +4,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.ManyToAny;
 
 @Entity
 public class ProjectJPA {
@@ -16,16 +22,40 @@ public class ProjectJPA {
 	@GeneratedValue
 	private Long id;
 	
+	@Column(nullable = false)
 	private String name;
 	
-	@OneToMany
+	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<TaskJPA> tasks;
+	
+	@ManyToOne (optional = false)
+	private UserJPA user;
 	
 	public ProjectJPA() {
 		tasks = new LinkedList<>(); 
 	}
 	
+	public ProjectJPA(Long id, String name, List<TaskJPA> tasks, UserJPA user) {
+		this.id = id;
+		this.name = name;
+		this.tasks = tasks;
+		this.user = user;
+	}
 	
+	public ProjectJPA(Long id, String name, UserJPA user) {
+		this.id = id;
+		this.name = name;
+		this.tasks = new LinkedList<>();
+		this.user = user;
+	}
+	
+	public ProjectJPA(String name, UserJPA user) {
+		this.id = null;
+		this.name = name;
+		this.user = user;
+		this.tasks = new LinkedList<>();
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -48,6 +78,14 @@ public class ProjectJPA {
 
 	public void setTasks(List<TaskJPA> tasks) {
 		this.tasks = tasks;
+	}
+	
+	public UserJPA getUser() {
+		return user;
+	}
+
+	public void setUser(UserJPA user) {
+		this.user = user;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package it.aldinucci.todoapp.application.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,22 +28,20 @@ class DeleteTaskServiceTest {
 	
 	@Test
 	void test_deleteSuccessful() {
-		when(deletePort.delete(anyLong())).thenReturn(true);
+		doNothing().when(deletePort).delete(anyLong());
 		
-		boolean result = deleteService.delete(new DeleteTaskDTOIn(2L));
+		deleteService.delete(new DeleteTaskDTOIn(2L));
 		
 		verify(deletePort).delete(2L);
-		assertThat(result).isTrue();
 	}
 	
 	@Test
 	void test_deleteFailure() {
-		when(deletePort.delete(anyLong())).thenReturn(false);
+		doNothing().when(deletePort).delete(anyLong());
 		
-		boolean result = deleteService.delete(new DeleteTaskDTOIn(2L));
+		deleteService.delete(new DeleteTaskDTOIn(2L));
 		
 		verify(deletePort).delete(2L);
-		assertThat(result).isFalse();
 	}
 
 }

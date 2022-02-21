@@ -1,10 +1,6 @@
 package it.aldinucci.todoapp.domain;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
-
-import org.apache.commons.collections4.list.SetUniqueList;
 
 /**
  * There's actually no need to make the list of tasks to contains only unique id
@@ -19,52 +15,30 @@ public class Project{
 
 	private Long id;
 	private String name;
-	private SetUniqueList<Task> tasks;
-	private User user;
-	
-	public Project(Long id, String name, User user, List<Task> tasks) {
-		this.id = id;
-		this.name = name;
-		this.user = user;
-		this.tasks = SetUniqueList.setUniqueList(tasks);
+
+	public Project() {
 	}
-	
-	public Project(Long id, String name, User user) {
-		this.id = id;
-		this.name = name;
-		this.user = user;
-		this.tasks = SetUniqueList.setUniqueList(new LinkedList<Task>());
-	}
-	
+
 	public Project(Long id, String name) {
+		super();
 		this.id = id;
 		this.name = name;
-		this.user = null;
-		this.tasks = SetUniqueList.setUniqueList(new LinkedList<Task>());
 	}
 
 	public Long getId() {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
 
-	public List<Task> getTasks() {
-		return tasks;
-	}
-
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public User getUser() {
-		return user;
-	}
-	
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	@Override
@@ -86,7 +60,8 @@ public class Project{
 
 	@Override
 	public String toString() {
-		return "Project [id=" + id + ", name=" + name + ", tasks=" + tasks + ", user=" + user + "]";
+		return "Project [id=" + id + ", name=" + name + "]";
 	}
 	
+
 }

@@ -2,6 +2,7 @@ package it.aldinucci.todoapp.adapter.out.persistence.entity;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,13 +15,32 @@ public class TaskJPA {
 	@GeneratedValue
 	private Long id;
 	
+	@Column(nullable = false)
 	private String name;
 	private String description;
 	private boolean completed;
 	
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private ProjectJPA project;
 	
+	public TaskJPA() {
+	}
+
+	public TaskJPA(Long id, String name, String description, boolean completed, ProjectJPA project) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.completed = completed;
+		this.project = project;
+	}
+
+	public TaskJPA(String name, String description, boolean completed, ProjectJPA project) {
+		this.id = null;
+		this.name = name;
+		this.description = description;
+		this.completed = completed;
+		this.project = project;
+	}
 
 	public Long getId() {
 		return id;
