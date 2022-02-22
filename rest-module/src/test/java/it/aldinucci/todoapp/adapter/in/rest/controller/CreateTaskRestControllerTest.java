@@ -1,5 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
+
 import static it.aldinucci.todoapp.adapter.in.rest.config.BaseRestUrl.BASE_REST_URL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
@@ -24,22 +25,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
-import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.exceptions.UserNotFoundException;
+import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
+import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
+import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exceptions.ProjectNotFoundException;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = {CreateProjectRestController.class})
-class CreateProjectRestControllerTest {
-
-	private static final String FIXTURE_URL = BASE_REST_URL+"/project/create";
+@WebMvcTest(controllers = {CreateTaskRestController.class})
+class CreateTaskRestControllerTest {
+	
+	private static final String FIXTURE_URL = BASE_REST_URL+"/task/create";
 	
 	@Autowired
 	private MockMvc mvc;
 	
 	@MockBean
-	private CreateProjectUsePort createPort;
+	private CreateTaskUsePort createTask;
 	
 	private ObjectMapper objectMapper;
 	
@@ -48,65 +49,67 @@ class CreateProjectRestControllerTest {
 		objectMapper = new ObjectMapper();
 	}
 	
+
 	@Test
-	void test_createProject_successful() throws JsonProcessingException, Exception {
-		Project project = new Project(2L, "test project");
-		NewProjectDTOIn projectDto = new NewProjectDTOIn("another name", "user@email.it");
-		when(createPort.create(isA(NewProjectDTOIn.class)))
-			.thenReturn(project);
+	void test_createTask_successful() throws JsonProcessingException, Exception {
+		Task task = new Task(1L, "new task", "task description");
+		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "test description", 2L);
+		when(createTask.create(isA(NewTaskDTOIn.class)))
+			.thenReturn(task);
 		
 		mvc.perform(post(FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(projectDto)))
+				.content(objectMapper.writeValueAsString(taskDto)))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id", is(2)))
-			.andExpect(jsonPath("$.name", is("test project")));
+			.andExpect(jsonPath("$.name", is("new task")))
+			.andExpect(jsonPath("$.description", is("task description")))
+			.andExpect(jsonPath("$.id", is(1)));
 		
-		verify(createPort).create(projectDto);
-		verifyNoMoreInteractions(createPort);
+		verify(createTask).create(taskDto);
+		verifyNoMoreInteractions(createTask);
 	}
 	
+
 	@Test
-	void test_createProject_withInvalidEmailFormat_shouldSendBadRequest() throws JsonProcessingException, Exception {
-		NewProjectDTOIn projectDto = new NewProjectDTOIn("another name", "user-email.it");
+	void test_createTask_withEmptyName_shouldSendBadRequest() throws JsonProcessingException, Exception {
+		NewTaskDTOIn taskDto = new NewTaskDTOIn("", "description",7L);
 		
 		mvc.perform(post(FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(projectDto)))
+				.content(objectMapper.writeValueAsString(taskDto)))
 			.andExpect(status().isBadRequest());
 		
-		verifyNoInteractions(createPort);
+		verifyNoInteractions(createTask);
 	}
 	
 	@Test
-	void test_createProject_withEmptyName_shouldSendBadRequest() throws JsonProcessingException, Exception {
-		NewProjectDTOIn projectDto = new NewProjectDTOIn("", "user@email.it");
+	void test_createTask_withNullId_shouldSendBadRequest() throws JsonProcessingException, Exception {
+		NewTaskDTOIn taskDto = new NewTaskDTOIn("name", "description",null);
 		
 		mvc.perform(post(FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(projectDto)))
+				.content(objectMapper.writeValueAsString(taskDto)))
 			.andExpect(status().isBadRequest());
 		
-		verifyNoInteractions(createPort);
+		verifyNoInteractions(createTask);
 	}
 	
 	@Test
-	void test_createProject_whenUserNotFound_shouldReturnBadRequest() throws JsonProcessingException, Exception {
-		NewProjectDTOIn projectDto = new NewProjectDTOIn("test name", "user@email.it");
-		when(createPort.create(isA(NewProjectDTOIn.class)))
-			.thenThrow(new UserNotFoundException("test message"));
+	void test_createTask_whenProjectNotFound_shouldReturnBadRequest() throws JsonProcessingException, Exception {
+		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "description",11L);
+		when(createTask.create(isA(NewTaskDTOIn.class)))
+			.thenThrow(new ProjectNotFoundException("test message"));
 		
 		mvc.perform(post(FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(projectDto)))
+				.content(objectMapper.writeValueAsString(taskDto)))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$",is("test message")));
 		
-		verify(createPort).create(projectDto);
+		verify(createTask).create(taskDto);
 	}
-
 }

@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class NewTaskDTOIn {
 
@@ -13,13 +14,14 @@ public class NewTaskDTOIn {
 	@NotNull
 	private String description;
 	
-	@NotEmpty
+	@Positive
+	@NotNull
 	private Long projectId;
 	
 	public NewTaskDTOIn() {
 	}
 
-	public NewTaskDTOIn(@NotEmpty String name, @NotNull String description, @NotEmpty Long projectId) {
+	public NewTaskDTOIn(String name, String description, Long projectId) {
 		super();
 		this.name = name;
 		this.description = description;

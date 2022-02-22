@@ -14,28 +14,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
-import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.exceptions.UserNotFoundException;
+import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
+import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
+import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exceptions.ProjectNotFoundException;
 
 @RestController
 @RequestMapping(BASE_REST_URL)
-public class CreateProjectRestController {
+public class CreateTaskRestController {
 
-	private CreateProjectUsePort createProject;
+	private CreateTaskUsePort createTask;
 	
 	@Autowired
-	public CreateProjectRestController(CreateProjectUsePort createProject) {
-		this.createProject = createProject;
+	public CreateTaskRestController(CreateTaskUsePort createTask) {
+		this.createTask = createTask;
 	}
 
-	@PostMapping("/project/create")
-	public Project createProjectEndPoint(@Valid @RequestBody NewProjectDTOIn newProject) {
-		return createProject.create(newProject);
+	@PostMapping("/task/create")
+	public Task createTaskEndPoint(@Valid @RequestBody NewTaskDTOIn newTask) {
+		return createTask.create(newTask);
 	}
 	
-	@ExceptionHandler(UserNotFoundException.class)
+	@ExceptionHandler(ProjectNotFoundException.class)
 	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
