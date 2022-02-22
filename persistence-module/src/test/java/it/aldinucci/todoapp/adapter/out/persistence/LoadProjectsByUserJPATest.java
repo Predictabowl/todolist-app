@@ -16,7 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.exceptions.UserPersistenceException;
+import it.aldinucci.todoapp.exceptions.UserNotFoundException;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -37,7 +37,7 @@ class LoadProjectsByUserJPATest {
 	@Test
 	void test_loadProjects_whenUserNotPresentShouldThrow() {
 		assertThatThrownBy(() -> loadProjects.load(TEST_EMAIL))
-			.isInstanceOf(UserPersistenceException.class)
+			.isInstanceOf(UserNotFoundException.class)
 			.hasMessage("User not found with email: "+TEST_EMAIL);
 	}
 	

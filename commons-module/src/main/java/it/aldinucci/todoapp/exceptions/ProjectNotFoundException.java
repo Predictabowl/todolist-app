@@ -1,14 +1,13 @@
 package it.aldinucci.todoapp.exceptions;
 
-public class UserPersistenceException extends RuntimeException{
+public class ProjectNotFoundException extends RuntimeException{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public UserPersistenceException(String message) {
+
+	public ProjectNotFoundException(String message) {
 		super(message);
 	}
-
 }

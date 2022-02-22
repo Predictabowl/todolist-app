@@ -18,7 +18,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.exceptions.ProjectPersistenceException;
+import it.aldinucci.todoapp.exceptions.ProjectNotFoundException;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -37,7 +37,7 @@ class LoadTasksByProjectIdJPATest {
 	@Test
 	void test_loadTasks_whenProjectNotPresent_shouldThrow() {
 		assertThatThrownBy(() -> loadTasks.load(3L))
-			.isInstanceOf(ProjectPersistenceException.class)
+			.isInstanceOf(ProjectNotFoundException.class)
 			.hasMessage("Could not find project with id: 3");
 	}
 	

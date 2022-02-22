@@ -31,8 +31,8 @@ class CreateNewProjectServiceTest {
 	
 	@Test
 	void test_serviceShouldCallPort() {
-		NewProjectDTOIn newProjectIn = new NewProjectDTOIn("test project","test@email.com","test description");
-		NewProjectDTOOut newProjectOut = new NewProjectDTOOut("test project", "test@email.com", "test description");
+		NewProjectDTOIn newProjectIn = new NewProjectDTOIn("test project","test@email.com");
+		NewProjectDTOOut newProjectOut = new NewProjectDTOOut("test project", "test@email.com");
 		Project createdProject = new Project(1L, "first project");
 		when(port.create(isA(NewProjectDTOOut.class))).thenReturn(createdProject);
 		

@@ -26,6 +26,7 @@
 		<module>configuration-module</module>
 		<module>commons-module</module>
 		<module>web-module</module>
+		<module>rest-module</module>
 	</modules>
 
 	<dependencies>
@@ -66,6 +67,11 @@
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>web-module</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>rest-module</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

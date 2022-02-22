@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ProjectJPARepository;
 import it.aldinucci.todoapp.application.port.out.DeleteProjectByIdDriverPort;
-import it.aldinucci.todoapp.exceptions.ProjectPersistenceException;
+import it.aldinucci.todoapp.exceptions.ProjectNotFoundException;
 
 @Component
 public class DeleteProjectByIdJPA implements DeleteProjectByIdDriverPort{
@@ -21,7 +21,7 @@ public class DeleteProjectByIdJPA implements DeleteProjectByIdDriverPort{
 	@Override
 	public void delete(long id) {
 		ProjectJPA project = projectRepository.findById(id).orElseThrow(() 
-				-> new ProjectPersistenceException("Could not find Project with id: "+id));
+				-> new ProjectNotFoundException("Could not find Project with id: "+id));
 		project.getUser().getProjects().remove(project);
 		projectRepository.delete(project);
 	}
