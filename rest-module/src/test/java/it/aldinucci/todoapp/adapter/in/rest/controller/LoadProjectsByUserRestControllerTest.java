@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
+import it.aldinucci.todoapp.exceptions.UserNotFoundException;
 
 @WebMvcTest(controllers = {LoadProjectsByUserRestController.class})
 @ExtendWith(SpringExtension.class)
@@ -37,7 +38,6 @@ class LoadProjectsByUserRestControllerTest {
 	
 	@Test
 	void test_loadProjects_successful() throws Exception {
-		
 		Project project1 = new Project(2L, "test project");
 		Project project2 = new Project(5L, "another test project");
 		when(loadProjects.load(isA(UserIdDTO.class)))
@@ -62,5 +62,19 @@ class LoadProjectsByUserRestControllerTest {
 			.andExpect(status().isBadRequest());
 		
 		verifyNoInteractions(loadProjects);
+	}
+	
+	@Test
+	void test_loadProjects_whenUSerNotFound_shouldReturnBadRequest() throws Exception {
+		when(loadProjects.load(isA(UserIdDTO.class)))
+			.thenThrow(new UserNotFoundException("test user not found"));
+		
+		mvc.perform(get(BASE_REST_URL+"/test@email/projects")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$", is("test user not found")));
+		
+		verify(loadProjects).load(new UserIdDTO("test@email"));
+		verifyNoMoreInteractions(loadProjects);
 	}
 }
