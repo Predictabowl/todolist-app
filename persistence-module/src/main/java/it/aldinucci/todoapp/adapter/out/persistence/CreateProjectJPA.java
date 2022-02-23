@@ -11,7 +11,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository
 import it.aldinucci.todoapp.application.port.out.CreateProjectDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewProjectDTOOut;
 import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.exceptions.UserNotFoundException;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 @Component
 public class CreateProjectJPA implements CreateProjectDriverPort{
@@ -35,7 +35,7 @@ public class CreateProjectJPA implements CreateProjectDriverPort{
 	@Override
 	public Project create(NewProjectDTOOut project) {
 		UserJPA user = userRepository.findByEmail(project.getUserEmail()).orElseThrow(() 
-				->new UserNotFoundException("User not found with email: "+project.getUserEmail()));
+				->new AppUserNotFoundException("User not found with email: "+project.getUserEmail()));
 		ProjectJPA projectJPA = new ProjectJPA(project.getName(), user);
 		user.getProjects().add(projectJPA);
 		projectJPA = projectRepository.save(projectJPA);

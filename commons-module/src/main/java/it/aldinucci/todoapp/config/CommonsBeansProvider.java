@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CommonsBeansProviderConfig {
+public class CommonsBeansProvider {
 	
 	@Bean
 	public ModelMapper getModelMapper() {
@@ -19,4 +19,5 @@ public class CommonsBeansProviderConfig {
 	public Validator getBeanValidator() {
 		return Validation.buildDefaultValidatorFactory().getValidator();
 	}
+
 }

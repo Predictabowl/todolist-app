@@ -12,9 +12,10 @@ public class DeleteTaskDTOIn {
 	public DeleteTaskDTOIn() {
 	}
 
-	public DeleteTaskDTOIn(@Positive Long taskId) {
+	public DeleteTaskDTOIn(Long taskId) {
 		super();
 		this.taskId = taskId;
+		
 	}
 
 	public Long getTaskId() {

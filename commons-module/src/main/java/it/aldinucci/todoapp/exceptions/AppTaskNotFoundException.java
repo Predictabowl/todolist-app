@@ -1,13 +1,13 @@
 package it.aldinucci.todoapp.exceptions;
 
-public class TaskNotFoundException extends RuntimeException{
+public class AppTaskNotFoundException extends RuntimeException{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public TaskNotFoundException(String message) {
+	public AppTaskNotFoundException(String message) {
 		super(message);
 	}
 

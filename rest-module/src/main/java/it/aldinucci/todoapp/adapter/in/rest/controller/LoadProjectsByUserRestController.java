@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.adapter.in.rest.config.BaseRestUrl.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
 
 import java.util.List;
 
@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.exceptions.UserNotFoundException;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 @RestController
 @RequestMapping(BASE_REST_URL)
 public class LoadProjectsByUserRestController {
-	
+
 	private LoadProjectsByUserUsePort loadProjects;
 
 	@Autowired
@@ -31,14 +31,14 @@ public class LoadProjectsByUserRestController {
 		super();
 		this.loadProjects = loadProjects;
 	}
-	
+
 	@GetMapping("/{email}/projects")
-	public List<Project> loadProjectsEndPoint(@Valid UserIdDTO userId){
+	public List<Project> loadProjectsEndPoint(@Valid UserIdDTO userId) {
 		return loadProjects.load(userId);
 	}
 
-	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex){
-		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	@ExceptionHandler(AppUserNotFoundException.class)
+	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 }

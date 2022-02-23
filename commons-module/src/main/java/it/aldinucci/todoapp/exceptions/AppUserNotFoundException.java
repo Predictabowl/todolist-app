@@ -1,13 +1,14 @@
 package it.aldinucci.todoapp.exceptions;
 
-public class ProjectNotFoundException extends RuntimeException{
+public class AppUserNotFoundException extends RuntimeException{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public ProjectNotFoundException(String message) {
+	
+	public AppUserNotFoundException(String message) {
 		super(message);
 	}
+
 }

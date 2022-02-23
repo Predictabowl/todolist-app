@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.adapter.in.rest.config.BaseRestUrl.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.exceptions.ProjectNotFoundException;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 
 @RestController
 @RequestMapping(BASE_REST_URL)
@@ -35,7 +35,7 @@ public class CreateTaskRestController {
 		return createTask.create(newTask);
 	}
 	
-	@ExceptionHandler(ProjectNotFoundException.class)
+	@ExceptionHandler(AppProjectNotFoundException.class)
 	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}

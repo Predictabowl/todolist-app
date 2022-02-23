@@ -1,7 +1,7 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
-import static it.aldinucci.todoapp.adapter.in.rest.config.BaseRestUrl.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -28,10 +29,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.exceptions.ProjectNotFoundException;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {CreateTaskRestController.class})
+@AutoConfigureMockMvc(addFilters = false)
 class CreateTaskRestControllerTest {
 	
 	private static final String FIXTURE_URL = BASE_REST_URL+"/task/create";
@@ -101,7 +103,7 @@ class CreateTaskRestControllerTest {
 	void test_createTask_whenProjectNotFound_shouldReturnBadRequest() throws JsonProcessingException, Exception {
 		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "description",11L);
 		when(createTask.create(isA(NewTaskDTOIn.class)))
-			.thenThrow(new ProjectNotFoundException("test message"));
+			.thenThrow(new AppProjectNotFoundException("test message"));
 		
 		mvc.perform(post(FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON)

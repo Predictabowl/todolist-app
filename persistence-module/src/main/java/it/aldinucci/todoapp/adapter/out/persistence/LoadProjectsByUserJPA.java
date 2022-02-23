@@ -10,7 +10,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
 import it.aldinucci.todoapp.application.port.out.LoadProjectsByUserDriverPort;
 import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.exceptions.UserNotFoundException;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 @Component
 public class LoadProjectsByUserJPA implements LoadProjectsByUserDriverPort{
@@ -30,7 +30,7 @@ public class LoadProjectsByUserJPA implements LoadProjectsByUserDriverPort{
 	@Override
 	public List<Project> load(String userEmail) {
 		UserJPA user = userRepository.findByEmail(userEmail).orElseThrow(() 
-				-> new UserNotFoundException("User not found with email: "+userEmail));
+				-> new AppUserNotFoundException("User not found with email: "+userEmail));
 		
 		return user.getProjects().stream().map(p -> mapper.map(p, Project.class))
 			.toList();

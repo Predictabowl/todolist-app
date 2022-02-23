@@ -16,7 +16,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.application.port.out.dto.NewProjectDTOOut;
 import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.exceptions.UserNotFoundException;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 @DataJpaTest
 @Import({CreateProjectJPA.class, ModelMapper.class})
@@ -53,7 +53,7 @@ class CreateProjectJPATest {
 		NewProjectDTOOut newProject = new NewProjectDTOOut("test name", TEST_EMAIL);
 		
 		assertThatThrownBy(() -> createProject.create(newProject))
-			.isInstanceOf(UserNotFoundException.class)
+			.isInstanceOf(AppUserNotFoundException.class)
 			.hasMessage("User not found with email: "+TEST_EMAIL);
 	}
 

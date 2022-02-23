@@ -10,7 +10,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ProjectJPARepository;
 import it.aldinucci.todoapp.application.port.out.LoadTasksByProjectIdDriverPort;
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.exceptions.ProjectNotFoundException;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 
 @Component
 public class LoadTasksByProjectIdJPA implements LoadTasksByProjectIdDriverPort{
@@ -30,7 +30,7 @@ public class LoadTasksByProjectIdJPA implements LoadTasksByProjectIdDriverPort{
 	@Override
 	public List<Task> load(long projectId) {
 		ProjectJPA project = projectRepository.findById(projectId).orElseThrow(()
-				-> new ProjectNotFoundException("Could not find project with id: "+projectId));
+				-> new AppProjectNotFoundException("Could not find project with id: "+projectId));
 		return project.getTasks().stream().map(t -> mapper.map(t, Task.class))
 				.toList();
 	}

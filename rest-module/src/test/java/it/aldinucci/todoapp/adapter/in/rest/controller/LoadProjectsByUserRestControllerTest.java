@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.adapter.in.rest.config.BaseRestUrl.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -24,10 +25,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.exceptions.UserNotFoundException;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 @WebMvcTest(controllers = {LoadProjectsByUserRestController.class})
 @ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
 class LoadProjectsByUserRestControllerTest {
 	
 	@Autowired
@@ -67,7 +69,7 @@ class LoadProjectsByUserRestControllerTest {
 	@Test
 	void test_loadProjects_whenUSerNotFound_shouldReturnBadRequest() throws Exception {
 		when(loadProjects.load(isA(UserIdDTO.class)))
-			.thenThrow(new UserNotFoundException("test user not found"));
+			.thenThrow(new AppUserNotFoundException("test user not found"));
 		
 		mvc.perform(get(BASE_REST_URL+"/test@email/projects")
 				.accept(MediaType.APPLICATION_JSON))

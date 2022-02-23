@@ -20,7 +20,6 @@ public class LoadProjectTasksService implements LoadTasksByProjectUsePort{
 	
 	@Autowired
 	public LoadProjectTasksService(LoadTasksByProjectIdDriverPort loadTasks) {
-		super();
 		this.loadTasks = loadTasks;
 	}
 
