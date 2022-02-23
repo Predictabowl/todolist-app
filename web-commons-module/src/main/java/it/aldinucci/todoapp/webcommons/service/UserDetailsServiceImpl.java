@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.webcommons.config.security.UserDetailsImpl;
+import it.aldinucci.todoapp.webcommons.model.UserDetailsImpl;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{

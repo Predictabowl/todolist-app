@@ -1,7 +1,8 @@
-package it.aldinucci.todoapp.webcommons.config.security;
+package it.aldinucci.todoapp.webcommons.model;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -57,4 +58,26 @@ public class UserDetailsImpl implements UserDetails{
 		return true;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, password);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserDetailsImpl other = (UserDetailsImpl) obj;
+		return Objects.equals(email, other.email) && Objects.equals(password, other.password);
+	}
+
+	@Override
+	public String toString() {
+		return "UserDetailsImpl [email=" + email + ", password=" + password + "]";
+	}
+	
 }
