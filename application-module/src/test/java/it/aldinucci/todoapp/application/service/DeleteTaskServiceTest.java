@@ -19,27 +19,27 @@ import it.aldinucci.todoapp.application.port.out.DeleteTaskByIdDriverPort;
 class DeleteTaskServiceTest {
 
 	@MockBean
-	private DeleteTaskByIdDriverPort deletePort;
+	private DeleteTaskByIdDriverPort deleteTask;
 	
 	@Autowired
 	private DeleteTaskService deleteService;
 	
 	@Test
 	void test_deleteSuccessful() {
-		doNothing().when(deletePort).delete(anyLong());
+		doNothing().when(deleteTask).delete(anyLong());
 		
 		deleteService.delete(new DeleteTaskDTOIn(2L));
 		
-		verify(deletePort).delete(2L);
+		verify(deleteTask).delete(2L);
 	}
 	
 	@Test
 	void test_deleteFailure() {
-		doNothing().when(deletePort).delete(anyLong());
+		doNothing().when(deleteTask).delete(anyLong());
 		
 		deleteService.delete(new DeleteTaskDTOIn(2L));
 		
-		verify(deletePort).delete(2L);
+		verify(deleteTask).delete(2L);
 	}
 
 }
