@@ -15,7 +15,6 @@ public class DeleteTaskService implements DeleteTaskByIdUsePort{
 	private final DeleteTaskByIdDriverPort deletePort;
 
 	public DeleteTaskService(DeleteTaskByIdDriverPort deletePort) {
-		super();
 		this.deletePort = deletePort;
 	}
 

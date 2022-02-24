@@ -4,26 +4,20 @@ import java.util.Objects;
 
 import javax.validation.constraints.Positive;
 
-public class DeleteTaskDTOIn {
+import it.aldinucci.todoapp.util.AutoValidatingInputModel;
+
+public class DeleteTaskDTOIn extends AutoValidatingInputModel<DeleteTaskDTOIn>{
 
 	@Positive
 	private Long taskId;
-	
-	public DeleteTaskDTOIn() {
-	}
 
 	public DeleteTaskDTOIn(Long taskId) {
-		super();
 		this.taskId = taskId;
-		
+		validateSelf();
 	}
 
 	public Long getTaskId() {
 		return taskId;
-	}
-
-	public void setTaskId(Long taskId) {
-		this.taskId = taskId;
 	}
 
 	@Override
@@ -47,5 +41,5 @@ public class DeleteTaskDTOIn {
 	public String toString() {
 		return "DeleteTaskDTOIn [taskId=" + taskId + "]";
 	}
-	
+
 }

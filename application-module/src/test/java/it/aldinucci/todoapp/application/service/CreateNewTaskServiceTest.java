@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import it.aldinucci.todoapp.application.mapper.TaskMapper;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.out.CreateTaskDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 class CreateNewTaskServiceTest {
 
@@ -27,7 +27,7 @@ class CreateNewTaskServiceTest {
 	private CreateTaskDriverPort newTaskport;
 	
 	@Mock
-	private TaskMapper mapper;
+	private AppGenericMapper<NewTaskDTOIn, NewTaskDTOOut> mapper;
 		
 	@Autowired
 	private CreateNewTaskService service;

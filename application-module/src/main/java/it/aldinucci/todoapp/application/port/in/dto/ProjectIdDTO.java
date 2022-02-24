@@ -2,29 +2,16 @@ package it.aldinucci.todoapp.application.port.in.dto;
 
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-
 public class ProjectIdDTO {
 
-	@Positive
-	@NotNull
-	private Long projectId;
+	private long projectId;
 	
-	public ProjectIdDTO() {
-	}
-
 	public ProjectIdDTO(Long projectId) {
-		super();
 		this.projectId = projectId;
 	}
 
-	public Long getProjectId() {
+	public long getProjectId() {
 		return projectId;
-	}
-
-	public void setProjectId(Long projectId) {
-		this.projectId = projectId;
 	}
 
 	@Override
@@ -41,13 +28,12 @@ public class ProjectIdDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		ProjectIdDTO other = (ProjectIdDTO) obj;
-		return Objects.equals(projectId, other.projectId);
+		return projectId == other.projectId;
 	}
 
 	@Override
 	public String toString() {
 		return "ProjectIdDTO [projectId=" + projectId + "]";
 	}
-	
 	
 }

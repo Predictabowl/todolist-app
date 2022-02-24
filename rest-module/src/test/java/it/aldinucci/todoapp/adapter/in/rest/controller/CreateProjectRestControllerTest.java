@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -31,9 +32,11 @@ import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
+import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {CreateProjectRestController.class})
+@Import({AppRestSecurityConfig.class})
 class CreateProjectRestControllerTest {
 
 	private static final String FIXTURE_URL = BASE_REST_URL+"/project/create";

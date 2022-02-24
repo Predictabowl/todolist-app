@@ -17,6 +17,8 @@ public class LearningConfig {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		UserJPA user = new UserJPA("testUser@email.it", "username", passwordEncoder.encode("password")); 
 		userRepo.save(user);
+		UserJPA user2 = new UserJPA("admin@email.it", "admin", passwordEncoder.encode("password"));
+		userRepo.save(user2);
 	}
 	
 }

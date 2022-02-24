@@ -4,25 +4,20 @@ import java.util.Objects;
 
 import javax.validation.constraints.Email;
 
-public class UserIdDTO {
+import it.aldinucci.todoapp.util.AutoValidatingInputModel;
+
+public class UserIdDTO extends AutoValidatingInputModel<UserIdDTO>{
 
 	@Email
 	private String email;
 	
-	public UserIdDTO() {
-	}
-
 	public UserIdDTO(String email) {
-		super();
 		this.email = email;
+		validateSelf();
 	}
 
 	public String getEmail() {
 		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	@Override

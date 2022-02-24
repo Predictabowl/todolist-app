@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
 
-class TaskMapperImplTest {
+class TaskMapperInOutTest {
 
-	private TaskMapperImpl mapper;
+	private TaskMapperInOut mapper;
 	
 	@Test
 	void test_mapper() {
-		mapper = new TaskMapperImpl();
+		mapper = new TaskMapperInOut();
 		
 		NewTaskDTOOut dtoOut = mapper.map(new NewTaskDTOIn("name", "description", 5L));
 		

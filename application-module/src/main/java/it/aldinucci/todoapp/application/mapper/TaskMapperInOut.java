@@ -2,8 +2,9 @@ package it.aldinucci.todoapp.application.mapper;
 
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
+import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
-public class TaskMapperImpl implements TaskMapper {
+public class TaskMapperInOut implements AppGenericMapper<NewTaskDTOIn, NewTaskDTOOut> {
 
 	@Override
 	public NewTaskDTOOut map(NewTaskDTOIn task) {

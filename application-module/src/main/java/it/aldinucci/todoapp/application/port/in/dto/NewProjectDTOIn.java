@@ -5,8 +5,10 @@ import java.util.Objects;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
-public class NewProjectDTOIn{
+
+public class NewProjectDTOIn extends AutoValidatingInputModel<NewProjectDTOIn>{
 
 	@NotEmpty
 	private String name;
@@ -14,28 +16,18 @@ public class NewProjectDTOIn{
 	@Email
 	private String userEmail;
 	
-	public NewProjectDTOIn() {
-	}
-	
 	public NewProjectDTOIn(String name, String userEmail) {
 		this.name = name;
 		this.userEmail = userEmail;
+		validateSelf();
 	}
 	
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getUserEmail() {
 		return userEmail;
-	}
-
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
 	}
 
 	@Override

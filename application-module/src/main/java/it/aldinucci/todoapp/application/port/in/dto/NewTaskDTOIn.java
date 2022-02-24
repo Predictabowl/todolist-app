@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 public class NewTaskDTOIn {
 
@@ -14,15 +13,9 @@ public class NewTaskDTOIn {
 	@NotNull
 	private String description;
 	
-	@Positive
-	@NotNull
-	private Long projectId;
+	private long projectId;
 	
-	public NewTaskDTOIn() {
-	}
-
-	public NewTaskDTOIn(String name, String description, Long projectId) {
-		super();
+	public NewTaskDTOIn(String name, String description, long projectId) {
 		this.name = name;
 		this.description = description;
 		this.projectId = projectId;
@@ -32,24 +25,12 @@ public class NewTaskDTOIn {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Long getProjectId() {
+	public long getProjectId() {
 		return projectId;
-	}
-
-	public void setProjectId(Long projectId) {
-		this.projectId = projectId;
 	}
 
 	@Override
@@ -67,13 +48,12 @@ public class NewTaskDTOIn {
 			return false;
 		NewTaskDTOIn other = (NewTaskDTOIn) obj;
 		return Objects.equals(description, other.description) && Objects.equals(name, other.name)
-				&& Objects.equals(projectId, other.projectId);
+				&& projectId == other.projectId;
 	}
 
 	@Override
 	public String toString() {
 		return "NewTaskDTOIn [name=" + name + ", description=" + description + ", projectId=" + projectId + "]";
 	}
-
 	
 }
