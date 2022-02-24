@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import it.aldinucci.todoapp.application.port.in.dto.DeleteTaskDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteTaskByIdDriverPort;
 
 @ExtendWith(SpringExtension.class)
@@ -28,7 +28,7 @@ class DeleteTaskServiceTest {
 	void test_deleteSuccessful() {
 		doNothing().when(deleteTask).delete(anyLong());
 		
-		deleteService.delete(new DeleteTaskDTOIn(2L));
+		deleteService.delete(new TaskIdDTO(2L));
 		
 		verify(deleteTask).delete(2L);
 	}
@@ -37,7 +37,7 @@ class DeleteTaskServiceTest {
 	void test_deleteFailure() {
 		doNothing().when(deleteTask).delete(anyLong());
 		
-		deleteService.delete(new DeleteTaskDTOIn(2L));
+		deleteService.delete(new TaskIdDTO(2L));
 		
 		verify(deleteTask).delete(2L);
 	}

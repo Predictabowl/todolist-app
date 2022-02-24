@@ -2,21 +2,15 @@ package it.aldinucci.todoapp.application.port.in.dto;
 
 import java.util.Objects;
 
-import javax.validation.constraints.Positive;
+public class TaskIdDTO{
 
-import it.aldinucci.todoapp.util.AutoValidatingInputModel;
+	private long taskId;
 
-public class DeleteTaskDTOIn extends AutoValidatingInputModel<DeleteTaskDTOIn>{
-
-	@Positive
-	private Long taskId;
-
-	public DeleteTaskDTOIn(Long taskId) {
+	public TaskIdDTO(long taskId) {
 		this.taskId = taskId;
-		validateSelf();
 	}
 
-	public Long getTaskId() {
+	public long getTaskId() {
 		return taskId;
 	}
 
@@ -33,8 +27,8 @@ public class DeleteTaskDTOIn extends AutoValidatingInputModel<DeleteTaskDTOIn>{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DeleteTaskDTOIn other = (DeleteTaskDTOIn) obj;
-		return Objects.equals(taskId, other.taskId);
+		TaskIdDTO other = (TaskIdDTO) obj;
+		return taskId == other.taskId;
 	}
 
 	@Override
