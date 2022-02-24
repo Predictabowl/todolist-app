@@ -28,6 +28,9 @@
 		<module>web-module</module>
 		<module>rest-module</module>
 		<module>web-commons-module</module>
+		<module>out-port-module</module>
+		<module>in-port-module</module>
+		<module>domain-module</module>
 	</modules>
 
 	<dependencies>
@@ -78,6 +81,21 @@
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>web-commons-module</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>in-port-module</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>out-port-module</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>domain-module</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
