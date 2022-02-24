@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import it.aldinucci.todoapp.application.port.in.LoadUserFromProjectIdUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
@@ -13,10 +13,10 @@ import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
 @Component
 public class NewTaskWebAuthorization implements InputModelAuthorization<NewTaskDTOIn> {
 
-	private LoadUserFromProjectIdUsePort loadUserService;
+	private LoadUserByProjectIdUsePort loadUserService;
 	
 	@Autowired
-	public NewTaskWebAuthorization(LoadUserFromProjectIdUsePort loadUserService){
+	public NewTaskWebAuthorization(LoadUserByProjectIdUsePort loadUserService){
 		this.loadUserService = loadUserService;
 	}
 

@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.webcommons.security.custom;
+package it.aldinucci.todoapp.webcommons.security.authorization;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import it.aldinucci.todoapp.application.port.in.LoadUserFromProjectIdUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
@@ -22,7 +22,7 @@ import it.aldinucci.todoapp.webcommons.security.authorization.NewTaskWebAuthoriz
 class NewTaskWebAuthorizationTest {
 
 	@Mock
-	private LoadUserFromProjectIdUsePort loadUser;
+	private LoadUserByProjectIdUsePort loadUser;
 	
 	@InjectMocks
 	private NewTaskWebAuthorization authorize;

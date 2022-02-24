@@ -5,14 +5,14 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.aldinucci.todoapp.application.port.in.LoadUserFromProjectIdUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadUserByProjectIdDriverPort;
 import it.aldinucci.todoapp.domain.User;
 
 @Service
 @Transactional
-public class LoadUserFromProjectIdService implements LoadUserFromProjectIdUsePort{
+public class LoadUserFromProjectIdService implements LoadUserByProjectIdUsePort{
 
 	private LoadUserByProjectIdDriverPort loadUser;
 	
