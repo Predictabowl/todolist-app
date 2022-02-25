@@ -14,12 +14,12 @@ import it.aldinucci.todoapp.domain.Task;
 
 @Service
 @Transactional
-public class LoadProjectTasksService implements LoadTasksByProjectUsePort{
+public class LoadTasksByProjectIdService implements LoadTasksByProjectUsePort{
 
 	private LoadTasksByProjectIdDriverPort loadTasks;
 	
 	@Autowired
-	public LoadProjectTasksService(LoadTasksByProjectIdDriverPort loadTasks) {
+	public LoadTasksByProjectIdService(LoadTasksByProjectIdDriverPort loadTasks) {
 		this.loadTasks = loadTasks;
 	}
 

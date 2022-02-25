@@ -14,12 +14,12 @@ import it.aldinucci.todoapp.domain.Project;
 
 @Service
 @Transactional
-public class LoadUserProjectsService implements LoadProjectsByUserUsePort{
+public class LoadProjectsByUserIdService implements LoadProjectsByUserUsePort{
 
 	private final LoadProjectsByUserDriverPort loadProjectsPort;
 	
 	@Autowired
-	public LoadUserProjectsService(LoadProjectsByUserDriverPort port) {
+	public LoadProjectsByUserIdService(LoadProjectsByUserDriverPort port) {
 		this.loadProjectsPort = port;
 	}
 	

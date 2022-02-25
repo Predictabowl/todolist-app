@@ -20,14 +20,14 @@ import it.aldinucci.todoapp.application.port.out.LoadTasksByProjectIdDriverPort;
 import it.aldinucci.todoapp.domain.Task;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {LoadProjectTasksService.class})
-class LoadProjectTasksServiceTest {
+@ContextConfiguration(classes = {LoadTasksByProjectIdService.class})
+class LoadTasksByProjectIdServiceTest {
 
 	@MockBean
 	private LoadTasksByProjectIdDriverPort driverPort;
 	
 	@Autowired
-	private LoadProjectTasksService service;
+	private LoadTasksByProjectIdService service;
 	
 	@Test
 	void test_serviceShouldDelegatetoDriverPort() {

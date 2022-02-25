@@ -21,14 +21,14 @@ import it.aldinucci.todoapp.application.port.out.LoadProjectsByUserDriverPort;
 import it.aldinucci.todoapp.domain.Project;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {LoadUserProjectsService.class, ModelMapper.class})
-class LoadUserProjectsServiceTest {
+@ContextConfiguration(classes = {LoadProjectsByUserIdService.class, ModelMapper.class})
+class LoadProjectsByUserIdServiceTest {
 
 	@MockBean
 	private LoadProjectsByUserDriverPort port;
 	
 	@Autowired
-	private LoadUserProjectsService service;
+	private LoadProjectsByUserIdService service;
 	
 	@Test
 	void test_serviceShouldMap_and_delegateToDriverPort() {

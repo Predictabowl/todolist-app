@@ -17,11 +17,11 @@ import it.aldinucci.todoapp.application.port.out.LoadUserByProjectIdDriverPort;
 import it.aldinucci.todoapp.domain.User;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {LoadUserFromProjectIdService.class})
-class LoadUserFromProjectIdServiceTest {
+@ContextConfiguration(classes = {LoadUserByProjectIdService.class})
+class LoadUserByProjectIdServiceTest {
 
 	@Autowired
-	private LoadUserFromProjectIdService userService;
+	private LoadUserByProjectIdService userService;
 	
 	@MockBean
 	private LoadUserByProjectIdDriverPort userPort;

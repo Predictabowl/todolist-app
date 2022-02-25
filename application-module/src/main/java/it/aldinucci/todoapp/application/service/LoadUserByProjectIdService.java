@@ -12,12 +12,12 @@ import it.aldinucci.todoapp.domain.User;
 
 @Service
 @Transactional
-public class LoadUserFromProjectIdService implements LoadUserByProjectIdUsePort{
+public class LoadUserByProjectIdService implements LoadUserByProjectIdUsePort{
 
 	private LoadUserByProjectIdDriverPort loadUser;
 	
 	@Autowired
-	public LoadUserFromProjectIdService(LoadUserByProjectIdDriverPort loadUser) {
+	public LoadUserByProjectIdService(LoadUserByProjectIdDriverPort loadUser) {
 		this.loadUser = loadUser;
 	}
 
