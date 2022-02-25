@@ -1,7 +1,7 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -46,7 +46,7 @@ class DeleteProjectByIdRestControllerTest {
 	@WithMockUser("user@email.org")
 	void test_deleteProject_successful() throws Exception {
 		
-		mvc.perform(delete(BASE_REST_URL+"/project/5")
+		mvc.perform(delete(BASE_REST_URI+"/project/5")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
@@ -63,7 +63,7 @@ class DeleteProjectByIdRestControllerTest {
 		AppProjectNotFoundException exception = new AppProjectNotFoundException("no project");
 		doThrow(exception).when(deleteProject).delete(isA(ProjectIdDTO.class));
 		
-		mvc.perform(delete(BASE_REST_URL+"/project/5")
+		mvc.perform(delete(BASE_REST_URI+"/project/5")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());

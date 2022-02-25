@@ -15,7 +15,7 @@ public class AppCommonsExceptionHandlers extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(ForbiddenWebAccessException.class)
 	public ResponseEntity<String> illegalHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
 }

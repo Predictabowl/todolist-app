@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -45,7 +45,7 @@ class DeleteTaskByIdRestControllerTest {
 	@WithMockUser("user@email.org")
 	void test_deleteTask_successful() throws Exception {
 		
-		mvc.perform(delete(BASE_REST_URL+"/task/6")
+		mvc.perform(delete(BASE_REST_URI+"/task/6")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
@@ -62,7 +62,7 @@ class DeleteTaskByIdRestControllerTest {
 		AppTaskNotFoundException exception = new AppTaskNotFoundException("no task");
 		doThrow(exception).when(deleteTask).delete(isA(TaskIdDTO.class));
 		
-		mvc.perform(delete(BASE_REST_URL+"/task/5")
+		mvc.perform(delete(BASE_REST_URI+"/task/5")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());

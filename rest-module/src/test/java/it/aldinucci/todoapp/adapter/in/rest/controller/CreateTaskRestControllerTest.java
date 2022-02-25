@@ -1,7 +1,7 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -40,7 +40,7 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @Import({AppRestSecurityConfig.class})
 class CreateTaskRestControllerTest {
 	
-	private static final String FIXTURE_URL = BASE_REST_URL+"/task/create";
+	private static final String FIXTURE_URL = BASE_REST_URI+"/task/create";
 	
 	@Autowired
 	private MockMvc mvc;
