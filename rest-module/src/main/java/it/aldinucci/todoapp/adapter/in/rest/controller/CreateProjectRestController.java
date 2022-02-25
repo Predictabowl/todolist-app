@@ -38,6 +38,12 @@ public class CreateProjectRestController {
 		return createProject.create(projectDto);
 	}
 	
+//	@PostMapping("/project/create")
+//	public Project createProjectEndPoint(@Valid @RequestBody NewProjectRestDto newProject) {
+//		NewProjectDTOIn projectDto = new NewProjectDTOIn(newProject.getName(), "user@email.com");
+//		return createProject.create(projectDto);
+//	}
+//	
 	@ExceptionHandler(AppUserNotFoundException.class)
 	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);

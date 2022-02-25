@@ -21,9 +21,9 @@ public class AppRestSecurityConfig extends WebSecurityConfigurerAdapter {
 			
 			.antMatcher(BASE_REST_URL+"/**")
 			// send csrf token back as a cookie for a REST GET 
-			.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-		.and()
-//			.csrf().disable()
+//			.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//		.and()
+			.csrf().disable()
 //			.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 //			.authorizeRequests().anyRequest().permitAll();
 //			.authorizeRequests().regexMatchers(HttpMethod.GET, ".*").permitAll()

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUnfinishedTasksByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
@@ -24,19 +24,19 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 
 @RestController
 @RequestMapping(BASE_REST_URL)
-public class LoadTaskByProjectIdRestController {
+public class LoadUnfinishedTaskByProjectIdRestController {
 
-	private LoadTasksByProjectUsePort loadProjectTasks;
+	private LoadUnfinishedTasksByProjectIdUsePort loadProjectTasks;
 	private InputModelAuthorization<ProjectIdDTO> authorize;
 	
 	@Autowired
-	public LoadTaskByProjectIdRestController(LoadTasksByProjectUsePort loadProjects,
+	public LoadUnfinishedTaskByProjectIdRestController(LoadUnfinishedTasksByProjectIdUsePort loadProjects,
 			InputModelAuthorization<ProjectIdDTO> authorize) {
 		this.loadProjectTasks = loadProjects;
 		this.authorize = authorize;
 	}
 
-	@GetMapping("/project/{projectId}/tasks")
+	@GetMapping("/project/{projectId}/tasks/unfinished")
 	public List<Task> getTasksByProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId){
 		authorize.check(authentication.getName(), projectId);
 		return loadProjectTasks.load(projectId);

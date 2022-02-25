@@ -17,46 +17,53 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
+import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
+import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
-@Import({LoadUserByProjectIdJPA.class})
-class LoadUserByProjectIdJPATest {
+@Import(LoadUserByTaskIdJPA.class)
+class LoadUserByTaskIdJPATest {
 
-	@Autowired
-	private LoadUserByProjectIdJPA loadUser;
-	
+	@MockBean
+	private AppGenericMapper<UserJPA, User> mapper;
+
 	@Autowired
 	private TestEntityManager entityManager;
 	
-	@MockBean
-	private AppGenericMapper<UserJPA, User> mapper;
+	@Autowired
+	private LoadUserByTaskIdJPA adapter;
 	
 	@Test
-	void test_loadUser_Successful() {
-		UserJPA userJpa = new UserJPA("email", "username", "password");
+	void test_loadUser_successful() {
+		UserJPA userJpa = new UserJPA("email", "username", "passwod");
 		entityManager.persist(userJpa);
-		ProjectJPA projectJpa = new ProjectJPA("project name", userJpa);
-		entityManager.persist(projectJpa);
-		userJpa.getProjects().add(projectJpa);
+		ProjectJPA project = new ProjectJPA("project", userJpa);
+		entityManager.persist(project);
+		userJpa.getProjects().add(project);
+		TaskJPA taskJpa = new TaskJPA("task", "task descr", true, project);
+		entityManager.persist(taskJpa);
+		project.getTasks().add(taskJpa);
+		entityManager.flush();
+		
 		User user = new User();
 		when(mapper.map(isA(UserJPA.class))).thenReturn(user);
 		
-		User loadedUser = loadUser.load(projectJpa.getId());
+		User loadedUser = adapter.load(taskJpa.getId());
 		
 		verify(mapper).map(userJpa);
 		assertThat(loadedUser).isSameAs(user);
 	}
 	
 	@Test
-	void test_loadUser_whenProjectNotPresent() {
-		assertThatThrownBy(() -> loadUser.load(3L))
-			.isInstanceOf(AppProjectNotFoundException.class)
-			.hasMessage("Project not found with id: 3");
+	void test_loadUser_whenTaskNotPresent() {
+		
+		assertThatThrownBy(() -> adapter.load(1))
+			.isInstanceOf(AppTaskNotFoundException.class)
+			.hasMessage("Task not found with id: 1");
 		
 		verifyNoInteractions(mapper);
 	}

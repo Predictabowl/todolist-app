@@ -24,23 +24,25 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUnfinishedTasksByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
-@WebMvcTest(controllers = { LoadTaskByProjectIdRestController.class })
+@WebMvcTest(controllers = { LoadUnfinishedTaskByProjectIdRestController.class })
 @ExtendWith(SpringExtension.class)
 @Import(AppRestSecurityConfig.class)
-class LoadTaskByProjectIdRestControllerTest {
+class LoadUnfinishedTaskByProjectIdRestControllerTest {
 
+	private final static String FIXTURE_URL = "/tasks/unfinished";
+	
 	@Autowired
 	private MockMvc mvc;
 
 	@MockBean
-	private LoadTasksByProjectUsePort usePort;
+	private LoadUnfinishedTasksByProjectIdUsePort usePort;
 	
 	@MockBean
 	private InputModelAuthorization<ProjectIdDTO> authorize;
@@ -52,7 +54,7 @@ class LoadTaskByProjectIdRestControllerTest {
 		Task task2 = new Task(7L, "project 2", "description 2");
 		when(usePort.load(isA(ProjectIdDTO.class))).thenReturn(Arrays.asList(task1, task2));
 		
-		mvc.perform(get(BASE_REST_URL+"/project/3/tasks")
+		mvc.perform(get(BASE_REST_URL+"/project/3"+FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].id", is(2)))
@@ -72,7 +74,7 @@ class LoadTaskByProjectIdRestControllerTest {
 	void test_loadTasks_whenProjectNotFound_shouldReturnBadRequest() throws Exception {
 		when(usePort.load(isA(ProjectIdDTO.class))).thenThrow(new AppProjectNotFoundException("return message"));
 		
-		mvc.perform(get(BASE_REST_URL+"/project/1/tasks")
+		mvc.perform(get(BASE_REST_URL+"/project/1"+FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$", is("return message")));

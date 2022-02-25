@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,7 +20,7 @@ import it.aldinucci.todoapp.application.port.out.LoadProjectsByUserDriverPort;
 import it.aldinucci.todoapp.domain.Project;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {LoadProjectsByUserIdService.class, ModelMapper.class})
+@ContextConfiguration(classes = {LoadProjectsByUserIdService.class})
 class LoadProjectsByUserIdServiceTest {
 
 	@MockBean
