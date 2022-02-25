@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
-import it.aldinucci.todoapp.exceptions.ProjectPersistenceException;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -29,7 +29,7 @@ class DeleteProjectByIdJPATest {
 	@Test
 	void test_deleteProject_WhenNotPresent() {
 		assertThatThrownBy(() -> deleteProject.delete(3L))
-			.isInstanceOf(ProjectPersistenceException.class)
+			.isInstanceOf(AppProjectNotFoundException.class)
 			.hasMessage("Could not find Project with id: 3");
 	}
 	

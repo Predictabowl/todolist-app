@@ -14,7 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
-import it.aldinucci.todoapp.exceptions.TaskPersistenceException;
+import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -30,7 +30,7 @@ class DeleteTaskByIdJPATest {
 	@Test
 	void test_deleteTaskWhenNotPresent_shouldThrow() {
 		assertThatThrownBy(() -> deleteTask.delete(5L))
-			.isInstanceOf(TaskPersistenceException.class)
+			.isInstanceOf(AppTaskNotFoundException.class)
 			.hasMessage("Could not find Task with id: 5");
 	}
 	

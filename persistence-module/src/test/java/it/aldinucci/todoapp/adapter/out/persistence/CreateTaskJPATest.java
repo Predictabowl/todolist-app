@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
@@ -18,7 +17,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.exceptions.ProjectPersistenceException;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 
 @DataJpaTest
 @Import({CreateTaskJPA.class, ModelMapper.class})
@@ -59,7 +58,7 @@ class CreateTaskJPATest {
 		NewTaskDTOOut newTask = new NewTaskDTOOut("task name", "task description", 1L);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
-			.isInstanceOf(ProjectPersistenceException.class)
+			.isInstanceOf(AppProjectNotFoundException.class)
 			.hasMessage("Project not found with id: 1");
 	}
 

@@ -1,47 +1,38 @@
 package it.aldinucci.todoapp.application.service;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
-import it.aldinucci.todoapp.application.port.in.dto.DeleteTaskDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteTaskByIdDriverPort;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {DeleteTaskService.class})
 class DeleteTaskServiceTest {
 
-	@MockBean
-	private DeleteTaskByIdDriverPort deletePort;
+	@Mock
+	private DeleteTaskByIdDriverPort deleteTask;
 	
-	@Autowired
+	@InjectMocks
 	private DeleteTaskService deleteService;
 	
-	@Test
-	void test_deleteSuccessful() {
-		doNothing().when(deletePort).delete(anyLong());
-		
-		deleteService.delete(new DeleteTaskDTOIn(2L));
-		
-		verify(deletePort).delete(2L);
+	@BeforeEach
+	void setUp() {
+		openMocks(this);
 	}
 	
 	@Test
-	void test_deleteFailure() {
-		doNothing().when(deletePort).delete(anyLong());
+	void test_deleteSuccessful() {
+		doNothing().when(deleteTask).delete(anyLong());
 		
-		deleteService.delete(new DeleteTaskDTOIn(2L));
+		deleteService.delete(new TaskIdDTO(2L));
 		
-		verify(deletePort).delete(2L);
+		verify(deleteTask).delete(2L);
 	}
 
 }
