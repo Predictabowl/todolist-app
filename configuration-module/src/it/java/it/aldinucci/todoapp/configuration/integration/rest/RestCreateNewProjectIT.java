@@ -29,25 +29,26 @@ import it.aldinucci.todoapp.domain.Project;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
 class RestCreateNewProjectIT {
-	
+
 	@Autowired
 	private UserJPARepository userRepo;
-	
+
 	@Autowired
 	private ProjectJPARepository projectRepo;
-	
+
 	@Autowired
 	private PasswordEncoder encoder;
-	
+
 	@LocalServerPort
 	private int port;
-	
+
 	private static final String FIXTURE_EMAIL = "user@email.com";
-	private static final String FIXTURE_PASSWORD= "somePassword";
-	
+	private static final String FIXTURE_PASSWORD = "somePassword";
+	private static final String FIXTURE_URI = BASE_REST_URI + "/project/create";
+
 	private String sessionId;
 	private String csrfToken;
-	
+
 	@BeforeEach
 	void setUp() {
 		RestAssured.port = port;
@@ -58,42 +59,36 @@ class RestCreateNewProjectIT {
 	@Test
 	void test_createNewProject_success() {
 		setSessionData();
-		
+
 		Response response = given()
-			.auth().preemptive().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD) //this is superfluous after obtaining the sessionId
-			.header("X-XSRF-TOKEN", csrfToken)
-			.cookie("XSRF-TOKEN",csrfToken) //both the header AND the cookie are needed
-			.sessionId(sessionId)
-			.contentType(MediaType.APPLICATION_JSON_VALUE)
-			.accept(MediaType.APPLICATION_JSON_VALUE)
-			.body(new NewProjectDTOIn("new project", FIXTURE_EMAIL))
-		.when()
-			.post(BASE_REST_URI+"/project/create")
-		.then()
-			.extract().response();
-		
+				.auth()	.basic(FIXTURE_EMAIL, FIXTURE_PASSWORD) // this is superfluous after obtaining the sessionId
+				.header("X-XSRF-TOKEN", csrfToken)
+				.cookie("XSRF-TOKEN", csrfToken) // both the header AND the cookie are needed
+				.sessionId(sessionId).contentType(MediaType.APPLICATION_JSON_VALUE)
+				.accept(MediaType.APPLICATION_JSON_VALUE)
+				.body(new NewProjectDTOIn("new project", FIXTURE_EMAIL))
+			.when()
+				.post(FIXTURE_URI)
+			.then()
+				.extract().response();
+
 		Project project = response.getBody().as(Project.class);
-		
+
 		List<ProjectJPA> projects = projectRepo.findAll();
 		assertThat(projects).hasSize(1);
-		
+
 		ProjectJPA projectJpa = projects.get(0);
 		assertThat(project.getId()).isEqualTo(projectJpa.getId());
 		assertThat(project.getName()).isEqualTo(projectJpa.getName()).isEqualTo("new project");
 	}
-	
-	
+
 	private void setSessionData() {
 		userRepo.save(new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD)));
 		userRepo.flush();
-		Response response = given()
-				.auth().preemptive().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)	
-				.contentType(MediaType.APPLICATION_JSON_VALUE)
-			.when()
-				.get(BASE_REST_URI+"/project/create")
-			.then()
+		Response response = given().auth().preemptive().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
+				.contentType(MediaType.APPLICATION_JSON_VALUE).when().get(FIXTURE_URI).then()
 				.extract().response();
-		
+
 		sessionId = response.getSessionId();
 		csrfToken = response.cookie("XSRF-TOKEN");
 	}
