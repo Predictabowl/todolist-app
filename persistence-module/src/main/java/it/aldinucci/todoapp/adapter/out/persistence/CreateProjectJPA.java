@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +11,7 @@ import it.aldinucci.todoapp.application.port.out.CreateProjectDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewProjectDTOOut;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
+import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Component
 public class CreateProjectJPA implements CreateProjectDriverPort{
@@ -20,18 +20,16 @@ public class CreateProjectJPA implements CreateProjectDriverPort{
 	
 	private ProjectJPARepository projectRepository;
 	
-	private ModelMapper mapper;
-	
+	private AppGenericMapper<ProjectJPA, Project> mapper;
+
 	@Autowired
 	public CreateProjectJPA(UserJPARepository userRepository, ProjectJPARepository projectRepository,
-			ModelMapper mapper) {
-		super();
+			AppGenericMapper<ProjectJPA, Project> mapper) {
 		this.userRepository = userRepository;
 		this.projectRepository = projectRepository;
 		this.mapper = mapper;
 	}
 
-	
 	@Override
 	public Project create(NewProjectDTOOut project) {
 		UserJPA user = userRepository.findByEmail(project.getUserEmail()).orElseThrow(() 
@@ -40,7 +38,7 @@ public class CreateProjectJPA implements CreateProjectDriverPort{
 		user.getProjects().add(projectJPA);
 		projectJPA = projectRepository.save(projectJPA);
 		userRepository.saveAndFlush(user);
-		return mapper.map(projectJPA, Project.class);
+		return mapper.map(projectJPA);
 	}
 
 

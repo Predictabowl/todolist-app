@@ -6,7 +6,7 @@ public class ProjectIdDTO {
 
 	private long projectId;
 	
-	public ProjectIdDTO(Long projectId) {
+	public ProjectIdDTO(long projectId) {
 		this.projectId = projectId;
 	}
 

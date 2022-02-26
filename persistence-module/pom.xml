@@ -10,7 +10,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>application-module</artifactId>
+			<artifactId>out-port-module</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>commons-module</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

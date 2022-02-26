@@ -16,7 +16,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	private LoadUserByEmailUsePort loadUserPort;
 	
-	
 	@Autowired
 	public UserDetailsServiceImpl(LoadUserByEmailUsePort loadUserPort) {
 		super();

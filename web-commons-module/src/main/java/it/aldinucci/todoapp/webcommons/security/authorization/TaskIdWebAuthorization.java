@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.UnauthorizaedWebAccessException;
 
 @Component
 public class TaskIdWebAuthorization implements InputModelAuthorization<TaskIdDTO> {
@@ -19,10 +19,10 @@ public class TaskIdWebAuthorization implements InputModelAuthorization<TaskIdDTO
 	}
 
 	@Override
-	public void check(String authenticatedEmail, TaskIdDTO model) throws ForbiddenWebAccessException {
+	public void check(String authenticatedEmail, TaskIdDTO model) throws UnauthorizaedWebAccessException {
 		User user = loadUser.load(model);
 		if(!authenticatedEmail.equals(user.getEmail()))
-				throw new ForbiddenWebAccessException("This operation is not permitted for the authenticated user");
+				throw new UnauthorizaedWebAccessException("This operation is not permitted for the authenticated user");
 	}
 
 }

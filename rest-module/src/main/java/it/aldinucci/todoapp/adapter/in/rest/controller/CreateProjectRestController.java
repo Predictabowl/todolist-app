@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -22,7 +22,7 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 @RestController
-@RequestMapping(BASE_REST_URL)
+@RequestMapping(BASE_REST_URI)
 public class CreateProjectRestController {
 
 	private CreateProjectUsePort createProject;
@@ -38,6 +38,12 @@ public class CreateProjectRestController {
 		return createProject.create(projectDto);
 	}
 	
+//	@PostMapping("/project/create")
+//	public Project createProjectEndPoint(@Valid @RequestBody NewProjectRestDto newProject) {
+//		NewProjectDTOIn projectDto = new NewProjectDTOIn(newProject.getName(), "user@email.com");
+//		return createProject.create(projectDto);
+//	}
+//	
 	@ExceptionHandler(AppUserNotFoundException.class)
 	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);

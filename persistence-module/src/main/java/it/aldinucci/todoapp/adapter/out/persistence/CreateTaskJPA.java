@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +11,7 @@ import it.aldinucci.todoapp.application.port.out.CreateTaskDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
+import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Component
 public class CreateTaskJPA implements CreateTaskDriverPort{
@@ -20,16 +20,15 @@ public class CreateTaskJPA implements CreateTaskDriverPort{
 	
 	private TaskJPARepository taskRepo;
 	
-	private ModelMapper mapper;
+	private AppGenericMapper<TaskJPA, Task> mapper;
 	
-	@Autowired	
-	public CreateTaskJPA(ProjectJPARepository projectRepo, TaskJPARepository taskRepo, ModelMapper mapper) {
-		super();
+	@Autowired
+	public CreateTaskJPA(ProjectJPARepository projectRepo, TaskJPARepository taskRepo,
+			AppGenericMapper<TaskJPA, Task> mapper) {
 		this.projectRepo = projectRepo;
 		this.taskRepo = taskRepo;
 		this.mapper = mapper;
 	}
-
 
 
 	@Override
@@ -43,7 +42,7 @@ public class CreateTaskJPA implements CreateTaskDriverPort{
 		taskRepo.save(newTask);
 		project.getTasks().add(newTask);
 		projectRepo.save(project);
-		return mapper.map(newTask, Task.class);
+		return mapper.map(newTask);
 	}
 
 }

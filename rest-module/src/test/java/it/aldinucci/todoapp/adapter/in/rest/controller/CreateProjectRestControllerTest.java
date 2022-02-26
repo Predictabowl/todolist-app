@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.aldinucci.todoapp.adapter.in.rest.dto.NewProjectRestDto;
 import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
@@ -39,7 +40,7 @@ import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
 @Import({AppRestSecurityConfig.class})
 class CreateProjectRestControllerTest {
 
-	private static final String FIXTURE_URL = BASE_REST_URL+"/project/create";
+	private static final String FIXTURE_URL = BASE_REST_URI+"/project/create";
 	
 	@Autowired
 	private MockMvc mvc;
@@ -105,6 +106,30 @@ class CreateProjectRestControllerTest {
 			.andExpect(jsonPath("$",is("test message")));
 		
 		verify(createPort).create(new NewProjectDTOIn("test name", "test@email.it"));
+	}
+	
+	@Test
+	void test_createProject_withoutAuthentication_shouldReturnUnauthorized() throws JsonProcessingException, Exception {
+		mvc.perform(post(FIXTURE_URL)
+				.with(csrf())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(new NewProjectRestDto("test name"))))
+			.andExpect(status().isUnauthorized());
+		
+		verifyNoInteractions(createPort);
+	}
+	
+	@Test
+	@WithMockUser
+	void test_createProjet_withoutCsrfToken_shouldReturnForbidden() throws JsonProcessingException, Exception {
+		mvc.perform(post(FIXTURE_URL)
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", 1))))
+			.andExpect(status().isForbidden());
+		
+		verifyNoInteractions(createPort);
 	}
 
 }

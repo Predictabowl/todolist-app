@@ -1,11 +1,13 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -46,7 +48,7 @@ class DeleteProjectByIdRestControllerTest {
 	@WithMockUser("user@email.org")
 	void test_deleteProject_successful() throws Exception {
 		
-		mvc.perform(delete(BASE_REST_URL+"/project/5")
+		mvc.perform(delete(BASE_REST_URI+"/project/5")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
@@ -63,7 +65,7 @@ class DeleteProjectByIdRestControllerTest {
 		AppProjectNotFoundException exception = new AppProjectNotFoundException("no project");
 		doThrow(exception).when(deleteProject).delete(isA(ProjectIdDTO.class));
 		
-		mvc.perform(delete(BASE_REST_URL+"/project/5")
+		mvc.perform(delete(BASE_REST_URI+"/project/5")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
@@ -72,5 +74,28 @@ class DeleteProjectByIdRestControllerTest {
 		ProjectIdDTO model = new ProjectIdDTO(5L);
 		inOrder.verify(authorize).check("user", model);
 		inOrder.verify(deleteProject).delete(model);
+	}
+	
+	@Test
+	void test_deleteProject_withoutAuthentication_shouldReturnUnathorized() throws Exception {
+		
+		mvc.perform(delete(BASE_REST_URI+"/project/5")
+				.with(csrf())
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(deleteProject);
+	}
+	
+	@Test
+	@WithMockUser
+	void test_deleteProject_withoutCsrfToken_shouldReturnForbidden() throws Exception {
+		mvc.perform(post(BASE_REST_URI+"/project/3")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isForbidden());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(deleteProject);
 	}
 }

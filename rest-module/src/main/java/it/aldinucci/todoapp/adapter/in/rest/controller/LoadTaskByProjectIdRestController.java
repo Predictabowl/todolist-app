@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseUrls.BASE_REST_URL;
+import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 
 import java.util.List;
 
@@ -23,23 +23,23 @@ import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @RestController
-@RequestMapping(BASE_REST_URL)
+@RequestMapping(BASE_REST_URI)
 public class LoadTaskByProjectIdRestController {
 
-	private LoadTasksByProjectUsePort loadProjects;
+	private LoadTasksByProjectUsePort loadProjectTasks;
 	private InputModelAuthorization<ProjectIdDTO> authorize;
 	
 	@Autowired
 	public LoadTaskByProjectIdRestController(LoadTasksByProjectUsePort loadProjects,
 			InputModelAuthorization<ProjectIdDTO> authorize) {
-		this.loadProjects = loadProjects;
+		this.loadProjectTasks = loadProjects;
 		this.authorize = authorize;
 	}
 
-	@GetMapping("/{projectId}/tasks")
+	@GetMapping("/project/{projectId}/tasks")
 	public List<Task> getTasksByProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId){
 		authorize.check(authentication.getName(), projectId);
-		return loadProjects.load(projectId);
+		return loadProjectTasks.load(projectId);
 	}
 	
 	@ExceptionHandler(AppProjectNotFoundException.class)

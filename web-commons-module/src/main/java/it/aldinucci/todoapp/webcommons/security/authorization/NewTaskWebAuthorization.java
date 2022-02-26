@@ -8,7 +8,7 @@ import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.UnauthorizaedWebAccessException;
 
 @Component
 public class NewTaskWebAuthorization implements InputModelAuthorization<NewTaskDTOIn> {
@@ -21,10 +21,10 @@ public class NewTaskWebAuthorization implements InputModelAuthorization<NewTaskD
 	}
 
 	@Override
-	public void check(String authenticatedEmail, NewTaskDTOIn model) throws ForbiddenWebAccessException {
+	public void check(String authenticatedEmail, NewTaskDTOIn model) throws UnauthorizaedWebAccessException {
 		User user = loadUserService.load(new ProjectIdDTO(model.getProjectId()));
 		if (!authenticatedEmail.equals(user.getEmail()))
-			throw new ForbiddenWebAccessException("Operation not authorized for the autheticated user");
+			throw new UnauthorizaedWebAccessException("Operation not authorized for the autheticated user");
 	}
 	
 }
