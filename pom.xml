@@ -21,6 +21,7 @@
 		<sonar.exclusions>
 			**/dto/*.*,
 			**/domain/*.*
+			**/entity/*.*
 		</sonar.exclusions>
 	</properties>
 
