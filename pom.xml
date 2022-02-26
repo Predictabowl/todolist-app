@@ -18,6 +18,10 @@
 		<java.version>17</java.version>
 		<sonar.organization>predictabowl</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.exclusions>
+			**/dto/*.*,
+			**/domain/*.*
+		</sonar.exclusions>
 	</properties>
 
 	<modules>
