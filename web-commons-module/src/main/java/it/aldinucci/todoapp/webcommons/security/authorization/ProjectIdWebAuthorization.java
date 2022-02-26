@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.UnauthorizaedWebAccessException;
 
 @Component
 public class ProjectIdWebAuthorization implements InputModelAuthorization<ProjectIdDTO> {
@@ -19,10 +19,10 @@ public class ProjectIdWebAuthorization implements InputModelAuthorization<Projec
 	}
 
 	@Override
-	public void check(String authenticatedEmail, ProjectIdDTO model) throws ForbiddenWebAccessException {
+	public void check(String authenticatedEmail, ProjectIdDTO model) throws UnauthorizaedWebAccessException {
 		User user = loadUser.load(model);
 		if(!authenticatedEmail.equals(user.getEmail()))
-				throw new ForbiddenWebAccessException("This operation is not permitted for the authenticated user");
+				throw new UnauthorizaedWebAccessException("This operation is not permitted for the authenticated user");
 	}
 
 }

@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.UnauthorizaedWebAccessException;
 
 class TaskIdWebAuthorizationTest {
 
@@ -51,7 +51,7 @@ class TaskIdWebAuthorizationTest {
 		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(user);
 		
 		assertThatThrownBy(() -> authorize.check("different email", taskId))
-			.isInstanceOf(ForbiddenWebAccessException.class)
+			.isInstanceOf(UnauthorizaedWebAccessException.class)
 			.hasMessage("This operation is not permitted for the authenticated user");
 		
 		verify(loadUser).load(taskId);

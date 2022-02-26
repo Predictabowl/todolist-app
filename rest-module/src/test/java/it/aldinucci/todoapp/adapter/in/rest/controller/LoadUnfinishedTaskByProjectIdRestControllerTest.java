@@ -4,6 +4,7 @@ import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -83,6 +84,17 @@ class LoadUnfinishedTaskByProjectIdRestControllerTest {
 		ProjectIdDTO model = new ProjectIdDTO(1L);
 		inOrder.verify(authorize).check("testmail", model);
 		inOrder.verify(usePort).load(model);
+	}
+	
+	@Test
+	void test_loadTasks_withoutAuthentication_shouldReturnUnauthorized() throws Exception {
+		
+		mvc.perform(get(BASE_REST_URI+"/project/1"+FIXTURE_URL)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(usePort);
 	}
 
 }

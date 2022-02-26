@@ -118,5 +118,30 @@ class CreateTaskRestControllerTest {
 		inOrder.verify(authorize).check("email", taskDto);
 		inOrder.verify(createTask).create(taskDto);
 	}
-
+	
+	@Test
+	void test_createProject_withoutAuthentication_shouldReturnUnauthorized() throws JsonProcessingException, Exception {
+		mvc.perform(post(FIXTURE_URL)
+				.with(csrf())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", 1))))
+			.andExpect(status().isUnauthorized());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(createTask);
+	}
+	
+	@Test
+	@WithMockUser
+	void test_createProject_withoutCsrfToken_shouldReturnForbidden() throws JsonProcessingException, Exception {
+		mvc.perform(post(FIXTURE_URL)
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", 1))))
+			.andExpect(status().isForbidden());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(createTask);
+	}
 }

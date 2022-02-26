@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.UnauthorizaedWebAccessException;
 
 @ControllerAdvice
 public class AppCommonsExceptionHandlers extends ResponseEntityExceptionHandler{
 	
-	@ExceptionHandler(ForbiddenWebAccessException.class)
+	@ExceptionHandler(UnauthorizaedWebAccessException.class)
 	public ResponseEntity<String> illegalHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}

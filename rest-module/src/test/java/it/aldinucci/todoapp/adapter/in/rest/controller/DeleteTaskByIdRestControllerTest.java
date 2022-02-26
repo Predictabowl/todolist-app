@@ -3,8 +3,10 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -71,5 +73,28 @@ class DeleteTaskByIdRestControllerTest {
 		TaskIdDTO model = new TaskIdDTO(5L);
 		inOrder.verify(authorize).check("user", model);
 		inOrder.verify(deleteTask).delete(model);
+	}
+	
+	@Test
+	void test_deleteTask_withoutAuthentication_shouldReturnUnathorized() throws Exception {
+		
+		mvc.perform(delete(BASE_REST_URI+"/task/1")
+				.with(csrf())
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(deleteTask);
+	}
+	
+	@Test
+	@WithMockUser
+	void test_deleteTask_withoutCsrfToken_shouldReturnForbidden() throws Exception {
+		mvc.perform(post(BASE_REST_URI+"/task/2")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isForbidden());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(deleteTask);
 	}
 }

@@ -16,8 +16,7 @@ import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
-import it.aldinucci.todoapp.webcommons.security.authorization.NewTaskWebAuthorization;
+import it.aldinucci.todoapp.webcommons.exception.UnauthorizaedWebAccessException;
 
 class NewTaskWebAuthorizationTest {
 
@@ -51,7 +50,7 @@ class NewTaskWebAuthorizationTest {
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(user);
 		
 		assertThatThrownBy(() -> authorize.check("email1", newTask))
-			.isInstanceOf(ForbiddenWebAccessException.class)
+			.isInstanceOf(UnauthorizaedWebAccessException.class)
 			.hasMessage("Operation not authorized for the autheticated user");
 		
 		verify(loadUser).load(new ProjectIdDTO(3L));

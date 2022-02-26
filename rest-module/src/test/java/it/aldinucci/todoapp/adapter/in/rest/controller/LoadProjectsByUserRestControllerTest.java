@@ -5,6 +5,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -72,5 +73,15 @@ class LoadProjectsByUserRestControllerTest {
 		
 		verify(loadProjects).load(new UserIdDTO("test@email"));
 		verifyNoMoreInteractions(loadProjects);
+	}
+	
+	@Test
+	void test_loadProjects_withoutAuthentication_shouldReturnUnauthorized() throws Exception {
+		
+		mvc.perform(get(BASE_REST_URI+"/projects")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized());
+		
+		verifyNoInteractions(loadProjects);
 	}
 }
