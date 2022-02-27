@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<link rel="stylesheet" href="/webjars/bulma/css/bulma.min.css" />
+<link rel="stylesheet" href="/css/main.css" />
+<meta charset="UTF-8">
+<title>Projects</title>
+</head>
+<body>
+	<div th:insert="~{fragments :: BNavbar}"></div>
+
+	<div>
+		<h1 class="title" th:text="${user.username}"></h1>
+	</div>
+
+	<div th:if="${projects.empty}">
+		<div>No Project</div>
+	</div>
+
+	<div th:unless="${projects.empty}">
+		<table class="table is-striped is-hoverable">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="project : ${projects}">
+					<td th:text="${project.id}"></td>
+					<td><a th:text="${project.name}"
+						th:href="@{/todolist/project/{id}/tasks (id=${project.id})}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>
