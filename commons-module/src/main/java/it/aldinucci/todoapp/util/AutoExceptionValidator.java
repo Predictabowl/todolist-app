@@ -22,4 +22,5 @@ public class AutoExceptionValidator<T> {
 		if(!violations.isEmpty())
 			throw new ConstraintViolationException(violations);
 	}
+	
 }

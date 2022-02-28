@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="eng">
+<head>
+
+<link rel="stylesheet" href="/webjars/bulma/css/bulma.min.css" />
+<link rel="stylesheet" href="/css/main.css" />
+<meta charset="UTF-8">
+<title>Log in page</title>
+</head>
+<body>
+
+	<div class="container">
+		<div class="block box">
+			<h1 class="title">Please Log In</h1>
+			<div th:if="${param.error}">Invalid username and password.</div>
+			<div th:if="${param.logout}">You have been logged out.</div>
+			<div>
+				<form th:action="@{/register}" method="post" th:object="${registerUserDto}">
+					<div>
+						<input class="rounded-lg" type="text" id="email"
+							name="email" placeholder="Email" th:field="*{email}"/>
+						<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+					</div>
+					<div>
+						<input class="rounded-lg" type="text" id="username"
+							name="username" placeholder="Username" th:field="*{username}"/>
+						<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+					</div>
+					<div>
+						<input class="rounded-lg" type="text" id="password"
+							name="password" placeholder="Password" th:field="*{password}"/>
+						<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+					</div>
+					<div>
+						<input class="rounded-lg" type="text" id="confirmedPassword"
+							name="confirmedPassword" placeholder="Confirmed Password" th:field="*{confirmedPassword}"/>
+						<div th:if="${#fields.hasErrors('confirmedPassword')}" th:errors="*{confirmedPassword}"></div>
+					</div>
+					<div class="text-center my-2">
+						<button class="button is-primary" type="submit" value="Register in" th:text="#{register}"></button>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>

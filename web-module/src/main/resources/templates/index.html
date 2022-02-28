@@ -2,16 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 <link rel="stylesheet" href="/webjars/bulma/css/bulma.min.css" />
+<link rel="stylesheet" href="/webjars/font-awesome/css/all.min.css" />
 <link rel="stylesheet" href="/css/main.css" />
+<script type="text/javascript" src="/webjars/jquery/dist/jquery.min.js"></script>
 <meta charset="UTF-8">
 <title>Projects</title>
 </head>
 <body>
-	<div th:insert="~{fragments :: BNavbar}"></div>
-
-	<div>
-		<h1 class="title" th:text="${user.username}"></h1>
-	</div>
+	<div th:insert="~{fragments/commons::BNavbar(${user.username})}"></div>
 
 	<div th:if="${projects.empty}">
 		<div>No Project</div>
@@ -34,6 +32,6 @@
 			</tbody>
 		</table>
 	</div>
-
+	
 </body>
 </html>

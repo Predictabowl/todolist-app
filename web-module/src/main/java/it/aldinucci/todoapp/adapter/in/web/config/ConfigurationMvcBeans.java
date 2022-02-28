@@ -32,5 +32,4 @@ public class ConfigurationMvcBeans implements WebMvcConfigurer{
 		registry.addInterceptor(localeChangeInterceptor());
 	}
 	
-	
 }
