@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadTasksByProjectIdDriverPort;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {LoadTasksByProjectIdService.class})
@@ -30,7 +31,7 @@ class LoadTasksByProjectIdServiceTest {
 	private LoadTasksByProjectIdService service;
 	
 	@Test
-	void test_serviceShouldDelegatetoDriverPort() {
+	void test_serviceShouldDelegatetoDriverPort() throws AppProjectNotFoundException {
 		ProjectIdDTO projectId = new ProjectIdDTO(3L);
 		List<Task> taskList = Collections.emptyList();
 		when(driverPort.load(anyLong())).thenReturn(taskList);

@@ -26,18 +26,19 @@ import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 public class CreateProjectRestController {
 
 	private CreateProjectUsePort createProject;
-	
+
 	@Autowired
 	public CreateProjectRestController(CreateProjectUsePort createProject) {
 		this.createProject = createProject;
 	}
 
 	@PostMapping("/project/create")
-	public Project createProjectEndPoint(Authentication authentication, @Valid @RequestBody NewProjectRestDto newProject) {
+	public Project createProjectEndPoint(Authentication authentication,
+			@Valid @RequestBody NewProjectRestDto newProject) throws AppUserNotFoundException {
 		NewProjectDTOIn projectDto = new NewProjectDTOIn(newProject.getName(), authentication.getName());
 		return createProject.create(projectDto);
 	}
-	
+
 //	@PostMapping("/project/create")
 //	public Project createProjectEndPoint(@Valid @RequestBody NewProjectRestDto newProject) {
 //		NewProjectDTOIn projectDto = new NewProjectDTOIn(newProject.getName(), "user@email.com");

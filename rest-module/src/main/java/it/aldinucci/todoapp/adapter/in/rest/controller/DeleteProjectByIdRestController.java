@@ -21,11 +21,11 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 
 @RestController
 @RequestMapping(BASE_REST_URI)
-public class DeleteProjectByIdRestController{
+public class DeleteProjectByIdRestController {
 
 	private DeleteProjectByIdUsePort deleteProject;
 	private InputModelAuthorization<ProjectIdDTO> authorize;
-	
+
 	@Autowired
 	public DeleteProjectByIdRestController(DeleteProjectByIdUsePort deleteProject,
 			InputModelAuthorization<ProjectIdDTO> authorize) {
@@ -33,13 +33,13 @@ public class DeleteProjectByIdRestController{
 		this.authorize = authorize;
 	}
 
-
 	@DeleteMapping("/project/{projectId}")
-	public void deleteProjectEndPoint(Authentication authentication,@Valid ProjectIdDTO projectId) {
+	public void deleteProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId)
+			throws AppProjectNotFoundException {
 		authorize.check(authentication.getName(), projectId);
 		deleteProject.delete(projectId);
 	}
-	
+
 	@ExceptionHandler(AppProjectNotFoundException.class)
 	public ResponseEntity<String> notFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

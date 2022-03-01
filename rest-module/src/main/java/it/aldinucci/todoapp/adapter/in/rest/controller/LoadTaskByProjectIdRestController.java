@@ -37,7 +37,7 @@ public class LoadTaskByProjectIdRestController {
 	}
 
 	@GetMapping("/project/{projectId}/tasks")
-	public List<Task> getTasksByProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId){
+	public List<Task> getTasksByProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId) throws AppProjectNotFoundException{
 		authorize.check(authentication.getName(), projectId);
 		return loadProjectTasks.load(projectId);
 	}

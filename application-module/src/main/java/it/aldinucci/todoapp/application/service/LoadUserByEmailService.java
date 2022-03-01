@@ -9,6 +9,7 @@ import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 @Service
 @Transactional
@@ -22,8 +23,10 @@ public class LoadUserByEmailService implements LoadUserByEmailUsePort{
 	}
 
 	@Override
-	public User load(UserIdDTO id) {
-		return loadUserPort.load(id.getEmail());
+	public User load(UserIdDTO id) throws AppUserNotFoundException{
+		return loadUserPort.load(id.getEmail()).orElseThrow(() 
+				-> new AppUserNotFoundException("User not found with email: "+id.getEmail()));
+
 	}
 
 }

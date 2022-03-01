@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 public class NewTaskDTOIn {
 
 	@NotEmpty
+	@NotNull
 	private String name;
 	
 	@NotNull

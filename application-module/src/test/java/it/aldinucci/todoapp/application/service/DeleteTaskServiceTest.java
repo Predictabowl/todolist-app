@@ -12,6 +12,7 @@ import org.mockito.Mock;
 
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteTaskByIdDriverPort;
+import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
 
 class DeleteTaskServiceTest {
 
@@ -27,7 +28,7 @@ class DeleteTaskServiceTest {
 	}
 	
 	@Test
-	void test_deleteSuccessful() {
+	void test_deleteSuccessful() throws AppTaskNotFoundException {
 		doNothing().when(deleteTask).delete(anyLong());
 		
 		deleteService.delete(new TaskIdDTO(2L));

@@ -19,6 +19,7 @@
 					<div>
 						<input class="rounded-lg" type="text" id="email"
 							name="email" placeholder="Email" th:field="*{email}"/>
+						<div class="has-text-warning" th:if="${emailExists != null}" th:text="#{email.exists}"></div>
 						<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 					</div>
 					<div>

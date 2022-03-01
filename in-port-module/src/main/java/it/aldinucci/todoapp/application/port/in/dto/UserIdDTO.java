@@ -3,12 +3,14 @@ package it.aldinucci.todoapp.application.port.in.dto;
 import java.util.Objects;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
 public class UserIdDTO extends AutoValidatingInputModel<UserIdDTO>{
 
 	@Email
+	@NotNull
 	private String email;
 	
 	public UserIdDTO(String email) {

@@ -1,5 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Component
@@ -27,9 +28,10 @@ public class LoadUserByEmailJPA implements LoadUserByEmailDriverPort{
 	}
 
 	@Override
-	public User load(String email) {
-		return mapper.map(userRepo.findByEmail(email).orElseThrow(() 
-				-> new AppUserNotFoundException("User not found with email: "+email)));
-	}
+	public Optional<User> load(String email) {
+		Optional<UserJPA> optionalUser = userRepo.findByEmail(email);
+		if(optionalUser.isEmpty())
+				return Optional.empty();
+		return Optional.of(mapper.map(optionalUser.get()));	}
 
 }

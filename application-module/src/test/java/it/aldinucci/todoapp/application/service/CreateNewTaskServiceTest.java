@@ -15,6 +15,7 @@ import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.out.CreateTaskDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 class CreateNewTaskServiceTest {
@@ -39,7 +40,7 @@ class CreateNewTaskServiceTest {
 	}
 	
 	@Test
-	void test_serviceShouldUsePort() {
+	void test_serviceShouldUsePort() throws AppProjectNotFoundException {
 		NewTaskDTOIn newTask = new NewTaskDTOIn(TASK_NAME, TASK_DESCRIPTION, 1L);
 		NewTaskDTOOut mappedTask = new NewTaskDTOOut(TASK_NAME, TASK_DESCRIPTION, 1L);
 		Task savedTask = new Task(2L, TASK_NAME, "new description");

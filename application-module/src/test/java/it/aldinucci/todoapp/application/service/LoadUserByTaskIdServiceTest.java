@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadUserByTaskIdDriverPort;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
 
 class LoadUserByTaskIdServiceTest {
 
@@ -30,7 +31,7 @@ class LoadUserByTaskIdServiceTest {
 	
 	
 	@Test
-	void test_loadUser_successful() {
+	void test_loadUser_successful() throws AppTaskNotFoundException {
 		TaskIdDTO taskId = new TaskIdDTO(1L);
 		User user = new User("email", "username", "password");
 		when(driverPort.load(anyLong())).thenReturn(user);

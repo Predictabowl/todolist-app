@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
 
 class TaskIdWebAuthorizationTest {
@@ -31,7 +32,7 @@ class TaskIdWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorizationSuccessful() {
+	void test_authorizationSuccessful() throws AppTaskNotFoundException {
 		User user = new User("email", "username", "password");
 		TaskIdDTO model = new TaskIdDTO(3L);
 		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(user);
@@ -45,7 +46,7 @@ class TaskIdWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorizationFailure_shouldThrow() {
+	void test_authorizationFailure_shouldThrow() throws AppTaskNotFoundException {
 		User user = new User("email", "username", "password");
 		TaskIdDTO taskId = new TaskIdDTO(3L);
 		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(user);

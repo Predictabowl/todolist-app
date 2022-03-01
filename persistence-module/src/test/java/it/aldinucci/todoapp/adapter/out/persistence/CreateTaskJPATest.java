@@ -41,7 +41,7 @@ class CreateTaskJPATest {
 	private TestEntityManager entityManager;
 	
 	@Test
-	void test_createNewTask_successful() {
+	void test_createNewTask_successful() throws AppProjectNotFoundException {
 		UserJPA userJPA = new UserJPA(null, TEST_EMAIL, "username", "password");
 		entityManager.persist(userJPA);
 		ProjectJPA projectJPA = new ProjectJPA("project name", userJPA);

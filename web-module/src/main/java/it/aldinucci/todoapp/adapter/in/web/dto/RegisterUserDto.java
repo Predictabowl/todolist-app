@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class RegisterUserDto {
 
@@ -12,12 +13,15 @@ public class RegisterUserDto {
 	private String email;
 
 	@NotEmpty(message = "Username cannot be empty")
+	@NotNull
 	private String username;
 
 	@NotEmpty(message = "Password cannot be empty")
+	@NotNull
 	private String password;
 
 	@NotEmpty(message = "Confirmed password cannot be empty")
+	@NotNull
 	private String confirmedPassword;
 
 	public RegisterUserDto() {

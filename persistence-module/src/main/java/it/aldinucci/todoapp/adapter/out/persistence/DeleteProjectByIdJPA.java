@@ -19,7 +19,7 @@ public class DeleteProjectByIdJPA implements DeleteProjectByIdDriverPort{
 	}
 
 	@Override
-	public void delete(long id) {
+	public void delete(long id) throws AppProjectNotFoundException{
 		ProjectJPA project = projectRepository.findById(id).orElseThrow(() 
 				-> new AppProjectNotFoundException("Could not find Project with id: "+id));
 		project.getUser().getProjects().remove(project);

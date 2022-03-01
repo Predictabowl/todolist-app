@@ -14,6 +14,7 @@ import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
 import it.aldinucci.todoapp.application.port.out.CreateProjectDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewProjectDTOOut;
 import it.aldinucci.todoapp.domain.Project;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 class CreateNewProjectServiceTest {
@@ -33,7 +34,7 @@ class CreateNewProjectServiceTest {
 	}
 	
 	@Test
-	void test_serviceShouldCallPort() {
+	void test_serviceShouldCallPort() throws AppUserNotFoundException {
 		NewProjectDTOIn newProjectIn = new NewProjectDTOIn("test project","test@email.com");
 		NewProjectDTOOut newProjectOut = new NewProjectDTOOut("test project", "test@email.com");
 		Project createdProject = new Project(1L, "first project");

@@ -31,7 +31,7 @@ public class CreateProjectJPA implements CreateProjectDriverPort{
 	}
 
 	@Override
-	public Project create(NewProjectDTOOut project) {
+	public Project create(NewProjectDTOOut project) throws AppUserNotFoundException{
 		UserJPA user = userRepository.findByEmail(project.getUserEmail()).orElseThrow(() 
 				->new AppUserNotFoundException("User not found with email: "+project.getUserEmail()));
 		ProjectJPA projectJPA = new ProjectJPA(project.getName(), user);

@@ -34,7 +34,7 @@ class DeleteProjectByIdJPATest {
 	}
 	
 	@Test
-	void test_deleteProject_Successful() {
+	void test_deleteProject_Successful() throws AppProjectNotFoundException {
 		UserJPA user = new UserJPA("email", "username", "password");
 		entityManager.persist(user);
 		ProjectJPA project = new ProjectJPA("project name", user);

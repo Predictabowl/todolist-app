@@ -2,9 +2,18 @@ package it.aldinucci.todoapp.adapter.in.web.dto;
 
 import java.util.Objects;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class UserWebDto {
 	
+	@NotNull
+	@NotEmpty
 	private String username;
+	
+	@NotNull
+	@Email
 	private String email;
 
 	public UserWebDto() {

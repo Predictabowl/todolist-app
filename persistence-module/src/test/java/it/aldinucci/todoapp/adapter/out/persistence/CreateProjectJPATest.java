@@ -40,7 +40,7 @@ class CreateProjectJPATest {
 	private TestEntityManager entityManager;
 	
 	@Test
-	void test_createNewProject_successful() {
+	void test_createNewProject_successful() throws AppUserNotFoundException {
 		UserJPA userJPA = new UserJPA(null, TEST_EMAIL, "username", "password");
 		entityManager.persist(userJPA);
 		NewProjectDTOOut newProject = new NewProjectDTOOut("test name", TEST_EMAIL);

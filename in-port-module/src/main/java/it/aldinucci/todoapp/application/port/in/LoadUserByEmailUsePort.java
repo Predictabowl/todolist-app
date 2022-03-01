@@ -2,8 +2,9 @@ package it.aldinucci.todoapp.application.port.in;
 
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 public interface LoadUserByEmailUsePort {
 
-	public User load(UserIdDTO id);
+	public User load(UserIdDTO id) throws AppUserNotFoundException;
 }

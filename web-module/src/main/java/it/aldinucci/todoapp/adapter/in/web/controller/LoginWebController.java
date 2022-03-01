@@ -12,23 +12,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
 import it.aldinucci.todoapp.adapter.in.web.validator.RegisterUserValidator;
 import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
+import it.aldinucci.todoapp.exceptions.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Controller
 @RequestMapping(BASE_WEB_URI)
-public class SecurityWebController{
+public class LoginWebController{
 	
+	private static final String EMAIL_EXISTS = "emailExists";
 	private CreateUserUsePort createUser;
 	private AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper;
 	private RegisterUserValidator registerUserValidator;
 
 	@Autowired
-	public SecurityWebController(CreateUserUsePort createUser, AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper,
+	public LoginWebController(CreateUserUsePort createUser, AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper,
 			RegisterUserValidator registerUserValidator) {
 		this.createUser = createUser;
 		this.mapper = mapper;
@@ -46,14 +49,20 @@ public class SecurityWebController{
 	}
 	
 	@PostMapping("/register")
-	public String postRegistrationPage(@Valid RegisterUserDto newUser, BindingResult bindingResult) {
-		if(bindingResult.hasErrors()){
-			return "register";
+	public ModelAndView postRegistrationPage(@Valid RegisterUserDto newUser, BindingResult bindingResult) {
+		ModelAndView modelAndView = new ModelAndView("register");
+		if(bindingResult.hasErrors()) 
+			return modelAndView;
+		
+		try {
+			createUser.create(mapper.map(newUser));
+		} catch (AppEmailAlreadyRegisteredException e) {
+			modelAndView.addObject(EMAIL_EXISTS, true);
+			return modelAndView;
 		}
-		createUser.create(mapper.map(newUser));
-		return "redirect:/login";
+		return new ModelAndView("redirect:/login");
 	}
-	
+
 	@InitBinder(value = "registerUserDto")
 	void initRegisterUserValidator(WebDataBinder binder) {
 		binder.setValidator(registerUserValidator);

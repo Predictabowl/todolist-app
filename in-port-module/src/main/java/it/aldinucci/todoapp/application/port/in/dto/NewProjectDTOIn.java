@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
@@ -11,6 +12,7 @@ import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 public class NewProjectDTOIn extends AutoValidatingInputModel<NewProjectDTOIn>{
 
 	@NotEmpty
+	@NotNull
 	private String name;
 	
 	@Email

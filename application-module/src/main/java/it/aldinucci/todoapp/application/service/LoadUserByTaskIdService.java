@@ -7,6 +7,7 @@ import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadUserByTaskIdDriverPort;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
 
 @Service
 public class LoadUserByTaskIdService implements LoadUserByTaskIdUsePort{
@@ -19,7 +20,7 @@ public class LoadUserByTaskIdService implements LoadUserByTaskIdUsePort{
 	}
 
 	@Override
-	public User load(TaskIdDTO taskId) {
+	public User load(TaskIdDTO taskId) throws AppTaskNotFoundException {
 		return loadUser.load(taskId.getTaskId()); 
 	}
 

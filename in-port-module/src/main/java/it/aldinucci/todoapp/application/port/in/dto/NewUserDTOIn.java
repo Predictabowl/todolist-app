@@ -11,6 +11,7 @@ import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 public class NewUserDTOIn extends AutoValidatingInputModel<NewUserDTOIn>{
 	
 	@NotEmpty
+	@NotNull
 	private String username;
 	
 	@Email
@@ -18,6 +19,7 @@ public class NewUserDTOIn extends AutoValidatingInputModel<NewUserDTOIn>{
 	private String email;
 	
 	@NotEmpty
+	@NotNull
 	private String password;
 
 	public NewUserDTOIn(String username, String email, String password) {

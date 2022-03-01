@@ -24,7 +24,7 @@ public class DeleteTaskByIdRestController {
 
 	private DeleteTaskByIdUsePort deleteTask;
 	private InputModelAuthorization<TaskIdDTO> authorize;
-	
+
 	@Autowired
 	public DeleteTaskByIdRestController(DeleteTaskByIdUsePort deleteTask,
 			InputModelAuthorization<TaskIdDTO> authorize) {
@@ -32,13 +32,12 @@ public class DeleteTaskByIdRestController {
 		this.authorize = authorize;
 	}
 
-
 	@DeleteMapping("/task/{taskId}")
-	public void deleteTaskEndPoint(Authentication authentication, TaskIdDTO taskId) {
+	public void deleteTaskEndPoint(Authentication authentication, TaskIdDTO taskId) throws AppTaskNotFoundException {
 		authorize.check(authentication.getName(), taskId);
 		deleteTask.delete(taskId);
 	}
-	
+
 	@ExceptionHandler(AppTaskNotFoundException.class)
 	public ResponseEntity<String> notFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

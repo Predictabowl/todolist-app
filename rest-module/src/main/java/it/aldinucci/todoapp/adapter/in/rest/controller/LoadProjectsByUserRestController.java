@@ -32,7 +32,7 @@ public class LoadProjectsByUserRestController {
 	}
 
 	@GetMapping("/projects")
-	public List<Project> loadProjectsEndPoint(Authentication authentication) {
+	public List<Project> loadProjectsEndPoint(Authentication authentication) throws AppUserNotFoundException {
 		return loadProjects.load(new UserIdDTO(authentication.getName()));
 	}
 

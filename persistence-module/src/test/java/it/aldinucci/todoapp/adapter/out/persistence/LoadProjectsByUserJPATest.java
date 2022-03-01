@@ -51,7 +51,7 @@ class LoadProjectsByUserJPATest {
 	}
 	
 	@Test
-	void test_loadProjects_successful() {
+	void test_loadProjects_successful() throws AppUserNotFoundException {
 		UserJPA user = new UserJPA(TEST_EMAIL, "username", "password");
 		entityManager.persistAndFlush(user);
 		ProjectJPA projectJpa1 = new ProjectJPA("project 1", user);

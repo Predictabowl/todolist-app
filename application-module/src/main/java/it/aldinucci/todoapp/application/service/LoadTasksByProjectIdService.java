@@ -11,6 +11,7 @@ import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadTasksByProjectIdDriverPort;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 
 @Service
 @Transactional
@@ -25,7 +26,7 @@ public class LoadTasksByProjectIdService implements LoadTasksByProjectUsePort{
 
 
 	@Override
-	public List<Task> load(ProjectIdDTO projectId) {
+	public List<Task> load(ProjectIdDTO projectId) throws AppProjectNotFoundException {
 		return loadTasks.load(projectId.getProjectId());
 	}
 

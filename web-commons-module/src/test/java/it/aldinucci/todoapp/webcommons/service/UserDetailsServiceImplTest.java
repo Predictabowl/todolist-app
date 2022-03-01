@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 import it.aldinucci.todoapp.webcommons.model.UserDetailsImpl;
 
 class UserDetailsServiceImplTest {
@@ -31,9 +32,9 @@ class UserDetailsServiceImplTest {
 	}
 	
 	@Test
-	void test_userDetails() {
-		UserDetailsImpl userDetails = new UserDetailsImpl("email", "password");
+	void test_userDetails() throws AppUserNotFoundException {
 		User user = new User("email", "username", "password");
+		UserDetailsImpl userDetails = new UserDetailsImpl(user);
 		when(loadUser.load(isA(UserIdDTO.class))).thenReturn(user);
 		
 		UserDetails loadedDetails = service.loadUserByUsername("another@mail");

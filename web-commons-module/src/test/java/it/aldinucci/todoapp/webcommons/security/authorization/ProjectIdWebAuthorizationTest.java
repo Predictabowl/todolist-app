@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
 
 class ProjectIdWebAuthorizationTest {
@@ -31,7 +32,7 @@ class ProjectIdWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorizationSuccessful() {
+	void test_authorizationSuccessful() throws AppProjectNotFoundException {
 		User user = new User("email", "username", "password");
 		ProjectIdDTO model = new ProjectIdDTO(3L);
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(user);
@@ -45,7 +46,7 @@ class ProjectIdWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorizationFailure_shouldThrow() {
+	void test_authorizationFailure_shouldThrow() throws AppProjectNotFoundException {
 		User user = new User("email", "username", "password");
 		ProjectIdDTO projectId = new ProjectIdDTO(3L);
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(user);
