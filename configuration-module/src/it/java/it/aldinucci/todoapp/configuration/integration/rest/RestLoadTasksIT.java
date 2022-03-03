@@ -93,7 +93,9 @@ class RestLoadTasksIT {
 	}
 
 	private void setSessionData() {
-		UserJPA user = userRepo.save(new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD)));
+		UserJPA user = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
+		user.setEnabled(true);
+		userRepo.save(user);
 		project = projectRepo.save(new ProjectJPA("test project", user));
 		user.getProjects().add(project);
 		userRepo.save(user);

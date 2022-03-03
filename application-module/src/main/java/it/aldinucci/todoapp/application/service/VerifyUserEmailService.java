@@ -3,6 +3,8 @@ package it.aldinucci.todoapp.application.service;
 import java.util.Calendar;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 @Service
+@Transactional
 public class VerifyUserEmailService implements VerifyUserEmailUsePort {
 
 	private LoadVerificationTokenDriverPort loadToken;

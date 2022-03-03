@@ -87,8 +87,9 @@ class RestLoadProjectsIT {
 	}
 
 	private void setSessionData() {
-		user = userRepo.save(new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD)));
-		userRepo.flush();
+		user = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
+		user.setEnabled(true);
+		userRepo.saveAndFlush(user);
 	}
 
 }

@@ -124,7 +124,9 @@ class RestCreateNewTaskIT {
 	}
 	
 	private void setSessionData() {
-		userJPA = userRepo.save(new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD)));
+		userJPA = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
+		userJPA.setEnabled(true);
+		userRepo.save(userJPA);
 		userRepo.flush();
 		Response response = given()
 				.auth().preemptive().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)

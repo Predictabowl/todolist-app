@@ -75,7 +75,9 @@ class RestDeleteProjectIT {
 	}
 
 	private void setSessionData() {
-		user = userRepo.save(new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD)));
+		user = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
+		user.setEnabled(true);
+		userRepo.save(user);
 		userRepo.flush();
 		
 		Response response = given()

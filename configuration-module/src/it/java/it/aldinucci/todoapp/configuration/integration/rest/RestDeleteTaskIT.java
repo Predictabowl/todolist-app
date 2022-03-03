@@ -93,7 +93,9 @@ class RestDeleteTaskIT {
 	}
 	
 	private void setSessionData() {
-		user = userRepo.save(new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD)));
+		user = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
+		user.setEnabled(true);
+		userRepo.save(user);
 		project = projectRepo.save(new ProjectJPA("project name", user));
 		user.getProjects().add(project);
 		userRepo.save(user);
