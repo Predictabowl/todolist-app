@@ -18,12 +18,26 @@ class UserJpaToUserMapperTest {
 	}
 	
 	@Test
-	void test() {
-		User user = mapper.map(new UserJPA(2L, "email", "username", "password"));
+	void test_userEnabled() {
+		UserJPA userJPA = new UserJPA(2L, "email", "username", "password");
+		userJPA.setEnabled(true);
+		User user = mapper.map(userJPA);
 		
 		assertThat(user.getEmail()).isEqualTo("email");
 		assertThat(user.getPassword()).isEqualTo("password");
 		assertThat(user.getUsername()).isEqualTo("username");
+		assertThat(user.isEnabled()).isTrue();
+	}
+	
+	@Test
+	void test_userNotEnabled() {
+		UserJPA userJPA = new UserJPA(3L, "email@test.it", "name", "pass");
+		User user = mapper.map(userJPA);
+		
+		assertThat(user.getEmail()).isEqualTo("email@test.it");
+		assertThat(user.getPassword()).isEqualTo("pass");
+		assertThat(user.getUsername()).isEqualTo("name");
+		assertThat(user.isEnabled()).isFalse();
 	}
 
 }

@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,7 @@ class CreateUserJPATest {
 		assertThat(userJpa.getPassword()).isEqualTo("password");
 		assertThat(userJpa.getUsername()).isEqualTo("name");
 		assertThat(userJpa.getId()).isNotNull();
+		
 	}
 
 }

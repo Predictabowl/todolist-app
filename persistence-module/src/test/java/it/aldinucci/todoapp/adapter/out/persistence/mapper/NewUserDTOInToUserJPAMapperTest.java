@@ -26,6 +26,7 @@ class NewUserDTOInToUserJPAMapperTest {
 		assertThat(user.getUsername()).isEqualTo("user");
 		assertThat(user.getId()).isNull();
 		assertThat(user.getProjects()).isEmpty();
+		assertThat(user.isEnabled()).isFalse();
 	}
 
 

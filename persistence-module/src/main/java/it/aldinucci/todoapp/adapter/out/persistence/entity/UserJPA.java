@@ -30,26 +30,43 @@ public class UserJPA {
 	@Column(nullable = false)
 	private String password;
 	
+	private boolean enabled;
+	
 	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<ProjectJPA> projects;
 	
 	public UserJPA() {
 		this.projects = new LinkedList<>();
+		this.enabled = false;
 	}
 
-	public UserJPA(Long id, String email, String username, String password, List<ProjectJPA> projects) {
+	
+	public UserJPA(Long id, String email, String username, String password, boolean enabled,
+			List<ProjectJPA> projects) {
 		this.id = id;
 		this.email = email;
 		this.username = username;
 		this.password = password;
+		this.enabled = enabled;
 		this.projects = projects;
 	}
+	
+	public UserJPA(Long id, String email, String username, String password, boolean enabled) {
+		this.id = id;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.projects = new LinkedList<>();
+	}
+
 	
 	public UserJPA(Long id, String email, String username, String password) {
 		this.id = id;
 		this.email = email;
 		this.username = username;
 		this.password = password;
+		this.enabled = false;
 		this.projects = new LinkedList<>();
 	}
 	
@@ -58,6 +75,7 @@ public class UserJPA {
 		this.email = email;
 		this.username = username;
 		this.password = password;
+		this.enabled = false;
 		this.projects = new LinkedList<>();
 	}
 
@@ -100,10 +118,18 @@ public class UserJPA {
 	public void setProjects(List<ProjectJPA> projects) {
 		this.projects = projects;
 	}
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, id, password, username);
+		return Objects.hash(email, enabled, id, password, username);
 	}
 
 	@Override
@@ -115,13 +141,15 @@ public class UserJPA {
 		if (getClass() != obj.getClass())
 			return false;
 		UserJPA other = (UserJPA) obj;
-		return Objects.equals(email, other.email) && Objects.equals(id, other.id)
+		return Objects.equals(email, other.email) && enabled == other.enabled && Objects.equals(id, other.id)
 				&& Objects.equals(password, other.password) && Objects.equals(username, other.username);
 	}
 
 	@Override
 	public String toString() {
-		return "UserJPA [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password + "]";
+		return "UserJPA [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password
+				+ ", enabled=" + enabled + "]";
 	}
+
 	
 }

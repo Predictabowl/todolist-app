@@ -28,12 +28,12 @@
 						<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
 					</div>
 					<div>
-						<input class="rounded-lg" type="text" id="password"
+						<input class="rounded-lg" type="password" id="password"
 							name="password" placeholder="Password" th:field="*{password}"/>
 						<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
 					</div>
 					<div>
-						<input class="rounded-lg" type="text" id="confirmedPassword"
+						<input class="rounded-lg" type="password" id="confirmedPassword"
 							name="confirmedPassword" placeholder="Confirmed Password" th:field="*{confirmedPassword}"/>
 						<div th:if="${#fields.hasErrors('confirmedPassword')}" th:errors="*{confirmedPassword}"></div>
 					</div>

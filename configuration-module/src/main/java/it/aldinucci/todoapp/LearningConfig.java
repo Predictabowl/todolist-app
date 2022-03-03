@@ -12,13 +12,15 @@ public class LearningConfig {
 	
 	@Autowired
 	public LearningConfig(UserJPARepository userRepo) {
-		super();
 		
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		UserJPA user = new UserJPA("testUser@email.it", "Test User", passwordEncoder.encode("password")); 
+		UserJPA user = new UserJPA("testUser@email.it", "Test User", passwordEncoder.encode("password"));
+		user.setEnabled(true);
 		userRepo.save(user);
 		UserJPA user2 = new UserJPA("admin@email.it", "Admin", passwordEncoder.encode("password"));
 		userRepo.save(user2);
+		user2.setEnabled(true);
+		userRepo.flush();
 	}
 	
 }
