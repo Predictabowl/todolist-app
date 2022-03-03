@@ -12,9 +12,9 @@ import it.aldinucci.todoapp.application.util.ApplicationPropertyNames;
 
 @Configuration
 public class ApplicationBeansProvider {
-	
 
-	@Value(ApplicationPropertyNames.VERIFICATION_SENDER_EMAIL)
+
+	@Value("${"+ApplicationPropertyNames.VERIFICATION_SENDER_EMAIL+"}")
 	private String senderEmail;
 	
 	@Bean

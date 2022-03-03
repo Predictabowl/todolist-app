@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -26,13 +28,15 @@ import it.aldinucci.todoapp.application.port.in.dto.VerificantionLinkDTO;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {ApplicationBeansProvider.class, SendVerificationEmailService.class})
+@EnableConfigurationProperties
+@PropertySource(value = "classpath:application.properties")
 class SendVerificationEmailServiceTest {
 
 	private static final String FIXTURE_VERIFICATION_URL = "http://localhost:8080/verification";
 
 	@RegisterExtension
 	static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
-	  .withConfiguration(GreenMailConfiguration.aConfig().withUser("luke", "springboot"));
+	  .withConfiguration(GreenMailConfiguration.aConfig().withUser("capitanfindus@email.it", "springboot"));
 	
 	@Autowired
 	private SendVerificationEmailService sendEmail;
