@@ -1,15 +1,22 @@
-package it.aldinucci.todoapp.adapter.in.web.learning;
+package it.aldinucci.todoapp.application.config;
 
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-//@Configuration
-public class WebLearningConfig {
+import it.aldinucci.todoapp.application.util.ApplicationPropertyNames;
 
+@Configuration
+public class ApplicationBeansProvider {
+	
+
+	@Value(ApplicationPropertyNames.VERIFICATION_SENDER_EMAIL)
+	private String senderEmail;
+	
 	@Bean
 	public JavaMailSender getJavaMailSender() {
 	    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -19,7 +26,8 @@ public class WebLearningConfig {
 	    mailSender.setPort(3025);
 	    
 //	    mailSender.setUsername("capitanfindus@inwind.it");
-	    mailSender.setUsername("duke");
+//	    mailSender.setUsername("luke");
+	    mailSender.setUsername(senderEmail);
 	    mailSender.setPassword("springboot");
 	    
 	    Properties props = mailSender.getJavaMailProperties();

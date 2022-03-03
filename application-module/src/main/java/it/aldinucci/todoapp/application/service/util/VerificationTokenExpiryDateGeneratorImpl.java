@@ -23,7 +23,7 @@ public class VerificationTokenExpiryDateGeneratorImpl implements VerificationTok
 	
 	@Override
 	public Date generate() {
-		Integer property = env.getProperty(ApplicationPropertyNames.VERIFICATION_TOKEN_DURATION.get(),
+		Integer property = env.getProperty(ApplicationPropertyNames.VERIFICATION_TOKEN_DURATION,
 				Integer.class, DEFAULT_TOKEN_DURATION);
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+property);

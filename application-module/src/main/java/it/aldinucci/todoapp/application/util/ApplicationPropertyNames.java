@@ -1,18 +1,13 @@
 package it.aldinucci.todoapp.application.util;
 
-public enum ApplicationPropertyNames {
+public class ApplicationPropertyNames {
 
-	VERIFICATION_TOKEN_DURATION("verification.token.duration"),
-	VERIFICATION_TOKEN_LENGTH("verification.token.length");
+	public static final String VERIFICATION_TOKEN_DURATION = "todolist.verification.token.duration";
+	public static final String VERIFICATION_TOKEN_LENGTH = "todolist.verification.token.length";
+	public static final String VERIFICATION_SENDER_EMAIL = "todolist.verification.email";
+	public static final String VERIFICATION_SENDER_EMAIL_PASSWORD = "todolist.verification.email.password";
 	
-	private String property;
-	
-	private ApplicationPropertyNames(String property) {
-		this.property = property;
-	}
-
-	public String get() {
-		return property;
+	private ApplicationPropertyNames() {
 	}
 	
 }

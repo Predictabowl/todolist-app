@@ -76,7 +76,7 @@ class CreateVerificationTokenServiceTest {
 		inOrder.verify(dateGenerator).generate();
 		inOrder.verify(createTokenPort).create(tokenDto);
 		verify(env).getProperty(
-				ApplicationPropertyNames.VERIFICATION_TOKEN_LENGTH.get(),
+				ApplicationPropertyNames.VERIFICATION_TOKEN_LENGTH,
 				Integer.class,
 				CreateVerificationTokenService.DEFAULT_TOKEN_LENGTH);
 		assertThat(createdToken).isSameAs(token);

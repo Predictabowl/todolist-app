@@ -49,7 +49,7 @@ class VerificationTokenExpiryDateGeneratorImplTest {
 			.hasMinute(calendar.get(Calendar.MINUTE));
 		
 		verify(env).getProperty(
-				ApplicationPropertyNames.VERIFICATION_TOKEN_DURATION.get(),
+				ApplicationPropertyNames.VERIFICATION_TOKEN_DURATION,
 				Integer.class,
 				VerificationTokenExpiryDateGeneratorImpl.DEFAULT_TOKEN_DURATION);
 	}

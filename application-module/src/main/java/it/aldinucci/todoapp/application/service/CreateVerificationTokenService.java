@@ -45,7 +45,7 @@ public class CreateVerificationTokenService implements CreateVerificationTokenUs
 	@Override
 	public VerificationToken create(User user) throws AppUserNotFoundException{
 		Integer length = env.getProperty(
-				ApplicationPropertyNames.VERIFICATION_TOKEN_LENGTH.get(),
+				ApplicationPropertyNames.VERIFICATION_TOKEN_LENGTH,
 				Integer.class,
 				DEFAULT_TOKEN_LENGTH);
 		
