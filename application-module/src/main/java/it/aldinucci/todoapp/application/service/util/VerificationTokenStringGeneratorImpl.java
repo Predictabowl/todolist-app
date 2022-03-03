@@ -9,18 +9,20 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.domain.VerificationToken;
+import it.aldinucci.todoapp.exceptions.AppCouldNotGenerateVerificationTokenException;
 import it.aldinucci.todoapp.util.RandomStringGenerator;
 
 /**
  * With the current implementation there's a possibility (albeit remote) that the
- * generator will be stuck in a loop. It will happen if the token length is
- * not enough to generate unique strings.
+ * generator will not be able to generate a token.
  * @author piero
  *
  */
 @Component
 public class VerificationTokenStringGeneratorImpl implements VerificationTokenStringGenerator {
 
+	private static final int MAX_LOOP_NUMBER = 2048;
+	
 	private RandomStringGenerator randStringGen;
 	private LoadVerificationTokenDriverPort loadToken;
 	private DeleteVerificationTokenDriverPort deleteToken;
@@ -38,7 +40,8 @@ public class VerificationTokenStringGeneratorImpl implements VerificationTokenSt
 	public String generate(int length) {
 		String tokenString = "";
 		Optional<VerificationToken> token;
-		while (tokenString.isEmpty()) {
+		int i = 0;
+		while (tokenString.isEmpty() && i < MAX_LOOP_NUMBER) {
 			tokenString = randStringGen.generate(length);
 			token = loadToken.load(tokenString);
 			if (!token.isEmpty()) {
@@ -47,7 +50,11 @@ public class VerificationTokenStringGeneratorImpl implements VerificationTokenSt
 				else
 					tokenString = "";
 			}
+			i++;
 		}
+		if (i >= MAX_LOOP_NUMBER && tokenString.isEmpty())
+			throw new AppCouldNotGenerateVerificationTokenException();
+		
 		return tokenString;
 	}	
 }

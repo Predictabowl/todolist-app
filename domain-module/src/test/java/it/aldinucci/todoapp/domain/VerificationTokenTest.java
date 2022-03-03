@@ -15,7 +15,7 @@ class VerificationTokenTest {
 	
 	@BeforeEach
 	void setUp() {
-		token = new VerificationToken("token", Calendar.getInstance().getTime());
+		token = new VerificationToken("token", Calendar.getInstance().getTime(), "user@email.it");
 		calendar = Calendar.getInstance();
 	}
 	

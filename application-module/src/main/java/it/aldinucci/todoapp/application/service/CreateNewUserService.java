@@ -13,7 +13,6 @@ import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.out.CreateUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewUserDTOOut;
-import it.aldinucci.todoapp.application.service.util.CreateVerificationTokenService;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exceptions.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -26,18 +25,17 @@ public class CreateNewUserService implements CreateUserUsePort{
 	private CreateUserDriverPort createUser;
 	private PasswordEncoder encoder;
 	private LoadUserByEmailDriverPort loadUser;
-	private CreateVerificationTokenService createVerificationToken;
 
 	@Autowired
 	public CreateNewUserService(AppGenericMapper<NewUserDTOIn, NewUserDTOOut> mapper, CreateUserDriverPort createUser,
-			PasswordEncoder encoder, LoadUserByEmailDriverPort loadUser,
-			CreateVerificationTokenService createVerificationToken) {
+			PasswordEncoder encoder, LoadUserByEmailDriverPort loadUser) {
+		super();
 		this.mapper = mapper;
 		this.createUser = createUser;
 		this.encoder = encoder;
 		this.loadUser = loadUser;
-		this.createVerificationToken = createVerificationToken;
 	}
+
 
 
 	@Override
@@ -48,9 +46,7 @@ public class CreateNewUserService implements CreateUserUsePort{
 			throw new AppEmailAlreadyRegisteredException("There's already an user registered with the email: "+email);
 		NewUserDTOOut newUserOut = mapper.map(newUser);
 		newUserOut.setPassword(encoder.encode(newUserOut.getPassword()));
-		User user = createUser.create(newUserOut);
-		createVerificationToken.create(user);
-		return user;
+		return createUser.create(newUserOut);
 	}
 
 }

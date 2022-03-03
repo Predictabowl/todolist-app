@@ -62,6 +62,17 @@ class VerificationTokenJPARepositoryTest {
 	}
 	
 	@Test
+	void test_findByUserEmail_successful() {
+		Calendar calendar = Calendar.getInstance();
+		VerificationTokenJPA token = new VerificationTokenJPA("code", user, calendar.getTime());
+		entityManager.persistAndFlush(token);
+
+		VerificationTokenJPA loadedToken = repository.findByUserEmail("email@test.it").get();
+		
+		assertThat(loadedToken).usingRecursiveComparison().isEqualTo(token);
+	}
+
+	@Test
 	void test_mapping_oneToOne() {
 		Calendar calendar = Calendar.getInstance();
 		VerificationTokenJPA token = new VerificationTokenJPA("code", user, calendar.getTime());

@@ -2,19 +2,22 @@ package it.aldinucci.todoapp.application.port.out.dto;
 
 import java.util.Objects;
 
-public class NewUserDTOOut {
-	
+public class UserDTOOut {
+
 	private String username;
 	private String email;
 	private String password;
+	private boolean enabled;
 	
-	public NewUserDTOOut() {
+	public UserDTOOut() {
 	}
 
-	public NewUserDTOOut(String username, String email, String password) {
+	public UserDTOOut(String username, String email, String password, boolean enabled) {
+		super();
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.enabled = enabled;
 	}
 
 	public String getUsername() {
@@ -41,9 +44,17 @@ public class NewUserDTOOut {
 		this.password = password;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, password, username);
+		return Objects.hash(email, enabled, password, username);
 	}
 
 	@Override
@@ -54,14 +65,15 @@ public class NewUserDTOOut {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NewUserDTOOut other = (NewUserDTOOut) obj;
-		return Objects.equals(email, other.email) && Objects.equals(password, other.password)
-				&& Objects.equals(username, other.username);
+		UserDTOOut other = (UserDTOOut) obj;
+		return Objects.equals(email, other.email) && enabled == other.enabled
+				&& Objects.equals(password, other.password) && Objects.equals(username, other.username);
 	}
 
 	@Override
 	public String toString() {
-		return "NewUserDTOOut [username=" + username + ", email=" + email + ", password=" + password + "]";
+		return "UserDTOOut [username=" + username + ", email=" + email + ", password=" + password + ", enabled="
+				+ enabled + "]";
 	}
-	
+
 }

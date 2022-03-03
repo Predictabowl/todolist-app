@@ -7,13 +7,23 @@ public class VerificationToken {
 
 	private String token;
 	private Date expiryDate;
+	private String userEmail;
 
 	public VerificationToken() {
 	}
 
-	public VerificationToken(String token, Date expiryDate) {
+	public VerificationToken(String token, Date expiryDate, String userEmail) {
 		this.token = token;
 		this.expiryDate = expiryDate;
+		this.userEmail = userEmail;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 	public String getToken() {
@@ -38,7 +48,7 @@ public class VerificationToken {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(expiryDate, token);
+		return Objects.hash(expiryDate, token, userEmail);
 	}
 
 	@Override
@@ -50,13 +60,13 @@ public class VerificationToken {
 		if (getClass() != obj.getClass())
 			return false;
 		VerificationToken other = (VerificationToken) obj;
-		return Objects.equals(expiryDate, other.expiryDate) && Objects.equals(token, other.token);
+		return Objects.equals(expiryDate, other.expiryDate) && Objects.equals(token, other.token)
+				&& Objects.equals(userEmail, other.userEmail);
 	}
 
 	@Override
 	public String toString() {
-		return "VerificationToken [token=" + token + ", expiryDate=" + expiryDate + "]";
+		return "VerificationToken [token=" + token + ", expiryDate=" + expiryDate + ", userEmail=" + userEmail + "]";
 	}
-	
-	
+
 }

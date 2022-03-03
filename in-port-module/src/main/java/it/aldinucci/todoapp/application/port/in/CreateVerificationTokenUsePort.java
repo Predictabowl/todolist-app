@@ -1,9 +1,9 @@
-package it.aldinucci.todoapp.application.service.util;
+package it.aldinucci.todoapp.application.port.in;
 
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 
-public interface CreateVerificationTokenService {
+public interface CreateVerificationTokenUsePort {
 
 	public VerificationToken create(User user);
 }

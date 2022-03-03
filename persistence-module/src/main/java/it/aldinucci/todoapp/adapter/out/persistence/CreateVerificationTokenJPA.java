@@ -12,26 +12,37 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.VerificationToken
 import it.aldinucci.todoapp.application.port.out.CreateVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.VerificationTokenDTOOut;
 import it.aldinucci.todoapp.domain.VerificationToken;
+import it.aldinucci.todoapp.exceptions.AppUserAlreadyHaveVerificationTokenException;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
+import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Component
 public class CreateVerificationTokenJPA implements CreateVerificationTokenDriverPort {
 
 	private VerificationTokenJPARepository tokenRepo;
 	private UserJPARepository userRepo;
+	private AppGenericMapper<VerificationTokenJPA, VerificationToken> mapper;
 
 	@Autowired
-	public CreateVerificationTokenJPA(VerificationTokenJPARepository tokenRepo, UserJPARepository userRepo) {
+	public CreateVerificationTokenJPA(VerificationTokenJPARepository tokenRepo, UserJPARepository userRepo,
+			AppGenericMapper<VerificationTokenJPA, VerificationToken> mapper) {
 		this.tokenRepo = tokenRepo;
 		this.userRepo = userRepo;
+		this.mapper = mapper;
 	}
 
+
 	@Override
-	public VerificationToken create(VerificationTokenDTOOut token) throws AppUserNotFoundException {
-//		Optional<UserJPA> user = userRepo.findByEmail(token.getUserEmail());
-//		VerificationTokenJPA tokenJpa = new VerificationTokenJPA(token.getToken(), user.get(), token.getExpiryDate());
-//		tokenRepo.save(tokenJpa);
-		throw new UnsupportedOperationException("Method not implemented");
+	public VerificationToken create(VerificationTokenDTOOut token) throws AppUserNotFoundException, AppUserAlreadyHaveVerificationTokenException {
+		UserJPA user = userRepo.findByEmail(token.getUserEmail()).orElseThrow(() ->
+				new AppUserNotFoundException("User not found with email: "+token.getUserEmail()));
+		
+		Optional<VerificationTokenJPA> optional = tokenRepo.findByUser(user);
+		if (optional.isPresent())
+			throw new AppUserAlreadyHaveVerificationTokenException();
+		
+		VerificationTokenJPA tokenJpa = new VerificationTokenJPA(token.getToken(), user, token.getExpiryDate());
+		return mapper.map(tokenRepo.save(tokenJpa));
 	}
 
 }
