@@ -10,18 +10,18 @@ import org.junit.jupiter.api.Test;
 
 class VerificationTokenTest {
 
-	private VerificationToken token;
 	private Calendar calendar;
+	private VerificationToken token;
 	
 	@BeforeEach
 	void setUp() {
-		token = new VerificationToken("token", Calendar.getInstance().getTime(), "user@email.it");
 		calendar = Calendar.getInstance();
+		token = new VerificationToken("token", calendar.getTime(), "user@email.it");
 	}
 	
 	@Test
 	void test_isExpired() {
-		calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
+		calendar.add(Calendar.MINUTE, 1);
 		Date date = calendar.getTime();
 		
 		assertThat(token.isExpired(date)).isTrue();
@@ -29,10 +29,15 @@ class VerificationTokenTest {
 	
 	@Test
 	void test_isNotExpired() {
-		calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)-1);
+		calendar.add(Calendar.MINUTE, -1);
 		Date date = calendar.getTime();
 		
 		assertThat(token.isExpired(date)).isFalse();
+	}
+	
+	@Test
+	void test_whenDatesAreEqual_tokenIsNotExpired() {
+		assertThat(token.isExpired(calendar.getTime())).isFalse();
 	}
 
 }

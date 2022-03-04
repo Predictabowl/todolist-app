@@ -10,21 +10,24 @@ import it.aldinucci.todoapp.application.port.in.dto.VerificantionLinkDTO;
 
 @Service
 public class SendVerificationEmailService implements SendVerificationEmailUsePort{ 
-	
+
 	private JavaMailSender emailSender;
-	
+
 	@Autowired
 	public SendVerificationEmailService(JavaMailSender emailSender) {
 		this.emailSender = emailSender;
 	}
 
+
 	@Override
 	public void send(VerificantionLinkDTO link) {
 		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom("capitanfindus@inwind.it");
-		message.setTo(link.getEmail());
 		message.setSubject("Account Verification");
-		message.setText("Verification email. link: "+link.getLink());
+		message.setFrom("noreply@email.it");
+		message.setTo(link.getEmail());
+		message.setText(
+				"Verification email...\n"+""
+				+ "Click on the following link: "+link.getLink());
 		emailSender.send(message);
 		
 	}

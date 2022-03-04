@@ -17,16 +17,16 @@ import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.core.env.Environment;
 
 import it.aldinucci.todoapp.application.port.out.CreateVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificatinTokenByUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.VerificationTokenDTOOut;
 import it.aldinucci.todoapp.application.service.util.VerificationTokenExpiryDateGenerator;
 import it.aldinucci.todoapp.application.service.util.VerificationTokenStringGenerator;
-import it.aldinucci.todoapp.application.util.ApplicationPropertyNames;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
+import it.aldinucci.todoapp.util.AppPropertiesReader;
+import it.aldinucci.todoapp.util.ApplicationPropertyNames;
 
 class CreateVerificationTokenServiceTest {
 
@@ -42,7 +42,7 @@ class CreateVerificationTokenServiceTest {
 	private DeleteVerificatinTokenByUserDriverPort deleteTokenPort;
 	
 	@Mock
-	private Environment env;
+	private AppPropertiesReader propReader;
 	
 	@Mock VerificationTokenExpiryDateGenerator dateGenerator;
 	
@@ -55,7 +55,7 @@ class CreateVerificationTokenServiceTest {
 	void setUp() {
 		openMocks(this);
 		date = Calendar.getInstance().getTime();
-		when(env.getProperty(isA(String.class), any(), anyInt())).thenReturn(FIXTURE_TOKEN_LENGTH);
+		when(propReader.get(isA(String.class), any(), anyInt())).thenReturn(FIXTURE_TOKEN_LENGTH);
 	}
 	
 	@Test
@@ -75,7 +75,7 @@ class CreateVerificationTokenServiceTest {
 		inOrder.verify(stringGenerator).generate(FIXTURE_TOKEN_LENGTH);
 		inOrder.verify(dateGenerator).generate();
 		inOrder.verify(createTokenPort).create(tokenDto);
-		verify(env).getProperty(
+		verify(propReader).get(
 				ApplicationPropertyNames.VERIFICATION_TOKEN_LENGTH,
 				Integer.class,
 				CreateVerificationTokenService.DEFAULT_TOKEN_LENGTH);

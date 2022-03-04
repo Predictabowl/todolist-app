@@ -15,16 +15,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.core.env.Environment;
 
-import it.aldinucci.todoapp.application.util.ApplicationPropertyNames;
+import it.aldinucci.todoapp.util.AppPropertiesReader;
+import it.aldinucci.todoapp.util.ApplicationPropertyNames;
 
 class VerificationTokenExpiryDateGeneratorImplTest {
 
 	private static final int FIXTURE_TOKEN_DURATION = 25;
 
 	@Mock
-	private Environment env;
+	private AppPropertiesReader propReader;
 
 	@InjectMocks
 	private VerificationTokenExpiryDateGeneratorImpl dateGen;
@@ -35,12 +35,12 @@ class VerificationTokenExpiryDateGeneratorImplTest {
 	void setUp() {
 		openMocks(this);
 		calendar = Calendar.getInstance();
-		when(env.getProperty(isA(String.class),any(),anyInt())).thenReturn(FIXTURE_TOKEN_DURATION);
+		when(propReader.get(isA(String.class),any(),anyInt())).thenReturn(FIXTURE_TOKEN_DURATION);
 	}
 
 	@Test
 	void test_DateCalculation() {
-		calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+FIXTURE_TOKEN_DURATION);
+		calendar.add(Calendar.MINUTE, FIXTURE_TOKEN_DURATION);
 		
 		Date generatedDate = dateGen.generate();
 		
@@ -48,7 +48,7 @@ class VerificationTokenExpiryDateGeneratorImplTest {
 			.isInSameHourWindowAs(Calendar.getInstance().getTime())
 			.hasMinute(calendar.get(Calendar.MINUTE));
 		
-		verify(env).getProperty(
+		verify(propReader).get(
 				ApplicationPropertyNames.VERIFICATION_TOKEN_DURATION,
 				Integer.class,
 				VerificationTokenExpiryDateGeneratorImpl.DEFAULT_TOKEN_DURATION);
