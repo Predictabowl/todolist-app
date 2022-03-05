@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.util;
+package it.aldinucci.todoapp.config;
 
 public class ApplicationPropertyNames {
 

@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -42,7 +41,7 @@ import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
 @Import({AppRestSecurityConfig.class})
 class CreateProjectRestControllerTest {
 
-	private static final String FIXTURE_URL = BASE_REST_URI+"/project/create";
+	private static final String FIXTURE_URL = "/api/project/create";
 	
 	@Autowired
 	private MockMvc mvc;

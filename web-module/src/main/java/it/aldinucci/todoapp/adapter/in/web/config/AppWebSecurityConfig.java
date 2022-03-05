@@ -1,7 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.web.config;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_WEB_URI;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -16,7 +14,7 @@ public class AppWebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers(BASE_WEB_URI+"/register").permitAll()
+				.antMatchers("/user/register/**").permitAll()
 		.and()
 			.authorizeRequests().anyRequest().authenticated()
 		.and()

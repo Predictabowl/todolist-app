@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.configuration.integration.rest;
 
 import static io.restassured.RestAssured.given;
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -81,7 +80,7 @@ class RestLoadTasksIT {
 			.auth()	.basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 		.when()
-			.get(BASE_REST_URI+"/project/"+project.getId()+"/tasks")
+			.get("/api/project/"+project.getId()+"/tasks")
 		.then()
 			.statusCode(200)
 			.extract().body();

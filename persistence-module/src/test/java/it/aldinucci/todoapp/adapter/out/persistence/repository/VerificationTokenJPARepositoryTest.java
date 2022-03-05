@@ -71,6 +71,7 @@ class VerificationTokenJPARepositoryTest {
 		
 		assertThat(loadedToken).usingRecursiveComparison().isEqualTo(token);
 	}
+	
 
 	@Test
 	void test_mapping_oneToOne() {

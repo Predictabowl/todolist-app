@@ -66,7 +66,7 @@ class SendVerificationEmailServiceTest {
 
 		Address[] from = msg.getFrom();
 		assertThat(from).hasSize(1);
-		assertThat(from[0].toString()).matches("noreply@email.it");
+		assertThat(from[0].toString()).matches("test@email.it");
 	}
 
 }

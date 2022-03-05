@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.configuration.integration.rest;
 
 import static io.restassured.RestAssured.given;
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +27,7 @@ class RestDeleteProjectIT {
 
 	private static final String FIXTURE_EMAIL = "user@email.com";
 	private static final String FIXTURE_PASSWORD = "somePassword";
-	private static final String FIXTURE_URI = BASE_REST_URI + "/project/1";
+	private static final String FIXTURE_URI = "/api/project/1";
 	
 	@Autowired
 	private ProjectJPARepository projectRepo;
@@ -67,7 +66,7 @@ class RestDeleteProjectIT {
 			.cookie("XSRF-TOKEN", csrfToken)
 			.sessionId(sessionId)
 		.when()
-			.delete(BASE_REST_URI+"/project/"+project.getId())
+			.delete("/api/project/"+project.getId())
 		.then()
 			.statusCode(200);
 		

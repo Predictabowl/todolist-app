@@ -29,7 +29,6 @@ public class CreateNewUserService implements CreateUserUsePort{
 	@Autowired
 	public CreateNewUserService(AppGenericMapper<NewUserDTOIn, NewUserDTOOut> mapper, CreateUserDriverPort createUser,
 			PasswordEncoder encoder, LoadUserByEmailDriverPort loadUser) {
-		super();
 		this.mapper = mapper;
 		this.createUser = createUser;
 		this.encoder = encoder;

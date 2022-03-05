@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import it.aldinucci.todoapp.config.ApplicationPropertyNames;
 import it.aldinucci.todoapp.util.AppPropertiesReader;
-import it.aldinucci.todoapp.util.ApplicationPropertyNames;
 
 class VerificationTokenExpiryDateGeneratorImplTest {
 

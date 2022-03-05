@@ -10,7 +10,6 @@ import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPo
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppCouldNotGenerateVerificationTokenException;
-import it.aldinucci.todoapp.util.RandomStringGenerator;
 
 /**
  * With the current implementation there's a possibility (albeit remote) that the
@@ -19,16 +18,16 @@ import it.aldinucci.todoapp.util.RandomStringGenerator;
  *
  */
 @Component
-public class VerificationTokenStringGeneratorImpl implements VerificationTokenStringGenerator {
+public class UniqueVerificationTokenGeneratorImpl implements UniqueVerificationTokenGenerator {
 
 	private static final int MAX_LOOP_NUMBER = 2048;
 	
-	private RandomStringGenerator randStringGen;
+	private TokenStringGenerator randStringGen;
 	private LoadVerificationTokenDriverPort loadToken;
 	private DeleteVerificationTokenDriverPort deleteToken;
 	
 	@Autowired
-	public VerificationTokenStringGeneratorImpl(RandomStringGenerator randStringGen,
+	public UniqueVerificationTokenGeneratorImpl(TokenStringGenerator randStringGen,
 			LoadVerificationTokenDriverPort loadToken, DeleteVerificationTokenDriverPort deleteToken) {
 		this.randStringGen = randStringGen;
 		this.loadToken = loadToken;
@@ -37,12 +36,12 @@ public class VerificationTokenStringGeneratorImpl implements VerificationTokenSt
 
 
 	@Override
-	public String generate(int length) {
+	public String generate() {
 		String tokenString = "";
 		Optional<VerificationToken> token;
 		int i = 0;
 		while (tokenString.isEmpty() && i < MAX_LOOP_NUMBER) {
-			tokenString = randStringGen.generate(length);
+			tokenString = randStringGen.generate();
 			token = loadToken.load(tokenString);
 			if (!token.isEmpty()) {
 				if (token.get().isExpired(Calendar.getInstance().getTime()))

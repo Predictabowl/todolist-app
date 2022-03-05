@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_WEB_URI;
 
 import java.util.List;
 
@@ -11,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
@@ -25,7 +23,6 @@ import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Controller
-@RequestMapping(BASE_WEB_URI)
 public class BaseWebController {
 	
 	private static final String MESSAGE_ATTRIBUTE = "message";

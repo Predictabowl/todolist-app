@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.util;
 
-import static it.aldinucci.todoapp.util.ApplicationPropertyNames.*;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

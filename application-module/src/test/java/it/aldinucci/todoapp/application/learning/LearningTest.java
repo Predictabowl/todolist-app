@@ -3,7 +3,7 @@ package it.aldinucci.todoapp.application.learning;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import it.aldinucci.todoapp.application.config.ApplicationBeansProvider;
-import it.aldinucci.todoapp.util.ApplicationPropertyNames;
+import it.aldinucci.todoapp.config.ApplicationPropertyNames;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

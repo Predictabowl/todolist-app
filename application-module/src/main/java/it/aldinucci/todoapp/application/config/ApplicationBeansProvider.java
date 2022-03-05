@@ -1,9 +1,6 @@
 package it.aldinucci.todoapp.application.config;
 
-import static it.aldinucci.todoapp.util.ApplicationPropertyNames.*;
-import static it.aldinucci.todoapp.util.ApplicationPropertyNames.VERIFICATION_EMAIL_HOST;
-import static it.aldinucci.todoapp.util.ApplicationPropertyNames.VERIFICATION_EMAIL_PASSWORD;
-import static it.aldinucci.todoapp.util.ApplicationPropertyNames.VERIFICATION_EMAIL_PORT;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.*;
 
 import java.util.Properties;
 
@@ -22,7 +19,7 @@ public class ApplicationBeansProvider {
 	@Value("${"+VERIFICATION_EMAIL_HOST+"}")
 	private String emailHost;
 	
-	@Value("${"+VERIFICATION_EMAIL_PORT+"}")
+	@Value("${"+VERIFICATION_EMAIL_PORT+":465}")
 	private int emailPort;
 	
 	@Value("${"+VERIFICATION_EMAIL_PASSWORD+"}")
@@ -37,15 +34,13 @@ public class ApplicationBeansProvider {
 	@Value("${"+VERIFICATION_EMAIL_SSL+":true}")
 	private String emailSsl;
 	
-	@Value("${"+VERIFICATION_EMAIL_SSL+":false}")
+	@Value("${"+VERIFICATION_EMAIL_DEBUG+":false}")
 	private String emailDebug;
 	
 	@Bean
 	public JavaMailSender getJavaMailSender() {
 	    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-//	    mailSender.setHost("smtp.libero.it");
 	    mailSender.setHost(emailHost);
-//	    mailSender.setPort(465);
 	    mailSender.setPort(emailPort);
 	    mailSender.setUsername(emailAddress);
 	    mailSender.setPassword(emailPassword);
@@ -53,10 +48,6 @@ public class ApplicationBeansProvider {
 	    Properties props = mailSender.getJavaMailProperties();
 	    props.put("mail.transport.protocol", emailProtocol);
 	    props.put("mail.smtp.auth", emailAuth);
-//	    props.put("mail.smtp.starttls.enable", "true");
-//	    props.put("mail.smtp.starttls.required", "true");
-//	    props.put("mail.smtp.ssl.checkserveridentity", "true");
-//	    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 	    props.put("mail.smtp.ssl.enable", emailSsl);
 	    props.put("mail.debug", emailDebug);
 	    

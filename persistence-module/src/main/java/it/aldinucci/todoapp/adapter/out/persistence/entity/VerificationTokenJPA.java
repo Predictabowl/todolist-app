@@ -6,6 +6,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
@@ -24,7 +25,7 @@ public class VerificationTokenJPA {
 	@NaturalId
 	private String token;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne (fetch = FetchType.LAZY, optional = false)
 	@MapsId
 	private UserJPA user;
 

@@ -1,7 +1,7 @@
 package it.aldinucci.todoapp.application.service.util;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -23,14 +23,11 @@ import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPo
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppCouldNotGenerateVerificationTokenException;
-import it.aldinucci.todoapp.util.RandomStringGenerator;
 
-class VerificationTokenStringGeneratorImplTest {
+class UniqueVerificationTokenGeneratorImplTest {
 
-	private static final int TOKEN_LENGTH = 10;
-	
 	@Mock
-	private RandomStringGenerator randStringGen;
+	private TokenStringGenerator randStringGen;
 	
 	@Mock
 	private LoadVerificationTokenDriverPort loadToken;
@@ -39,7 +36,7 @@ class VerificationTokenStringGeneratorImplTest {
 	private DeleteVerificationTokenDriverPort deleteToken;
 	
 	@InjectMocks
-	private VerificationTokenStringGeneratorImpl tokenGenerator;
+	private UniqueVerificationTokenGeneratorImpl tokenGenerator;
 	
 	@BeforeEach
 	void sretUp() {
@@ -48,12 +45,12 @@ class VerificationTokenStringGeneratorImplTest {
 	
 	@Test
 	void test_tokenCreated_whenTokenDoesNotExists() {
-		when(randStringGen.generate(anyInt())).thenReturn("random string");
+		when(randStringGen.generate()).thenReturn("random string");
 		when(loadToken.load(isA(String.class))).thenReturn(Optional.empty());
 		
-		String generatedToken = tokenGenerator.generate(TOKEN_LENGTH);
+		String generatedToken = tokenGenerator.generate();
 		
-		verify(randStringGen).generate(TOKEN_LENGTH);
+		verify(randStringGen).generate();
 		verify(loadToken).load("random string");
 		verifyNoInteractions(deleteToken);
 		assertThat(generatedToken).isEqualTo("random string");
@@ -61,7 +58,7 @@ class VerificationTokenStringGeneratorImplTest {
 	
 	@Test
 	void test_tokenCreated_whenTokenNotUniqueAndNotExpired() {
-		when(randStringGen.generate(anyInt()))
+		when(randStringGen.generate())
 			.thenReturn("random string")
 			.thenReturn("another string");
 		Calendar calendar = Calendar.getInstance();
@@ -71,12 +68,12 @@ class VerificationTokenStringGeneratorImplTest {
 			.thenReturn(Optional.of(token))
 			.thenReturn(Optional.empty());
 		
-		String generatedString = tokenGenerator.generate(TOKEN_LENGTH);
+		String generatedString = tokenGenerator.generate();
 		
 		InOrder inOrder = Mockito.inOrder(randStringGen,loadToken);
-		inOrder.verify(randStringGen).generate(TOKEN_LENGTH);
+		inOrder.verify(randStringGen).generate();
 		inOrder.verify(loadToken).load("random string");
-		inOrder.verify(randStringGen).generate(TOKEN_LENGTH);
+		inOrder.verify(randStringGen).generate();
 		inOrder.verify(loadToken).load("another string");
 		verifyNoInteractions(deleteToken);
 		assertThat(generatedString).isEqualTo("another string");
@@ -84,16 +81,16 @@ class VerificationTokenStringGeneratorImplTest {
 	
 	@Test
 	void test_tokenCreated_whenTokenExistsButIsExpired() {
-		when(randStringGen.generate(anyInt()))
+		when(randStringGen.generate())
 			.thenReturn("random string");
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)-1);
 		VerificationToken token = new VerificationToken("random string", calendar.getTime(), "user@test.it");
 		when(loadToken.load(isA(String.class))).thenReturn(Optional.of(token));
 		
-		String generatedString = tokenGenerator.generate(TOKEN_LENGTH);
+		String generatedString = tokenGenerator.generate();
 		
-		verify(randStringGen).generate(TOKEN_LENGTH);
+		verify(randStringGen).generate();
 		verify(loadToken).load("random string");
 		verify(deleteToken).delete("random string");
 		verifyNoMoreInteractions(randStringGen);
@@ -102,14 +99,14 @@ class VerificationTokenStringGeneratorImplTest {
 	}
 	
 	@Test
-	void test_tokenCreation_willThrow_ifMaximumNumberOfLoopsIsReached() {
-	when(randStringGen.generate(anyInt())).thenReturn("random string");
+	void test_tokenCreationNotUnique_willThrow_ifMaximumNumberOfLoopsIsReached() {
+	when(randStringGen.generate()).thenReturn("random string");
 	Calendar calendar = Calendar.getInstance();
 	calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
 	VerificationToken token = new VerificationToken("random string", calendar.getTime(), "user@test.it");
 	when(loadToken.load(isA(String.class))).thenReturn(Optional.of(token));
 	
-	assertThatThrownBy(() -> tokenGenerator.generate(TOKEN_LENGTH))
+	assertThatThrownBy(() -> tokenGenerator.generate())
 		.isInstanceOf(AppCouldNotGenerateVerificationTokenException.class);
 	
 	}

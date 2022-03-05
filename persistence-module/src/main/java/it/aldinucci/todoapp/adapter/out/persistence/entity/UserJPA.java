@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -31,7 +32,7 @@ public class UserJPA {
 	private String password;
 	
 	private boolean enabled;
-	
+		
 	@OneToMany (cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<ProjectJPA> projects;
 	

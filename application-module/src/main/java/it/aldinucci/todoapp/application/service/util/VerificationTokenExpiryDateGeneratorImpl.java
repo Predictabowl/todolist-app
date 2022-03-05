@@ -6,8 +6,8 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import it.aldinucci.todoapp.config.ApplicationPropertyNames;
 import it.aldinucci.todoapp.util.AppPropertiesReader;
-import it.aldinucci.todoapp.util.ApplicationPropertyNames;
 
 @Component
 public class VerificationTokenExpiryDateGeneratorImpl implements VerificationTokenExpiryDateGenerator {  

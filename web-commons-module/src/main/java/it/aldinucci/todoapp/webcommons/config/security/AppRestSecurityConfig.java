@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.webcommons.config.security;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -19,7 +18,7 @@ public class AppRestSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			
-			.antMatcher(BASE_REST_URI+"/**")
+			.antMatcher("/api/**")
 			// send csrf token back as a cookie for a REST GET 
 			.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 		.and()
