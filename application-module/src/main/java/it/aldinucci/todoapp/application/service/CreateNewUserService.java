@@ -1,7 +1,5 @@
 package it.aldinucci.todoapp.application.service;
 
-import java.util.Optional;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
 import it.aldinucci.todoapp.application.port.out.CreateUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewUserData;
@@ -41,12 +40,11 @@ public class CreateNewUserService implements CreateUserUsePort{
 	}
 
 
-
 	@Override
-	public User create(NewUserDTOIn newUser) throws AppEmailAlreadyRegisteredException{
-		Optional<User> oldUser = loadUser.load(newUser.getEmail());
-		if(oldUser.isPresent())
-			throw new AppEmailAlreadyRegisteredException("There's already an user registered with the email: "+newUser.getEmail());
+	public NewUserDtoOut create(NewUserDTOIn newUser) throws AppEmailAlreadyRegisteredException{
+		if(loadUser.load(newUser.getEmail()).isPresent())
+			throw new AppEmailAlreadyRegisteredException("There's already an user registered with the email: " + 
+					newUser.getEmail());
 		
 		NewUserData newUserOut = mapper.map(newUser);
 		newUserOut.setPassword(encoder.encode(newUserOut.getPassword()));
@@ -54,7 +52,7 @@ public class CreateNewUserService implements CreateUserUsePort{
 		
 		VerificationToken token = createToken.create(newUser.getEmail());
 		
-		return user;
+		return new NewUserDtoOut(user, token);
 	}
 
 }

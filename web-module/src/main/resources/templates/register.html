@@ -10,27 +10,31 @@
 </head>
 <body>
 
-	<div class="container is-flex">
-		<div class="block box">
-			<h1 class="title is-center" th:text="#{signUp}"></h1>
-			<div class="is-flex">
-				<form th:action="@{/user/register}" name="user-register" method="post" th:object="${registerUserDto}">
-					<div>
-						<div th:insert="~{fragments/commons::inputFieldWithIcon('email','Email', 'text', 'fa-envelope')}"></div>
-						<label class="help is-danger" th:if="${emailExists != null}" th:text="#{email.exists}"></label>
+	<section class="section">
+		<div class="container">
+			<div class="columns is-centered">
+				<div class="block box has-text-centered">
+					<h1 class="title" th:text="#{signUp}"></h1>
+					<form th:action="@{/user/register}" name="user-register" method="post" th:object="${registerUserDto}">
+						<div class="column">
+							<div th:insert="~{fragments/commons::inputFieldWithIcon('email','Email', 'email', 'fa-envelope')}"></div>
+							<label class="help is-danger" th:if="${emailExists != null}" th:text="#{email.exists}"></label>
+						</div>
+						<div class="column" th:insert="~{fragments/commons::inputFieldWithIcon('username','Username', 'text', 'fa-user')}"></div>
+						<div class="column" th:insert="~{fragments/commons::inputFieldWithIcon('password','Password', 'password', 'fa-key')}"></div>
+						<div class="column" th:insert="~{fragments/commons::inputFieldWithIcon('confirmedPassword','Repeat-Password', 'password', 'fa-key')}"></div>
+						<div class="column">
+							<button class="button is-link is-rounded" type="submit" name="form-submit" value="Register in" th:text="#{register}"></button>
+						</div>					
+					</form>
+					<div class="column">
+						<a th:href="@{/user/register/resend/verification}" class="link" th:text="#{send.email.verification.again}"></a>
 					</div>
-					<div th:insert="~{fragments/commons::inputFieldWithIcon('username','Username', 'text', 'fa-user')}"></div>
-					<div th:insert="~{fragments/commons::inputFieldWithIcon('password','Password', 'password', 'fa-key')}"></div>
-					<div th:insert="~{fragments/commons::inputFieldWithIcon('confirmedPassword','Repeat-Password', 'password', 'fa-key')}"></div>
-					<div class="">
-						<button class="button is-link is-rounded" type="submit" name="form-submit" value="Register in" th:text="#{register}"></button>
-					</div>
-					
-				</form>
+				</div>
 			</div>
+	
 		</div>
-
-	</div>
+	</section>
 
 </body>
 </html>

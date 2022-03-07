@@ -2,6 +2,7 @@ package it.aldinucci.todoapp.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -20,11 +21,13 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
 import it.aldinucci.todoapp.application.port.out.CreateUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewUserData;
 import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
@@ -60,13 +63,17 @@ class CreateNewUserServiceTest {
 		NewUserDTOIn newUserIn = new NewUserDTOIn("name", FIXTURE_EMAIL, "password");
 		NewUserData newUserOut = spy(new NewUserData("test", "user@email.it", "pass"));
 		User createdUser = new User("email", "user", "pass");
+		VerificationToken token = new VerificationToken();
 		when(createUser.create(isA(NewUserData.class))).thenReturn(createdUser);
 		when(mapper.map(newUserIn)).thenReturn(newUserOut);
 		when(encoder.encode(isA(CharSequence.class))).thenReturn("encoded password");
 		when(loadUser.load(isA(String.class))).thenReturn(Optional.empty());
+		when(createToken.create(anyString())).thenReturn(token);
 		
-		User resultUser = service.create(newUserIn);
+		NewUserDtoOut newUserDtoOut = service.create(newUserIn);
 		
+		assertThat(newUserDtoOut.getUser()).isSameAs(createdUser);
+		assertThat(newUserDtoOut.getToken()).isSameAs(token);
 		InOrder inOrder = Mockito.inOrder(createUser,mapper,encoder,newUserOut,loadUser, createToken);
 		inOrder.verify(loadUser).load(FIXTURE_EMAIL);
 		inOrder.verify(mapper).map(newUserIn);
@@ -74,7 +81,6 @@ class CreateNewUserServiceTest {
 		inOrder.verify(newUserOut).setPassword("encoded password");
 		inOrder.verify(createUser).create(newUserOut);
 		inOrder.verify(createToken).create(FIXTURE_EMAIL);
-		assertThat(resultUser).isSameAs(createdUser);
 	}
 	
 	@Test

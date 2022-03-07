@@ -15,6 +15,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Calendar;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +26,6 @@ import org.mockito.stubbing.VoidAnswer2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,11 +33,14 @@ import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
 
 import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
-import it.aldinucci.todoapp.adapter.in.web.service.VerificationHelperService;
 import it.aldinucci.todoapp.adapter.in.web.validator.RegisterUserValidator;
 import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
+import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
+import it.aldinucci.todoapp.application.port.in.dto.VerificationLinkDTO;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
@@ -58,7 +61,7 @@ class RegisterUserWebControllerTest {
 	private RegisterUserValidator userValidator;
 	
 	@MockBean
-	private VerificationHelperService verificationService;
+	private SendVerificationEmailUsePort sendMail;
 	
 	@Autowired
 	private MockMvc mvc;
@@ -113,7 +116,7 @@ class RegisterUserWebControllerTest {
 		verify(userValidator).validate(eq(registerUserDto), isA(Errors.class));
 		verifyNoInteractions(createUser);
 		verifyNoInteractions(mapper);
-		verifyNoInteractions(verificationService);
+		verifyNoInteractions(sendMail);
 	}
 	
 	@Test
@@ -145,7 +148,7 @@ class RegisterUserWebControllerTest {
 		inOrder.verify(userValidator).validate(eq(registerUserDto), isA(Errors.class));
 		inOrder.verify(mapper).map(registerUserDto);
 		inOrder.verify(createUser).create(newUserDTOIn);
-		verifyNoInteractions(verificationService);
+		verifyNoInteractions(sendMail);
 	}
 	
 	/**
@@ -161,7 +164,10 @@ class RegisterUserWebControllerTest {
 		NewUserDTOIn newUserDTOIn = new NewUserDTOIn("test name", FIXTURE_EMAIL, "testPass");
 		doNothing().when(userValidator).validate(any(), any());
 		when(mapper.map(isA(RegisterUserDto.class))).thenReturn(newUserDTOIn);
-		when(createUser.create(isA(NewUserDTOIn.class))).thenReturn(new User(FIXTURE_EMAIL, "name", "pass"));
+		User user = new User(FIXTURE_EMAIL, "name", "pass");
+		VerificationToken token = new VerificationToken("token-code", Calendar.getInstance().getTime(), FIXTURE_EMAIL);
+		NewUserDtoOut newUser = new NewUserDtoOut(user, token); 
+		when(createUser.create(isA(NewUserDTOIn.class))).thenReturn(newUser);
 		
 		ModelAndView modelAndView = mvc.perform(post(FIXTURE_URI)
 				.with(csrf())
@@ -180,13 +186,13 @@ class RegisterUserWebControllerTest {
 		ModelAndViewAssert.assertViewName(modelAndView, "register.sent.verification");
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "useremail", FIXTURE_EMAIL);
 		
-		InOrder inOrder = Mockito.inOrder(userValidator,mapper,createUser, verificationService);
+		InOrder inOrder = Mockito.inOrder(userValidator,mapper,createUser, sendMail);
 		inOrder.verify(userValidator).supports(RegisterUserDto.class);
 		inOrder.verify(userValidator).validate(eq(registerUserDto), isA(Errors.class));
 		inOrder.verify(mapper).map(registerUserDto);
 		inOrder.verify(createUser).create(newUserDTOIn);
-		inOrder.verify(verificationService)
-			.sendVerifcationMail(FIXTURE_EMAIL, "http://hostsomewhere.org:123/user/register/verification");
+		inOrder.verify(sendMail)
+			.send(new VerificationLinkDTO("http://hostsomewhere.org:123/user/register/verification/token-code", FIXTURE_EMAIL));
 
 	}
 
