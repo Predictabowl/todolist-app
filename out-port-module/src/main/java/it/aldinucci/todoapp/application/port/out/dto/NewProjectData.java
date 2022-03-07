@@ -3,15 +3,15 @@ package it.aldinucci.todoapp.application.port.out.dto;
 import java.util.Objects;
 
 
-public class NewProjectDTOOut{
+public class NewProjectData{
 
 	private String name;
 	private String userEmail;
 	
-	public NewProjectDTOOut() {
+	public NewProjectData() {
 	}
 	
-	public NewProjectDTOOut(String name, String userEmail) {
+	public NewProjectData(String name, String userEmail) {
 		this.name = name;
 		this.userEmail = userEmail;
 	}
@@ -45,7 +45,7 @@ public class NewProjectDTOOut{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NewProjectDTOOut other = (NewProjectDTOOut) obj;
+		NewProjectData other = (NewProjectData) obj;
 		return Objects.equals(name, other.name) && Objects.equals(userEmail, other.userEmail);
 	}
 

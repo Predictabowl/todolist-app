@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
-import it.aldinucci.todoapp.application.port.out.dto.NewUserDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewUserData;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
@@ -30,7 +30,7 @@ class CreateUserJPATest {
 	private AppGenericMapper<UserJPA, User> userMapper;
 	
 	@MockBean
-	private AppGenericMapper<NewUserDTOOut, UserJPA> userJPAMapper;
+	private AppGenericMapper<NewUserData, UserJPA> userJPAMapper;
 	
 	@Autowired
 	private TestEntityManager entityManager;
@@ -40,11 +40,11 @@ class CreateUserJPATest {
 	
 	@Test
 	void test_createNewUser_success() {
-		NewUserDTOOut userDto = new NewUserDTOOut("username", "test@email.it", "password");
+		NewUserData userDto = new NewUserData("username", "test@email.it", "password");
 		UserJPA newUserJpa = new UserJPA("email@test.it", "name", "password");
 		User newUser = new User("user@email.it", "username", "pass");
 		when(userMapper.map(isA(UserJPA.class))).thenReturn(newUser);
-		when(userJPAMapper.map(isA(NewUserDTOOut.class))).thenReturn(newUserJpa);
+		when(userJPAMapper.map(isA(NewUserData.class))).thenReturn(newUserJpa);
 		
 		User createdUser = createUser.create(userDto);
 		

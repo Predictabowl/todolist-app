@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
-import it.aldinucci.todoapp.application.port.out.dto.NewUserDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewUserData;
 
 class NewUserDTOInToUserJPAMapperTest {
 
@@ -19,7 +19,7 @@ class NewUserDTOInToUserJPAMapperTest {
 	
 	@Test
 	void test() {
-		UserJPA user = mapper.map(new NewUserDTOOut("user", "email", "password"));
+		UserJPA user = mapper.map(new NewUserData("user", "email", "password"));
 		
 		assertThat(user.getEmail()).isEqualTo("email");
 		assertThat(user.getPassword()).isEqualTo("password");

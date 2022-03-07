@@ -24,6 +24,8 @@ import org.mockito.stubbing.VoidAnswer2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
@@ -106,6 +108,7 @@ class RegisterUserWebControllerTest {
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "registerUserDto", registerUserDto);
 		assertThat(modelAndView.getModel().containsKey("emailExists")).isFalse();
 		
+		
 		verify(userValidator).supports(RegisterUserDto.class);
 		verify(userValidator).validate(eq(registerUserDto), isA(Errors.class));
 		verifyNoInteractions(createUser);
@@ -131,6 +134,7 @@ class RegisterUserWebControllerTest {
 				.param("confirmedPassword", "testPass"))
 			.andExpect(status().is2xxSuccessful())
 			.andReturn().getModelAndView();
+		
 		
 		ModelAndViewAssert.assertViewName(modelAndView, "register");
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "registerUserDto", registerUserDto);
@@ -163,6 +167,7 @@ class RegisterUserWebControllerTest {
 				.with(csrf())
 				.with(req -> {
 					req.setServerName("hostsomewhere.org");
+					req.setServerPort(123);
 					return req;
 				})
 				.param("email", FIXTURE_EMAIL)
@@ -181,7 +186,7 @@ class RegisterUserWebControllerTest {
 		inOrder.verify(mapper).map(registerUserDto);
 		inOrder.verify(createUser).create(newUserDTOIn);
 		inOrder.verify(verificationService)
-			.sendVerifcationMail(FIXTURE_EMAIL, "http://hostsomewhere.org/user/register/verification");
+			.sendVerifcationMail(FIXTURE_EMAIL, "http://hostsomewhere.org:123/user/register/verification");
 
 	}
 

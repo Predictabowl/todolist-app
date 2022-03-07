@@ -58,6 +58,24 @@
 			});
 		</script>
 	</div>
+	
+	<!-- INPUT TEXT WITH OBJECT FIELDS REFERENCED AND ERROR DISPLAY -->
+	<div th:fragment="inputWithField (fieldName, placeHolder, inputType)">
+		<input th:class="'input is-rounded ' +${#fields.hasErrors(fieldName) ? 'is-danger' : 'is-success'}" th:type="${inputType}"
+			th:placeholder="${placeHolder}" th:field="*{__${fieldName}__}"/>
+		<label class="help is-danger"	th:if="${#fields.hasErrors(fieldName)}" th:id="'input-helper-'+${fieldName}" 
+			th:errors="*{__${fieldName}__}"></label>
+	</div>
+	
+		<!-- Add icon on the left of the input field -->
+	<div th:fragment="inputFieldWithIcon (fieldName, placeHolder, inputType, iconClass)">
+		<div class="control has-icons-left">
+			<div th:insert="~{::inputWithField(__${fieldName}__, __${placeHolder}__, __${inputType}__)}"></div>
+	    	<span class="icon is-small is-left">
+				<i th:class="'fas ' +${iconClass}"></i>
+			</span>
+		</div>
+	</div>
 
 </body>
 </html>

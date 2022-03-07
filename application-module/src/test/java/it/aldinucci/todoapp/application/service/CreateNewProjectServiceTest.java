@@ -12,7 +12,7 @@ import org.mockito.Mock;
 
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
 import it.aldinucci.todoapp.application.port.out.CreateProjectDriverPort;
-import it.aldinucci.todoapp.application.port.out.dto.NewProjectDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewProjectData;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -23,7 +23,7 @@ class CreateNewProjectServiceTest {
 	private CreateProjectDriverPort port;
 	
 	@Mock
-	private AppGenericMapper<NewProjectDTOIn, NewProjectDTOOut> mapper;
+	private AppGenericMapper<NewProjectDTOIn, NewProjectData> mapper;
 	
 	private CreateNewProjectService service;
 	
@@ -36,9 +36,9 @@ class CreateNewProjectServiceTest {
 	@Test
 	void test_serviceShouldCallPort() throws AppUserNotFoundException {
 		NewProjectDTOIn newProjectIn = new NewProjectDTOIn("test project","test@email.com");
-		NewProjectDTOOut newProjectOut = new NewProjectDTOOut("test project", "test@email.com");
+		NewProjectData newProjectOut = new NewProjectData("test project", "test@email.com");
 		Project createdProject = new Project(1L, "first project");
-		when(port.create(isA(NewProjectDTOOut.class))).thenReturn(createdProject);
+		when(port.create(isA(NewProjectData.class))).thenReturn(createdProject);
 		when(mapper.map(newProjectIn)).thenReturn(newProjectOut);
 		
 		Project resultProject = service.create(newProjectIn);

@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.VerificantionLinkDTO;
+import it.aldinucci.todoapp.application.port.in.dto.VerificationLinkDTO;
 
 @Service
 public class SendVerificationEmailService implements SendVerificationEmailUsePort {
@@ -25,7 +25,7 @@ public class SendVerificationEmailService implements SendVerificationEmailUsePor
 	}
 
 	@Override
-	public void send(VerificantionLinkDTO link) {
+	public void send(VerificationLinkDTO link) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setSubject("Account Verification");
 		message.setFrom(emailAddress);

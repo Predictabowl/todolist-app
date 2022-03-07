@@ -22,15 +22,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.out.CreateUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
-import it.aldinucci.todoapp.application.port.out.dto.NewUserDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewUserData;
+import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exceptions.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 class CreateNewUserServiceTest {
 
+	private static final String FIXTURE_EMAIL = "test@email.it";
+
 	@Mock
-	private AppGenericMapper<NewUserDTOIn, NewUserDTOOut> mapper;
+	private AppGenericMapper<NewUserDTOIn, NewUserData> mapper;
 	
 	@Mock
 	private CreateUserDriverPort createUser;
@@ -40,6 +43,9 @@ class CreateNewUserServiceTest {
 	
 	@Mock 
 	private LoadUserByEmailDriverPort loadUser;
+	
+	@Mock
+	private CreateVerificationToken createToken;
 	
 	@InjectMocks
 	private CreateNewUserService service;
@@ -51,28 +57,29 @@ class CreateNewUserServiceTest {
 	
 	@Test
 	void test_createUserSuccess_shouldCallPort() throws AppEmailAlreadyRegisteredException {
-		NewUserDTOIn newUserIn = new NewUserDTOIn("name", "test@email.it", "password");
-		NewUserDTOOut newUserOut = spy(new NewUserDTOOut("test", "user@email.it", "pass"));
+		NewUserDTOIn newUserIn = new NewUserDTOIn("name", FIXTURE_EMAIL, "password");
+		NewUserData newUserOut = spy(new NewUserData("test", "user@email.it", "pass"));
 		User createdUser = new User("email", "user", "pass");
-		when(createUser.create(isA(NewUserDTOOut.class))).thenReturn(createdUser);
+		when(createUser.create(isA(NewUserData.class))).thenReturn(createdUser);
 		when(mapper.map(newUserIn)).thenReturn(newUserOut);
 		when(encoder.encode(isA(CharSequence.class))).thenReturn("encoded password");
 		when(loadUser.load(isA(String.class))).thenReturn(Optional.empty());
 		
 		User resultUser = service.create(newUserIn);
 		
-		InOrder inOrder = Mockito.inOrder(createUser,mapper,encoder,newUserOut,loadUser);
-		inOrder.verify(loadUser).load("test@email.it");
+		InOrder inOrder = Mockito.inOrder(createUser,mapper,encoder,newUserOut,loadUser, createToken);
+		inOrder.verify(loadUser).load(FIXTURE_EMAIL);
 		inOrder.verify(mapper).map(newUserIn);
 		inOrder.verify(encoder).encode("pass");
 		inOrder.verify(newUserOut).setPassword("encoded password");
 		inOrder.verify(createUser).create(newUserOut);
+		inOrder.verify(createToken).create(FIXTURE_EMAIL);
 		assertThat(resultUser).isSameAs(createdUser);
 	}
 	
 	@Test
 	void test_createUserWhenEmailAlreadyPresent_shouldThrow() {
-		NewUserDTOIn newUserIn = new NewUserDTOIn("name", "test@email.it", "password");
+		NewUserDTOIn newUserIn = new NewUserDTOIn("name", FIXTURE_EMAIL, "password");
 		User oldUser = new User("email", "user", "pass");
 		when(loadUser.load(isA(String.class))).thenReturn(Optional.of(oldUser));
 		
@@ -80,10 +87,11 @@ class CreateNewUserServiceTest {
 			.isInstanceOf(AppEmailAlreadyRegisteredException.class)
 			.hasMessage("There's already an user registered with the email: test@email.it");
 		
-		verify(loadUser).load("test@email.it");
+		verify(loadUser).load(FIXTURE_EMAIL);
 		verifyNoInteractions(mapper);
 		verifyNoInteractions(encoder);
 		verifyNoInteractions(createUser);
+		verifyNoInteractions(createToken);
 	}
 
 }

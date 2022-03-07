@@ -9,15 +9,15 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.VerificationTokenJPARepository;
-import it.aldinucci.todoapp.application.port.out.CreateVerificationTokenDriverPort;
-import it.aldinucci.todoapp.application.port.out.dto.VerificationTokenDTOOut;
+import it.aldinucci.todoapp.application.port.out.CreateUserVerificationTokenDriverPort;
+import it.aldinucci.todoapp.application.port.out.dto.VerificationTokenData;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppUserAlreadyHaveVerificationTokenException;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Component
-public class CreateVerificationTokenJPA implements CreateVerificationTokenDriverPort {
+public class CreateVerificationTokenJPA implements CreateUserVerificationTokenDriverPort {
 
 	private VerificationTokenJPARepository tokenRepo;
 	private UserJPARepository userRepo;
@@ -33,7 +33,7 @@ public class CreateVerificationTokenJPA implements CreateVerificationTokenDriver
 
 
 	@Override
-	public VerificationToken create(VerificationTokenDTOOut token) throws AppUserNotFoundException, AppUserAlreadyHaveVerificationTokenException {
+	public VerificationToken create(VerificationTokenData token) throws AppUserNotFoundException, AppUserAlreadyHaveVerificationTokenException {
 		UserJPA user = userRepo.findByEmail(token.getUserEmail()).orElseThrow(() ->
 				new AppUserNotFoundException("User not found with email: "+token.getUserEmail()));
 		

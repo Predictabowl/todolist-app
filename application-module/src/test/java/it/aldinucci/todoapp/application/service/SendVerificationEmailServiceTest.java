@@ -24,7 +24,7 @@ import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetupTest;
 
 import it.aldinucci.todoapp.application.config.ApplicationBeansProvider;
-import it.aldinucci.todoapp.application.port.in.dto.VerificantionLinkDTO;
+import it.aldinucci.todoapp.application.port.in.dto.VerificationLinkDTO;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { ApplicationBeansProvider.class, SendVerificationEmailService.class })
@@ -50,7 +50,7 @@ class SendVerificationEmailServiceTest {
 
 	@Test
 	void test_sendEmail() throws MessagingException, IOException {
-		VerificantionLinkDTO dto = new VerificantionLinkDTO(FIXTURE_VERIFICATION_URL, "unknown@email.org");
+		VerificationLinkDTO dto = new VerificationLinkDTO(FIXTURE_VERIFICATION_URL, "unknown@email.org");
 
 		sendEmail.send(dto);
 

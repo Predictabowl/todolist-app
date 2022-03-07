@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
 import it.aldinucci.todoapp.application.port.out.UpdateUserDriverPort;
-import it.aldinucci.todoapp.application.port.out.dto.UserDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.UserData;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -24,7 +24,7 @@ public class UpdateUserJPA implements UpdateUserDriverPort {
 	}
 
 	@Override
-	public User update(UserDTOOut user) {
+	public User update(UserData user) {
 		UserJPA userJPA = userRepo.findByEmail(user.getEmail())
 				.orElseThrow(() -> new AppUserNotFoundException("Could not find user with email: " + user.getEmail()));
 		userJPA.setPassword(user.getPassword());

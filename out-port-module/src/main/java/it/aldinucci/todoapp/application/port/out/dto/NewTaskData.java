@@ -2,17 +2,17 @@ package it.aldinucci.todoapp.application.port.out.dto;
 
 import java.util.Objects;
 
-public class NewTaskDTOOut {
+public class NewTaskData {
 
 	private String name;
 	private String description;
 	private static final boolean COMPLETE = false;
 	private Long projectId;
 	
-	public NewTaskDTOOut() {
+	public NewTaskData() {
 	}
 
-	public NewTaskDTOOut(String name, String description, Long projectId) {
+	public NewTaskData(String name, String description, Long projectId) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -60,7 +60,7 @@ public class NewTaskDTOOut {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NewTaskDTOOut other = (NewTaskDTOOut) obj;
+		NewTaskData other = (NewTaskData) obj;
 		return Objects.equals(description, other.description) && Objects.equals(name, other.name)
 				&& Objects.equals(projectId, other.projectId);
 	}

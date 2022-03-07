@@ -22,7 +22,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return new UserDetailsImpl(loadUserPort.load(new UserIdDTO(username)));
+		return new UserDetailsImpl(loadUserPort.load(new UserIdDTO(username))
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username)));
 	}
 
 }

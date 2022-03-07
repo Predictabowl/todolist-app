@@ -46,7 +46,7 @@ public class BaseWebController {
 		UserIdDTO userId = new UserIdDTO(authentication.getName());
 		List<Project> projects = loadProjects.load(userId);
 		model.addAttribute("projects",projects);
-		model.addAttribute("user", mapper.map(loadUser.load(userId)));
+		model.addAttribute("user", mapper.map(loadUser.load(userId).get()));
 		model.addAttribute(MESSAGE_ATTRIBUTE,projects.isEmpty() ? "No project" : "");
 		
 		return "index";

@@ -8,7 +8,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ProjectJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.TaskJPARepository;
 import it.aldinucci.todoapp.application.port.out.CreateTaskDriverPort;
-import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewTaskData;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -32,12 +32,12 @@ public class CreateTaskJPA implements CreateTaskDriverPort{
 
 
 	@Override
-	public Task create(NewTaskDTOOut task) throws AppProjectNotFoundException{
+	public Task create(NewTaskData task) throws AppProjectNotFoundException{
 		ProjectJPA project = projectRepo.findById(task.getProjectId()).orElseThrow(() 
 				-> new AppProjectNotFoundException("Project not found with id: "+task.getProjectId()));
 		TaskJPA newTask = new TaskJPA(task.getName(),
 				task.getDescription(),
-				NewTaskDTOOut.isComplete(),
+				NewTaskData.isComplete(),
 				project);
 		taskRepo.save(newTask);
 		project.getTasks().add(newTask);

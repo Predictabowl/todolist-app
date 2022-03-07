@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
-import it.aldinucci.todoapp.application.port.out.dto.UserDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.UserData;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -42,7 +42,7 @@ class UpdateUserJPATest {
 
 	@Test
 	void test_updateWhenUserIsMissing_shouldThrow() {
-		UserDTOOut dto = new UserDTOOut("user", FIXTURE_EMAIL, "password", true);
+		UserData dto = new UserData("user", FIXTURE_EMAIL, "password", true);
 		
 		assertThatThrownBy(() -> updateUser.update(dto))
 			.isInstanceOf(AppUserNotFoundException.class)
@@ -55,7 +55,7 @@ class UpdateUserJPATest {
 	void test_updateSuccess() {
 		UserJPA userJpa = new UserJPA(null, FIXTURE_EMAIL, "name", "pass", false);
 		entityManager.persistAndFlush(userJpa);
-		UserDTOOut dto = new UserDTOOut("user", FIXTURE_EMAIL, "password", true);
+		UserData dto = new UserData("user", FIXTURE_EMAIL, "password", true);
 		User user = new User();
 		when(mapper.map(isA(UserJPA.class))).thenReturn(user);
 

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
-import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewTaskData;
 
 class TaskMapperInOutTest {
 
@@ -14,7 +14,7 @@ class TaskMapperInOutTest {
 	void test_mapper() {
 		mapper = new TaskMapperInOut();
 		
-		NewTaskDTOOut dtoOut = mapper.map(new NewTaskDTOIn("name", "description", 5L));
+		NewTaskData dtoOut = mapper.map(new NewTaskDTOIn("name", "description", 5L));
 		
 		assertThat(dtoOut.getName()).isEqualTo("name");
 		assertThat(dtoOut.getDescription()).isEqualTo("description");

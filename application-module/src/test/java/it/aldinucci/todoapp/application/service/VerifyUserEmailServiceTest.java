@@ -21,7 +21,7 @@ import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPo
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.UpdateUserDriverPort;
-import it.aldinucci.todoapp.application.port.out.dto.UserDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.UserData;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
@@ -119,6 +119,6 @@ class VerifyUserEmailServiceTest {
 		verify(loadToken).load(FIXTURE_TOKEN_STRING);
 		verify(deleteToken).delete(FIXTURE_TOKEN_STRING);
 		verify(loadUser).load(FIXTURE_EMAIL);
-		verify(updateUser).update(new UserDTOOut("username", FIXTURE_EMAIL, "password", true));
+		verify(updateUser).update(new UserData("username", FIXTURE_EMAIL, "password", true));
 	}
 }

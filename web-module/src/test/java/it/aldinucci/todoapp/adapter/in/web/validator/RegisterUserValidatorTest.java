@@ -54,7 +54,7 @@ class RegisterUserValidatorTest {
 	}
 	
 	@Test
-	void test_validatorWhenPAsswordsDontMatch_shouldRejectValue() {
+	void test_validatorWhenPasswordsDontMatch_shouldRejectValue() {
 		when(messageSource.getMessage(isA(String.class), any(), isA(Locale.class)))
 			.thenReturn("return message");
 		
@@ -64,7 +64,7 @@ class RegisterUserValidatorTest {
 		InOrder inOrder = Mockito.inOrder(messageSource,validator,errors);
 		inOrder.verify(validator).validate(user, errors);
 		inOrder.verify(messageSource).getMessage("registerUserDto.matchPasswords.error", null, Locale.getDefault());
-		inOrder.verify(errors).rejectValue("confirmedPassword", "return message", "Both password should have the same value");
+		inOrder.verify(errors).rejectValue("confirmedPassword", "return message", "The confirmed password doesn't match");
 		verifyNoMoreInteractions(errors);
 		verifyNoMoreInteractions(messageSource);
 		verifyNoMoreInteractions(validator);

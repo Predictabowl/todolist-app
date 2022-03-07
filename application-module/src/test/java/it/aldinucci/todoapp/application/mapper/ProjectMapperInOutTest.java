@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
-import it.aldinucci.todoapp.application.port.out.dto.NewProjectDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewProjectData;
 
 class ProjectMapperInOutTest {
 	
@@ -15,7 +15,7 @@ class ProjectMapperInOutTest {
 	void test_mapper() {
 		mapper = new ProjectMapperInOut();
 		NewProjectDTOIn dtoIn = new NewProjectDTOIn("name", "user@email.it");
-		NewProjectDTOOut dtoOut = mapper.map(dtoIn);
+		NewProjectData dtoOut = mapper.map(dtoIn);
 		
 		assertThat(dtoOut.getName()).isEqualTo(dtoIn.getName());
 		assertThat(dtoOut.getUserEmail()).isEqualTo(dtoIn.getUserEmail());

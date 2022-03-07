@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
 import it.aldinucci.todoapp.application.port.out.CreateUserDriverPort;
-import it.aldinucci.todoapp.application.port.out.dto.NewUserDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewUserData;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
@@ -14,11 +14,11 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 public class CreateUserJPA implements CreateUserDriverPort{
 
 	private UserJPARepository userRepo;
-	private AppGenericMapper<NewUserDTOOut, UserJPA> userJPAMapper;
+	private AppGenericMapper<NewUserData, UserJPA> userJPAMapper;
 	private AppGenericMapper<UserJPA, User> userMapper;
 	
 	@Autowired
-	public CreateUserJPA(UserJPARepository userRepo, AppGenericMapper<NewUserDTOOut, UserJPA> userJPAMapper,
+	public CreateUserJPA(UserJPARepository userRepo, AppGenericMapper<NewUserData, UserJPA> userJPAMapper,
 			AppGenericMapper<UserJPA, User> userMapper) {
 		this.userRepo = userRepo;
 		this.userJPAMapper = userJPAMapper;
@@ -27,7 +27,7 @@ public class CreateUserJPA implements CreateUserDriverPort{
 
 
 	@Override
-	public User create(NewUserDTOOut newUser) {
+	public User create(NewUserData newUser) {
 		return userMapper.map(userRepo.save(userJPAMapper.map(newUser)));
 	}
 

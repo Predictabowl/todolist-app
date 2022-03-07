@@ -48,7 +48,7 @@ public class RegisterUserWebController {
 		return "register";
 	}
 	
-	@PostMapping
+	@PostMapping()
 	public ModelAndView postRegistrationPage(@Valid RegisterUserDto newUser, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView("register");
 		if(bindingResult.hasErrors()) 

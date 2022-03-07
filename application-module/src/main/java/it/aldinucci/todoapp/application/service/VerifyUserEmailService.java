@@ -14,7 +14,7 @@ import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPo
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.UpdateUserDriverPort;
-import it.aldinucci.todoapp.application.port.out.dto.UserDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.UserData;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
@@ -52,7 +52,7 @@ public class VerifyUserEmailService implements VerifyUserEmailUsePort {
 				.orElseThrow(() -> new AppUserNotFoundException(
 						"Data Integrity compromised, could not find user linked with token with email: "
 								+ verificationToken.getUserEmail()));
-		updateUser.update(new UserDTOOut(user.getUsername(), user.getEmail(), user.getPassword(), true));
+		updateUser.update(new UserData(user.getUsername(), user.getEmail(), user.getPassword(), true));
 		return true;
 	}
 

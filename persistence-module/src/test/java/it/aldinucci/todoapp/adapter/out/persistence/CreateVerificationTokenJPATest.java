@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
-import it.aldinucci.todoapp.application.port.out.dto.VerificationTokenDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.VerificationTokenData;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppUserAlreadyHaveVerificationTokenException;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
@@ -54,7 +54,7 @@ class CreateVerificationTokenJPATest {
 	void test_createToken_whenDoesNotExists() {
 		UserJPA user = new UserJPA("user@email.it", "username", "pass");
 		entityManager.persistAndFlush(user);
-		VerificationTokenDTOOut dto = new VerificationTokenDTOOut("token", date, "user@email.it");
+		VerificationTokenData dto = new VerificationTokenData("token", date, "user@email.it");
 		VerificationToken token = new VerificationToken();
 		when(mapper.map(isA(VerificationTokenJPA.class))).thenReturn(token);
 
@@ -77,7 +77,7 @@ class CreateVerificationTokenJPATest {
 		entityManager.persistAndFlush(user);
 		VerificationTokenJPA tokenJpa = new VerificationTokenJPA("token", user, date);
 		entityManager.persistAndFlush(tokenJpa);
-		VerificationTokenDTOOut dto = new VerificationTokenDTOOut("another token", date, "user@email.it");
+		VerificationTokenData dto = new VerificationTokenData("another token", date, "user@email.it");
 		
 		assertThatThrownBy(() -> createToken.create(dto))
 			.isInstanceOf(AppUserAlreadyHaveVerificationTokenException.class);
@@ -91,7 +91,7 @@ class CreateVerificationTokenJPATest {
 	
 	@Test
 	void test_createToken_whenUserNotExists_shouldThrow() {
-		VerificationTokenDTOOut dto = new VerificationTokenDTOOut("another token", date, "user@email.it");
+		VerificationTokenData dto = new VerificationTokenData("another token", date, "user@email.it");
 		
 		assertThatThrownBy(() -> createToken.create(dto))
 			.isInstanceOf(AppUserNotFoundException.class)

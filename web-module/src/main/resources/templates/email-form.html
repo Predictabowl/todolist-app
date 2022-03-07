@@ -16,12 +16,7 @@
 			<div class="is-flex">
 				<form th:action="@{/user/register}" name="user-register" method="post" th:object="${registerUserDto}">
 					<div>
-						<div th:insert="~{fragments/commons::inputFieldWithIcon('email','Email', 'text', 'fa-envelope')}"></div>
-						<label class="help is-danger" th:if="${emailExists != null}" th:text="#{email.exists}"></label>
 					</div>
-					<div th:insert="~{fragments/commons::inputFieldWithIcon('username','Username', 'text', 'fa-user')}"></div>
-					<div th:insert="~{fragments/commons::inputFieldWithIcon('password','Password', 'password', 'fa-key')}"></div>
-					<div th:insert="~{fragments/commons::inputFieldWithIcon('confirmedPassword','Repeat-Password', 'password', 'fa-key')}"></div>
 					<div class="">
 						<button class="button is-link is-rounded" type="submit" name="form-submit" value="Register in" th:text="#{register}"></button>
 					</div>

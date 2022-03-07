@@ -2,16 +2,16 @@ package it.aldinucci.todoapp.application.port.out.dto;
 
 import java.util.Objects;
 
-public class NewUserDTOOut {
+public class NewUserData {
 	
 	private String username;
 	private String email;
 	private String password;
 	
-	public NewUserDTOOut() {
+	public NewUserData() {
 	}
 
-	public NewUserDTOOut(String username, String email, String password) {
+	public NewUserData(String username, String email, String password) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
@@ -54,7 +54,7 @@ public class NewUserDTOOut {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NewUserDTOOut other = (NewUserDTOOut) obj;
+		NewUserData other = (NewUserData) obj;
 		return Objects.equals(email, other.email) && Objects.equals(password, other.password)
 				&& Objects.equals(username, other.username);
 	}

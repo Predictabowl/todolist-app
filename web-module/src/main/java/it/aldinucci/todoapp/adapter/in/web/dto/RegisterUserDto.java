@@ -25,6 +25,10 @@ public class RegisterUserDto {
 	private String confirmedPassword;
 
 	public RegisterUserDto() {
+		this.email = "";
+		this.username = "";
+		this.password = "";
+		this.confirmedPassword = "";
 	}
 
 	public RegisterUserDto(String email, String username, String password, String confirmedPassword) {

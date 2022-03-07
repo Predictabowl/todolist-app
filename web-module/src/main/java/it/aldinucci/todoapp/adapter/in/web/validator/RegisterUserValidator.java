@@ -33,7 +33,7 @@ public class RegisterUserValidator implements Validator {
 		RegisterUserDto user = (RegisterUserDto) target;
 		if (!user.getPassword().equals(user.getConfirmedPassword()))
 			errors.rejectValue("confirmedPassword", messageSource.getMessage("registerUserDto.matchPasswords.error", null,
-					Locale.getDefault()), "Both password should have the same value");
+					Locale.getDefault()), "The confirmed password doesn't match");
 	}
 
 }

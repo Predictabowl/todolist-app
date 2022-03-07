@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
-import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewTaskData;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -47,7 +47,7 @@ class CreateTaskJPATest {
 		ProjectJPA projectJPA = new ProjectJPA("project name", userJPA);
 		userJPA.getProjects().add(projectJPA);
 		entityManager.persist(projectJPA);
-		NewTaskDTOOut newTask = new NewTaskDTOOut("task name", "task description", projectJPA.getId());
+		NewTaskData newTask = new NewTaskData("task name", "task description", projectJPA.getId());
 		Task task = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task);
 		
@@ -64,7 +64,7 @@ class CreateTaskJPATest {
 	
 	@Test
 	void test_createNewTask_whenProjectNotPresent() {
-		NewTaskDTOOut newTask = new NewTaskDTOOut("task name", "task description", 1L);
+		NewTaskData newTask = new NewTaskData("task name", "task description", 1L);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
 			.isInstanceOf(AppProjectNotFoundException.class)
