@@ -3,23 +3,18 @@ package it.aldinucci.todoapp.adapter.in.web.controller;
 import static it.aldinucci.todoapp.adapter.in.web.util.AppLinksBuilder.buildVerificationLink;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import it.aldinucci.todoapp.adapter.in.web.dto.EmailWebDto;
-import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;

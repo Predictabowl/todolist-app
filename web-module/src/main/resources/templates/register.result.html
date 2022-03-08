@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="eng">
+<head th:replace="fragments/layouts :: app-common-header(~{::title})">
+	<title>Registration results</title>
+</head>
+<body>
+
+	<section th:replace="fragments/layouts :: registration-layout('', ~{::#content})">
+		<div id="content">
+			<div class="notification is-success column" th:if="${accountVerified}" th:text="#{the.account.is.now.active}">
+			</div>
+			<div class="column" th:unless="${accountVerified}">
+				<div class="notification is-danger" th:text="#{verification.token.is.invalid}"></div>
+				<a class="link" th:href="@{/user/register/resend/verification}" th:text="#{send.email.verification.again}"></a>
+			</div>
+			<div class="column">
+				<a class="link" th:href="@{/login}" th:text="#{back.to.login}"></a>
+			</div>
+		</div>
+	</section>
+
+</body>
+</html>

@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="eng">
-<head>
-
-<link rel="stylesheet" href="/webjars/bulma/css/bulma.min.css" />
-<link rel="stylesheet" href="/css/main.css" />
-<meta charset="UTF-8">
-<title>Log in page</title>
+<head th:replace="fragments/layouts :: app-common-header(~{::title})">
+	<title>Verification notice</title>
 </head>
 <body>
 
-	<div class="container">
-		<div class="block box">
-			<p>Placeholder</p>
-			<p>A verification email was sent to the address: <span th:text="${useremail}"></span></p>
+	<section th:replace="fragments/layouts :: registration-layout('', ~{::#content})">
+		<div id="content">
+			<div class="notification is-info">	
+				<span th:text="#{verification.mail.was.sent}"></span>: <span th:text="${useremail}"></span>
+			</div>
 		</div>
-	</div>
+	</section>
 
 </body>
 </html>

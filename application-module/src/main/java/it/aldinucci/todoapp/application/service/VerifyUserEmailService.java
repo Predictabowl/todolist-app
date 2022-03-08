@@ -38,7 +38,7 @@ public class VerifyUserEmailService implements VerifyUserEmailUsePort {
 	}
 
 	@Override
-	public boolean verify(VerifyTokenDTOIn tokenDto) {
+	public boolean verify(VerifyTokenDTOIn tokenDto) throws AppUserNotFoundException{
 		Optional<VerificationToken> loadedToken = loadToken.load(tokenDto.getToken());
 		if (loadedToken.isEmpty())
 			return false;

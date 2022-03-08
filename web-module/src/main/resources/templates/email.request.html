@@ -1,31 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="eng">
-<head>
-
-<link rel="stylesheet" href="/webjars/bulma/css/bulma.min.css" />
-<link rel="stylesheet" href="/webjars/font-awesome/css/all.min.css" />
-<link rel="stylesheet" href="/css/main.css" />
-<meta charset="UTF-8">
-<title>Log in page</title>
+<head th:replace="fragments/layouts :: app-common-header(~{::title})">
+	<title>Email insert</title>
 </head>
 <body>
 
-	<div class="container is-flex">
-		<div class="block box">
-			<h1 class="title is-center" th:text="#{send.email.verification}"></h1>
-			<div class="is-flex">
-				<form th:action="@{${actionLink}}" name="email-form" method="post" th:object="${emailWebDto}">
-					<div>
-						<div th:insert="~{fragments/commons::inputFieldWithIcon('email','Email', 'email', 'fa-envelope')}"></div>
-						<label class="help is-danger" th:if="${emailNotFound != null}" th:text="#{email.not.found}"></label>
-						<label class="help is-danger" th:if="${emailAlreadyVerified != null}" th:text="#{email.exists}"></label>
-					</div>
+	<section th:replace="fragments/layouts :: registration-layout(#{send.email.verification}, ~{::#content})">
+		<div id="content">
+			<form th:action="@{${actionLink}}" name="email-form" method="post" th:object="${emailWebDto}">
+				<div>
+					<div class="column" th:insert="~{fragments/commons::inputFieldWithIcon('email','Email', 'email', 'fa-envelope')}"></div>
+					<label class="help is-danger" th:if="${emailNotFound != null}" th:text="#{email.not.found}"></label>
+					<label class="help is-danger" th:if="${emailAlreadyVerified != null}" th:text="#{email.exists}"></label>
+				</div>
+				<div class="column">
 					<button class="button is-link is-rounded" type="submit" name="submit-button" value="Register in" th:text="#{send}"></button>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
-
-	</div>
+	</section>
 
 </body>
 </html>
