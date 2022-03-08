@@ -12,5 +12,9 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>domain-module</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>commons-module</artifactId>
+		</dependency>
 	</dependencies>
 </project>

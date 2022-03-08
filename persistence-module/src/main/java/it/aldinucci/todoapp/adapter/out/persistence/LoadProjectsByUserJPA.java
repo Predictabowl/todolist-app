@@ -29,7 +29,7 @@ public class LoadProjectsByUserJPA implements LoadProjectsByUserDriverPort{
 
 
 	@Override
-	public List<Project> load(String userEmail) {
+	public List<Project> load(String userEmail) throws AppUserNotFoundException{
 		UserJPA user = userRepository.findByEmail(userEmail).orElseThrow(() 
 				-> new AppUserNotFoundException("User not found with email: "+userEmail));
 		

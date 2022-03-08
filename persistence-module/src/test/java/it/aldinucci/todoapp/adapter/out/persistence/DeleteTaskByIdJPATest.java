@@ -36,7 +36,7 @@ class DeleteTaskByIdJPATest {
 	
 	
 	@Test
-	void test_deleteTask_successful() {
+	void test_deleteTask_successful() throws AppTaskNotFoundException {
 		UserJPA user = new UserJPA("email", "username", "password");
 		entityManager.persist(user);
 		ProjectJPA project = new ProjectJPA("project name", user);

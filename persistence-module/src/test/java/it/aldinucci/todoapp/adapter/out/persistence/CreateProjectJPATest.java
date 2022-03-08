@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
-import it.aldinucci.todoapp.application.port.out.dto.NewProjectDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewProjectData;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -40,10 +40,10 @@ class CreateProjectJPATest {
 	private TestEntityManager entityManager;
 	
 	@Test
-	void test_createNewProject_successful() {
+	void test_createNewProject_successful() throws AppUserNotFoundException {
 		UserJPA userJPA = new UserJPA(null, TEST_EMAIL, "username", "password");
 		entityManager.persist(userJPA);
-		NewProjectDTOOut newProject = new NewProjectDTOOut("test name", TEST_EMAIL);
+		NewProjectData newProject = new NewProjectData("test name", TEST_EMAIL);
 		Project project = new Project();
 		when(mapper.map(isA(ProjectJPA.class))).thenReturn(project);
 		
@@ -60,7 +60,7 @@ class CreateProjectJPATest {
 	
 	@Test
 	void test_createNewProject_whenUserNotPresent() {
-		NewProjectDTOOut newProject = new NewProjectDTOOut("test name", TEST_EMAIL);
+		NewProjectData newProject = new NewProjectData("test name", TEST_EMAIL);
 		
 		assertThatThrownBy(() -> createProject.create(newProject))
 			.isInstanceOf(AppUserNotFoundException.class)

@@ -26,9 +26,9 @@ public class LoadUserByProjectIdJPA implements LoadUserByProjectIdDriverPort{
 
 
 	@Override
-	public User load(long projecId) {
-		ProjectJPA project = projectRepo.findById(projecId)
-				.orElseThrow(() -> new AppProjectNotFoundException("Project not found with id: "+projecId));
+	public User load(long projectId) throws AppProjectNotFoundException{
+		ProjectJPA project = projectRepo.findById(projectId).orElseThrow(() 
+				-> new AppProjectNotFoundException("Project not found with id: "+projectId));
 		return mapper.map(project.getUser());
 	}
 

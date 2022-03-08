@@ -1,16 +1,20 @@
 package it.aldinucci.todoapp.webcommons.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
@@ -31,14 +35,25 @@ class UserDetailsServiceImplTest {
 	}
 	
 	@Test
-	void test_userDetails() {
-		UserDetailsImpl userDetails = new UserDetailsImpl("email", "password");
+	void test_userDetails_success(){
 		User user = new User("email", "username", "password");
-		when(loadUser.load(isA(UserIdDTO.class))).thenReturn(user);
+		UserDetailsImpl userDetails = new UserDetailsImpl(user);
+		when(loadUser.load(isA(UserIdDTO.class))).thenReturn(Optional.of(user));
 		
 		UserDetails loadedDetails = service.loadUserByUsername("another@mail");
 		
 		assertThat(loadedDetails).isEqualTo(userDetails);
+		verify(loadUser).load(new UserIdDTO("another@mail"));
+	}
+	
+	@Test
+	void test_userDetails_whenUSerNotFound_shouldThrow(){
+		when(loadUser.load(isA(UserIdDTO.class))).thenReturn(Optional.empty());
+		
+		assertThatThrownBy(() -> service.loadUserByUsername("another@mail"))
+			.isInstanceOf(UsernameNotFoundException.class)
+			.hasMessage("User not found with email: another@mail");
+		
 		verify(loadUser).load(new UserIdDTO("another@mail"));
 	}
 

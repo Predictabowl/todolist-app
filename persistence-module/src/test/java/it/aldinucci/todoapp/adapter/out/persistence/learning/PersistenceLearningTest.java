@@ -37,7 +37,7 @@ class PersistenceLearningTest {
 	
 	@Test
 	void test_learning() {
-		UserJPA user = new UserJPA(null, "mail@email.it", "username", "password", new LinkedList<ProjectJPA>());
+		UserJPA user = new UserJPA(null, "mail@email.it", "username", "password", true, new LinkedList<ProjectJPA>());
 		entityManager.persist(user);
 		
 		ProjectJPA project = new ProjectJPA(null, "test project", new LinkedList<TaskJPA>(), user);

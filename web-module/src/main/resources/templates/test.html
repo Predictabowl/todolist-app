@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+			<div id="logout-card" class="modal">
+			<div class="modal-background"></div>
+			<div class="modal-card">
+				<header class="modal-card-title">
+					<p>Log out</p>
+				</header>
+				<section class="modal-card-body">
+					<label class="has-warning-text">Are you sure?</label>
+				</section>
+				<footer class="modal-card-foot">
+					<form th:action="@{/logout}" method="post">
+						<button type="submit" class="button is-success is-outlined"
+								th:text="#{logout}"></button>
+						<a class=" ml-4 button is-warning is-outlined" id="logout-close" data-target="#modal-logout" th:text="#{cancel}"></a>
+					</form>
+				</footer>
+			</div>
+		</div>
+		
+		<form th:action="@{/logout}" id="logout-form" method="post">
+			<button type="submit" class="button is-success is-outlined"
+					th:text="#{logout}"></button>
+			<a class=" ml-4 button is-warning is-outlined" id="logout-close" data-target="#modal-logout" th:text="#{cancel}"></a>
+		</form>
+
+		<script type="text/javascript">
+			$("#logout-open").click(function() {
+				$("html").addClass("is-clipped");
+				$("#logout-card").addClass("is-active");
+			});
+			
+			$("#logout-close").click(function() {
+				$("html").removeClass("is-clipped");
+				$("#logout-card").removeClass("is-active");
+			});
+		</script>
+</body>
+</html>

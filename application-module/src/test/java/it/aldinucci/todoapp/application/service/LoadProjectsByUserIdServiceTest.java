@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadProjectsByUserDriverPort;
 import it.aldinucci.todoapp.domain.Project;
+import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {LoadProjectsByUserIdService.class})
@@ -30,7 +31,7 @@ class LoadProjectsByUserIdServiceTest {
 	private LoadProjectsByUserIdService service;
 	
 	@Test
-	void test_serviceShouldMap_and_delegateToDriverPort() {
+	void test_serviceShouldMap_and_delegateToDriverPort() throws AppUserNotFoundException {
 		UserIdDTO userId = new UserIdDTO("test@email.it");
 		List<Project> projects = Collections.emptyList();
 		when(port.load(isA(String.class))).thenReturn(projects);

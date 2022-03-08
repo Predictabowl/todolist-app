@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -20,12 +19,12 @@ import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @RestController
-@RequestMapping(BASE_REST_URI)
-public class DeleteProjectByIdRestController{
+@RequestMapping("/api")
+public class DeleteProjectByIdRestController {
 
 	private DeleteProjectByIdUsePort deleteProject;
 	private InputModelAuthorization<ProjectIdDTO> authorize;
-	
+
 	@Autowired
 	public DeleteProjectByIdRestController(DeleteProjectByIdUsePort deleteProject,
 			InputModelAuthorization<ProjectIdDTO> authorize) {
@@ -33,13 +32,13 @@ public class DeleteProjectByIdRestController{
 		this.authorize = authorize;
 	}
 
-
 	@DeleteMapping("/project/{projectId}")
-	public void deleteProjectEndPoint(Authentication authentication,@Valid ProjectIdDTO projectId) {
+	public void deleteProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId)
+			throws AppProjectNotFoundException {
 		authorize.check(authentication.getName(), projectId);
 		deleteProject.delete(projectId);
 	}
-	
+
 	@ExceptionHandler(AppProjectNotFoundException.class)
 	public ResponseEntity<String> notFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

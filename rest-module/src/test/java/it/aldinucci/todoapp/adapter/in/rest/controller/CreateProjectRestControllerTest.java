@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -16,6 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -40,7 +41,7 @@ import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
 @Import({AppRestSecurityConfig.class})
 class CreateProjectRestControllerTest {
 
-	private static final String FIXTURE_URL = BASE_REST_URI+"/project/create";
+	private static final String FIXTURE_URL = "/api/project/create";
 	
 	@Autowired
 	private MockMvc mvc;

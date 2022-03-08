@@ -38,7 +38,7 @@ class LoadUserByTaskIdJPATest {
 	private LoadUserByTaskIdJPA adapter;
 	
 	@Test
-	void test_loadUser_successful() {
+	void test_loadUser_successful() throws AppTaskNotFoundException {
 		UserJPA userJpa = new UserJPA("email", "username", "passwod");
 		entityManager.persist(userJpa);
 		ProjectJPA project = new ProjectJPA("project", userJpa);

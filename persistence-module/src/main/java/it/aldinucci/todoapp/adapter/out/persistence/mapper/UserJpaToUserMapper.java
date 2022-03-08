@@ -11,7 +11,7 @@ public class UserJpaToUserMapper implements AppGenericMapper<UserJPA, User>{
 
 	@Override
 	public User map(UserJPA model) {
-		return new User(model.getEmail(), model.getUsername(), model.getPassword());
+		return new User(model.getEmail(), model.getUsername(), model.getPassword(), model.isEnabled());
 	}
 
 }

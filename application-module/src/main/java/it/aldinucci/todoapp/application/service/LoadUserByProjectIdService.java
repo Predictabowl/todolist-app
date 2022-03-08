@@ -9,6 +9,7 @@ import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadUserByProjectIdDriverPort;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 
 @Service
 @Transactional
@@ -22,7 +23,7 @@ public class LoadUserByProjectIdService implements LoadUserByProjectIdUsePort{
 	}
 
 	@Override
-	public User load(ProjectIdDTO projectId) {
+	public User load(ProjectIdDTO projectId) throws AppProjectNotFoundException{
 		return loadUser.load(projectId.getProjectId());
 	}
 

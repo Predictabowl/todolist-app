@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="eng">
+<head th:replace="fragments/layouts :: app-common-header(~{::title})">
+	<title>Verification notice</title>
+</head>
+<body>
+
+	<section th:replace="fragments/layouts :: registration-layout('', ~{::#content})">
+		<div id="content">
+			<div class="notification is-info">	
+				<span th:text="#{verification.mail.was.sent}"></span>: <span th:text="${useremail}"></span>
+			</div>
+		</div>
+	</section>
+
+</body>
+</html>

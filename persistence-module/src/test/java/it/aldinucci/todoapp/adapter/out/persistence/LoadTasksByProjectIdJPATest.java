@@ -47,7 +47,7 @@ class LoadTasksByProjectIdJPATest {
 	}
 
 	@Test
-	void test_loadTasks_whenNoTasksPresent() {
+	void test_loadTasks_whenNoTasksPresent() throws AppProjectNotFoundException {
 		UserJPA user = new UserJPA("email", "username", "password");
 		ProjectJPA project1 = new ProjectJPA("project 1", user);
 		ProjectJPA project2 = new ProjectJPA("project 2", user);
@@ -68,7 +68,7 @@ class LoadTasksByProjectIdJPATest {
 	}
 
 	@Test
-	void test_loadTasks_successful() {
+	void test_loadTasks_successful() throws AppProjectNotFoundException {
 		UserJPA user = new UserJPA("email", "username", "password");
 		ProjectJPA project1 = new ProjectJPA("project 1", user);
 		entityManager.persist(user);

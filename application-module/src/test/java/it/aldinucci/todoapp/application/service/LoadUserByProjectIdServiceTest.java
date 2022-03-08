@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.application.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadUserByProjectIdDriverPort;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {LoadUserByProjectIdService.class})
@@ -27,7 +28,7 @@ class LoadUserByProjectIdServiceTest {
 	private LoadUserByProjectIdDriverPort userPort;
 	
 	@Test
-	void test_loadUser_successful() {
+	void test_loadUser_successful() throws AppProjectNotFoundException {
 		ProjectIdDTO projectId = new ProjectIdDTO(4L);
 		User user = new User("email", "username", "password");
 		when(userPort.load(anyLong())).thenReturn(user);

@@ -1,5 +1,7 @@
 package it.aldinucci.todoapp.application.service;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,16 @@ public class LoadUserByEmailService implements LoadUserByEmailUsePort{
 
 	private LoadUserByEmailDriverPort loadUserPort;
 	
+	
 	@Autowired
 	public LoadUserByEmailService(LoadUserByEmailDriverPort loadUserPort) {
+		super();
 		this.loadUserPort = loadUserPort;
 	}
 
+
 	@Override
-	public User load(UserIdDTO id) {
+	public Optional<User> load(UserIdDTO id){
 		return loadUserPort.load(id.getEmail());
 	}
 

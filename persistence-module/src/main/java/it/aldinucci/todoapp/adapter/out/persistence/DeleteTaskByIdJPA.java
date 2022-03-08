@@ -20,7 +20,7 @@ public class DeleteTaskByIdJPA implements DeleteTaskByIdDriverPort{
 
 
 	@Override
-	public void delete(long id) {
+	public void delete(long id) throws AppTaskNotFoundException{
 		TaskJPA task = taskRepository.findById(id).orElseThrow(()
 				-> new AppTaskNotFoundException("Could not find Task with id: "+id));
 		task.getProject().getTasks().remove(task);

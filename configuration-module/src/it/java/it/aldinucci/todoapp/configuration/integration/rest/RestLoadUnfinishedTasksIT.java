@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.configuration.integration.rest;
 
 import static io.restassured.RestAssured.given;
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -81,7 +80,7 @@ class RestLoadUnfinishedTasksIT {
 			.auth()	.basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 		.when()
-			.get(BASE_REST_URI+"/project/"+project.getId()+"/tasks/unfinished")
+			.get("/api/project/"+project.getId()+"/tasks/unfinished")
 		.then()
 			.statusCode(200)
 			.extract().body();
@@ -92,7 +91,9 @@ class RestLoadUnfinishedTasksIT {
 	}
 
 	private void setSessionData() {
-		UserJPA user = userRepo.save(new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD)));
+		UserJPA user = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
+		user.setEnabled(true);
+		userRepo.save(user);
 		project = projectRepo.save(new ProjectJPA("test project", user));
 		user.getProjects().add(project);
 		userRepo.save(user);

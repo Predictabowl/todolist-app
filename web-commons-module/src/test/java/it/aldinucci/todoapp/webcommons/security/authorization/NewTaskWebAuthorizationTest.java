@@ -16,7 +16,8 @@ import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.webcommons.exception.UnauthorizaedWebAccessException;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
+import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
 
 class NewTaskWebAuthorizationTest {
 
@@ -32,7 +33,7 @@ class NewTaskWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorizeSuccess() {
+	void test_authorizeSuccess() throws AppProjectNotFoundException {
 		NewTaskDTOIn newTask = new NewTaskDTOIn("task name", "descr", 3L);
 		User user = new User("email1", "username", "password");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(user);
@@ -44,13 +45,13 @@ class NewTaskWebAuthorizationTest {
 	}
 
 	@Test
-	void test_authorizeWhenProjectIdDoesNotBelongToAuthenticateUser_shouldThrow() {
+	void test_authorizeWhenProjectIdDoesNotBelongToAuthenticateUser_shouldThrow() throws AppProjectNotFoundException {
 		NewTaskDTOIn newTask = new NewTaskDTOIn("task name", "descr", 3L);
 		User user = new User("another email", "username", "password");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(user);
 		
 		assertThatThrownBy(() -> authorize.check("email1", newTask))
-			.isInstanceOf(UnauthorizaedWebAccessException.class)
+			.isInstanceOf(UnauthorizedWebAccessException.class)
 			.hasMessage("Operation not authorized for the autheticated user");
 		
 		verify(loadUser).load(new ProjectIdDTO(3L));

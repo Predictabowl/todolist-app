@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
@@ -48,7 +47,7 @@ class LoadProjectsByUserRestControllerTest {
 		when(loadProjects.load(isA(UserIdDTO.class)))
 			.thenReturn(asList(project1,project2));
 		
-		mvc.perform(get(BASE_REST_URI+"/projects")
+		mvc.perform(get("/api/projects")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].id", is(2)))
@@ -66,7 +65,7 @@ class LoadProjectsByUserRestControllerTest {
 		when(loadProjects.load(isA(UserIdDTO.class)))
 			.thenThrow(new AppUserNotFoundException("test user not found"));
 		
-		mvc.perform(get(BASE_REST_URI+"/projects")
+		mvc.perform(get("/api/projects")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$", is("test user not found")));
@@ -78,7 +77,7 @@ class LoadProjectsByUserRestControllerTest {
 	@Test
 	void test_loadProjects_withoutAuthentication_shouldReturnUnauthorized() throws Exception {
 		
-		mvc.perform(get(BASE_REST_URI+"/projects")
+		mvc.perform(get("/api/projects")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized());
 		

@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -48,7 +47,7 @@ class DeleteProjectByIdRestControllerTest {
 	@WithMockUser("user@email.org")
 	void test_deleteProject_successful() throws Exception {
 		
-		mvc.perform(delete(BASE_REST_URI+"/project/5")
+		mvc.perform(delete("/api/project/5")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
@@ -65,7 +64,7 @@ class DeleteProjectByIdRestControllerTest {
 		AppProjectNotFoundException exception = new AppProjectNotFoundException("no project");
 		doThrow(exception).when(deleteProject).delete(isA(ProjectIdDTO.class));
 		
-		mvc.perform(delete(BASE_REST_URI+"/project/5")
+		mvc.perform(delete("/api/project/5")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
@@ -79,7 +78,7 @@ class DeleteProjectByIdRestControllerTest {
 	@Test
 	void test_deleteProject_withoutAuthentication_shouldReturnUnathorized() throws Exception {
 		
-		mvc.perform(delete(BASE_REST_URI+"/project/5")
+		mvc.perform(delete("/api/project/5")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized());
@@ -91,7 +90,7 @@ class DeleteProjectByIdRestControllerTest {
 	@Test
 	@WithMockUser
 	void test_deleteProject_withoutCsrfToken_shouldReturnForbidden() throws Exception {
-		mvc.perform(post(BASE_REST_URI+"/project/3")
+		mvc.perform(post("/api/project/3")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isForbidden());
 		

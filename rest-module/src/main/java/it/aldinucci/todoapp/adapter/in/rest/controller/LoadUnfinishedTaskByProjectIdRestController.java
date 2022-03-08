@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @RestController
-@RequestMapping(BASE_REST_URI)
+@RequestMapping("/api")
 public class LoadUnfinishedTaskByProjectIdRestController {
 
 	private LoadUnfinishedTasksByProjectIdUsePort loadProjectTasks;

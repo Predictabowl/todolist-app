@@ -7,6 +7,8 @@ import java.util.Objects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import it.aldinucci.todoapp.domain.User;
+
 public class UserDetailsImpl implements UserDetails{
 
 	/**
@@ -14,13 +16,11 @@ public class UserDetailsImpl implements UserDetails{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String email;
-	private String password;
+	private transient User user;
 	
 	
-	public UserDetailsImpl(String email, String password) {
-		this.email = email;
-		this.password = password;
+	public UserDetailsImpl(User user) {
+		this.user = user;
 	}
 
 	@Override
@@ -31,12 +31,12 @@ public class UserDetailsImpl implements UserDetails{
 
 	@Override
 	public String getPassword() {
-		return password;
+		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return email;
+		return user.getEmail();
 	}
 
 	@Override
@@ -56,12 +56,12 @@ public class UserDetailsImpl implements UserDetails{
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return user.isEnabled();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, password);
+		return Objects.hash(user);
 	}
 
 	@Override
@@ -73,12 +73,12 @@ public class UserDetailsImpl implements UserDetails{
 		if (getClass() != obj.getClass())
 			return false;
 		UserDetailsImpl other = (UserDetailsImpl) obj;
-		return Objects.equals(email, other.email) && Objects.equals(password, other.password);
+		return Objects.equals(user, other.user);
 	}
 
 	@Override
 	public String toString() {
-		return "UserDetailsImpl [email=" + email + ", password=" + password + "]";
+		return "UserDetailsImpl [user=" + user + "]";
 	}
-	
+
 }

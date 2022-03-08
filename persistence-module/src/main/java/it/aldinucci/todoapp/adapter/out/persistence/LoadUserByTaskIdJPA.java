@@ -25,7 +25,7 @@ public class LoadUserByTaskIdJPA implements LoadUserByTaskIdDriverPort{
 
 
 	@Override
-	public User load(long taskId) {
+	public User load(long taskId) throws AppTaskNotFoundException {
 		TaskJPA task = repository.findById(taskId).orElseThrow(() -> 
 			new AppTaskNotFoundException("Task not found with id: "+taskId));
 		return mapper.map(task.getProject().getUser());

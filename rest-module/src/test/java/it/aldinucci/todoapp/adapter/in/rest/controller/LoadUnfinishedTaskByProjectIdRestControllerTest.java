@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.inOrder;
@@ -55,7 +54,7 @@ class LoadUnfinishedTaskByProjectIdRestControllerTest {
 		Task task2 = new Task(7L, "project 2", "description 2");
 		when(usePort.load(isA(ProjectIdDTO.class))).thenReturn(Arrays.asList(task1, task2));
 		
-		mvc.perform(get(BASE_REST_URI+"/project/3"+FIXTURE_URL)
+		mvc.perform(get("/api/project/3"+FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].id", is(2)))
@@ -75,7 +74,7 @@ class LoadUnfinishedTaskByProjectIdRestControllerTest {
 	void test_loadTasks_whenProjectNotFound_shouldReturnBadRequest() throws Exception {
 		when(usePort.load(isA(ProjectIdDTO.class))).thenThrow(new AppProjectNotFoundException("return message"));
 		
-		mvc.perform(get(BASE_REST_URI+"/project/1"+FIXTURE_URL)
+		mvc.perform(get("/api/project/1"+FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$", is("return message")));
@@ -89,7 +88,7 @@ class LoadUnfinishedTaskByProjectIdRestControllerTest {
 	@Test
 	void test_loadTasks_withoutAuthentication_shouldReturnUnauthorized() throws Exception {
 		
-		mvc.perform(get(BASE_REST_URI+"/project/1"+FIXTURE_URL)
+		mvc.perform(get("/api/project/1"+FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized());
 		

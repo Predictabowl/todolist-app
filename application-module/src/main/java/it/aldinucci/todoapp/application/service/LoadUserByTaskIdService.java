@@ -1,5 +1,7 @@
 package it.aldinucci.todoapp.application.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,8 +9,10 @@ import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadUserByTaskIdDriverPort;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
 
 @Service
+@Transactional
 public class LoadUserByTaskIdService implements LoadUserByTaskIdUsePort{
 
 	private LoadUserByTaskIdDriverPort loadUser;
@@ -19,7 +23,7 @@ public class LoadUserByTaskIdService implements LoadUserByTaskIdUsePort{
 	}
 
 	@Override
-	public User load(TaskIdDTO taskId) {
+	public User load(TaskIdDTO taskId) throws AppTaskNotFoundException {
 		return loadUser.load(taskId.getTaskId()); 
 	}
 

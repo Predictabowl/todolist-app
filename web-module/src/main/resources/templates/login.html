@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="eng">
+<head th:replace="fragments/layouts :: app-common-header(~{::title})">
+	<title>Log In</title>
+</head>
+<body>
+
+	<section th:replace="fragments/layouts :: registration-layout(#{login}, ~{::#content})">
+		<div id="content">
+			<div>
+				<div class="label has-text-danger" th:if="${param.error}">Invalid username
+					and password.</div>
+				<div class="label has-text-warning" th:if="${param.logout}">You have been
+					logged out.</div>
+				<form th:action="@{/login}" name="login-form" method="post" th:object="${param}">
+					<div class="column">
+						<div class="control has-icons-left">
+							<input class="input is-rounded" type="email" id="username"
+								name="username" placeholder="Email" /> 
+							<span class="icon is-small is-left">
+								<i class="fas fa-envelope"></i>
+							</span>
+						</div>
+					</div>
+					<div class="column">
+						<div class="control has-icons-left">
+							<input class="input is-rounded" type="password" id="password"
+								name="password" placeholder="Password" />
+							<span class="icon is-small is-left">
+								<i class="fas fa-key"></i>
+							</span>
+						</div>
+					</div>
+					<div class="column">
+						<button class="button is-rounded is-success" name="log-in" type="submit" value="Log in"
+							th:text="#{login}"></button>
+					</div>
+				</form>
+			</div>
+			<div>
+				<a class="link" th:href="@{/user/register}" th:text="#{register}"></a>
+			</div>
+		</div>
+	</section>
+
+</body>
+</html>

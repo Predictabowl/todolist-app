@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="fragments/layouts :: app-common-header(~{::title})">
+	<title>Projects</title>
+</head>
+<body>
+	<div th:insert="~{fragments/commons::BNavbar(${user.username})}"></div>
+
+	<div th:if="${projects.empty}">
+		<div>No Project</div>
+	</div>
+
+	<div th:unless="${projects.empty}">
+		<table class="table is-striped is-hoverable">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="project : ${projects}">
+					<td th:text="${project.id}"></td>
+					<td><a th:text="${project.name}"
+						th:href="@{/todolist/project/{id}/tasks (id=${project.id})}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+</body>
+</html>

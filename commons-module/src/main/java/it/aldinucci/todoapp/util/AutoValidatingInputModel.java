@@ -16,4 +16,5 @@ public abstract class AutoValidatingInputModel<T> {
 		if(!violations.isEmpty())
 			throw new ConstraintViolationException(violations);
 	}
+	
 }

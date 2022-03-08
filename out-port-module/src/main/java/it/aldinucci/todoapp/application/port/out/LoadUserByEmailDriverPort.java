@@ -1,8 +1,10 @@
 package it.aldinucci.todoapp.application.port.out;
 
+import java.util.Optional;
+
 import it.aldinucci.todoapp.domain.User;
 
 public interface LoadUserByEmailDriverPort {
 
-	public User load(String email);
+	public Optional<User> load(String email);
 }

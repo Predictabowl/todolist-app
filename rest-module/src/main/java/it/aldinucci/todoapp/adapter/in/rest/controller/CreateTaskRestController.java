@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -22,12 +21,12 @@ import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @RestController
-@RequestMapping(BASE_REST_URI)
+@RequestMapping("/api")
 public class CreateTaskRestController {
 
 	private CreateTaskUsePort createTask;
 	private InputModelAuthorization<NewTaskDTOIn> authorize;
-	
+
 	@Autowired
 	public CreateTaskRestController(CreateTaskUsePort createTask, InputModelAuthorization<NewTaskDTOIn> authorize) {
 		this.createTask = createTask;
@@ -35,14 +34,15 @@ public class CreateTaskRestController {
 	}
 
 	@PostMapping("/task/create")
-	public Task createTaskEndPoint(Authentication authentication, @Valid @RequestBody NewTaskDTOIn newTask){
+	public Task createTaskEndPoint(Authentication authentication, @Valid @RequestBody NewTaskDTOIn newTask)
+			throws AppProjectNotFoundException {
 		authorize.check(authentication.getName(), newTask);
 		return createTask.create(newTask);
 	}
-	
+
 	@ExceptionHandler(AppProjectNotFoundException.class)
 	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
-	
+
 }

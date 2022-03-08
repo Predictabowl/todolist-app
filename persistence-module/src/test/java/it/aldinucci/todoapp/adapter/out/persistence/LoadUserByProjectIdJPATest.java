@@ -7,6 +7,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ class LoadUserByProjectIdJPATest {
 	private AppGenericMapper<UserJPA, User> mapper;
 	
 	@Test
-	void test_loadUser_Successful() {
+	void test_loadUser_Successful() throws AppProjectNotFoundException {
 		UserJPA userJpa = new UserJPA("email", "username", "password");
 		entityManager.persist(userJpa);
 		ProjectJPA projectJpa = new ProjectJPA("project name", userJpa);
@@ -54,7 +56,7 @@ class LoadUserByProjectIdJPATest {
 	
 	@Test
 	void test_loadUser_whenProjectNotPresent() {
-		assertThatThrownBy(() -> loadUser.load(3L))
+		assertThatThrownBy(() -> loadUser.load(3))
 			.isInstanceOf(AppProjectNotFoundException.class)
 			.hasMessage("Project not found with id: 3");
 		

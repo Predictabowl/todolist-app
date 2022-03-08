@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.out.CreateTaskDriverPort;
-import it.aldinucci.todoapp.application.port.out.dto.NewTaskDTOOut;
+import it.aldinucci.todoapp.application.port.out.dto.NewTaskData;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Service
@@ -17,11 +18,11 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 class CreateNewTaskService implements CreateTaskUsePort{
 
 	private final CreateTaskDriverPort newTaskPort;
-	private final AppGenericMapper<NewTaskDTOIn, NewTaskDTOOut> mapper;
+	private final AppGenericMapper<NewTaskDTOIn, NewTaskData> mapper;
 	
 	@Autowired
 	public CreateNewTaskService(CreateTaskDriverPort newTaskPort,
-			AppGenericMapper<NewTaskDTOIn, NewTaskDTOOut> mapper) {
+			AppGenericMapper<NewTaskDTOIn, NewTaskData> mapper) {
 		super();
 		this.newTaskPort = newTaskPort;
 		this.mapper = mapper;
@@ -29,7 +30,7 @@ class CreateNewTaskService implements CreateTaskUsePort{
 
 
 	@Override
-	public Task create(NewTaskDTOIn task) {
+	public Task create(NewTaskDTOIn task) throws AppProjectNotFoundException {
 		return newTaskPort.create(mapper.map(task));
 	}
 

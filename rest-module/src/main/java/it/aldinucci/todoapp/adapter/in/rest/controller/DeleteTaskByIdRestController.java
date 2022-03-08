@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static it.aldinucci.todoapp.webcommons.config.AppBaseURIs.BASE_REST_URI;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,12 +18,12 @@ import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @RestController
-@RequestMapping(BASE_REST_URI)
+@RequestMapping("/api")
 public class DeleteTaskByIdRestController {
 
 	private DeleteTaskByIdUsePort deleteTask;
 	private InputModelAuthorization<TaskIdDTO> authorize;
-	
+
 	@Autowired
 	public DeleteTaskByIdRestController(DeleteTaskByIdUsePort deleteTask,
 			InputModelAuthorization<TaskIdDTO> authorize) {
@@ -32,13 +31,12 @@ public class DeleteTaskByIdRestController {
 		this.authorize = authorize;
 	}
 
-
 	@DeleteMapping("/task/{taskId}")
-	public void deleteTaskEndPoint(Authentication authentication, TaskIdDTO taskId) {
+	public void deleteTaskEndPoint(Authentication authentication, TaskIdDTO taskId) throws AppTaskNotFoundException {
 		authorize.check(authentication.getName(), taskId);
 		deleteTask.delete(taskId);
 	}
-	
+
 	@ExceptionHandler(AppTaskNotFoundException.class)
 	public ResponseEntity<String> notFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
