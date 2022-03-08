@@ -7,12 +7,6 @@
 	</parent>
 	<artifactId>persistence-module</artifactId>
 
-	<properties>
-		<postgres.test.username>testUser</postgres.test.username>
-		<postgres.test.password>password</postgres.test.password>
-		<postgres.test.container.port>5432</postgres.test.container.port>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -26,13 +20,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!--
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<scope>test</scope>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -40,51 +32,4 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>io.fabric8</groupId>
-					<artifactId>docker-maven-plugin</artifactId>
-					<configuration>
-						<showLogs>true</showLogs>
-						<images>
-							<alias>app-postgres</alias>
-							<name>postgres:14.2</name>
-							<run>
-								<ports>
-									<port>${postgres.test.container.port}</port>
-								</ports>
-								<env>
-									<POSTGRES_USER>${postgres.test.username}}</POSTGRES_USER>
-									<POSTGRES_PASSWORD>${postgres.test.password}}</POSTGRES_PASSWORD>
-									<POSTGRES_DB>todoListAppTestDb</POSTGRES_DB>
-								</env>
-								<wait>
-									<log>(?s)\[1\] LOG: database system is ready to accept connections</log>
-									<time>20000</time>
-								</wait>
-							</run>
-						</images>
-					</configuration>
-					<executions>
-						<execution>
-							<id>docker:start</id>
-							<phase>pre-integration-test</phase>
-							<goals>
-								<goal>start</goal>
-							</goals>
-						</execution>
-						<execution>
-							<id>docker:stop</id>
-							<phase>post-integration-test</phase>
-							<goals>
-								<goal>stop</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 </project>
