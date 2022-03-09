@@ -7,7 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
 
-@Configuration
+//@Configuration
 public class LearningConfig {
 	
 	@Autowired
@@ -18,8 +18,8 @@ public class LearningConfig {
 		user.setEnabled(true);
 		userRepo.save(user);
 		UserJPA user2 = new UserJPA("admin@email.it", "Admin", passwordEncoder.encode("password"));
-		userRepo.save(user2);
 		user2.setEnabled(true);
+		userRepo.save(user2);
 		userRepo.flush();
 	}
 	
