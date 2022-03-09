@@ -2,12 +2,12 @@ package it.aldinucci.todoapp.application.port.in.dto;
 
 import java.util.Objects;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.URL;
 
+import it.aldinucci.todoapp.application.port.in.model.AppEmail;
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
 public class VerificationLinkDTO extends AutoValidatingInputModel<VerificationLinkDTO>{
@@ -17,14 +17,11 @@ public class VerificationLinkDTO extends AutoValidatingInputModel<VerificationLi
 	@NotEmpty
 	private String link;
 	
-	@NotNull
-	@NotEmpty
-	@Email
-	private String email;
+	private AppEmail email;
 
 	public VerificationLinkDTO(String link, String email) {
 		this.link = link;
-		this.email = email;
+		this.email = new AppEmail(email);
 		validateSelf();
 	}
 
@@ -33,7 +30,7 @@ public class VerificationLinkDTO extends AutoValidatingInputModel<VerificationLi
 	}
 
 	public String getEmail() {
-		return email;
+		return email.getEmail();
 	}
 
 	@Override

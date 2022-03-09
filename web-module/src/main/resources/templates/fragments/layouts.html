@@ -29,6 +29,12 @@
 		</div>
 	</section>
 	
+	<!-- App base layout -->
+	<div th:fragment="app-layout(username, content)">
+		<div th:replace="fragments/commons :: BNavbar(${username})"></div>
+		<th:block th:replace="${content}" />
+	</div>
+	
 </body>
 
 </html>

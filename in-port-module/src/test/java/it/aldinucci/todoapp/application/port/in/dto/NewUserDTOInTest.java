@@ -32,4 +32,5 @@ class NewUserDTOInTest {
 		assertThatThrownBy(() -> new NewUserDTOIn("username", "email@email.it", ""))
 			.isInstanceOf(ConstraintViolationException.class);
 	}
+
 }

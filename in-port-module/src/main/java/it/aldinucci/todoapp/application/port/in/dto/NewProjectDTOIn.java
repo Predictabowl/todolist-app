@@ -2,10 +2,10 @@ package it.aldinucci.todoapp.application.port.in.dto;
 
 import java.util.Objects;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import it.aldinucci.todoapp.application.port.in.model.AppEmail;
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
 
@@ -15,12 +15,11 @@ public class NewProjectDTOIn extends AutoValidatingInputModel<NewProjectDTOIn>{
 	@NotNull
 	private String name;
 	
-	@Email
-	private String userEmail;
+	private AppEmail userEmail;
 	
 	public NewProjectDTOIn(String name, String userEmail) {
 		this.name = name;
-		this.userEmail = userEmail;
+		this.userEmail = new AppEmail(userEmail);
 		validateSelf();
 	}
 	
@@ -29,7 +28,7 @@ public class NewProjectDTOIn extends AutoValidatingInputModel<NewProjectDTOIn>{
 	}
 
 	public String getUserEmail() {
-		return userEmail;
+		return userEmail.getEmail();
 	}
 
 	@Override

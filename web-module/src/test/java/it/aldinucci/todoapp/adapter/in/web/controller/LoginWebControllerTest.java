@@ -26,7 +26,7 @@ class LoginWebControllerTest {
 				mvc.perform(get("/login"))
 					.andExpect(status().is2xxSuccessful())
 						.andReturn().getModelAndView(),
-				"login");
+				"login/login");
 	}
 
 }

@@ -25,6 +25,8 @@ import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 @RequestMapping("/user/register/resend/verification")
 public class ResendVerificationTokenController {
 	
+	private static final String EMAIL_REQUEST_VIEW = "login/email.request";
+	
 	private RetrieveVerificationTokenUsePort retrieveToken;
 	private SendVerificationEmailUsePort sendMail;
 	
@@ -39,12 +41,12 @@ public class ResendVerificationTokenController {
 	@GetMapping
 	public String getView(EmailWebDto emailWebDto, Model model) {
 		model.addAttribute("actionLink", "/user/register/resend/verification");
-		return "email.request";
+		return EMAIL_REQUEST_VIEW;
 	}
 	
 	@PostMapping
 	public ModelAndView resendVerificationToken(@Valid EmailWebDto emailWebDto, BindingResult bindingResult ) {
-		ModelAndView modelAndView = new ModelAndView("email.request");
+		ModelAndView modelAndView = new ModelAndView(EMAIL_REQUEST_VIEW);
 		modelAndView.addObject("actionLink", "/user/register/resend/verification");
 		if(bindingResult.hasErrors())
 			return modelAndView;
@@ -63,7 +65,8 @@ public class ResendVerificationTokenController {
 		sendMail.send(buildVerificationLink(
 				ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString(),
 				token, emailWebDto.getEmail()));
-		modelAndView.setViewName("redirect:/login");
+		modelAndView.setViewName("login/register.sent.verification");
+		modelAndView.addObject("useremail", emailWebDto.getEmail());
 		return modelAndView;
 	}
 	

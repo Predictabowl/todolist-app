@@ -28,6 +28,8 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 @RequestMapping("/user/register")
 public class RegisterUserWebController {
 
+	private static final String REGISTER_VIEW_NAME = "login/register";
+
 	private static final String EMAIL_EXISTS = "emailExists";
 	
 	private CreateUserUsePort createUser;
@@ -48,12 +50,12 @@ public class RegisterUserWebController {
 
 	@GetMapping
 	public String showRegistrationPage(RegisterUserDto registerUserDto) {
-		return "register";
+		return REGISTER_VIEW_NAME;
 	}
 	
 	@PostMapping
 	public ModelAndView postRegistrationPage(@Valid RegisterUserDto newUser, BindingResult bindingResult) {
-		ModelAndView modelAndView = new ModelAndView("register");
+		ModelAndView modelAndView = new ModelAndView(REGISTER_VIEW_NAME);
 		if(bindingResult.hasErrors()) 
 			return modelAndView;
 		
@@ -69,7 +71,7 @@ public class RegisterUserWebController {
 				ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString(),
 				user.getToken().getToken(),
 				user.getUser().getEmail()));
-		modelAndView.setViewName("register.sent.verification");
+		modelAndView.setViewName("login/register.sent.verification");
 		modelAndView.addObject("useremail", user.getUser().getEmail());
 		return modelAndView;
 	}
