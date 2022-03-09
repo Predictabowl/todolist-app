@@ -31,6 +31,42 @@
 			</div>
 		</div>
 	</div>
-	
+
+
+	<!-- CARD TEST -->
+	<button class="button" id="card-button">Show Card</button>
+	<div class="modal"  id="new-project-card">
+		<div class="modal-background">
+			<div class="modal-content">
+				<div class="card">
+					<header class="card-header">
+						<p class="card-header-title">This is a Card</p>
+						<button class="card-header-icon">
+							<span class="icon">
+								<i class="fas fa-angle-down"></i>
+							</span>
+						</button>
+					</header>
+					<div class="card-content">
+						Something is write here.
+						<a href="#">@tizio</a>
+						<time datetime="2022-3-3"></time>
+					</div>
+					<footer class="card-footer">
+						<a class="card-footer-item" href="#">Save</a>
+						<a class="card-footer-item" id="card-close-button" href="#">Cancel</a>
+					</footer>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+	<script type="text/javascript">
+		$("#card-button, #card-close-button").click(function() {
+			$("#new-project-card").toggle('slow');
+// 			$("#new-project-card").show("slow");
+		});
+	</script>
+
 </body>
 </html>
