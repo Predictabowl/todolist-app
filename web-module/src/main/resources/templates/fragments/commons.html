@@ -9,19 +9,28 @@
 
 	<!-- 	NAVBAR BULMA -->
 	<div th:fragment="BNavbar (username)">
-		<nav class="navbar has-background-dark"
-			aria-label="main navigation bar">
+		<nav class="navbar has-background-dark"	aria-label="main navigation bar">
 			<div class="navbar-brand">
 				<a href="" class="navbar-item title is-4 has-text-light"
 					th:text="#{appname}"> </a>
 			</div>
 			<div class="navbar-menu is-active">
 				<div class="navbar-start">
+					<div class="navbar-item">
+						<a class="icon has-text-primary" id="sidebar-button">
+							<i class="fas fa-bars"></i>
+						</a>
+					</div>
+					<div class="navbar-item">
+						<a class="icon has-text-primary" th:title="#{new.project}">
+							<i class="fas fa-plus"></i>
+						</a>
+					</div>
 					<div class="navbar-item has-dropdown is-hoverable">
 						<a class="navbar-link has-text-primary" th:text="#{projects}"></a>
 						<div class="navbar-dropdown">
 							<a th:href="@{/}" class="navbar-item" th:text="#{list}"></a> <a
-								th:href="@{/new}" class="navbar-item" th:text="#{new}"></a>
+								href="#" id="open-project-card" class="navbar-item" th:text="#{new}"></a>
 						</div>
 					</div>
 				</div>

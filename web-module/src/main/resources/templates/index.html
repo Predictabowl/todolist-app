@@ -8,33 +8,39 @@
 	<div th:replace="fragments/layouts :: app-layout(${user.username}, ~{::#content})">
 
 		<div id="content">
-			<div th:if="${projects.empty}">
-				<div>No Project</div>
-			</div>
-		
-			<div th:unless="${projects.empty}">
-				<table class="table is-striped is-hoverable">
-					<thead>
-						<tr>
-							<th>id</th>
-							<th>Name</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="project : ${projects}">
-							<td th:text="${project.id}"></td>
-							<td><a th:text="${project.name}"
-								th:href="@{/todolist/project/{id}/tasks (id=${project.id})}"></a></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			
+<!-- 			<section class="section main"> -->
+				<div th:if="${projects.empty}">
+					<div>No Project</div>
+				</div>
+
+				<div th:unless="${projects.empty}">
+					<table class="table is-striped is-hoverable">
+						<thead>
+							<tr>
+								<th>id</th>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="project : ${projects}">
+								<td th:text="${project.id}"></td>
+								<td>
+									<a th:text="${project.name}"
+										th:href="@{/todolist/project/{id}/tasks (id=${project.id})}">
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+<!-- 			</section> -->
 		</div>
 	</div>
-
+	
 
 	<!-- CARD TEST -->
-	<button class="button" id="card-button">Show Card</button>
+	
 	<div class="modal"  id="new-project-card">
 		<div class="modal-background">
 			<div class="modal-content">
@@ -54,7 +60,7 @@
 					</div>
 					<footer class="card-footer">
 						<a class="card-footer-item" href="#">Save</a>
-						<a class="card-footer-item" id="card-close-button" href="#">Cancel</a>
+						<a class="card-footer-item" id="close-project-card" href="#">Cancel</a>
 					</footer>
 				</div>
 			</div>
@@ -62,11 +68,12 @@
 	</div>
 		
 	<script type="text/javascript">
-		$("#card-button, #card-close-button").click(function() {
+		$("#open-project-card, #close-project-card").click(function() {
 			$("#new-project-card").toggle('slow');
 // 			$("#new-project-card").show("slow");
 		});
 	</script>
+	
 
 </body>
 </html>
