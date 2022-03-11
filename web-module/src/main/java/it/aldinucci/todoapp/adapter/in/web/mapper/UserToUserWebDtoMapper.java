@@ -7,7 +7,7 @@ import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Component
-public class UserToUSerWebDtoMapper implements AppGenericMapper<User, UserWebDto>{
+public class UserToUserWebDtoMapper implements AppGenericMapper<User, UserWebDto>{
 
 	@Override
 	public UserWebDto map(User model) {

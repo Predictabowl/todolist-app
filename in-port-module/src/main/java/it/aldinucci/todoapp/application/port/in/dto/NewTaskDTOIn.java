@@ -5,7 +5,9 @@ import java.util.Objects;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-public class NewTaskDTOIn {
+import it.aldinucci.todoapp.util.AutoValidatingInputModel;
+
+public class NewTaskDTOIn extends AutoValidatingInputModel<NewTaskDTOIn>{
 
 	@NotEmpty
 	@NotNull
@@ -20,6 +22,7 @@ public class NewTaskDTOIn {
 		this.name = name;
 		this.description = description;
 		this.projectId = projectId;
+		validateSelf();
 	}
 
 	public String getName() {

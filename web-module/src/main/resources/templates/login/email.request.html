@@ -8,12 +8,12 @@
 	<section th:replace="fragments/layouts :: registration-layout(#{send.email.verification}, ~{::#content})">
 		<div id="content">
 			<form th:action="@{${actionLink}}" name="email-form" method="post" th:object="${emailWebDto}">
-				<div>
-					<div class="column" th:insert="~{fragments/commons::inputFieldWithIcon('email','Email', 'email', 'fa-envelope')}"></div>
+				<div class="field">
+					<div th:insert="~{fragments/commons::inputFieldWithIcon('email','Email', 'email', 'fa-envelope')}"></div>
 					<label class="help is-danger" th:if="${emailNotFound != null}" th:text="#{email.not.found}"></label>
 					<label class="help is-danger" th:if="${emailAlreadyVerified != null}" th:text="#{email.exists}"></label>
 				</div>
-				<div class="column">
+				<div class="control">
 					<button class="button is-link is-rounded" type="submit" name="submit-button" value="Register in" th:text="#{send}"></button>
 				</div>
 			</form>

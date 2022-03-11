@@ -71,7 +71,7 @@
 	<!-- INPUT TEXT WITH OBJECT FIELDS REFERENCED AND ERROR DISPLAY -->
 	<div th:fragment="inputWithField (fieldName, placeHolder, inputType)">
 		<input th:class="'input is-rounded ' +${#fields.hasErrors(fieldName) ? 'is-danger' : 'is-success'}" th:type="${inputType}"
-			th:placeholder="${placeHolder}" th:field="*{__${fieldName}__}"/>
+			th:placeholder="${placeHolder}" th:field="*{__${fieldName}__}" th:required="${inputNotRequired == null}"/>
 		<label class="help is-danger"	th:if="${#fields.hasErrors(fieldName)}" th:id="'input-helper-'+${fieldName}" 
 			th:errors="*{__${fieldName}__}"></label>
 	</div>

@@ -69,7 +69,29 @@ class IndexWebControllerTest {
 
 	@Test
 	@WithMockUser(username = FIXTURE_EMAIL)
-	void test_indexController_success() throws Exception {
+	void test_indexController_withNoProjects() throws Exception {
+		user = new User(FIXTURE_EMAIL, "username", "password");
+		UserIdDTO userIdDTO = new UserIdDTO(FIXTURE_EMAIL);
+		UserWebDto userWebDto = new UserWebDto("username", FIXTURE_EMAIL);
+		when(loadUser.load(isA(UserIdDTO.class))).thenReturn(Optional.of(user));
+		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(Collections.emptyList());
+		when(mapper.map(isA(User.class))).thenReturn(userWebDto);
+
+		mvc.perform(get("/"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("index"))
+			.andExpect(model().attribute("user", userWebDto))
+			.andExpect(model().attribute("projects", Collections.emptyList()));
+		
+		InOrder inOrder = inOrder(loadProjects, loadUser, mapper);
+		inOrder.verify(loadProjects).load(userIdDTO);
+		inOrder.verify(loadUser).load(userIdDTO);
+		inOrder.verify(mapper).map(user);
+	}
+	
+	@Test
+	@WithMockUser(username = FIXTURE_EMAIL)
+	void test_indexController_withFewProjects() throws Exception {
 		user = new User(FIXTURE_EMAIL, "username", "password");
 		UserIdDTO userIdDTO = new UserIdDTO(FIXTURE_EMAIL);
 		UserWebDto userWebDto = new UserWebDto("username", FIXTURE_EMAIL);
@@ -84,8 +106,7 @@ class IndexWebControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(view().name("index"))
 			.andExpect(model().attribute("user", userWebDto))
-			.andExpect(model().attribute("projects", projects))
-			.andExpect(model().attribute("message", ""));
+			.andExpect(model().attribute("projects", projects));
 		
 		InOrder inOrder = inOrder(loadProjects, loadUser, mapper);
 		inOrder.verify(loadProjects).load(userIdDTO);

@@ -18,19 +18,21 @@
 	</head>
 	
 	<!-- Login and Registration box layout -->
-	<section class="section" th:fragment="registration-layout(title, content)">
-		<div class="container">
-			<div class="columns is-centered is-desktop">
-				<div class="block box has-text-centered is-vcentered">
-					<h1 class="title" th:if="${title != ''}" th:text="${title}">Title</h1>
+	
+		<section class="hero is-medium"	th:fragment="registration-layout(title, content)">
+			<div class="hero-body has-text-centered" style="margin: auto;">
+				<div class="box">
+					<h1 class="title" th:if="${title != ''}"
+						th:text="${title}">
+						Title
+					</h1>
 					<th:block th:replace="${content}" />
 				</div>
 			</div>
-		</div>
-	</section>
-	
+		</section>
+
 	<!-- App base layout -->
-	<div th:fragment="app-layout(username, content)">
+	<div th:fragment="app-layout(username, content, projects)">
 		<div th:replace="fragments/commons :: BNavbar(${username})"></div>
 		<div class="columns main-window">
 			<section

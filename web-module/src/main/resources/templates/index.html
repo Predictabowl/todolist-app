@@ -5,7 +5,7 @@
 	<title>Projects</title>
 </head>
 <body>
-	<div th:replace="fragments/layouts :: app-layout(${user.username}, ~{::#content})">
+	<div th:replace="fragments/layouts :: app-layout(${user.username}, ~{::#content}, ${projects})">
 
 		<div id="content">
 			

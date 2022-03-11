@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.domain.User;
 
-class UserToUSerWebDtoMapperTest {
+class UserToUserWebDtoMapperTest {
 
-	private UserToUSerWebDtoMapper mapper;
+	private UserToUserWebDtoMapper mapper;
 
 	@Test
 	void test() {
-		mapper = new UserToUSerWebDtoMapper();
+		mapper = new UserToUserWebDtoMapper();
 
 		UserWebDto webDto = mapper.map(new User("test@email.it", "username", "password"));
 
