@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.aldinucci.todoapp.adapter.in.rest.dto.NewTaskWebDto;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Task;
@@ -34,8 +36,8 @@ public class CreateTaskRestController {
 	}
 
 	@PostMapping("/task/create")
-	public Task createTaskEndPoint(Authentication authentication, @Valid @RequestBody NewTaskDTOIn newTask)
-			throws AppProjectNotFoundException {
+	public Task createTaskEndPoint(Authentication authentication, @RequestBody NewTaskDTOIn newTask)
+					throws AppProjectNotFoundException {
 		authorize.check(authentication.getName(), newTask);
 		return createTask.create(newTask);
 	}

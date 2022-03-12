@@ -138,15 +138,15 @@ class RegisterUserWebViewTest {
 		HtmlForm form = page.getFormByName("user-register");
 		HtmlInput emailInput = form.getInputByName("email");
 		emailInput.setValueAttribute("useremail.it");
-		form.getInputByName("username").setValueAttribute("");
-		form.getInputByName("password").setValueAttribute("");
-		form.getInputByName("confirmedPassword").setValueAttribute("");
+		form.getInputByName("username").setValueAttribute("name");
+		form.getInputByName("password").setValueAttribute("pass1");
+		form.getInputByName("confirmedPassword").setValueAttribute("pass2");
 		form.getButtonByName("form-submit").click();
 		
-		RegisterUserDto userDto = new RegisterUserDto("useremail.it", "", "", "");
+		RegisterUserDto userDto = new RegisterUserDto("useremail.it", "name", "pass1", "pass2");
 		ArgumentCaptor<BindingResult> bindingResult = ArgumentCaptor.forClass(BindingResult.class);
 		verify(controller).postRegistrationPage(eq(userDto), bindingResult.capture());
-		assertThat(bindingResult.getValue().getAllErrors()).hasSize(4);
+		assertThat(bindingResult.getValue().getAllErrors()).hasSize(1);
 	}
 	
 	@Test
