@@ -22,7 +22,7 @@
 						</a>
 					</div>
 					<div class="navbar-item">
-						<a class="icon has-text-primary" th:title="#{new.project}">
+						<a class="icon has-text-primary" th:title="#{new.project}" id="open-new-project-card">
 							<i class="fas fa-plus"></i>
 						</a>
 					</div>
@@ -60,14 +60,46 @@
 		</nav>
 
 		<form th:action="@{/logout}" id="logout-form" method="post"></form>
-
+		
+		<div class="modal" id="modal-project-form-card">
+			<div class="modal-background"></div>
+			<div class="hero is-fullheight">
+				<div class="hero-body">
+						<div class="modal-card">
+							<header class="modal-card-head">
+								<p class="modal-card-title" th:text="#{new.project}"></p>
+								<button class="delete"
+									id="close-new-project-card">
+								</button>
+							</header>
+							<form th:action="@{/project/new}" name="new-project-form" method="post">
+								<section class="modal-card-body">
+										<div class="field">
+											<input class="input is-rounded" name="name" placeholder="Project Name" required>
+										 </div>
+								</section>
+								<footer class="modal-card-foot">
+									<button class="button is-success is-rounded" name="submit-button" type="submit" th:text="#{create}">
+									</button>
+									<button class="button is-rounded" id="cancel-new-project-card" type="button" th:text="#{cancel}">
+									</button>
+								</footer>
+							</form>
+						</div>
+				</div>
+			</div>
+		</div>
+		
 		<script type="text/javascript">
 			$("#logout-link").click(function() {
 				$("#logout-form").submit();
 			});
+			$("#open-new-project-card, #cancel-new-project-card, #close-new-project-card").click(function() {
+				$("#modal-project-form-card").toggle("slow");
+			})
 		</script>
 	</div>
-	
+		
 	<!-- INPUT TEXT WITH OBJECT FIELDS REFERENCED AND ERROR DISPLAY -->
 	<div th:fragment="inputWithField (fieldName, placeHolder, inputType)">
 		<input th:class="'input is-rounded ' +${#fields.hasErrors(fieldName) ? 'is-danger' : 'is-success'}" th:type="${inputType}"
