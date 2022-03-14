@@ -7,3 +7,15 @@
 #display-toggle:checked ~ #indexModal{
 	display: flex;
 }
+
+.main-window{
+	height: 100vh;
+	width: 100vw;
+}
+
+.auto-scroll{
+	overflow: auto;
+}
+
+
+

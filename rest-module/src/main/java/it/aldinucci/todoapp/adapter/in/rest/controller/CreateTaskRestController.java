@@ -35,7 +35,7 @@ public class CreateTaskRestController {
 
 	@PostMapping("/task/create")
 	public Task createTaskEndPoint(Authentication authentication, @Valid @RequestBody NewTaskDTOIn newTask)
-			throws AppProjectNotFoundException {
+					throws AppProjectNotFoundException {
 		authorize.check(authentication.getName(), newTask);
 		return createTask.create(newTask);
 	}

@@ -3,10 +3,12 @@ package it.aldinucci.todoapp.adapter.in.rest.dto;
 import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class NewProjectRestDto {
 	
 	@NotEmpty
+	@NotNull
 	private String name;
 	
 	public NewProjectRestDto() {

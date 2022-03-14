@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.VerificationTokenJPARepository;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificatinTokenByUserDriverPort;

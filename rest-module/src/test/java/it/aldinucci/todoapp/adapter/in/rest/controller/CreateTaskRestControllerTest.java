@@ -85,13 +85,13 @@ class CreateTaskRestControllerTest {
 	@Test
 	@WithMockUser
 	void test_createTask_withEmptyName_shouldSendBadRequest() throws JsonProcessingException, Exception {
-		NewTaskDTOIn taskDto = new NewTaskDTOIn("", "description",7L);
+		String jsonTask = "{\"name\":\"\", \"description\":\"description\",\"projectId\":7}";
 		
 		mvc.perform(post(FIXTURE_URL)
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(taskDto)))
+				.content(jsonTask))
 			.andExpect(status().isBadRequest());
 		
 		verifyNoInteractions(createTask);

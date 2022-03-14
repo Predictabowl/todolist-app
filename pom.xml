@@ -27,6 +27,9 @@
 		<sonar.coverage.esclusions>
 			**/exceptions/*.*
 		</sonar.coverage.esclusions>
+		<postgres.test.username>testUser</postgres.test.username>
+		<postgres.test.password>password</postgres.test.password>
+		<postgres.test.container.port>5432</postgres.test.container.port>
 	</properties>
 
 	<modules>
@@ -243,15 +246,64 @@
 					<artifactId>sonar-maven-plugin</artifactId>
 					<version>3.9.1.2184</version>
 				</plugin>
+				<plugin>
+					<groupId>io.fabric8</groupId>
+					<artifactId>docker-maven-plugin</artifactId>
+					<version>0.39.1</version>
+					<configuration>
+						<showLogs>true</showLogs>
+						<images>
+							<image>
+								<alias>app-postgres</alias>
+								<name>postgres:14.2</name>
+								<run>
+									<ports>
+										<port>${postgres.test.container.port}:5432</port>
+									</ports>
+									<env>
+										<POSTGRES_USER>${postgres.test.username}</POSTGRES_USER>
+										<POSTGRES_PASSWORD>${postgres.test.password}</POSTGRES_PASSWORD>
+										<POSTGRES_DB>todoListAppTestDb</POSTGRES_DB>
+									</env>
+									<wait>
+										<log>(?s)\[1\] LOG:  database system is ready to accept connections</log>
+										<time>20000</time>
+									</wait>
+								</run>
+							</image>
+						</images>
+					</configuration>
+					<executions>
+						<execution>
+							<id>docker:start</id>
+							<phase>pre-integration-test</phase>
+							<goals>
+								<goal>start</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>docker:stop</id>
+							<phase>post-integration-test</phase>
+							<goals>
+								<goal>stop</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
 
 	<profiles>
 		<profile>
-			<id>skip-tests</id>
+			<id>skip-unit-tests</id>
 			<properties>
 				<skip.unit-tests>true</skip.unit-tests>
+			</properties>
+		</profile>
+		<profile>
+			<id>skip-integration-tests</id>
+			<properties>
 				<skip.integration-tests>true</skip.integration-tests>
 			</properties>
 		</profile>

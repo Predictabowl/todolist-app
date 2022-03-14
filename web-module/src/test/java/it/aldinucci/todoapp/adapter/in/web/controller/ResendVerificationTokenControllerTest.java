@@ -33,6 +33,8 @@ import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 @ExtendWith(SpringExtension.class)
 class ResendVerificationTokenControllerTest {
 
+	private static final String FIXTURE_EMAIL_REQUEST_VIEW = "login/email.request";
+
 	private static final String FIXTURE_EMAIL = "email@test.org";
 	
 	@MockBean
@@ -50,7 +52,7 @@ class ResendVerificationTokenControllerTest {
 			.andExpect(status().isOk())
 			.andReturn().getModelAndView();
 		
-		ModelAndViewAssert.assertViewName(modelAndView, "email.request");
+		ModelAndViewAssert.assertViewName(modelAndView, FIXTURE_EMAIL_REQUEST_VIEW);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "actionLink", "/user/register/resend/verification");
 	}
 	
@@ -68,10 +70,11 @@ class ResendVerificationTokenControllerTest {
 					return req;
 				})
 				.param("email", FIXTURE_EMAIL))
-			.andExpect(status().is3xxRedirection())
+			.andExpect(status().isOk())
 			.andReturn().getModelAndView();
 		
-		ModelAndViewAssert.assertViewName(modelAndView, "redirect:/login");
+		ModelAndViewAssert.assertViewName(modelAndView, "login/register.sent.verification");
+		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "useremail", FIXTURE_EMAIL);
 		verify(retrieveToken).get(userId);
 		verify(sendMail).send(new VerificationLinkDTO(
 				"http://differenthost.org:23/user/register/verification/code",
@@ -90,7 +93,7 @@ class ResendVerificationTokenControllerTest {
 			.andExpect(status().isOk())
 			.andReturn().getModelAndView();
 		
-		ModelAndViewAssert.assertViewName(modelAndView, "email.request");
+		ModelAndViewAssert.assertViewName(modelAndView, FIXTURE_EMAIL_REQUEST_VIEW);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "emailAlreadyVerified", true);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "actionLink", "/user/register/resend/verification");
 		verify(retrieveToken).get(userId);
@@ -109,7 +112,7 @@ class ResendVerificationTokenControllerTest {
 			.andExpect(status().isOk())
 			.andReturn().getModelAndView();
 		
-		ModelAndViewAssert.assertViewName(modelAndView, "email.request");
+		ModelAndViewAssert.assertViewName(modelAndView, FIXTURE_EMAIL_REQUEST_VIEW);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "emailNotFound", true);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "actionLink", "/user/register/resend/verification");
 		verify(retrieveToken).get(userId);
@@ -125,7 +128,7 @@ class ResendVerificationTokenControllerTest {
 			.andExpect(status().isOk())
 			.andReturn().getModelAndView();
 		
-		ModelAndViewAssert.assertViewName(modelAndView, "email.request");
+		ModelAndViewAssert.assertViewName(modelAndView, FIXTURE_EMAIL_REQUEST_VIEW);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "actionLink", "/user/register/resend/verification");		
 		assertThat(modelAndView.getModel()).doesNotContainKey("tokenErrorMessage");
 		

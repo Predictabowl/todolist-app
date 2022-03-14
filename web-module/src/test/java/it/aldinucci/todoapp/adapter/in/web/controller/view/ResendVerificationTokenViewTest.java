@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.BindingResult;
 
@@ -27,7 +29,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.ResendVerificationTokenController;
 import it.aldinucci.todoapp.adapter.in.web.dto.EmailWebDto;
 import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
@@ -38,7 +39,8 @@ import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exceptions.AppEmailAlreadyRegisteredException;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = {ResendVerificationTokenController.class, LoginWebController.class})
+@WebMvcTest(controllers = {ResendVerificationTokenController.class})
+@PropertySource("classpath:messages.properties")
 class ResendVerificationTokenViewTest {
 	
 	@Autowired
@@ -52,6 +54,9 @@ class ResendVerificationTokenViewTest {
 	
 	@SpyBean
 	private ResendVerificationTokenController resendTokenController;
+	
+	@Autowired
+	Environment env;
 	
 	private HtmlPage page;
 
@@ -85,5 +90,11 @@ class ResendVerificationTokenViewTest {
 		verify(resendTokenController)
 			.resendVerificationToken(eq(new EmailWebDto("Malformed")), bindingResult.capture());
 		assertThat(bindingResult.getValue().getAllErrors()).hasSize(1);
+	}
+	
+	@Test
+	void test_viewHasLinkBack_toLoginPage() {
+		assertThat(page.getAnchorByHref("/login").getTextContent())
+			.matches(env.getProperty("back.to.login"));
 	}
 }

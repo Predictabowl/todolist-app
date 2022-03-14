@@ -18,16 +18,88 @@
 	</head>
 	
 	<!-- Login and Registration box layout -->
-	<section class="section" th:fragment="registration-layout(title, content)">
-		<div class="container">
-			<div class="columns is-centered is-desktop">
-				<div class="block box has-text-centered is-vcentered">
-					<h1 class="title" th:if="${title != ''}" th:text="${title}">Title</h1>
-					<th:block th:replace="${content}" />
-				</div>
+	
+	<section class="hero is-medium"	th:fragment="registration-layout(title, content)">
+		<div class="hero-body has-text-centered" style="margin: auto;">
+			<div class="box">
+				<h1 class="title" th:if="${title != ''}"
+					th:text="${title}">
+					Title
+				</h1>
+				<th:block th:replace="${content}" />
 			</div>
 		</div>
 	</section>
+
+	<!-- App base layout -->
+	<div th:fragment="app-layout(username, content, projects)">
+		<div th:replace="fragments/commons :: BNavbar(${username})"></div>
+		<div class="columns main-window">
+			<section
+				class="column section auto-scroll has-background-grey-lighter is-one-fifth" id="sidebar">
+				<aside class="menu">
+					<ul class="menu-list">
+						<a class="menu-label is-active" href="#" id="toggle-project-list">
+							<span class="icon is-small"> 
+								<em class="fas fa-angle-down" id="project-list-angle"> </em>
+							</span>
+							<span th:text="#{projects}"></span>
+						</a>
+						<div class="is-primary" id="project-list">
+							<div th:if="${projects.empty}">
+								<a class="has-text-warning has-background-dark" th:text="#{no.projects}"></a>
+							</div>
+							<div th:unless="${projects.empty}">
+								<ul th:each="project : ${projects}">
+									<li>
+										<a class="has-text-link" th:text="${project.name}"
+											th:href="@{/project/{id}/tasks (id=${project.id})}">
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</ul>
+				</aside>
+			</section>
+			<section class="section column auto-scroll has-background-white-ter" id="main-window">
+				<div class="container">
+					<th:block th:replace="${content}" />
+				</div>
+			</section>
+		</div>
+		<script type="text/javascript">
+			$("#toggle-project-list").click(function() {
+				$("#project-list").toggle("fast", function(){
+					$("#project-list-angle").toggleClass("fa-angle-down");
+					$("#project-list-angle").toggleClass("fa-angle-right");
+					$("#toggle-project-list").toggleClass("is-active");
+					localStorage.setItem("hiddenProjects", $("#project-list").css("display") == "none");
+				});
+			});
+			
+			$("#project-list").ready(function() {
+				if (localStorage.getItem("hiddenProjects") == "true"){
+					$("#project-list").hide();
+					$("#project-list-angle").removeClass("fa-angle-down");
+					$("#project-list-angle").addClass("fa-angle-right");
+					$("#toggle-project-list").removeClass("is-active");
+				}
+			});
+	
+			$("#sidebar-button").click(function() {
+				$("#sidebar").toggle("slide", function(){
+					localStorage.setItem("hiddenSideBar", $("#sidebar").css("display") == "none");
+				});
+			});
+			
+			$("sidebar").ready(function(){
+				if (localStorage.getItem("hiddenSideBar") == "true"){
+					$("#sidebar").hide();
+				}
+			})
+		</script>
+	</div>
 	
 </body>
 

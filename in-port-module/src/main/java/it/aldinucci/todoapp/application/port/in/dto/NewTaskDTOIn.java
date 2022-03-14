@@ -4,14 +4,19 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-public class NewTaskDTOIn {
+import it.aldinucci.todoapp.util.AutoValidatingInputModel;
+
+public class NewTaskDTOIn extends AutoValidatingInputModel<NewTaskDTOIn>{
 
 	@NotEmpty
 	@NotNull
+	@Size(max = 255)
 	private String name;
 	
 	@NotNull
+	@Size(max = 1024)
 	private String description;
 	
 	private long projectId;
@@ -20,6 +25,7 @@ public class NewTaskDTOIn {
 		this.name = name;
 		this.description = description;
 		this.projectId = projectId;
+		validateSelf();
 	}
 
 	public String getName() {

@@ -17,7 +17,10 @@ public class TaskJPA {
 	
 	@Column(nullable = false)
 	private String name;
+	
+	@Column(length = 1024)
 	private String description;
+	
 	private boolean completed;
 	
 	@ManyToOne(optional = false)

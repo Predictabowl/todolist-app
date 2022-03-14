@@ -48,6 +48,7 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 @ExtendWith(SpringExtension.class)
 class RegisterUserWebControllerTest {
 
+	private static final String FIXTURE_REGISTER_VIEW = "login/register";
 	private static final String FIXTURE_EMAIL = "test@email.it";
 	private static final String FIXTURE_URI = "/user/register";
 
@@ -80,7 +81,7 @@ class RegisterUserWebControllerTest {
 			.andReturn().getModelAndView();
 		
 		assertThat(modelAndView.getModel().containsKey("emailExists")).isFalse();
-		ModelAndViewAssert.assertViewName(modelAndView, "register");
+		ModelAndViewAssert.assertViewName(modelAndView, FIXTURE_REGISTER_VIEW);
 		
 		verify(userValidator).supports(RegisterUserDto.class);
 	}
@@ -107,7 +108,7 @@ class RegisterUserWebControllerTest {
 			.andExpect(status().is2xxSuccessful())
 			.andReturn().getModelAndView();
 		
-		ModelAndViewAssert.assertViewName(modelAndView, "register");
+		ModelAndViewAssert.assertViewName(modelAndView, FIXTURE_REGISTER_VIEW);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "registerUserDto", registerUserDto);
 		assertThat(modelAndView.getModel().containsKey("emailExists")).isFalse();
 		
@@ -139,7 +140,7 @@ class RegisterUserWebControllerTest {
 			.andReturn().getModelAndView();
 		
 		
-		ModelAndViewAssert.assertViewName(modelAndView, "register");
+		ModelAndViewAssert.assertViewName(modelAndView, FIXTURE_REGISTER_VIEW);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "registerUserDto", registerUserDto);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView,"emailExists", true);
 
@@ -183,7 +184,7 @@ class RegisterUserWebControllerTest {
 			.andExpect(status().isOk())
 			.andReturn().getModelAndView();
 		
-		ModelAndViewAssert.assertViewName(modelAndView, "register.sent.verification");
+		ModelAndViewAssert.assertViewName(modelAndView, "login/register.sent.verification");
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "useremail", FIXTURE_EMAIL);
 		
 		InOrder inOrder = Mockito.inOrder(userValidator,mapper,createUser, sendMail);

@@ -5,11 +5,13 @@ import java.util.Objects;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class UserWebDto {
 	
 	@NotNull
 	@NotEmpty
+	@Size(max = 255)
 	private String username;
 	
 	@NotNull

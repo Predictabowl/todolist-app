@@ -2,29 +2,30 @@ package it.aldinucci.todoapp.application.port.in.dto;
 
 import java.util.Objects;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import it.aldinucci.todoapp.application.port.in.model.AppEmail;
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
 public class NewUserDTOIn extends AutoValidatingInputModel<NewUserDTOIn>{
 	
 	@NotEmpty
 	@NotNull
+	@Size(max = 255)
 	private String username;
 	
-	@Email
-	@NotNull
-	private String email;
+	private AppEmail email;
 	
 	@NotEmpty
 	@NotNull
+	@Size(max = 255)
 	private String password;
 
 	public NewUserDTOIn(String username, String email, String password) {
 		this.username = username;
-		this.email = email;
+		this.email = new AppEmail(email);
 		this.password = password;
 		validateSelf();
 	}
@@ -34,7 +35,7 @@ public class NewUserDTOIn extends AutoValidatingInputModel<NewUserDTOIn>{
 	}
 
 	public String getEmail() {
-		return email;
+		return email.getEmail();
 	}
 
 	public String getPassword() {

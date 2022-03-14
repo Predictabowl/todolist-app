@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,6 +25,8 @@ import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
 @ExtendWith(SpringExtension.class)
 class UserRegisterVerificationControllerTest {
 
+	private static final String FIXTURE_RESULT_VIEW = "login/register.result";
+
 	private static final String FIXTURE_TOKEN="test-token-02";
 	
 	@MockBean
@@ -40,7 +41,7 @@ class UserRegisterVerificationControllerTest {
 		
 		mvc.perform(get("/user/register/verification/"+FIXTURE_TOKEN))
 			.andExpect(status().isOk())
-			.andExpect(view().name("register.result"))
+			.andExpect(view().name(FIXTURE_RESULT_VIEW))
 			.andExpect(model().attribute("accountVerified", true));
 		
 		verify(verifyUser).verify(new VerifyTokenDTOIn(FIXTURE_TOKEN));
@@ -52,7 +53,7 @@ class UserRegisterVerificationControllerTest {
 		
 		mvc.perform(get("/user/register/verification/"+FIXTURE_TOKEN))
 			.andExpect(status().isOk())
-			.andExpect(view().name("register.result"))
+			.andExpect(view().name(FIXTURE_RESULT_VIEW))
 			.andExpect(model().attribute("accountVerified", false));
 		
 		verify(verifyUser).verify(new VerifyTokenDTOIn(FIXTURE_TOKEN));

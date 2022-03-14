@@ -31,6 +31,6 @@ public class UserRegisterVerificationController {
 		} catch (AppUserNotFoundException e) {
 			return "redirect:/user/register";
 		}
-		return "register.result";
+		return "login/register.result";
 	}
 }

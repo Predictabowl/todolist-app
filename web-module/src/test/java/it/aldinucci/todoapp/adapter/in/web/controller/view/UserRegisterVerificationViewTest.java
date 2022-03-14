@@ -29,7 +29,6 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.UserRegisterVerificationController;
 import it.aldinucci.todoapp.application.port.in.VerifyUserEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.VerifyTokenDTOIn;
@@ -43,7 +42,7 @@ import it.aldinucci.todoapp.application.port.in.dto.VerifyTokenDTOIn;
  */
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = {UserRegisterVerificationController.class, LoginWebController.class})
+@WebMvcTest(controllers = {UserRegisterVerificationController.class})
 @PropertySource("classpath:messages.properties")
 class UserRegisterVerificationViewTest {
 	

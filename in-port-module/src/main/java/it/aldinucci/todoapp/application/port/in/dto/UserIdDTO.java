@@ -2,24 +2,18 @@ package it.aldinucci.todoapp.application.port.in.dto;
 
 import java.util.Objects;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import it.aldinucci.todoapp.application.port.in.model.AppEmail;
 
-import it.aldinucci.todoapp.util.AutoValidatingInputModel;
+public class UserIdDTO{
 
-public class UserIdDTO extends AutoValidatingInputModel<UserIdDTO>{
-
-	@Email
-	@NotNull
-	private String email;
+	private AppEmail email;
 	
 	public UserIdDTO(String email) {
-		this.email = email;
-		validateSelf();
+		this.email = new AppEmail(email);
 	}
 
 	public String getEmail() {
-		return email;
+		return email.getEmail();
 	}
 
 	@Override

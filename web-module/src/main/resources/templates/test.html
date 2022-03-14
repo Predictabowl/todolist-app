@@ -1,45 +1,131 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<head th:replace="fragments/layouts :: app-common-header(~{::title})">
+<title>Test Page</title>
 </head>
 <body>
-			<div id="logout-card" class="modal">
-			<div class="modal-background"></div>
-			<div class="modal-card">
-				<header class="modal-card-title">
-					<p>Log out</p>
-				</header>
-				<section class="modal-card-body">
-					<label class="has-warning-text">Are you sure?</label>
-				</section>
-				<footer class="modal-card-foot">
-					<form th:action="@{/logout}" method="post">
-						<button type="submit" class="button is-success is-outlined"
-								th:text="#{logout}"></button>
-						<a class=" ml-4 button is-warning is-outlined" id="logout-close" data-target="#modal-logout" th:text="#{cancel}"></a>
-					</form>
-				</footer>
+	<div class="columns main-window">
+		<section
+			class="column section auto-scroll has-background-grey-lighter is-one-fifth" id="sidebar">
+			<aside class="menu">
+				<ul class="menu-list">
+					<a class="menu-label is-active" href="#" id="toggle-project-list">
+						<span class="icon is-small"> <i class="fas fa-angle-down"
+							id="project-list-angle"> </i>
+					</span> Projects
+					</a>
+					<div class="is-primary" id="project-list">
+						<ul>
+							<li><a href="#">Project 1</a></li>
+							<li><a href="#">Project 2</a></li>
+							<li><a href="#"> A very long Project name that doesn't
+									make any sense </a></li>
+						</ul>
+					</div>
+				</ul>
+			</aside>
+							<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+		</section>
+		<section class="section column auto-scroll has-background-white-ter" id="main-window">
+			<div class="container">
+				<button id="sidebar-button" class="button">Toggle Sidebar</button>
+				<div>
+					<table class="table is-striped is-hoverable">
+						<thead>
+							<tr>
+								<th>id</th>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Mario</td>
+								<td>Carlo</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
+				<p>test</p>
 			</div>
-		</div>
-		
-		<form th:action="@{/logout}" id="logout-form" method="post">
-			<button type="submit" class="button is-success is-outlined"
-					th:text="#{logout}"></button>
-			<a class=" ml-4 button is-warning is-outlined" id="logout-close" data-target="#modal-logout" th:text="#{cancel}"></a>
-		</form>
+		</section>
+	</div>
+<!-- 
+	<script type="text/javascript">
+		$("#toggle-project-list").click(function() {
+			$("#project-list").toggle("fast", function(){
+				$("#project-list-angle").toggleClass("fa-angle-down");
+				$("#project-list-angle").toggleClass("fa-angle-right");
+				$("#toggle-project-list").toggleClass("is-active");
+			});
+		});
 
-		<script type="text/javascript">
-			$("#logout-open").click(function() {
-				$("html").addClass("is-clipped");
-				$("#logout-card").addClass("is-active");
-			});
-			
-			$("#logout-close").click(function() {
-				$("html").removeClass("is-clipped");
-				$("#logout-card").removeClass("is-active");
-			});
-		</script>
+		$("#sidebar-button").click(function() {
+			$("#sidebar").toggle("slide");
+// 			$("#sidebar").toggle("fast", function(){
+// 				$("#main-window").toggleClass("main-window");
+// 			});
+		});
+	</script>
+	-->
 </body>
 </html>

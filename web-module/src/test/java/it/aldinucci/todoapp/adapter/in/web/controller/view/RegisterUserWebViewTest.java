@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.web.controller.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.AdditionalAnswers.answerVoid;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -18,12 +17,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.stubbing.VoidAnswer2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -32,19 +32,14 @@ import org.springframework.validation.Validator;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
-import it.aldinucci.todoapp.adapter.in.web.controller.ResendVerificationTokenController;
 import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
 import it.aldinucci.todoapp.adapter.in.web.validator.RegisterUserValidator;
 import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
-import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
@@ -63,7 +58,8 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
  */
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = {RegisterUserWebController.class, ResendVerificationTokenController.class})
+@WebMvcTest(controllers = {RegisterUserWebController.class})
+@PropertySource("classpath:messages.properties")
 class RegisterUserWebViewTest {
 	
 	@Autowired
@@ -81,14 +77,14 @@ class RegisterUserWebViewTest {
 	@MockBean
 	private SendVerificationEmailUsePort sendMail;
 	
-	@MockBean
-	private RetrieveVerificationTokenUsePort retrieveToken;
-	
 	@SpyBean
 	private RegisterUserWebController controller;
 	
 	@Autowired
 	private Validator validator;
+	
+	@Autowired
+	private Environment env;
 	
 	private HtmlPage page;
 	
@@ -133,25 +129,28 @@ class RegisterUserWebViewTest {
 			}
 
 		})).when(userValidator).validate(any(), any());
-		
+		 
 		HtmlForm form = page.getFormByName("user-register");
 		HtmlInput emailInput = form.getInputByName("email");
 		emailInput.setValueAttribute("useremail.it");
-		form.getInputByName("username").setValueAttribute("");
-		form.getInputByName("password").setValueAttribute("");
-		form.getInputByName("confirmedPassword").setValueAttribute("");
+		form.getInputByName("username").setValueAttribute("name");
+		form.getInputByName("password").setValueAttribute("pass1");
+		form.getInputByName("confirmedPassword").setValueAttribute("pass2");
 		form.getButtonByName("form-submit").click();
 		
-		RegisterUserDto userDto = new RegisterUserDto("useremail.it", "", "", "");
+		RegisterUserDto userDto = new RegisterUserDto("useremail.it", "name", "pass1", "pass2");
 		ArgumentCaptor<BindingResult> bindingResult = ArgumentCaptor.forClass(BindingResult.class);
 		verify(controller).postRegistrationPage(eq(userDto), bindingResult.capture());
-		assertThat(bindingResult.getValue().getAllErrors()).hasSize(4);
+		assertThat(bindingResult.getValue().getAllErrors()).hasSize(1);
 	}
 	
 	@Test
-	void test_registrationForm_linkToResendToken(){
-		assertThatCode(() -> page.getAnchorByHref("/user/register/resend/verification").click())
-			.doesNotThrowAnyException();
+	void test_registrationForm_links(){
+		assertThat(page.getAnchorByHref("/user/register/resend/verification").getTextContent())
+			.matches(env.getProperty("send.email.verification.again"));
+		
+		assertThat(page.getAnchorByHref("/login").getTextContent())
+			.matches(env.getProperty("back.to.login"));
 	}
-
+	
 }
