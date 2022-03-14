@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -131,8 +132,9 @@ class ProjectWebViewTest {
 		form.getInputByName("name").setValueAttribute("test task");
 		form.getTextAreaByName("description").setText("Test description");
 		HtmlButton formButton = form.getButtonByName("submit-button");
-		
+
 		assertThat(formButton.getTextContent()).matches(env.getProperty("add"));
+		assertThat(formButton.getType()).matches("submit");
 		formButton.click();
 	
 		verify(createTaskController).createNewTask(
@@ -140,6 +142,27 @@ class ProjectWebViewTest {
 				eq(new ProjectIdDTO(5)),
 				eq(new NewTaskWebDto("test task", "Test description")),
 				isA(BindingResult.class));
+		
+	}
+	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_projectView_closeCreateTaskForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
+		
+		HtmlPage page = webClient.getPage("/project/5/tasks");
+		page.getElementById("add-task-link").click();
+		HtmlForm form = page.getFormByName("new-task-form");
+		HtmlButton formButton = form.getButtonByName("cancel-button");
+		
+
+		assertThat(formButton.getTextContent()).matches(env.getProperty("cancel"));
+		assertThat(formButton.getType()).matches("button");
+		formButton.click();
+		
+		assertThat(form.getVisibleText()).isEmpty();
+	
+		verifyNoInteractions(createTaskController);
 		
 	}
 }
