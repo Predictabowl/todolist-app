@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.aldinucci.todoapp.application.port.in.VerifyUserEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.VerifyTokenDTOIn;
-import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @Controller
 @RequestMapping("/user/register/verification")

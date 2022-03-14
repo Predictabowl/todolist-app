@@ -11,7 +11,7 @@ import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadTasksByProjectIdDriverPort;
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
+import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 @Service
 @Transactional

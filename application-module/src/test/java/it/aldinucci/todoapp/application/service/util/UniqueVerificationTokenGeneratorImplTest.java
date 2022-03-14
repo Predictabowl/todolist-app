@@ -22,7 +22,7 @@ import org.mockito.Mockito;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.domain.VerificationToken;
-import it.aldinucci.todoapp.exceptions.AppCouldNotGenerateVerificationTokenException;
+import it.aldinucci.todoapp.exception.AppCouldNotGenerateVerificationTokenException;
 
 class UniqueVerificationTokenGeneratorImplTest {
 

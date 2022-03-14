@@ -11,7 +11,7 @@ import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadProjectsByUserDriverPort;
 import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @Service
 @Transactional

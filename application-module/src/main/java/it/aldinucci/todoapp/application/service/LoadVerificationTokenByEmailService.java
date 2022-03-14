@@ -11,7 +11,7 @@ import it.aldinucci.todoapp.application.port.in.LoadVerificationTokenByEmailUseP
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenByEmailDriverPort;
 import it.aldinucci.todoapp.domain.VerificationToken;
-import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @Service
 @Transactional

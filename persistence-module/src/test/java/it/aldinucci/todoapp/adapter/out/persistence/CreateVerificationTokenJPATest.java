@@ -24,8 +24,8 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
 import it.aldinucci.todoapp.application.port.out.dto.VerificationTokenData;
 import it.aldinucci.todoapp.domain.VerificationToken;
-import it.aldinucci.todoapp.exceptions.AppUserAlreadyHaveVerificationTokenException;
-import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
+import it.aldinucci.todoapp.exception.AppUserAlreadyHaveVerificationTokenException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @DataJpaTest

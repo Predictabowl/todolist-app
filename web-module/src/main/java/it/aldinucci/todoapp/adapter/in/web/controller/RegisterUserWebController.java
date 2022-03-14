@@ -21,7 +21,7 @@ import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
-import it.aldinucci.todoapp.exceptions.AppEmailAlreadyRegisteredException;
+import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Controller

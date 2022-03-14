@@ -18,8 +18,8 @@ import it.aldinucci.todoapp.adapter.in.web.dto.EmailWebDto;
 import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
-import it.aldinucci.todoapp.exceptions.AppUserEmailAlreadyVerifiedException;
-import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
+import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @Controller
 @RequestMapping("/user/register/resend/verification")

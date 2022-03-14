@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.application.port.in.DeleteProjectByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
-import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
+import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 

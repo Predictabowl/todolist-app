@@ -13,7 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import it.aldinucci.todoapp.exceptions.AppUnableToReadPropertyException;
+import it.aldinucci.todoapp.exception.AppUnableToReadPropertyException;
 
 @EnableConfigurationProperties
 @PropertySource(value = "classpath:application.properties")

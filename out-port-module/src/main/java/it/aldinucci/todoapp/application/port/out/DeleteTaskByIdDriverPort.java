@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.application.port.out;
 
-import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
+import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 
 public interface DeleteTaskByIdDriverPort {
 

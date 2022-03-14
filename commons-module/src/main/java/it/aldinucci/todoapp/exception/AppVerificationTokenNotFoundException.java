@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.exceptions;
+package it.aldinucci.todoapp.exception;
 
 public class AppVerificationTokenNotFoundException extends RuntimeException{
 

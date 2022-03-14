@@ -24,9 +24,12 @@
 			**/domain/*.*,
 			**/entity/*.*
 		</sonar.exclusions>
-		<sonar.coverage.esclusions>
-			**/exceptions/*.*
-		</sonar.coverage.esclusions>
+		<sonar.coverage.exclusions>
+			**/exception/*.*,
+			**/model/*.*,
+			**/AutoValidatingInputModel.*,
+			**/UserDetailsImpl.*,
+		</sonar.coverage.exclusions>
 		<postgres.test.username>testUser</postgres.test.username>
 		<postgres.test.password>password</postgres.test.password>
 		<postgres.test.container.port>5432</postgres.test.container.port>
