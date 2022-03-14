@@ -28,8 +28,8 @@ import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
-import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
+import it.aldinucci.todoapp.webcommons.security.config.AppRestSecurityConfig;
 
 @WebMvcTest(controllers = { LoadTaskByProjectIdRestController.class })
 @ExtendWith(SpringExtension.class)

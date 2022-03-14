@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.webcommons.config.security;
+package it.aldinucci.todoapp.webcommons.security.config;
 
 
 import org.springframework.context.annotation.Configuration;
