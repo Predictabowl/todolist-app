@@ -100,7 +100,7 @@ class CreateVerificationTokenJPATest {
 		List<VerificationTokenJPA> tokens = entityManager.getEntityManager()
 				.createQuery("from VerificationTokenJPA", VerificationTokenJPA.class).getResultList();
 		
-		assertThat(tokens).hasSize(0);
+		assertThat(tokens).isEmpty();
 		verifyNoInteractions(mapper);
 	}
 	

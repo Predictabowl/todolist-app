@@ -15,7 +15,7 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 public class UpdateUserJPA implements UpdateUserDriverPort {
 
 	private UserJPARepository userRepo;
-	private AppGenericMapper<UserJPA, User> mapper;;
+	private AppGenericMapper<UserJPA, User> mapper;
 
 	@Autowired
 	public UpdateUserJPA(UserJPARepository userRepo, AppGenericMapper<UserJPA, User> mapper) {

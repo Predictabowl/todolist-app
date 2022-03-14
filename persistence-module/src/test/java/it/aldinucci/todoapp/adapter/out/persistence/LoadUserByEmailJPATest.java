@@ -45,7 +45,7 @@ class LoadUserByEmailJPATest {
 		Optional<User> loadedUser = loadAdapter.load("email");
 		
 		verify(mapper).map(userJpa);
-		assertThat(loadedUser.get()).isSameAs(user);
+		assertThat(loadedUser).containsSame(user);
 	}
 
 	@Test

@@ -22,29 +22,9 @@ public class AppRestSecurityConfig extends WebSecurityConfigurerAdapter {
 			// send csrf token back as a cookie for a REST GET 
 			.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 		.and()
-//			.csrf().disable()
-//			.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
-//			.authorizeRequests().anyRequest().permitAll();
-//			.authorizeRequests().regexMatchers(HttpMethod.GET, ".*").permitAll()
-//		.and()
 			.authorizeRequests().anyRequest().authenticated()
 		.and()
 			.httpBasic();
-//		.and()
-//			.authorizeHttpRequests()
-//				.antMatchers(BASE_REST_URL+"/login").permitAll();
-//			.authorizeHttpRequests((authorize) -> authorize
-//					.antMatchers(HttpMethod.POST, BASE_REST_URL+"/task/create")
-//						.access(new NewTaskAuthorization2(loadUser))
-//					);
 	}
-	
-//	@Bean
-//	public SecurityFilterChain web(HttpSecurity http) throws AuthenticationException{
-//		http
-//			.authorizeHttpRequests(null)
-//	}
-	
-	
 	
 }
