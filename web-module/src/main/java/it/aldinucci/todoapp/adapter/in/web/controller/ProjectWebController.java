@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import it.aldinucci.todoapp.adapter.in.web.dto.NewTaskWebDto;
 import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
@@ -47,7 +48,8 @@ public class ProjectWebController {
 	}
 
 	@GetMapping("/tasks")
-	public String getTasks(Authentication authentication, Model model, @Valid ProjectIdDTO projectId) {
+	public String getTasks(Authentication authentication, Model model, @Valid ProjectIdDTO projectId,
+				NewTaskWebDto newTaskWebDto) {
 		User user = loadUser.load(projectId);
 		
 		authorize.check(authentication.getName(), user);

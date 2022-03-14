@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
@@ -52,7 +51,7 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
  */
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = {RegisterUserWebController.class, LoginWebController.class})
+@WebMvcTest(controllers = {RegisterUserWebController.class})
 @AutoConfigureMockMvc(addFilters = false)
 @PropertySource("classpath:messages.properties")
 class RegisterSentNotificationViewTest {
@@ -73,6 +72,9 @@ class RegisterSentNotificationViewTest {
 	
 	@MockBean
 	private SendVerificationEmailUsePort sendMail;
+	
+	@MockBean
+	private LoginWebController loginWebController;
 
 	@Autowired
 	private Environment env;
@@ -104,5 +106,6 @@ class RegisterSentNotificationViewTest {
 			.contains(env.getProperty("verification.mail.was.sent"))
 			.contains(FIXTURE_EMAIL);
 	}
+
 
 }

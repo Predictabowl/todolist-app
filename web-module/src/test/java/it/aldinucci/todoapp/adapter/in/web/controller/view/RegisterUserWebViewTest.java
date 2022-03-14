@@ -37,11 +37,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
-import it.aldinucci.todoapp.adapter.in.web.controller.ResendVerificationTokenController;
 import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
 import it.aldinucci.todoapp.adapter.in.web.validator.RegisterUserValidator;
 import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
-import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
@@ -60,7 +58,7 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
  */
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = {RegisterUserWebController.class, ResendVerificationTokenController.class})
+@WebMvcTest(controllers = {RegisterUserWebController.class})
 @PropertySource("classpath:messages.properties")
 class RegisterUserWebViewTest {
 	
@@ -78,9 +76,6 @@ class RegisterUserWebViewTest {
 	
 	@MockBean
 	private SendVerificationEmailUsePort sendMail;
-	
-	@MockBean
-	private RetrieveVerificationTokenUsePort retrieveToken;
 	
 	@SpyBean
 	private RegisterUserWebController controller;

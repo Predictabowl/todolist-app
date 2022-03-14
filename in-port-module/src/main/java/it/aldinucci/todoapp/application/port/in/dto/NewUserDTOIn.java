@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import it.aldinucci.todoapp.application.port.in.model.AppEmail;
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
@@ -12,12 +13,14 @@ public class NewUserDTOIn extends AutoValidatingInputModel<NewUserDTOIn>{
 	
 	@NotEmpty
 	@NotNull
+	@Size(max = 255)
 	private String username;
 	
 	private AppEmail email;
 	
 	@NotEmpty
 	@NotNull
+	@Size(max = 255)
 	private String password;
 
 	public NewUserDTOIn(String username, String email, String password) {

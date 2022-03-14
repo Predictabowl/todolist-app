@@ -18,26 +18,19 @@
 				<div class="navbar-start">
 					<div class="navbar-item">
 						<a class="icon has-text-primary" id="sidebar-button">
-							<i class="fas fa-bars"></i>
+							<em class="fas fa-bars"></em>
 						</a>
 					</div>
 					<div class="navbar-item">
 						<a class="icon has-text-primary" th:title="#{new.project}" id="open-new-project-card">
-							<i class="fas fa-plus"></i>
+							<em class="fas fa-plus"></em>
 						</a>
-					</div>
-					<div class="navbar-item has-dropdown is-hoverable">
-						<a class="navbar-link has-text-primary" th:text="#{projects}"></a>
-						<div class="navbar-dropdown">
-							<a th:href="@{/}" class="navbar-item" th:text="#{list}"></a> <a
-								href="#" id="open-project-card" class="navbar-item" th:text="#{new}"></a>
-						</div>
 					</div>
 				</div>
 				<div class="navbar-end">
 					<div class="navbar-item has-dropdown is-hoverable">
-						<a class="navbar-link has-text-primary"> <i
-							class="fa-solid fa-2x fa-language"></i>
+						<a class="navbar-link has-text-primary"> 
+							<em class="fa-solid fa-2x fa-language"></em>
 						</a>
 						<div class="navbar-dropdown">
 							<a class="navbar-item" th:href="@{''(lang=en)}">English</a>
@@ -45,11 +38,11 @@
 						</div>
 					</div>
 					<div class="navbar-item">
-						<div class="navbar-item has-dropdown is-hoverable">
+						<div class="navbar-item has-dropdown is-hoverable" id="user-menu">
 							<a class="navbar-link has-text-primary" th:text="${username}"></a>
 							<div class="navbar-dropdown">
 								<a class="navbar-item" id="logout-link">
-									<i class="fa-solid fa-arrow-right-from-bracket"></i>
+									<em class="fa-solid fa-arrow-right-from-bracket"></em>
 									<span class="ml-1" th:text="#{logout}"></span>								
 								</a>
 							</div>
@@ -59,7 +52,7 @@
 			</div>
 		</nav>
 
-		<form th:action="@{/logout}" id="logout-form" method="post"></form>
+		<form th:action="@{/logout}" id="logout-form" name="logout-form" method="post"></form>
 		
 		<div class="modal" id="modal-project-form-card">
 			<div class="modal-background"></div>
@@ -113,7 +106,7 @@
 		<div class="control has-icons-left">
 			<div th:insert="~{::inputWithField(__${fieldName}__, __${placeHolder}__, __${inputType}__)}"></div>
 	    	<span class="icon is-small is-left">
-				<i th:class="'fas ' +${iconClass}"></i>
+				<em th:class="'fas ' +${iconClass}"></em>
 			</span>
 		</div>
 	</div>

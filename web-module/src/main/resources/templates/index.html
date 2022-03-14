@@ -6,69 +6,51 @@
 </head>
 <body>
 	<div th:replace="fragments/layouts :: app-layout(${user.username}, ~{::#content}, ${projects})">
-
 		<div id="content">
-			
-<!-- 			<section class="section main"> -->
-				<div th:if="${activeProject != null}">
-					<table class="table is-striped is-hoverable" id="tasks-table">
-						<thead>
-							<tr>
-								<th class="title" colspan="2" th:text="${activeProject.name}"></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="task : ${tasks}">
-								<td>
-								</td>
-								<td>
-									<span th:text="${task.name}"></span>
-									<p th:text="${task.description}"></p>
-								</td>
-							</tr>
-							<tr id="add-task-table-row">
-								<td colspan="2">
-<!-- 									<a th:href="@{/project/{id}/task/new (id=${activeProject.id})}" id="add-task-link"> -->
-									<div id="add-task-link">
-										<a href="#">
-											<span class="icon">
-												<i
-													class="fas fa-plus">
-												</i>
-											</span>
-											<span
-												th:text="#{add.task}">
-											</span>
-										</a>
-									</div>
-									<div class="container" id="new-task-form-container" style="display:none;">
-										<div class="box">
-											<form action="#" name="new-task-form">
-												<div class="field">
-													<input class="input is-rounded" type="text"  placeholder="Name" name="name" required/>
-												</div>
-												<div class="field">
-													<input class="input is-rounded" type="text"  placeholder="Description" name="description"/>
-												</div>
-												<div class="control">
-													<button class="button is-success is-rounded" type="submit">Placeholder</button>
-													<button class="button is-rounded" type="button" id="close-new-task-form">Placeholder</button>
-												</div>
-											</form>
-										</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+			<div th:if="${activeProject != null}" id="active-project-section">
+				<h1 class="title" th:text="${activeProject.name}"></h1>
+				<ul id="tasks-list">
+					<li class="box" th:each="task : ${tasks}">
+						<p>
+							<span class="title is-5" th:text="${task.name}"></span>
+						</p>
+						<p th:text="${task.description}"></p>
+					</li>
+				</ul>
+				
+				<div class="mt-5">
+					<div id="add-task-link">
+						<a href="#">
+							<span class="icon">
+								<em class="fas fa-plus"></em>
+							</span>
+							<span
+								th:text="#{add.task}">
+							</span>
+						</a>
+					</div>
+					<div class="box" id="new-task-form-container" style="display:none;">
+						<form th:action="@{/project/{id}/task/new (id=${activeProject.id})}" 
+								name="new-task-form" method="post"
+								th:object="${newTaskWebDto}">
+							<div class="field" th:insert="fragments/commons::inputWithField('name', 'Name', 'text')"></div>
+							<div class="field">
+								<textarea class="textarea" type="text" placeholder="Description" name="description" ></textarea>
+								<label class="help is-danger"	th:if="${#fields.hasErrors('description')}" th:id="'input-helper-description'" th:errors="*{'description'}"></label>
+							</div>
+							<div class="control">
+								<button class="button is-success is-rounded" type="submit" name="submit-button" th:text="#{add}"></button>
+								<button class="button is-rounded" type="button" id="close-new-task-form">Placeholder</button>
+							</div>
+						</form>
+					</div>
 				</div>
-<!-- 			</section> -->
+			</div>
 		</div>
 	</div>
 	
 	<script type="text/javascript">
 		$("#add-task-link, #close-new-task-form").click(function(){
-// 			$("#add-task-table-row").toggle();
 			$("#add-task-link").toggle();
 			$("#new-task-form-container").toggle();
 		})

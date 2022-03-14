@@ -2,7 +2,7 @@ package it.aldinucci.todoapp.adapter.in.web.controller.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
@@ -27,39 +26,22 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
 import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
-import it.aldinucci.todoapp.adapter.in.web.validator.RegisterUserValidator;
-import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
-import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
-import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = {LoginWebController.class, RegisterUserWebController.class})
+@WebMvcTest(controllers = {LoginWebController.class})
 class LoginViewTest {
 
 	@Autowired
 	private WebClient webClient;
 	
 	@MockBean
-	private CreateUserUsePort createUser;
-	
-	@MockBean
-	private AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper;
-	
-	@MockBean
-	private RegisterUserValidator registerUserValidator;
-	
-	@MockBean
-	private SendVerificationEmailUsePort sendVerificationEmail;
-	
-	@SpyBean
 	private RegisterUserWebController registerController;
 	
 	private HtmlPage page;
 	
 	@BeforeEach
 	void setUp() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
-		when(registerUserValidator.supports(RegisterUserDto.class)).thenReturn(true);
+		when(registerController.showRegistrationPage(any())).thenReturn("test-view-page");
 		page = webClient.getPage("/login");
 	}
 	
@@ -68,7 +50,7 @@ class LoginViewTest {
 		assertThatCode(() -> page.getAnchorByHref("/user/register").click())
 			.doesNotThrowAnyException();
 		
-		verify(registerController).showRegistrationPage(isA(RegisterUserDto.class));
+		verify(registerController).showRegistrationPage(new RegisterUserDto());
 	}
 	
 	@Test

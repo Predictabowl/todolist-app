@@ -1,7 +1,10 @@
 package it.aldinucci.todoapp.adapter.in.web.controller.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -18,16 +21,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.validation.BindingResult;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.CreateTaskWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.ProjectWebController;
+import it.aldinucci.todoapp.adapter.in.web.dto.NewTaskWebDto;
 import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
@@ -41,9 +49,9 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = {ProjectWebController.class, CreateTaskWebController.class})
+@WebMvcTest(controllers = {ProjectWebController.class})
 @PropertySource("classpath:messages.properties")
-public class ProjectWebViewTest {
+class ProjectWebViewTest {
 
 	private static final String FIXTURE_EMAIL = "test@email.it";
 	
@@ -63,7 +71,10 @@ public class ProjectWebViewTest {
 	private AppGenericMapper<User, UserWebDto> mapper;
 	
 	@MockBean
-	private InputModelAuthorization<User> authorize;
+	private InputModelAuthorization<User> authorizeUser;
+	
+	@MockBean
+	CreateTaskWebController createTaskController;
 	
 	@Autowired
 	private Environment env;
@@ -95,33 +106,40 @@ public class ProjectWebViewTest {
 		
 		HtmlPage page = webClient.getPage("/project/5/tasks");
 		
+		assertThat(page.getHtmlElementById("active-project-section").getTextContent())
+			.contains("second project");
 		
-		HtmlTable table = page.getHtmlElementById("tasks-table");
-		
-		assertThat(table.getRow(0).getTextContent()).contains("second project");
-		
-		assertThat(table.getRow(1).getCell(1).getTextContent())
+		HtmlUnorderedList taskList = page.getHtmlElementById("tasks-list");
+		assertThat(taskList.getTextContent())
 			.contains("first task")
-			.contains("desc 1");
-		
-		assertThat(table.getRow(2).getCell(1).getTextContent())
+			.contains("desc 1")
 			.contains("second task")
 			.contains("desc 2");
+
 		
-//		assertThat(page.getAnchorByHref("/project/5/task/new").getTextContent())
-//			.contains(env.getProperty("add.task"));
 	}
 	
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_projectView_shouldContrainCreateTaskForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
+		when(createTaskController.createNewTask(any(),any(), any(), any())).thenReturn("test-view-page");
 		
 		HtmlPage page = webClient.getPage("/project/5/tasks");
+		page.getElementById("add-task-link").click();
+		HtmlForm form = page.getFormByName("new-task-form");
+		form.getInputByName("name").setValueAttribute("test task");
+		form.getTextAreaByName("description").setText("Test description");
+		HtmlButton formButton = form.getButtonByName("submit-button");
 		
+		assertThat(formButton.getTextContent()).matches(env.getProperty("add"));
+		formButton.click();
+	
+		verify(createTaskController).createNewTask(
+				isA(Authentication.class),
+				eq(new ProjectIdDTO(5)),
+				eq(new NewTaskWebDto("test task", "Test description")),
+				isA(BindingResult.class));
 		
-		HtmlTable table = page.getHtmlElementById("tasks-table");
-		
-		page.getElementById(FIXTURE_EMAIL);
 	}
 }

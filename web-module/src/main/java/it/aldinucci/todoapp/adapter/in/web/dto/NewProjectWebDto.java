@@ -4,11 +4,13 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class NewProjectWebDto {
 
 	@NotNull
 	@NotEmpty
+	@Size(max = 255)
 	private String name;
 
 	public NewProjectWebDto(@NotNull @NotEmpty String name) {
