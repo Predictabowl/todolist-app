@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.TaskJPARepository;
 import it.aldinucci.todoapp.application.port.out.DeleteTaskByIdDriverPort;
-import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
+import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 
 @Component
 public class DeleteTaskByIdJPA implements DeleteTaskByIdDriverPort{

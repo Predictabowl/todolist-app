@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.application.port.in.DeleteTaskByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
-import it.aldinucci.todoapp.exceptions.AppTaskNotFoundException;
+import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 

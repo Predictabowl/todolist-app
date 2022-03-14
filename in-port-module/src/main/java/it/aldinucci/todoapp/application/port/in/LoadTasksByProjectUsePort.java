@@ -4,7 +4,7 @@ import java.util.List;
 
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
+import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 public interface LoadTasksByProjectUsePort {
 	

@@ -27,8 +27,8 @@ import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenByEmailDri
 import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
-import it.aldinucci.todoapp.exceptions.AppUserEmailAlreadyVerifiedException;
-import it.aldinucci.todoapp.exceptions.AppUserNotFoundException;
+import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 class RetrieveVerificationTokenServiceTest {
 

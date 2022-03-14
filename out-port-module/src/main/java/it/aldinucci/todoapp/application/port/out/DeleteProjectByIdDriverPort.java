@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.application.port.out;
 
-import it.aldinucci.todoapp.exceptions.AppProjectNotFoundException;
+import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 public interface DeleteProjectByIdDriverPort {
 

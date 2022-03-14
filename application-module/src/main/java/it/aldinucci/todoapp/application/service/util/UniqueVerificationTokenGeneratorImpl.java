@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.domain.VerificationToken;
-import it.aldinucci.todoapp.exceptions.AppCouldNotGenerateVerificationTokenException;
+import it.aldinucci.todoapp.exception.AppCouldNotGenerateVerificationTokenException;
 
 /**
  * With the current implementation there's a possibility (albeit remote) that the
@@ -51,7 +51,7 @@ public class UniqueVerificationTokenGeneratorImpl implements UniqueVerificationT
 			}
 			i++;
 		}
-		if (i >= MAX_LOOP_NUMBER && tokenString.isEmpty())
+		if (i >= MAX_LOOP_NUMBER)
 			throw new AppCouldNotGenerateVerificationTokenException();
 		
 		return tokenString;

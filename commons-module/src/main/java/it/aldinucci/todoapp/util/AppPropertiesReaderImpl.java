@@ -5,7 +5,7 @@ import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import it.aldinucci.todoapp.exceptions.AppUnableToReadPropertyException;
+import it.aldinucci.todoapp.exception.AppUnableToReadPropertyException;
 
 @Component
 public class AppPropertiesReaderImpl implements AppPropertiesReader {
