@@ -101,13 +101,35 @@
 			th:errors="*{__${fieldName}__}"></label>
 	</div>
 	
-		<!-- Add icon on the left of the input field -->
+	<!-- Add icon on the left of the input field -->
 	<div th:fragment="inputFieldWithIcon (fieldName, placeHolder, inputType, iconClass)">
 		<div class="control has-icons-left">
 			<div th:insert="~{::inputWithField(__${fieldName}__, __${placeHolder}__, __${inputType}__)}"></div>
 	    	<span class="icon is-small is-left">
 				<em th:class="'fas ' +${iconClass}"></em>
 			</span>
+		</div>
+	</div>
+	
+	
+	<!-- COMPLETED TASK FORM -->
+	<div class="is-inline-flex" th:fragment="toggleTaskCompletedForm (activeProject, task, colorClass)">
+		<div>
+			<form th:action="@{'/project/'+${activeProject.id}+'/task/'+${task.id}+'/toggle/completed'}" 
+					th:name="'complete-task-'+${task.id}+'-form'" method="post">
+				<button th:class="'button is-small is-outlined is-circular '+${colorClass}"
+					type="submit" name="submit-button">
+					<span class="icon">
+						<em class="fas fa-check"></em>
+					</span>
+				</button>
+			</form>
+		</div>
+		<div class="ml-4">
+			<p>
+				<span class="title is-5" th:text="${task.name}"></span>
+			</p>
+			<p th:text="${task.description}"></p>
 		</div>
 	</div>
 

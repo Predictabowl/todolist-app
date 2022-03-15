@@ -26,7 +26,10 @@ public class TaskJPA {
 	@ManyToOne(optional = false)
 	private ProjectJPA project;
 	
+	private int orderInProject;
+	
 	public TaskJPA() {
+		this.orderInProject = 0;
 	}
 
 	public TaskJPA(Long id, String name, String description, boolean completed, ProjectJPA project) {
@@ -35,6 +38,7 @@ public class TaskJPA {
 		this.description = description;
 		this.completed = completed;
 		this.project = project;
+		this.orderInProject = 0;
 	}
 
 	public TaskJPA(String name, String description, boolean completed, ProjectJPA project) {
@@ -43,6 +47,18 @@ public class TaskJPA {
 		this.description = description;
 		this.completed = completed;
 		this.project = project;
+		this.orderInProject = 0;
+	}
+	
+	public TaskJPA(Long id, String name, String description, boolean completed, ProjectJPA project,
+			int orderInProject) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.completed = completed;
+		this.project = project;
+		this.orderInProject = orderInProject;
 	}
 
 	public Long getId() {
@@ -90,6 +106,14 @@ public class TaskJPA {
 		return Objects.hash(id);
 	}
 
+	public final int getOrderInProject() {
+		return orderInProject;
+	}
+
+	public final void setOrderInProject(int orderInProject) {
+		this.orderInProject = orderInProject;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -105,7 +129,7 @@ public class TaskJPA {
 	@Override
 	public String toString() {
 		return "TaskJPA [id=" + id + ", name=" + name + ", description=" + description + ", completed=" + completed
-				+ ", project=" + project + "]";
+				+ ", project=" + project + ", orderInProject=" + orderInProject + "]";
 	}
-	
+
 }

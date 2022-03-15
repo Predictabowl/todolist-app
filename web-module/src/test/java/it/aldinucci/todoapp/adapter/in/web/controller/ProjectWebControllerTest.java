@@ -144,9 +144,10 @@ class ProjectWebControllerTest {
 	@Test
 	@WithMockUser("another@user.it")
 	void test_viewWithFewTasks_shouldCallAuthorizationCorrectly() throws Exception {
-		List<Task> tasks = Arrays.asList(
-				new Task(5L, "task 1", "descr 1"),
-				new Task(11L, "task 2", "descr 2"));
+		Task task1 = new Task(5L, "task 1", "descr 1", false);
+		Task task2 = new Task(11L, "task 2", "descr 2", false);
+		Task task3 = new Task(17L, "task 3", "descr 3", true);
+		List<Task> tasks = Arrays.asList(task1,	task3, task2);
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
 		mvc.perform(get("/project/"+FIXTURE_PROJECT_ID+"/tasks")
@@ -156,7 +157,8 @@ class ProjectWebControllerTest {
 			.andExpect(model().attribute("user", new UserWebDto("username",FIXTURE_EMAIL)))
 			.andExpect(model().attribute("projects", projects))
 			.andExpect(model().attribute("activeProject", projects.get(0)))
-			.andExpect(model().attribute("tasks", tasks));
+			.andExpect(model().attribute("tasks", Arrays.asList(task1, task2)))
+			.andExpect(model().attribute("completedTasks", Arrays.asList(task3)));
 		
 		InOrder inOrder = inOrder(loadUser, loadProjects, loadTasks, userMapper, authorize);
 		inOrder.verify(loadUser).load(FIXTURE_PROJECT_ID_DTO);

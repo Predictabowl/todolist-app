@@ -1,6 +1,8 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -19,6 +21,7 @@ import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
+import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -60,7 +63,11 @@ public class ProjectWebController {
 				.filter(p -> p.getId().equals(projectId.getProjectId())).findFirst()
 					.orElseThrow(() -> new AppProjectNotFoundException(
 							"Critical Data Integrity error while searching project with id: "+projectId.getProjectId())));
-		model.addAttribute("tasks",loadTasks.load(projectId));
+		
+		Map<Boolean, List<Task>> tasks = loadTasks.load(projectId).stream()
+				.collect(Collectors.partitioningBy(Task::isCompleted));
+		model.addAttribute("tasks",tasks.get(false));
+		model.addAttribute("completedTasks",tasks.get(true));
 		
 		return "index";
 	}

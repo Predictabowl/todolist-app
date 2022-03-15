@@ -7,16 +7,19 @@ public class NewTaskData {
 	private String name;
 	private String description;
 	private static final boolean COMPLETE = false;
+	private int orderInProject;
 	private Long projectId;
 	
 	public NewTaskData() {
+		this.orderInProject = 0;
 	}
 
-	public NewTaskData(String name, String description, Long projectId) {
+	public NewTaskData(String name, String description, Long projectId, int orderInProject) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.projectId = projectId;
+		this.orderInProject = orderInProject;
 	}
 
 	public String getName() {
@@ -47,9 +50,17 @@ public class NewTaskData {
 		return COMPLETE;
 	}
 
+	public final int getOrderInProject() {
+		return orderInProject;
+	}
+
+	public final void setOrderInProject(int orderInProject) {
+		this.orderInProject = orderInProject;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, name, projectId);
+		return Objects.hash(description, name, orderInProject, projectId);
 	}
 
 	@Override
@@ -62,12 +73,13 @@ public class NewTaskData {
 			return false;
 		NewTaskData other = (NewTaskData) obj;
 		return Objects.equals(description, other.description) && Objects.equals(name, other.name)
-				&& Objects.equals(projectId, other.projectId);
+				&& orderInProject == other.orderInProject && Objects.equals(projectId, other.projectId);
 	}
 
 	@Override
 	public String toString() {
-		return "NewTaskDTOOut [name=" + name + ", description=" + description + ", projectId=" + projectId + "]";
+		return "NewTaskData [name=" + name + ", description=" + description + ", orderInProject=" + orderInProject
+				+ ", projectId=" + projectId + "]";
 	}
 
 }

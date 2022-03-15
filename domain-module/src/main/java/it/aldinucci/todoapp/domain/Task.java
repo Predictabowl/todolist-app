@@ -8,8 +8,10 @@ public class Task {
 	private String name;
 	private String description;
 	private boolean completed;
+	private int orderInProject;
 	
 	public Task() {
+		this.orderInProject = 0;
 	}
 	
 
@@ -18,6 +20,7 @@ public class Task {
 		this.name = name;
 		this.description = description;
 		this.completed = false;
+		this.orderInProject = 0;
 	}
 	
 	public Task(Long id, String name, String description, boolean completed) {
@@ -25,6 +28,15 @@ public class Task {
 		this.name = name;
 		this.description = description;
 		this.completed = completed;
+		this.orderInProject = 0;
+	}
+	
+	public Task(Long id, String name, String description, boolean completed, int orderInProject) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.completed = completed;
+		this.orderInProject = orderInProject;
 	}
 
 	public Long getId() {
@@ -59,10 +71,18 @@ public class Task {
 		this.completed = completed;
 	}
 
+	public final int getOrderInProject() {
+		return orderInProject;
+	}
+
+	public final void setOrderInProject(int orderInProject) {
+		this.orderInProject = orderInProject;
+	}
+
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(completed, description, id, name);
+		return Objects.hash(completed, description, id, name, orderInProject);
 	}
 
 
@@ -76,13 +96,15 @@ public class Task {
 			return false;
 		Task other = (Task) obj;
 		return completed == other.completed && Objects.equals(description, other.description)
-				&& Objects.equals(id, other.id) && Objects.equals(name, other.name);
+				&& Objects.equals(id, other.id) && Objects.equals(name, other.name)
+				&& orderInProject == other.orderInProject;
 	}
 
 
 	@Override
 	public String toString() {
-		return "Task [id=" + id + ", name=" + name + ", description=" + description + ", completed=" + completed + "]";
+		return "Task [id=" + id + ", name=" + name + ", description=" + description + ", completed=" + completed
+				+ ", orderInProject=" + orderInProject + "]";
 	}
 
 }

@@ -18,14 +18,15 @@ class TaskJpaToTaskMapperTest {
 	
 	@Test
 	void test() {
-		TaskJPA taskJpa = new TaskJPA("name", "description", true, null);
+		TaskJPA taskJpa = new TaskJPA(12L, "name", "description", true, null, 17);
 		
 		Task task = mapper.map(taskJpa);
 		
-		assertThat(task.getDescription()).isEqualTo(taskJpa.getDescription());
-		assertThat(task.getId()).isEqualTo(taskJpa.getId());
-		assertThat(task.getName()).isEqualTo(taskJpa.getName());
+		assertThat(task.getDescription()).matches("description");
+		assertThat(task.getId()).isEqualTo(12L);
+		assertThat(task.getName()).matches("name");
 		assertThat(task.isCompleted()).isTrue();
+		assertThat(task.getOrderInProject()).isEqualTo(17);
 	}
 
 }

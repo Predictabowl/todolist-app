@@ -100,8 +100,9 @@ class ProjectWebViewTest {
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_projectView_shouldContainsAllTask() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = Arrays.asList(
-				new Task(11L, "first task", "desc 1"),
-				new Task(13L, "second task", "desc 2"));
+				new Task(11L, "first task", "desc 1", false),
+				new Task(13L, "second task", "desc 2", false),
+				new Task(15L, "third task", "desc 3", true));
 		
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
@@ -115,9 +116,18 @@ class ProjectWebViewTest {
 			.contains("first task")
 			.contains("desc 1")
 			.contains("second task")
-			.contains("desc 2");
+			.contains("desc 2")
+			.doesNotContain("third task")
+			.doesNotContain("desc 3");
 
-		
+		HtmlUnorderedList completedTaskList = page.getHtmlElementById("completed-tasks-list");
+		assertThat(completedTaskList.getTextContent())
+			.doesNotContain("first task")
+			.doesNotContain("desc 1")
+			.doesNotContain("second task")
+			.doesNotContain("desc 2")
+			.contains("third task")
+			.contains("desc 3");
 	}
 	
 	@Test
@@ -163,6 +173,34 @@ class ProjectWebViewTest {
 		assertThat(form.getVisibleText()).isEmpty();
 	
 		verifyNoInteractions(createTaskController);
-		
 	}
+	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_changeTaskCompletedStatus() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		List<Task> tasks = Arrays.asList(
+				new Task(11L, "first task", "desc 1", false),
+				new Task(13L, "second task", "desc 2", false),
+				new Task(15L, "third task", "desc 3", true));
+		
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
+		
+		HtmlPage page = webClient.getPage("/project/5/tasks");
+		
+		HtmlForm form13 = page.getFormByName("complete-task-13-form");
+		assertThat(form13.getActionAttribute()).matches("/project/5/task/13/toggle/completed");
+		assertThat(form13.getButtonByName("submit-button")).isNotNull();
+		assertThat(form13.getMethodAttribute()).matches("post");
+		
+		HtmlForm form11 = page.getFormByName("complete-task-11-form");
+		assertThat(form11.getActionAttribute()).matches("/project/5/task/11/toggle/completed");
+		assertThat(form11.getButtonByName("submit-button")).isNotNull();
+		assertThat(form13.getMethodAttribute()).matches("post");
+		
+		HtmlForm form15 = page.getFormByName("complete-task-15-form");
+		assertThat(form15.getActionAttribute()).matches("/project/5/task/15/toggle/completed");
+		assertThat(form15.getButtonByName("submit-button")).isNotNull();
+		assertThat(form13.getMethodAttribute()).matches("post");
+	}
+	
 }

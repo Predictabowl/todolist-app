@@ -7,31 +7,34 @@ import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
+import it.aldinucci.todoapp.application.port.out.GetTaskMaxOrderInProjectDriverPort;
 import it.aldinucci.todoapp.application.port.out.CreateTaskDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskData;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
-import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Service
 @Transactional
 class CreateNewTaskService implements CreateTaskUsePort{
 
 	private final CreateTaskDriverPort newTaskPort;
-	private final AppGenericMapper<NewTaskDTOIn, NewTaskData> mapper;
+	private final GetTaskMaxOrderInProjectDriverPort getMaxOrderTask;
 	
 	@Autowired
-	public CreateNewTaskService(CreateTaskDriverPort newTaskPort,
-			AppGenericMapper<NewTaskDTOIn, NewTaskData> mapper) {
+	public CreateNewTaskService(CreateTaskDriverPort newTaskPort, GetTaskMaxOrderInProjectDriverPort getMaxOrderTask) {
 		super();
 		this.newTaskPort = newTaskPort;
-		this.mapper = mapper;
+		this.getMaxOrderTask = getMaxOrderTask;
 	}
 
 
 	@Override
 	public Task create(NewTaskDTOIn task) throws AppProjectNotFoundException {
-		return newTaskPort.create(mapper.map(task));
+		return newTaskPort.create(new NewTaskData(
+				task.getName(), 
+				task.getDescription(), 
+				task.getProjectId(),
+				getMaxOrderTask.get(task.getProjectId()).orElse(-1)+1));
 	}
 
 }

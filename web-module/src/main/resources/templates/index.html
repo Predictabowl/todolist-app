@@ -8,34 +8,48 @@
 	<div th:replace="fragments/layouts :: app-layout(${user.username}, ~{::#content}, ${projects})">
 		<div id="content">
 			<div th:if="${activeProject != null}" id="active-project-section">
-				<h1 class="title" th:text="${activeProject.name}"></h1>
+				<div class="is-flex is-justify-content-space-between">
+					<h1 class="title" th:text="${activeProject.name}"></h1>
+					<div class="dropdown is-hoverable is-right">
+						<div class="dropdown-trigger">
+							<span
+								class="button is-rounded is-light is-info">
+								<em class="fas fa-ellipsis"></em>
+							</span>
+						</div>
+						<div class="dropdown-menu">
+							<div class="dropdown-content">
+								<a class="dropdown-item" id="toggle-completed-tasks">
+									<span th:text="#{show.completed.tasks}" id="show-task-label"></span>
+									<span class="is-not-displayed" th:text="#{hide.completed.tasks}" id="hide-task-label"></span>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
 				<ul id="tasks-list">
 					<li class="box" th:each="task : ${tasks}">
-						<p>
-							<span class="title is-5" th:text="${task.name}"></span>
-						</p>
-						<p th:text="${task.description}"></p>
+						<div th:replace="fragments/commons :: toggleTaskCompletedForm(${activeProject}, ${task}, 'is-success')">
+						</div>
 					</li>
 				</ul>
 				
 				<div class="mt-5">
-					<div id="add-task-link">
-						<a href="#">
-							<span class="icon">
-								<em class="fas fa-plus"></em>
-							</span>
-							<span
-								th:text="#{add.task}">
-							</span>
-						</a>
-					</div>
-					<div class="box" id="new-task-form-container" style="display:none;">
+					<a href="#" class="button is-primary is-outlined is-rounded" id="add-task-link">
+						<span class="icon">
+							<em class="fas fa-plus"></em>
+						</span>
+						<span
+							th:text="#{add.task}">
+						</span>
+					</a>
+					<div class="box is-not-displayed" id="new-task-form-container">
 						<form th:action="@{/project/{id}/task/new (id=${activeProject.id})}" 
 								name="new-task-form" method="post"
 								th:object="${newTaskWebDto}">
 							<div class="field" th:insert="fragments/commons::inputWithField('name', 'Name', 'text')"></div>
 							<div class="field">
-								<textarea class="textarea" type="text" placeholder="Description" name="description" ></textarea>
+								<textarea class="textarea" placeholder="Description" name="description" ></textarea>
 								<label class="help is-danger"	th:if="${#fields.hasErrors('description')}" th:id="'input-helper-description'" th:errors="*{'description'}"></label>
 							</div>
 							<div class="control">
@@ -45,6 +59,16 @@
 						</form>
 					</div>
 				</div>
+
+
+				<div class="mt-5 p-2 has-background-warning is-not-displayed" id="completed-tasks">
+					<ul id="completed-tasks-list">
+						<li class="box" th:each="task : ${completedTasks}">
+							<div th:replace="fragments/commons :: toggleTaskCompletedForm(${activeProject}, ${task}, 'is-danger')">
+							</div>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -53,6 +77,21 @@
 		$("#add-task-link, #close-new-task-form").click(function(){
 			$("#add-task-link").toggle();
 			$("#new-task-form-container").toggle();
+		})
+		$("#toggle-completed-tasks").click(function(){
+			$("#completed-tasks").toggle("slow", function(){
+				$("#show-task-label").toggle();
+				$("#hide-task-label").toggle();
+				localStorage.setItem("hiddenCompletedTasks", $("#completed-tasks").css("display") == "none");
+			});
+		})
+		
+		$("completed-tasks").ready(function(){
+			if (localStorage.getItem("hiddenCompletedTasks") == "false"){
+				$("#completed-tasks").show();
+				$("#show-task-label").hide();
+				$("#hide-task-label").show();
+			}
 		})
 	</script>
 
