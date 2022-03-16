@@ -47,19 +47,19 @@ public class RegisterUserWebController {
 	}
 
 	@GetMapping
-	public String showRegistrationPage(RegisterUserDto registerUserWebDto) {
+	public String showRegistrationPage(RegisterUserDto registerUserDto) {
 		return REGISTER_VIEW_NAME;
 	}
 	
 	@PostMapping
-	public ModelAndView postRegistrationPage(RegisterUserDto registerUserWebDto, BindingResult bindingResult) {
+	public ModelAndView postRegistrationPage(RegisterUserDto registerUserDto, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView(REGISTER_VIEW_NAME);
 		if(bindingResult.hasErrors()) 
 			return modelAndView;
 		
 		NewUserDtoOut user;
 		try {
-			user = createUser.create(mapper.map(registerUserWebDto));
+			user = createUser.create(mapper.map(registerUserDto));
 		} catch (AppEmailAlreadyRegisteredException e) {
 			modelAndView.addObject(EMAIL_EXISTS, true);
 			return modelAndView;

@@ -141,7 +141,7 @@ class RegisterUserWebControllerTest {
 		
 		
 		ModelAndViewAssert.assertViewName(modelAndView, FIXTURE_REGISTER_VIEW);
-		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "registerUserWebDto", registerUserDto);
+		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "registerUserDto", registerUserDto);
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView,"emailExists", true);
 
 		InOrder inOrder = Mockito.inOrder(userValidator,mapper,createUser);
