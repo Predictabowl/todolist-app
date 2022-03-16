@@ -36,8 +36,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.CreateTaskWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.ProjectWebController;
-import it.aldinucci.todoapp.adapter.in.web.dto.NewTaskWebDto;
-import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
@@ -47,6 +45,8 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
+import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @ExtendWith(SpringExtension.class)

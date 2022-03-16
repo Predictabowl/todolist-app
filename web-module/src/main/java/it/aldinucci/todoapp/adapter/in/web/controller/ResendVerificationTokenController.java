@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.EmailWebDto;
 import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
+import it.aldinucci.todoapp.webcommons.dto.EmailWebDto;
 
 @Controller
 @RequestMapping("/user/register/resend/verification")
@@ -53,7 +53,7 @@ public class ResendVerificationTokenController {
 
 		String token;
 		try {
-			token = retrieveToken.get(new UserIdDTO(emailWebDto.getEmail())).getToken();
+			token = retrieveToken.get(new UserIdDTO(emailWebDto.email())).getToken();
 		} catch (AppUserNotFoundException e) {
 			modelAndView.addObject("emailNotFound", true);
 			return modelAndView;
@@ -64,9 +64,9 @@ public class ResendVerificationTokenController {
 		
 		sendMail.send(buildVerificationLink(
 				ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString(),
-				token, emailWebDto.getEmail()));
+				token, emailWebDto.email()));
 		modelAndView.setViewName("login/register.sent.verification");
-		modelAndView.addObject("useremail", emailWebDto.getEmail());
+		modelAndView.addObject("useremail", emailWebDto.email());
 		return modelAndView;
 	}
 	

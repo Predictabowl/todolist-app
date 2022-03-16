@@ -21,7 +21,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
+import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
 
 class RegisterUserValidatorTest {
 

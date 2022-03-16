@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
 import it.aldinucci.todoapp.adapter.in.web.validator.RegisterUserValidator;
 import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
@@ -23,6 +22,7 @@ import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
 
 @Controller
 @RequestMapping("/user/register")

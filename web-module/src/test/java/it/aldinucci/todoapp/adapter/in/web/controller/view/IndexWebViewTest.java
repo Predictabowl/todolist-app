@@ -35,7 +35,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import it.aldinucci.todoapp.adapter.in.web.controller.CreateProjectWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.IndexWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
-import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
@@ -43,6 +42,7 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.NewProjectWebDto;
+import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {IndexWebController.class})

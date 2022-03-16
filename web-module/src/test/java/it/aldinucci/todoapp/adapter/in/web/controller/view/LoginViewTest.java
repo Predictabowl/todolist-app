@@ -25,7 +25,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
-import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
+import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {LoginWebController.class})
@@ -50,7 +50,7 @@ class LoginViewTest {
 		assertThatCode(() -> page.getAnchorByHref("/user/register").click())
 			.doesNotThrowAnyException();
 		
-		verify(registerController).showRegistrationPage(new RegisterUserDto());
+		verify(registerController).showRegistrationPage(new RegisterUserDto(null, null, null, null));
 	}
 	
 	@Test

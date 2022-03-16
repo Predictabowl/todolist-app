@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
+import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
 
 @Component
 public class RegisterUserValidator implements Validator {
@@ -31,7 +31,7 @@ public class RegisterUserValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		validator.validate(target, errors);
 		RegisterUserDto user = (RegisterUserDto) target;
-		if (!user.getPassword().equals(user.getConfirmedPassword()))
+		if (!user.password().equals(user.confirmedPassword()))
 			errors.rejectValue("confirmedPassword", messageSource.getMessage("registerUserDto.matchPasswords.error", null,
 					Locale.getDefault()), "The confirmed password doesn't match");
 	}

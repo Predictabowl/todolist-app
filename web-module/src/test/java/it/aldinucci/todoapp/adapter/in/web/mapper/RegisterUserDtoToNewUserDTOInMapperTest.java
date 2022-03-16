@@ -3,16 +3,16 @@ package it.aldinucci.todoapp.adapter.in.web.mapper;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
+import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
 
-class RegisterUserDtoToNewUSerDTOInMapperTest {
+class RegisterUserDtoToNewUserDTOInMapperTest {
 
-	private RegisterUserDtoToNewUSerDTOInMapper mapper;
+	private RegisterUserDtoToNewUserDTOInMapper mapper;
 	
 	@Test
 	void test() {
-		mapper = new RegisterUserDtoToNewUSerDTOInMapper();
+		mapper = new RegisterUserDtoToNewUserDTOInMapper();
 		
 		NewUserDTOIn userDTOIn = mapper.map(new RegisterUserDto("test@email.it", "username", "password1", "password2"));
 		

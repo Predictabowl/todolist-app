@@ -3,8 +3,8 @@ package it.aldinucci.todoapp.adapter.in.web.mapper;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 
 class UserToUserWebDtoMapperTest {
 
@@ -16,8 +16,8 @@ class UserToUserWebDtoMapperTest {
 
 		UserWebDto webDto = mapper.map(new User("test@email.it", "username", "password"));
 
-		assertThat(webDto.getEmail()).isEqualTo("test@email.it");
-		assertThat(webDto.getUsername()).isEqualTo("username");
+		assertThat(webDto.email()).isEqualTo("test@email.it");
+		assertThat(webDto.username()).isEqualTo("username");
 	}
 
 }
