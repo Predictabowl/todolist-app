@@ -44,7 +44,7 @@ class RegisterUserValidatorTest {
 	
 	@Test
 	void test_validatorSupportClassRegisterUserDto_isTrue() {
-		RegisterUserDto user = new RegisterUserDto();
+		RegisterUserDto user = new RegisterUserDto(null, null, null, null);
 		assertThat(registerUserValidator.supports(user.getClass())).isTrue();
 	}
 	

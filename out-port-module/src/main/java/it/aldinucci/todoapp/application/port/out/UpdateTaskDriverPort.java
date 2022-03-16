@@ -1,9 +1,10 @@
 package it.aldinucci.todoapp.application.port.out;
 
+import java.util.Optional;
+
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 
 public interface UpdateTaskDriverPort {
 
-	public void update(Task task) throws AppTaskNotFoundException;
+	public Optional<Task> update(Task task);
 }

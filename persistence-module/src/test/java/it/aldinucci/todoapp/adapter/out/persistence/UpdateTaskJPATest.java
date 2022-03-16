@@ -1,7 +1,12 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -16,7 +22,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
+import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -27,7 +33,10 @@ class UpdateTaskJPATest {
 	private UpdateTaskJPA sut;
 	
 	@Autowired
-	TestEntityManager entityManager;
+	private TestEntityManager entityManager;
+	
+	@MockBean
+	private AppGenericMapper<TaskJPA, Task> mapper;
 	
 	private ProjectJPA project;
 	
@@ -44,12 +53,13 @@ class UpdateTaskJPATest {
 	
 	
 	@Test
-	void test_updateTask_whenTaskDontExists_shouldThrow() {
+	void test_updateTask_whenTaskDontExists() {
 		Task task = new Task(1L, "another name", "test", true);
 		
-		assertThatThrownBy(() -> sut.update(task))
-			.isInstanceOf(AppTaskNotFoundException.class)
-			.hasMessage("Could not find task with id: 1");
+		Optional<Task> optionalTask = sut.update(task);
+		
+		assertThat(optionalTask).isEmpty();
+		verifyNoInteractions(mapper);
 	}
 	
 	@Test
@@ -58,14 +68,19 @@ class UpdateTaskJPATest {
 		entityManager.persist(taskJpa);
 		project.getTasks().add(taskJpa);
 		entityManager.flush();
+		Task emptyTask = new Task();
+		when(mapper.map(isA(TaskJPA.class))).thenReturn(emptyTask);
 		
 		Task task = new Task(taskJpa.getId(), "another name", "test", true);
 		
-		sut.update(task);
+		Optional<Task> updatedTask = sut.update(task);
 		
 		assertThat(taskJpa.getDescription()).matches("test");
 		assertThat(taskJpa.getName()).matches("another name");
 		assertThat(taskJpa.isCompleted()).isTrue();
+		
+		verify(mapper).map(taskJpa);
+		assertThat(updatedTask).containsSame(emptyTask);
 	}
 
 

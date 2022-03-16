@@ -6,8 +6,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class NewTaskWebDto {
-	
+public class NewTaskWebDto{
+		
 	@NotEmpty
 	@NotNull
 	@Size(max = 255)
@@ -17,7 +17,8 @@ public class NewTaskWebDto {
 	@Size(max = 1024)
 	private String description;
 
-	public NewTaskWebDto(String name, String description) {
+	public NewTaskWebDto(@NotEmpty @NotNull @Size(max = 255) String name,
+			@NotNull @Size(max = 1024) String description) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -27,8 +28,16 @@ public class NewTaskWebDto {
 		return name;
 	}
 
+	public final void setName(String name) {
+		this.name = name;
+	}
+
 	public final String getDescription() {
 		return description;
+	}
+
+	public final void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
@@ -52,5 +61,6 @@ public class NewTaskWebDto {
 	public String toString() {
 		return "NewTaskWebDto [name=" + name + ", description=" + description + "]";
 	}
+	
 	
 }

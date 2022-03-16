@@ -2,8 +2,6 @@ package it.aldinucci.todoapp.adapter.in.web.controller;
 
 import static it.aldinucci.todoapp.adapter.in.web.util.AppLinksBuilder.buildVerificationLink;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -49,19 +47,19 @@ public class RegisterUserWebController {
 	}
 
 	@GetMapping
-	public String showRegistrationPage(RegisterUserDto registerUserDto) {
+	public String showRegistrationPage(RegisterUserDto registerUserWebDto) {
 		return REGISTER_VIEW_NAME;
 	}
 	
 	@PostMapping
-	public ModelAndView postRegistrationPage(@Valid RegisterUserDto newUser, BindingResult bindingResult) {
+	public ModelAndView postRegistrationPage(RegisterUserDto registerUserWebDto, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView(REGISTER_VIEW_NAME);
 		if(bindingResult.hasErrors()) 
 			return modelAndView;
 		
 		NewUserDtoOut user;
 		try {
-			user = createUser.create(mapper.map(newUser));
+			user = createUser.create(mapper.map(registerUserWebDto));
 		} catch (AppEmailAlreadyRegisteredException e) {
 			modelAndView.addObject(EMAIL_EXISTS, true);
 			return modelAndView;

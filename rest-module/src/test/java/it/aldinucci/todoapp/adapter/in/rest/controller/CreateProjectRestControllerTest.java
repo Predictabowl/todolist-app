@@ -26,12 +26,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.aldinucci.todoapp.adapter.in.rest.dto.NewProjectRestDto;
 import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
+import it.aldinucci.todoapp.webcommons.dto.NewProjectWebDto;
 import it.aldinucci.todoapp.webcommons.security.config.AppRestSecurityConfig;
 
 @ExtendWith(SpringExtension.class)
@@ -59,7 +59,7 @@ class CreateProjectRestControllerTest {
 	@WithMockUser("user@email.it")
 	void test_createProject_successful() throws JsonProcessingException, Exception {
 		Project project = new Project(2L, "test project");
-		NewProjectRestDto restDto = new NewProjectRestDto("another name");
+		NewProjectWebDto restDto = new NewProjectWebDto("another name");
 		when(createPort.create(isA(NewProjectDTOIn.class)))
 			.thenReturn(project);
 		
@@ -84,7 +84,7 @@ class CreateProjectRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewProjectRestDto(""))))
+				.content(objectMapper.writeValueAsString(new NewProjectWebDto(""))))
 			.andExpect(status().isBadRequest());
 		
 		verifyNoInteractions(createPort);
@@ -100,7 +100,7 @@ class CreateProjectRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewProjectRestDto("test name"))))
+				.content(objectMapper.writeValueAsString(new NewProjectWebDto("test name"))))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$",is("test message")));
 		
@@ -113,7 +113,7 @@ class CreateProjectRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewProjectRestDto("test name"))))
+				.content(objectMapper.writeValueAsString(new NewProjectWebDto("test name"))))
 			.andExpect(status().isUnauthorized());
 		
 		verifyNoInteractions(createPort);

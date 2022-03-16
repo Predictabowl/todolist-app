@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.adapter.in.web.dto;
+package it.aldinucci.todoapp.application.port.in.dto;
 
 import java.util.Objects;
 
@@ -6,16 +6,19 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class NewProjectWebDto {
+import it.aldinucci.todoapp.util.AutoValidatingInputModel;
+
+public class ProjectDataDTOIn extends AutoValidatingInputModel<ProjectDataDTOIn>{
 
 	@NotNull
 	@NotEmpty
 	@Size(max = 255)
 	private String name;
 
-	public NewProjectWebDto(@NotNull @NotEmpty String name) {
+	public ProjectDataDTOIn(String name) {
 		super();
 		this.name = name;
+		validateSelf();
 	}
 
 	public final String getName() {
@@ -35,14 +38,13 @@ public class NewProjectWebDto {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NewProjectWebDto other = (NewProjectWebDto) obj;
+		ProjectDataDTOIn other = (ProjectDataDTOIn) obj;
 		return Objects.equals(name, other.name);
 	}
 
 	@Override
 	public String toString() {
-		return "NewProjectWebDto [name=" + name + "]";
+		return "ProjectDataDTOIn [name=" + name + "]";
 	}
-	
 	
 }

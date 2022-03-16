@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,11 +24,13 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
@@ -99,6 +103,11 @@ class RegisterSentNotificationViewTest {
 						new VerificationToken()));
 		
 		WebRequest webRequest = new WebRequest(new URL("http://localhost:8080/user/register"), HttpMethod.POST);
+		webRequest.setRequestParameters(Arrays.asList(
+				new NameValuePair("email", FIXTURE_EMAIL),
+				new NameValuePair("username", "user"),
+				new NameValuePair("password", "pass"),
+				new NameValuePair("confirmedPassword", "pass")));
 		page = webClient.getPage(webRequest);
 
 		String textContent = page.getBody().getTextContent();

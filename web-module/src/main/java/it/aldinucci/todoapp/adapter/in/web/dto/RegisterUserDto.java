@@ -42,35 +42,35 @@ public class RegisterUserDto {
 		this.confirmedPassword = confirmedPassword;
 	}
 
-	public String getEmail() {
+	public final String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public final void setEmail(String email) {
 		this.email = email;
 	}
 
-	public String getUsername() {
+	public final String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public final void setUsername(String username) {
 		this.username = username;
 	}
 
-	public String getPassword() {
+	public final String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public final void setPassword(String password) {
 		this.password = password;
 	}
 
-	public String getConfirmedPassword() {
+	public final String getConfirmedPassword() {
 		return confirmedPassword;
 	}
 
-	public void setConfirmedPassword(String confirmedPassword) {
+	public final void setConfirmedPassword(String confirmedPassword) {
 		this.confirmedPassword = confirmedPassword;
 	}
 
@@ -94,7 +94,7 @@ public class RegisterUserDto {
 
 	@Override
 	public String toString() {
-		return "RegisterUserDto [email=" + email + ", username=" + username + ", password=" + password
+		return "RegisterUserWebDto [email=" + email + ", username=" + username + ", password=" + password
 				+ ", confirmedPassword=" + confirmedPassword + "]";
 	}
 

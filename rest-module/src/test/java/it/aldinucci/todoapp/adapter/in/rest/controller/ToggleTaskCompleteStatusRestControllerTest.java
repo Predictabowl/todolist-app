@@ -43,7 +43,7 @@ class ToggleTaskCompleteStatusRestControllerTest {
 	private InputModelAuthorization<TaskIdDTO> authorize;
 	
 	@Test
-	void test_loadTasks_withoutAuthentication_shouldReturnUnauthorized() throws Exception {
+	void test_toggleTask_withoutAuthentication_shouldReturnUnauthorized() throws Exception {
 		
 		mvc.perform(put("/api/task/1/completed/toggle")
 				.with(csrf())
@@ -56,7 +56,7 @@ class ToggleTaskCompleteStatusRestControllerTest {
 	
 	@Test
 	@WithMockUser("user@email.it")
-	void test_loadTasks_withoutCSRF_shouldReturnForbidden() throws Exception {
+	void test_toggleTask_withoutCSRF_shouldReturnForbidden() throws Exception {
 		
 		mvc.perform(put("/api/task/1/completed/toggle")
 				.accept(MediaType.APPLICATION_JSON))

@@ -5,10 +5,10 @@ import java.util.Objects;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-public class EmailWebDto {
+public class EmailWebDto{
 	
 	@NotNull
-	@Email
+	@Email 
 	private String email;
 
 	public EmailWebDto(@NotNull @Email String email) {
@@ -23,6 +23,11 @@ public class EmailWebDto {
 	@Override
 	public int hashCode() {
 		return Objects.hash(email);
+	}
+	
+
+	public final void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Override
@@ -42,6 +47,4 @@ public class EmailWebDto {
 		return "EmailWebDto [email=" + email + "]";
 	}
 	
-	
-
 }
