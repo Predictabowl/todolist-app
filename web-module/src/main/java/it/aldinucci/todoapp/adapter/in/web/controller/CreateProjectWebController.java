@@ -15,7 +15,7 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.webcommons.dto.NewProjectWebDto;
 
 @Controller
-@RequestMapping("/project/new")
+@RequestMapping("web/project/new")
 public class CreateProjectWebController {
 
 	private CreateProjectUsePort createProject;
@@ -31,10 +31,10 @@ public class CreateProjectWebController {
 	public String createProject(Authentication authentication,@Valid NewProjectWebDto newProjectWebDto,
 			BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
-			return "redirect:/";
+			return "redirect:/web";
 		
 		Project project = createProject.create(
 				new NewProjectDTOIn(newProjectWebDto.name(),authentication.getName()));
-		return "redirect:/project/"+project.getId()+"/tasks";
+		return "redirect:/web/project/"+project.getId()+"/tasks";
 	}
 }

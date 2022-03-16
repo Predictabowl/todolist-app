@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,7 +92,7 @@ class ProjectWebViewTest {
 				new Project(2L, "test project"),
 				new Project(5L, "second project"),
 				new Project(7L, "project test"));
-		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(user);
+		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.of(user));
 		when(mapper.map(user)).thenReturn(new UserWebDto("username", FIXTURE_EMAIL));
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
 	}
@@ -106,7 +107,7 @@ class ProjectWebViewTest {
 		
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
-		HtmlPage page = webClient.getPage("/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
 		
 		assertThat(page.getHtmlElementById("active-project-section").getTextContent())
 			.contains("second project");
@@ -136,7 +137,7 @@ class ProjectWebViewTest {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		when(createTaskController.createNewTask(any(),any(), any(), any())).thenReturn("test-view-page");
 		
-		HtmlPage page = webClient.getPage("/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
 		page.getElementById("add-task-link").click();
 		HtmlForm form = page.getFormByName("new-task-form");
 		form.getInputByName("name").setValueAttribute("test task");
@@ -160,7 +161,7 @@ class ProjectWebViewTest {
 	void test_projectView_closeCreateTaskForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		
-		HtmlPage page = webClient.getPage("/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
 		page.getElementById("add-task-link").click();
 		HtmlForm form = page.getFormByName("new-task-form");
 		HtmlButton formButton = form.getButtonByName("cancel-button");
@@ -185,20 +186,20 @@ class ProjectWebViewTest {
 		
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
-		HtmlPage page = webClient.getPage("/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
 		
 		HtmlForm form13 = page.getFormByName("complete-task-13-form");
-		assertThat(form13.getActionAttribute()).matches("/project/5/task/13/toggle/completed");
+		assertThat(form13.getActionAttribute()).matches("/web/project/5/task/13/toggle/completed");
 		assertThat(form13.getButtonByName("submit-button")).isNotNull();
 		assertThat(form13.getMethodAttribute()).matches("post");
 		
 		HtmlForm form11 = page.getFormByName("complete-task-11-form");
-		assertThat(form11.getActionAttribute()).matches("/project/5/task/11/toggle/completed");
+		assertThat(form11.getActionAttribute()).matches("/web/project/5/task/11/toggle/completed");
 		assertThat(form11.getButtonByName("submit-button")).isNotNull();
 		assertThat(form13.getMethodAttribute()).matches("post");
 		
 		HtmlForm form15 = page.getFormByName("complete-task-15-form");
-		assertThat(form15.getActionAttribute()).matches("/project/5/task/15/toggle/completed");
+		assertThat(form15.getActionAttribute()).matches("/web/project/5/task/15/toggle/completed");
 		assertThat(form15.getButtonByName("submit-button")).isNotNull();
 		assertThat(form13.getMethodAttribute()).matches("post");
 	}

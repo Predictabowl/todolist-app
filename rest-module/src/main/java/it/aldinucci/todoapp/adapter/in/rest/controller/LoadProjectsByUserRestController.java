@@ -20,7 +20,7 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/projects")
 public class LoadProjectsByUserRestController {
 
 	private LoadProjectsByUserUsePort loadProjects;
@@ -30,7 +30,7 @@ public class LoadProjectsByUserRestController {
 		this.loadProjects = loadProjects;
 	}
 
-	@GetMapping("/projects")
+	@GetMapping
 	public List<Project> loadProjectsEndPoint(Authentication authentication) throws AppUserNotFoundException {
 		return loadProjects.load(new UserIdDTO(authentication.getName()));
 	}
@@ -39,4 +39,5 @@ public class LoadProjectsByUserRestController {
 	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
+	
 }

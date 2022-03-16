@@ -16,7 +16,7 @@ import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @Controller
-@RequestMapping("/project/{projectId}/task/new")
+@RequestMapping("/web/project/{projectId}/task/new")
 public class CreateTaskWebController {
 
 	private InputModelAuthorization<ProjectIdDTO> authorize;
@@ -39,6 +39,6 @@ public class CreateTaskWebController {
 					newTaskWebDto.description(),
 					projectId.projectId()));
 		}
-		return "redirect:/project/"+projectId.projectId()+"/tasks";
+		return "redirect:/web/project/"+projectId.projectId()+"/tasks";
 	}
 }

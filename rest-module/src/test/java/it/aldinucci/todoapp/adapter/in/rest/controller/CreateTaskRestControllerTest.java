@@ -27,12 +27,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
-import it.aldinucci.todoapp.webcommons.security.config.AppRestSecurityConfig;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {CreateTaskRestController.class})

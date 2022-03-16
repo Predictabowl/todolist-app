@@ -13,7 +13,7 @@ public class ProjectDataDTOIn extends AutoValidatingInputModel<ProjectDataDTOIn>
 	@NotNull
 	@NotEmpty
 	@Size(max = 255)
-	private String name;
+	private final String name;
 
 	public ProjectDataDTOIn(String name) {
 		super();

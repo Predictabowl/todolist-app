@@ -1,5 +1,7 @@
 package it.aldinucci.todoapp.application.service;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class LoadUserByProjectIdService implements LoadUserByProjectIdUsePort{
 	}
 
 	@Override
-	public User load(ProjectIdDTO projectId) throws AppProjectNotFoundException{
+	public Optional<User> load(ProjectIdDTO projectId) throws AppProjectNotFoundException{
 		return loadUser.load(projectId.projectId());
 	}
 

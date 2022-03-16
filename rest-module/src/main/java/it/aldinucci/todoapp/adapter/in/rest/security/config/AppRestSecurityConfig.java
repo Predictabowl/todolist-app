@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.webcommons.security.config;
+package it.aldinucci.todoapp.adapter.in.rest.security.config;
 
 
 import org.springframework.context.annotation.Configuration;
@@ -13,18 +13,16 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Order(value = 1)
 public class AppRestSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			
 			.antMatcher("/api/**")
-			// send csrf token back as a cookie for a REST GET 
-			.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-		.and()
-			.authorizeRequests().anyRequest().authenticated()
-		.and()
-			.httpBasic();
+				// send csrf token back as a cookie for a REST GET 
+				.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+			.and()
+				.authorizeRequests().anyRequest().authenticated()
+			.and()
+				.httpBasic();
 	}
 	
 }

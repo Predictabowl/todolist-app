@@ -37,7 +37,7 @@ class ChangeTaskStatusWebControllerTest {
 	
 	@Test
 	void test_changeStatus_withoutAuthentication_shouldRedirect() throws Exception {
-		mvc.perform(post("/project/5/task/2/toggle/completed")
+		mvc.perform(post("/web/project/5/task/2/toggle/completed")
 				.with(csrf())
 				.with(request -> {
 						request.setServerName("somewhere");
@@ -53,10 +53,10 @@ class ChangeTaskStatusWebControllerTest {
 	@Test
 	@WithMockUser("user@email.it")
 	void test_changeStatus_success() throws Exception {
-		mvc.perform(post("/project/5/task/2/toggle/completed")
+		mvc.perform(post("/web/project/5/task/2/toggle/completed")
 				.with(csrf()))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(redirectedUrl("/project/5/tasks"));
+			.andExpect(redirectedUrl("/web/project/5/tasks"));
 		
 		InOrder inOrder = Mockito.inOrder(toggleStatus, authorize);
 		TaskIdDTO idDTO = new TaskIdDTO(2);

@@ -15,9 +15,9 @@ public class NewProjectDTOIn extends AutoValidatingInputModel<NewProjectDTOIn>{
 	@NotEmpty
 	@NotNull
 	@Size(max = 255)
-	private String name;
+	private final String name;
 	
-	private AppEmail userEmail;
+	private final AppEmail userEmail;
 	
 	public NewProjectDTOIn(String name, String userEmail) {
 		this.name = name;

@@ -22,11 +22,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.ToggleTaskCompleteStatusUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
-import it.aldinucci.todoapp.webcommons.security.config.AppRestSecurityConfig;
 
 @WebMvcTest(controllers = ToggleTaskCompleteStatusRestController.class)
 @ExtendWith(SpringExtension.class)
@@ -96,6 +96,18 @@ class ToggleTaskCompleteStatusRestControllerTest {
 		TaskIdDTO idDTO = new TaskIdDTO(5);
 		inOrder.verify(authorize).check("user@email.it", idDTO);
 		inOrder.verify(togglePort).toggle(idDTO);
+	}
+	
+	@Test
+	@WithMockUser("user@email.it")
+	void test_toggleStatus_whenTaskIdNotValid_shouldReturnBadRequest() throws Exception {
+		mvc.perform(put("/api/task/5a/completed/toggle")
+				.with(csrf())
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest());
+
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(togglePort);
 	}
 
 }

@@ -106,11 +106,11 @@ public class TaskJPA {
 		return Objects.hash(id);
 	}
 
-	public final int getOrderInProject() {
+	public int getOrderInProject() {
 		return orderInProject;
 	}
 
-	public final void setOrderInProject(int orderInProject) {
+	public void setOrderInProject(int orderInProject) {
 		this.orderInProject = orderInProject;
 	}
 

@@ -16,7 +16,7 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping
 public class IndexWebController {
 
 	private LoadProjectsByUserUsePort loadProjects;
@@ -31,7 +31,7 @@ public class IndexWebController {
 		this.mapper = mapper;
 	}
 
-	@GetMapping
+	@GetMapping("/web")
 	public String index(Authentication authentication, Model model) {
 		UserIdDTO userId = new UserIdDTO(authentication.getName());
 		model.addAttribute("projects", loadProjects.load(userId));
@@ -40,6 +40,11 @@ public class IndexWebController {
 					new AppUserNotFoundException("Critical error: could not find user with email: "+userId.getEmail()))));
 
 		return "index";
+	}
+	
+	@GetMapping("/")
+	public String redirectHome() {
+		return("redirect:/web");
 	}
 
 }

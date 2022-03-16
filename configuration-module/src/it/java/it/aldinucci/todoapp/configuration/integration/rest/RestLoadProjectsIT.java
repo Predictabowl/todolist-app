@@ -84,6 +84,17 @@ class RestLoadProjectsIT {
 				new Project(project1.getId(), "test project"),
 				new Project(project2.getId(), "test 2"));
 	}
+	
+	@Test
+	void test_loadProjects_whenUserNotFound_shouldReturnForbidden(){
+		given()
+			.auth().basic("missing@test.it", FIXTURE_PASSWORD)
+			.accept(MediaType.APPLICATION_JSON_VALUE)
+		.when()
+			.get(FIXTURE_URI)
+		.then()
+			.statusCode(401);
+	}
 
 	private void setSessionData() {
 		user = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));

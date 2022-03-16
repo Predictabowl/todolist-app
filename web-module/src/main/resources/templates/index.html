@@ -44,7 +44,7 @@
 						</span>
 					</a>
 					<div class="box is-not-displayed" id="new-task-form-container">
-						<form th:action="@{/project/{id}/task/new (id=${activeProject.id})}" 
+						<form th:action="@{/web/project/{id}/task/new (id=${activeProject.id})}" 
 								name="new-task-form" method="post"
 								th:object="${newTaskWebDto}">
 							<div class="field" th:insert="fragments/commons::inputWithField('name', 'Name', 'text')"></div>

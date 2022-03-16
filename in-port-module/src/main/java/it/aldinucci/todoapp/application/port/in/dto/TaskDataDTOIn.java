@@ -8,41 +8,36 @@ import javax.validation.constraints.Size;
 
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
-public class NewTaskDTOIn extends AutoValidatingInputModel<NewTaskDTOIn>{
+public class TaskDataDTOIn extends AutoValidatingInputModel<TaskDataDTOIn>{
 
-	@NotEmpty
 	@NotNull
+	@NotEmpty
 	@Size(max = 255)
 	private final String name;
-	
+
 	@NotNull
+	@NotEmpty
 	@Size(max = 1024)
 	private final String description;
-	
-	private final long projectId;
-	
-	public NewTaskDTOIn(String name, String description, long projectId) {
+
+	public TaskDataDTOIn(String name, String description) {
+		super();
 		this.name = name;
 		this.description = description;
-		this.projectId = projectId;
 		validateSelf();
 	}
 
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
-	public String getDescription() {
+	public final String getDescription() {
 		return description;
-	}
-
-	public long getProjectId() {
-		return projectId;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, name, projectId);
+		return Objects.hash(description, name);
 	}
 
 	@Override
@@ -53,14 +48,13 @@ public class NewTaskDTOIn extends AutoValidatingInputModel<NewTaskDTOIn>{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NewTaskDTOIn other = (NewTaskDTOIn) obj;
-		return Objects.equals(description, other.description) && Objects.equals(name, other.name)
-				&& projectId == other.projectId;
+		TaskDataDTOIn other = (TaskDataDTOIn) obj;
+		return Objects.equals(description, other.description) && Objects.equals(name, other.name);
 	}
 
 	@Override
 	public String toString() {
-		return "NewTaskDTOIn [name=" + name + ", description=" + description + ", projectId=" + projectId + "]";
+		return "TaskDataDTOIn [name=" + name + ", description=" + description + "]";
 	}
 	
 }

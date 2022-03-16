@@ -21,11 +21,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.DeleteTaskByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
-import it.aldinucci.todoapp.webcommons.security.config.AppRestSecurityConfig;
 
 @WebMvcTest(controllers = {DeleteTaskByIdRestController.class})
 @ExtendWith(SpringExtension.class)

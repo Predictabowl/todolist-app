@@ -44,6 +44,8 @@ import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 @ExtendWith(SpringExtension.class)
 class IndexWebControllerTest {
 
+	private static final String BASE_URL = "/web";
+
 	private static final String FIXTURE_EMAIL = "email@test.it";
 
 	@MockBean
@@ -77,7 +79,7 @@ class IndexWebControllerTest {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(Collections.emptyList());
 		when(mapper.map(isA(User.class))).thenReturn(userWebDto);
 
-		mvc.perform(get("/"))
+		mvc.perform(get(BASE_URL))
 			.andExpect(status().isOk())
 			.andExpect(view().name("index"))
 			.andExpect(model().attribute("user", userWebDto))
@@ -102,7 +104,7 @@ class IndexWebControllerTest {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
 		when(mapper.map(isA(User.class))).thenReturn(userWebDto);
 
-		mvc.perform(get("/"))
+		mvc.perform(get(BASE_URL))
 			.andExpect(status().isOk())
 			.andExpect(view().name("index"))
 			.andExpect(model().attribute("user", userWebDto))
@@ -122,7 +124,7 @@ class IndexWebControllerTest {
 		when(loadUser.load(isA(UserIdDTO.class))).thenReturn(Optional.empty());
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(Collections.emptyList());
 		
-		MockHttpServletRequestBuilder requestBuilder = get("/");
+		MockHttpServletRequestBuilder requestBuilder = get(BASE_URL);
 		
 		assertThatThrownBy(() -> mvc.perform(requestBuilder))
 			.isInstanceOf(NestedServletException.class)
@@ -137,7 +139,7 @@ class IndexWebControllerTest {
 	
 	@Test
 	void test_indexController_withoutAuthorization() throws Exception {
-		mvc.perform(get("/"))
+		mvc.perform(get(BASE_URL))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrlPattern("**/login"));
 		

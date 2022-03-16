@@ -14,14 +14,14 @@ public class NewUserDTOIn extends AutoValidatingInputModel<NewUserDTOIn>{
 	@NotEmpty
 	@NotNull
 	@Size(max = 255)
-	private String username;
+	private final String username;
 	
-	private AppEmail email;
+	private final AppEmail email;
 	
 	@NotEmpty
 	@NotNull
 	@Size(max = 255)
-	private String password;
+	private final String password;
 
 	public NewUserDTOIn(String username, String email, String password) {
 		this.username = username;

@@ -35,6 +35,7 @@ public class UpdateTaskJPA implements UpdateTaskDriverPort{
 		taskJPA.setDescription(task.getDescription());
 		taskJPA.setCompleted(task.isCompleted());
 		taskJPA.setName(task.getName());
+		taskJPA.setOrderInProject(task.getOrderInProject());
 		return Optional.of(mapper.map(taskRepo.save(taskJPA)));
 	}
 

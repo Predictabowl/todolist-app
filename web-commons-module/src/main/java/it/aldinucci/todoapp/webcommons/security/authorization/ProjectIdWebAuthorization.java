@@ -1,5 +1,7 @@
 package it.aldinucci.todoapp.webcommons.security.authorization;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +22,10 @@ public class ProjectIdWebAuthorization implements InputModelAuthorization<Projec
 
 	@Override
 	public void check(String authenticatedEmail, ProjectIdDTO model) throws UnauthorizedWebAccessException {
-		User user = loadUser.load(model);
-		if(!authenticatedEmail.equals(user.getEmail()))
+		Optional<User> user = loadUser.load(model);
+		if(user.isEmpty())
+			throw new UnauthorizedWebAccessException("Could not find Project owner");
+		if(!authenticatedEmail.equals(user.get().getEmail()))
 				throw new UnauthorizedWebAccessException("This operation is not permitted for the authenticated user");
 	}
 

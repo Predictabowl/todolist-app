@@ -6,7 +6,7 @@ import it.aldinucci.todoapp.application.port.in.model.AppEmail;
 
 public class UserIdDTO{
 
-	private AppEmail email;
+	private final AppEmail email;
 	
 	public UserIdDTO(String email) {
 		this.email = new AppEmail(email);

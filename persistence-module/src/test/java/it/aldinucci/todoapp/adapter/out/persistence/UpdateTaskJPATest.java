@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -64,22 +65,29 @@ class UpdateTaskJPATest {
 	
 	@Test
 	void test_updateTask_success() {
-		TaskJPA taskJpa = new TaskJPA("task name", "description", false, project);
+		TaskJPA taskJpa = new TaskJPA(null, "task name", "description", false, project, 3);
 		entityManager.persist(taskJpa);
 		project.getTasks().add(taskJpa);
 		entityManager.flush();
+		entityManager.detach(taskJpa);
+		Long taskId = taskJpa.getId();
 		Task emptyTask = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(emptyTask);
 		
-		Task task = new Task(taskJpa.getId(), "another name", "test", true);
+		Task task = new Task(taskId, "another name", "test", true, 5);
 		
 		Optional<Task> updatedTask = sut.update(task);
+
+		TaskJPA updatedTaskJpa = entityManager.find(TaskJPA.class, taskId);
+		assertThat(updatedTaskJpa.getDescription()).matches("test");
+		assertThat(updatedTaskJpa.getName()).matches("another name");
+		assertThat(updatedTaskJpa.isCompleted()).isTrue();
+		assertThat(updatedTaskJpa.getOrderInProject()).isEqualTo(5);
 		
-		assertThat(taskJpa.getDescription()).matches("test");
-		assertThat(taskJpa.getName()).matches("another name");
-		assertThat(taskJpa.isCompleted()).isTrue();
-		
-		verify(mapper).map(taskJpa);
+		assertThat(taskJpa).usingRecursiveComparison().isNotEqualTo(updatedTaskJpa);
+		ArgumentCaptor<TaskJPA> taskJpaCaptor = ArgumentCaptor.forClass(TaskJPA.class);
+		verify(mapper).map(taskJpaCaptor.capture());
+		assertThat(taskJpaCaptor.getValue()).usingRecursiveComparison().isEqualTo(updatedTaskJpa);
 		assertThat(updatedTask).containsSame(emptyTask);
 	}
 

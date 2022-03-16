@@ -12,7 +12,7 @@ import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @Controller
-@RequestMapping("/project/{projectId}/task/{taskId}/toggle/completed")
+@RequestMapping("/web/project/{projectId}/task/{taskId}/toggle/completed")
 public class ChangeTaskStatusWebController {
 	
 	private InputModelAuthorization<TaskIdDTO> authorize;
@@ -32,6 +32,6 @@ public class ChangeTaskStatusWebController {
 		TaskIdDTO idDto = new TaskIdDTO(taskId);
 		authorize.check(authentication.getName(), idDto);
 		toggleTaskCompleted.toggle(idDto);
-		return "redirect:/project/"+projectId+"/tasks";
+		return "redirect:/web/project/"+projectId+"/tasks";
 	}
 }

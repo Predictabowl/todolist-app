@@ -53,7 +53,7 @@
 								<ul th:each="project : ${projects}">
 									<li>
 										<a class="has-text-link" th:text="${project.name}"
-											th:href="@{/project/{id}/tasks (id=${project.id})}">
+											th:href="@{/web/project/{id}/tasks (id=${project.id})}">
 										</a>
 									</li>
 								</ul>

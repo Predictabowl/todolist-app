@@ -28,112 +28,112 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
-import it.aldinucci.todoapp.application.port.in.UpdateProjectUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.ProjectDataDTOIn;
-import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
-import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
+import it.aldinucci.todoapp.application.port.in.UpdateTaskUsePort;
+import it.aldinucci.todoapp.application.port.in.dto.TaskDataDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
-@WebMvcTest(controllers = UpdateProjectRestController.class)
+@WebMvcTest(controllers = UpdateTaskRestController.class)
 @ExtendWith(SpringExtension.class)
 @Import(AppRestSecurityConfig.class)
-class UpdateProjectRestControllerTest {
+class UpdateTaskRestControllerTest {
+
+	private static final String FIXTURE_TEST_URL = "/api/task/3";
 
 	@Autowired
 	private MockMvc mvc;
 	
 	@MockBean
-	private InputModelAuthorization<ProjectIdDTO> authorize;
+	private InputModelAuthorization<TaskIdDTO> authorize;
 	
 	@MockBean
-	private UpdateProjectUsePort updateProject;
+	private UpdateTaskUsePort updateTask;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	@Test
-	void test_updateProject_withoutAuthentication_shouldReturnUnauthorized() throws Exception {
+	void test_updateTask_withoutAuthentication_shouldReturnUnauthorized() throws Exception {
 		
-		mvc.perform(put("/api/project/3")
+		mvc.perform(put(FIXTURE_TEST_URL)
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized());
 		
 		verifyNoInteractions(authorize);
-		verifyNoInteractions(updateProject);
+		verifyNoInteractions(updateTask);
 	}
 
 	@Test
 	@WithMockUser("user@email.it")
-	void test_updateProject_withoutCSRF_shouldReturnForbidden() throws Exception {
+	void test_updateTask_withoutCSRF_shouldReturnForbidden() throws Exception {
 		
-		mvc.perform(put("/api/project/3")
+		mvc.perform(put(FIXTURE_TEST_URL)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isForbidden());
 		
 		verifyNoInteractions(authorize);
-		verifyNoInteractions(updateProject);
+		verifyNoInteractions(updateTask);
 	}
 	
-	/**
-	 * For this situation to happen authorization on the ProjectId should be granted,
-	 * which means that this could only happen in case of data integrity failure or 
-	 * because interleaving.
-	 * @throws Exception
-	 */
 	@Test
 	@WithMockUser("user@email.it")
-	void test_updateProject_whenProjectNotFound_shouldReturnBadRequest() throws Exception {
-		when(updateProject.update(any(), any())).thenReturn(Optional.empty());
+	void test_updateTask_whenTaskNotFound_shouldReturnBadRequest() throws Exception {
+		when(updateTask.update(any(), any())).thenReturn(Optional.empty());
 		
-		mvc.perform(put("/api/project/3")
+		mvc.perform(put(FIXTURE_TEST_URL)
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new ProjectDataWebDto("new name"))))
+				.content(objectMapper.writeValueAsString(new TaskDataWebDto("new name", "new descr"))))
 			.andExpect(status().isBadRequest());
 		
-		InOrder inOrder = Mockito.inOrder(authorize, updateProject);
-		ProjectIdDTO projectIdDTO = new ProjectIdDTO(3);
-		inOrder.verify(authorize).check("user@email.it", projectIdDTO);
-		inOrder.verify(updateProject).update(projectIdDTO, new ProjectDataDTOIn("new name"));
+		InOrder inOrder = Mockito.inOrder(authorize, updateTask);
+		TaskIdDTO taskIdDTO = new TaskIdDTO(3);
+		inOrder.verify(authorize).check("user@email.it", taskIdDTO);
+		inOrder.verify(updateTask).update(taskIdDTO, new TaskDataDTOIn("new name", "new descr"));
 	}
 	
 	@Test
 	@WithMockUser("user@email.it")
-	void test_updateProject_whenDataIsNotValid_shouldReturnBadRequest() throws Exception {
-		when(updateProject.update(any(), any())).thenReturn(Optional.empty());
-		mvc.perform(put("/api/project/3")
+	void test_updateTask_whenDataIsNotValid_shouldReturnBadRequest() throws Exception {
+		when(updateTask.update(any(), any())).thenReturn(Optional.empty());
+		mvc.perform(put(FIXTURE_TEST_URL)
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new ProjectDataWebDto(""))))
+				.content(objectMapper.writeValueAsString(new TaskDataWebDto("",""))))
 			.andExpect(status().isBadRequest());
 		
 		verifyNoInteractions(authorize);
-		verifyNoInteractions(updateProject);
+		verifyNoInteractions(updateTask);
 	}
 	
 	@Test
 	@WithMockUser("user@email.it")
-	void test_updateProject_success() throws Exception {
-		Project project = new Project(3L, "different name");
-		when(updateProject.update(any(), any())).thenReturn(Optional.of(project));
+	void test_updateTask_success() throws Exception {
+		Task task = new Task(3L, "name", "description", false, 7);
+		when(updateTask.update(any(), any())).thenReturn(Optional.of(task));
 		
-		mvc.perform(put("/api/project/3")
+		mvc.perform(put(FIXTURE_TEST_URL)
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(project)))
+				.content(objectMapper.writeValueAsString(task)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id", is(3)))
-			.andExpect(jsonPath("$.name", is("different name")));
+			.andExpect(jsonPath("$.name", is("name")))
+			.andExpect(jsonPath("$.description", is("description")))
+			.andExpect(jsonPath("$.completed", is(false)))
+			.andExpect(jsonPath("$.orderInProject", is(7)));
 		
-		InOrder inOrder = Mockito.inOrder(authorize, updateProject);
-		ProjectIdDTO projectIdDTO = new ProjectIdDTO(3);
-		inOrder.verify(authorize).check("user@email.it", projectIdDTO);
-		inOrder.verify(updateProject).update(projectIdDTO, new ProjectDataDTOIn("different name"));
+		InOrder inOrder = Mockito.inOrder(authorize, updateTask);
+		TaskIdDTO taskIdDTO = new TaskIdDTO(3);
+		inOrder.verify(authorize).check("user@email.it", taskIdDTO);
+		inOrder.verify(updateTask).update(taskIdDTO, new TaskDataDTOIn("name", "description"));
 	}
+
 }

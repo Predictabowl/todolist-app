@@ -65,7 +65,7 @@
 									id="close-new-project-card">
 								</button>
 							</header>
-							<form th:action="@{/project/new}" name="new-project-form" method="post">
+							<form th:action="@{/web/project/new}" name="new-project-form" method="post">
 								<section class="modal-card-body">
 										<div class="field">
 											<input class="input is-rounded" name="name" placeholder="Project Name" required>
@@ -115,7 +115,7 @@
 	<!-- COMPLETED TASK FORM -->
 	<div class="is-inline-flex" th:fragment="toggleTaskCompletedForm (activeProject, task, colorClass)">
 		<div>
-			<form th:action="@{'/project/'+${activeProject.id}+'/task/'+${task.id}+'/toggle/completed'}" 
+			<form th:action="@{'/web/project/'+${activeProject.id}+'/task/'+${task.id}+'/toggle/completed'}" 
 					th:name="'complete-task-'+${task.id}+'-form'" method="post">
 				<button th:class="'button is-small is-outlined is-circular '+${colorClass}"
 					type="submit" name="submit-button">

@@ -49,6 +49,8 @@ import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 @PropertySource("classpath:messages.properties")
 class IndexWebViewTest {
 	
+	private static final String BASE_URL = "/web";
+
 	private static final String FIXTURE_EMAIL = "test@email.it";
 	
 	@Autowired
@@ -92,7 +94,7 @@ class IndexWebViewTest {
 	void test_indexView_when_thereAreNoProjects() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(Collections.emptyList());
 		
-		HtmlPage page = webClient.getPage("/");
+		HtmlPage page = webClient.getPage(BASE_URL);
 				
 		assertThat(page.getBody().getTextContent())
 			.contains(env.getProperty("no.projects"));
@@ -103,13 +105,13 @@ class IndexWebViewTest {
 	void test_indexView_when_thereAreProjects() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
 		
-		HtmlPage page = webClient.getPage("/");
+		HtmlPage page = webClient.getPage(BASE_URL);
 		
-		assertThat(page.getAnchorByHref("/project/2/tasks").getTextContent())
+		assertThat(page.getAnchorByHref("/web/project/2/tasks").getTextContent())
 			.matches("test project");
-		assertThat(page.getAnchorByHref("/project/5/tasks").getTextContent())
+		assertThat(page.getAnchorByHref("/web/project/5/tasks").getTextContent())
 			.matches("second project");
-		assertThat(page.getAnchorByHref("/project/7/tasks").getTextContent())
+		assertThat(page.getAnchorByHref("/web/project/7/tasks").getTextContent())
 			.matches("project test");
 	}
 	
@@ -119,7 +121,7 @@ class IndexWebViewTest {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
 		when(createProjectWebController.createProject(any(), any(), any())).thenReturn("test-view-page");
 		
-		HtmlPage page = webClient.getPage("/");
+		HtmlPage page = webClient.getPage(BASE_URL);
 		page.getHtmlElementById("open-new-project-card").click();
 		
 		HtmlForm form = page.getFormByName("new-project-form");
@@ -137,7 +139,7 @@ class IndexWebViewTest {
 	void test_logoutForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loginWebController.login()).thenReturn("test-view-page");
 		
-		HtmlPage page = webClient.getPage("/");
+		HtmlPage page = webClient.getPage(BASE_URL);
 		
 		HtmlForm logoutForm = page.getFormByName("logout-form");
 		assertThat(logoutForm.getActionAttribute()).matches("/logout");

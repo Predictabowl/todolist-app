@@ -11,7 +11,7 @@ public class VerifyTokenDTOIn extends AutoValidatingInputModel<VerifyTokenDTOIn>
 	
 	@NotNull
 	@NotEmpty
-	private String token;
+	private final String token;
 
 	public VerifyTokenDTOIn(String token) {
 		this.token = token;
