@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.UpdateProjectUsePort;
@@ -18,10 +19,17 @@ public class UpdateProjectService implements UpdateProjectUsePort{
 
 	private UpdateProjectDriverPort updateProject;
 	
+	@Autowired
+	public UpdateProjectService(UpdateProjectDriverPort updateProject) {
+		super();
+		this.updateProject = updateProject;
+	}
+
+
 	@Override
 	public Optional<Project> update(ProjectIdDTO projectId, ProjectDataDTOIn data) {
 		return updateProject.update(new Project(
-				projectId.getProjectId(),
+				projectId.projectId(),
 				data.getName()));
 	}
 

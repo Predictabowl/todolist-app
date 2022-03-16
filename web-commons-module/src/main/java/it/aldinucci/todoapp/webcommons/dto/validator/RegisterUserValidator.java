@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.adapter.in.web.validator;
+package it.aldinucci.todoapp.webcommons.dto.validator;
 
 import java.util.Locale;
 

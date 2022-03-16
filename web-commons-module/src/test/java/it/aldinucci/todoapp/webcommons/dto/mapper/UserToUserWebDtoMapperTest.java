@@ -1,6 +1,7 @@
-package it.aldinucci.todoapp.adapter.in.web.mapper;
+package it.aldinucci.todoapp.webcommons.dto.mapper;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 
 import it.aldinucci.todoapp.domain.User;

@@ -32,7 +32,8 @@ class CreateNewTaskService implements CreateTaskUsePort{
 	public Task create(NewTaskDTOIn task) throws AppProjectNotFoundException {
 		return newTaskPort.create(new NewTaskData(
 				task.getName(), 
-				task.getDescription(), 
+				task.getDescription(),
+				false,
 				task.getProjectId(),
 				getMaxOrderTask.get(task.getProjectId()).orElse(-1)+1));
 	}

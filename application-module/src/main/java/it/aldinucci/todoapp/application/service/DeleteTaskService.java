@@ -23,7 +23,7 @@ public class DeleteTaskService implements DeleteTaskByIdUsePort{
 
 	@Override
 	public void delete(TaskIdDTO task) throws AppTaskNotFoundException {
-		deletePort.delete(task.getTaskId());
+		deletePort.delete(task.taskId());
 	}
 
 }

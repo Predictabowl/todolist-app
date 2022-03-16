@@ -33,15 +33,15 @@ public class CreateTaskJPA implements CreateTaskDriverPort{
 
 	@Override
 	public Task create(NewTaskData task) throws AppProjectNotFoundException{
-		ProjectJPA project = projectRepo.findById(task.getProjectId()).orElseThrow(() 
-				-> new AppProjectNotFoundException("Project not found with id: "+task.getProjectId()));
+		ProjectJPA project = projectRepo.findById(task.projectId()).orElseThrow(() 
+				-> new AppProjectNotFoundException("Project not found with id: "+task.projectId()));
 		TaskJPA newTask = new TaskJPA(
 				null,
-				task.getName(),
-				task.getDescription(),
-				NewTaskData.isComplete(),
+				task.name(),
+				task.description(),
+				task.complete(),
 				project,
-				task.getOrderInProject());
+				task.orderInProject());
 		taskRepo.save(newTask);
 		project.getTasks().add(newTask);
 		projectRepo.save(project);

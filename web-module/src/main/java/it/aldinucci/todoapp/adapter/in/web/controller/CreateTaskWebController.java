@@ -37,8 +37,8 @@ public class CreateTaskWebController {
 			createTask.create(new NewTaskDTOIn(
 					newTaskWebDto.name(),
 					newTaskWebDto.description(),
-					projectId.getProjectId()));
+					projectId.projectId()));
 		}
-		return "redirect:/project/"+projectId.getProjectId()+"/tasks";
+		return "redirect:/project/"+projectId.projectId()+"/tasks";
 	}
 }

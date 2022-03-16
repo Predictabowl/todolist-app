@@ -51,7 +51,7 @@ class CreateNewTaskServiceTest {
 		
 		InOrder inOrder = inOrder(newTaskport, maxOrderTask);
 		inOrder.verify(maxOrderTask).get(1);
-		inOrder.verify(newTaskport).create(new NewTaskData(TASK_NAME, TASK_DESCRIPTION, 1L, 10));
+		inOrder.verify(newTaskport).create(new NewTaskData(TASK_NAME, TASK_DESCRIPTION, false, 1L, 10));
 		assertThat(resultTask).isSameAs(savedTask);
 	}
 	
@@ -65,7 +65,7 @@ class CreateNewTaskServiceTest {
 		
 		InOrder inOrder = inOrder(newTaskport, maxOrderTask);
 		inOrder.verify(maxOrderTask).get(1);
-		inOrder.verify(newTaskport).create(new NewTaskData(TASK_NAME, TASK_DESCRIPTION, 1L, 0));
+		inOrder.verify(newTaskport).create(new NewTaskData(TASK_NAME, TASK_DESCRIPTION, false, 1L, 0));
 		assertThat(resultTask).isSameAs(savedTask);
 	}
 

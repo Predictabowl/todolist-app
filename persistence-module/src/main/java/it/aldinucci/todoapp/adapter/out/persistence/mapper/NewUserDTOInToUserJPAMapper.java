@@ -11,7 +11,7 @@ public class NewUserDTOInToUserJPAMapper implements AppGenericMapper<NewUserData
 
 	@Override
 	public UserJPA map(NewUserData model) {
-		return new UserJPA(model.getEmail(), model.getUsername(), model.getPassword());
+		return new UserJPA(model.email(), model.username(), model.password());
 	}
 
 }

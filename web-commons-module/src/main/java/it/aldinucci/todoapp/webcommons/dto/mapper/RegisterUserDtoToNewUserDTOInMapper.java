@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.adapter.in.web.mapper;
+package it.aldinucci.todoapp.webcommons.dto.mapper;
 
 import org.springframework.stereotype.Component;
 

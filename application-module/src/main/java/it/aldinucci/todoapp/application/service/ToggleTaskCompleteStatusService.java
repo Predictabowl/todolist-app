@@ -30,7 +30,7 @@ public class ToggleTaskCompleteStatusService implements ToggleTaskCompleteStatus
 
 	@Override
 	public void toggle(TaskIdDTO taskId) {
-		Optional<Task> loadedTask = loadTask.load(taskId.getTaskId());
+		Optional<Task> loadedTask = loadTask.load(taskId.taskId());
 		if (loadedTask.isPresent()) {
 			Task task = loadedTask.get();
 			task.setCompleted(!task.isCompleted());

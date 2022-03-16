@@ -25,11 +25,11 @@ public class UpdateUserJPA implements UpdateUserDriverPort {
 
 	@Override
 	public User update(UserData user) {
-		UserJPA userJPA = userRepo.findByEmail(user.getEmail())
-				.orElseThrow(() -> new AppUserNotFoundException("Could not find user with email: " + user.getEmail()));
-		userJPA.setPassword(user.getPassword());
-		userJPA.setUsername(user.getUsername());
-		userJPA.setEnabled(user.isEnabled());
+		UserJPA userJPA = userRepo.findByEmail(user.email())
+				.orElseThrow(() -> new AppUserNotFoundException("Could not find user with email: " + user.email()));
+		userJPA.setPassword(user.password());
+		userJPA.setUsername(user.username());
+		userJPA.setEnabled(user.enabled());
 		return mapper.map(userRepo.save(userJPA));
 	}
 

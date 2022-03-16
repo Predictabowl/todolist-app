@@ -60,9 +60,9 @@ public class ProjectWebController {
 		List<Project> projects = loadProjects.load(new UserIdDTO(user.getEmail()));
 		model.addAttribute("projects", projects);
 		model.addAttribute("activeProject",	projects.stream()
-				.filter(p -> p.getId().equals(projectId.getProjectId())).findFirst()
+				.filter(p -> p.getId().equals(projectId.projectId())).findFirst()
 					.orElseThrow(() -> new AppProjectNotFoundException(
-							"Critical Data Integrity error while searching project with id: "+projectId.getProjectId())));
+							"Critical Data Integrity error while searching project with id: "+projectId.projectId())));
 		
 		Map<Boolean, List<Task>> tasks = loadTasks.load(projectId).stream()
 				.collect(Collectors.partitioningBy(Task::isCompleted));

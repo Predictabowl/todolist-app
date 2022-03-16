@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.adapter.in.web.validator;
+package it.aldinucci.todoapp.webcommons.dto.validator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
