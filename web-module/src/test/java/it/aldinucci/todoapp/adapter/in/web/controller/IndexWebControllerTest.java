@@ -145,5 +145,13 @@ class IndexWebControllerTest {
 		
 		verifyNoInteractions(sut);
 	}
+	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_indexController_shouldRedirecToHomePage() throws Exception {
+		mvc.perform(get("/"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:"+BASE_URL));
+	}
 
 }
