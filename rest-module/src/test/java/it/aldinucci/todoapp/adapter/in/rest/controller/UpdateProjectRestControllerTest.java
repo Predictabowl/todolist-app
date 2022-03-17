@@ -32,6 +32,7 @@ import it.aldinucci.todoapp.application.port.in.UpdateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.Project;
+import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -49,6 +50,9 @@ class UpdateProjectRestControllerTest {
 	@MockBean
 	private UpdateProjectUsePort updateProject;
 	
+	@MockBean
+	private AppGenericMapper<ProjectDataWebDto, ProjectDataDTOIn> mapper;
+	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	@Test
@@ -62,6 +66,7 @@ class UpdateProjectRestControllerTest {
 		
 		verifyNoInteractions(authorize);
 		verifyNoInteractions(updateProject);
+		verifyNoInteractions(mapper);
 	}
 
 	@Test
@@ -75,6 +80,7 @@ class UpdateProjectRestControllerTest {
 		
 		verifyNoInteractions(authorize);
 		verifyNoInteractions(updateProject);
+		verifyNoInteractions(mapper);
 	}
 	
 	/**
@@ -87,6 +93,8 @@ class UpdateProjectRestControllerTest {
 	@WithMockUser("user@email.it")
 	void test_updateProject_whenProjectNotFound_shouldReturnBadRequest() throws Exception {
 		when(updateProject.update(any(), any())).thenReturn(Optional.empty());
+		ProjectDataDTOIn dtoIn = new ProjectDataDTOIn("new name");
+		when(mapper.map(any())).thenReturn(dtoIn);
 		
 		mvc.perform(put("/api/project/3")
 				.with(csrf())
@@ -95,16 +103,18 @@ class UpdateProjectRestControllerTest {
 				.content(objectMapper.writeValueAsString(new ProjectDataWebDto("new name"))))
 			.andExpect(status().isBadRequest());
 		
-		InOrder inOrder = Mockito.inOrder(authorize, updateProject);
+		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
 		ProjectIdDTO projectIdDTO = new ProjectIdDTO(3);
 		inOrder.verify(authorize).check("user@email.it", projectIdDTO);
-		inOrder.verify(updateProject).update(projectIdDTO, new ProjectDataDTOIn("new name"));
+		inOrder.verify(mapper).map(new ProjectDataWebDto("new name"));
+		inOrder.verify(updateProject).update(projectIdDTO, dtoIn);
 	}
 	
 	@Test
 	@WithMockUser("user@email.it")
 	void test_updateProject_whenDataIsNotValid_shouldReturnBadRequest() throws Exception {
 		when(updateProject.update(any(), any())).thenReturn(Optional.empty());
+		
 		mvc.perform(put("/api/project/3")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
@@ -114,6 +124,7 @@ class UpdateProjectRestControllerTest {
 		
 		verifyNoInteractions(authorize);
 		verifyNoInteractions(updateProject);
+		verifyNoInteractions(mapper);
 	}
 	
 	@Test
@@ -121,6 +132,8 @@ class UpdateProjectRestControllerTest {
 	void test_updateProject_success() throws Exception {
 		Project project = new Project(3L, "different name");
 		when(updateProject.update(any(), any())).thenReturn(Optional.of(project));
+		ProjectDataDTOIn dtoIn = new ProjectDataDTOIn("different name");
+		when(mapper.map(any())).thenReturn(dtoIn);
 		
 		mvc.perform(put("/api/project/3")
 				.with(csrf())
@@ -131,9 +144,10 @@ class UpdateProjectRestControllerTest {
 			.andExpect(jsonPath("$.id", is(3)))
 			.andExpect(jsonPath("$.name", is("different name")));
 		
-		InOrder inOrder = Mockito.inOrder(authorize, updateProject);
+		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
 		ProjectIdDTO projectIdDTO = new ProjectIdDTO(3);
 		inOrder.verify(authorize).check("user@email.it", projectIdDTO);
-		inOrder.verify(updateProject).update(projectIdDTO, new ProjectDataDTOIn("different name"));
+		inOrder.verify(mapper).map(new ProjectDataWebDto("different name"));
+		inOrder.verify(updateProject).update(projectIdDTO, dtoIn);
 	}
 }

@@ -33,7 +33,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-class WebTasksIT {
+class WebTasksViewIT {
 
 	@Autowired
 	private UserJPARepository userRepo;

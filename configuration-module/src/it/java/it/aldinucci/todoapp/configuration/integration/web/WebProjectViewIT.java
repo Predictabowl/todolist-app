@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-class WebCreateNewProjectIT {
+class WebProjectViewIT {
 
 	@Autowired
 	private UserJPARepository userRepo;
@@ -49,6 +50,8 @@ class WebCreateNewProjectIT {
 	private String baseUrl;
 	
 	private WebDriver webDriver;
+
+	private UserJPA user;
 	
 	@BeforeEach
 	void setUp() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
@@ -82,23 +85,38 @@ class WebCreateNewProjectIT {
 		assertThat(project1.getName()).matches("New Test Project");
 		assertThat(project2.getName()).matches("Second Test Project");
 		
-		WebElement project1Link = webDriver.findElement(By.linkText("New Test Project"));
-		assertThat(project1Link.getAttribute("href"))
-			.matches(baseUrl+"/web/project/"+project1.getId()+"/tasks");
-		assertThat(webDriver.findElement(By.linkText("Second Test Project")).getAttribute("href"))
-			.matches(baseUrl+"/web/project/"+project2.getId()+"/tasks");
 		
 		assertThat(webDriver.getCurrentUrl()).matches(baseUrl+"/web/project/"+project2.getId()+"/tasks");
+	}
+	
+	@Test
+	void test_viewProjects() {
+		List<ProjectJPA> projects = new LinkedList<>();
+		ProjectJPA project1 = projectRepo.save(new ProjectJPA("project 1", user));
+		ProjectJPA project2 = projectRepo.save(new ProjectJPA("project 2", user));
+		projects.add(project1);
+		projects.add(project2);
+		user.setProjects(projects);
+		userRepo.saveAndFlush(user);
+		
+		webDriver.get(baseUrl+"/web");
+		
+		WebElement project1Link = webDriver.findElement(By.linkText("project 1"));
+		assertThat(project1Link.getAttribute("href"))
+			.matches(baseUrl+"/web/project/"+project1.getId()+"/tasks");
+		assertThat(webDriver.findElement(By.linkText("project 2")).getAttribute("href"))
+			.matches(baseUrl+"/web/project/"+project2.getId()+"/tasks");
 		
 		project1Link.click();
-		assertThat(webDriver.getCurrentUrl()).matches(baseUrl+"/web/project/"+project1.getId()+"/tasks");
+		assertThat(webDriver.findElement(By.cssSelector("h1")).getText())
+			.contains("project 1");
 	}
 	
 	
 	private void databaseSetup() {
 		userRepo.deleteAll();
-		userRepo.saveAndFlush(new UserJPA(null, "user@email.it", "User test", encoder.encode("test2Pass"), true,
-				Collections.emptyList()));
+		user = userRepo.saveAndFlush(new UserJPA(null, "user@email.it", "User test", encoder.encode("test2Pass"),
+				true, Collections.emptyList()));
 	}
 	
 	private void doLogin() {
