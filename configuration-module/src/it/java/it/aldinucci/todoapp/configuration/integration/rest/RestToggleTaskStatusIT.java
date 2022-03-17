@@ -27,7 +27,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-public class RestToggleTaskStatusIT {
+class RestToggleTaskStatusIT {
 
 	@Autowired
 	private UserJPARepository userRepo;

@@ -27,7 +27,7 @@ import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-public class RestUpdateTaskIT {
+class RestUpdateTaskIT {
 
 	@Autowired
 	private UserJPARepository userRepo;
