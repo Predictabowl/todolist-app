@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
@@ -28,15 +29,7 @@ class DeleteTaskByIdJPATest {
 	private TestEntityManager entityManager;
 	
 	@Test
-	void test_deleteTaskWhenNotPresent_shouldThrow() {
-		assertThatThrownBy(() -> deleteTask.delete(5L))
-			.isInstanceOf(AppTaskNotFoundException.class)
-			.hasMessage("Could not find Task with id: 5");
-	}
-	
-	
-	@Test
-	void test_deleteTask_successful() throws AppTaskNotFoundException {
+	void test_deleteTask_successful() {
 		UserJPA user = new UserJPA("email", "username", "password");
 		entityManager.persist(user);
 		ProjectJPA project = new ProjectJPA("project name", user);
@@ -53,6 +46,13 @@ class DeleteTaskByIdJPATest {
 		
 		assertThat(entityManager.find(TaskJPA.class, task1.getId())).isNull();
 		assertThat(project.getTasks()).containsExactly(task2);
+	}
+	
+	@Test
+	void test_deleteTask_whenTaskMissing() {
+		
+		assertThatCode(() -> deleteTask.delete(1))
+			.doesNotThrowAnyException();
 	}
 
 }

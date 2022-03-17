@@ -1,10 +1,11 @@
 package it.aldinucci.todoapp.application.port.in;
 
+import java.util.Optional;
+
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 
 public interface LoadUserByTaskIdUsePort {
 
-	public User load(TaskIdDTO taskId) throws AppTaskNotFoundException;
+	public Optional<User> load(TaskIdDTO taskId);
 }

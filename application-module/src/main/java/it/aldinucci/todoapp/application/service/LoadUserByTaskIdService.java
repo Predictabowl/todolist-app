@@ -1,5 +1,7 @@
 package it.aldinucci.todoapp.application.service;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class LoadUserByTaskIdService implements LoadUserByTaskIdUsePort{
 	}
 
 	@Override
-	public User load(TaskIdDTO taskId) throws AppTaskNotFoundException {
+	public Optional<User> load(TaskIdDTO taskId) throws AppTaskNotFoundException {
 		return loadUser.load(taskId.taskId()); 
 	}
 

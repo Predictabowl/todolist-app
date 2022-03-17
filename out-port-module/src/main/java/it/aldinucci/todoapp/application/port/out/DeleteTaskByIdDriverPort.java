@@ -4,5 +4,5 @@ import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 
 public interface DeleteTaskByIdDriverPort {
 
-	public void delete(long id) throws AppTaskNotFoundException;
+	public void delete(long id);
 }

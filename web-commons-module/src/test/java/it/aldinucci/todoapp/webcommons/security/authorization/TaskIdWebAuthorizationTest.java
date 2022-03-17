@@ -7,6 +7,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,7 +17,6 @@ import org.mockito.Mock;
 import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
 
 class TaskIdWebAuthorizationTest {
@@ -32,10 +33,10 @@ class TaskIdWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorizationSuccessful() throws AppTaskNotFoundException {
+	void test_authorizationSuccessful() {
 		User user = new User("email", "username", "password");
 		TaskIdDTO model = new TaskIdDTO(3L);
-		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(user);
+		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(Optional.of(user));
 		
 		assertThatCode(() -> {
 			authorize.check("email", model);
@@ -46,14 +47,26 @@ class TaskIdWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorizationFailure_shouldThrow() throws AppTaskNotFoundException {
+	void test_authorizationFailure_shouldThrow() {
 		User user = new User("email", "username", "password");
 		TaskIdDTO taskId = new TaskIdDTO(3L);
-		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(user);
+		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(Optional.of(user));
 		
 		assertThatThrownBy(() -> authorize.check("different email", taskId))
 			.isInstanceOf(UnauthorizedWebAccessException.class)
 			.hasMessage("This operation is not permitted for the authenticated user");
+		
+		verify(loadUser).load(taskId);
+	}
+	
+	@Test
+	void test_authorizationWhenCannotFindUser_shouldThrow() {
+		TaskIdDTO taskId = new TaskIdDTO(3L);
+		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(Optional.empty());
+		
+		assertThatThrownBy(() -> authorize.check("different email", taskId))
+			.isInstanceOf(UnauthorizedWebAccessException.class)
+			.hasMessage("Could not find the user owner of the task with id: 3");
 		
 		verify(loadUser).load(taskId);
 	}

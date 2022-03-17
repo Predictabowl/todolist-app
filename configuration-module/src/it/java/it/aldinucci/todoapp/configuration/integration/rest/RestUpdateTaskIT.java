@@ -22,35 +22,37 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ProjectJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.TaskJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
+import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-class RestDeleteTaskIT {
+public class RestUpdateTaskIT {
 
-	private static final String FIXTURE_EMAIL = "user@email.com";
-	private static final String FIXTURE_PASSWORD = "somePassword";
-	private static final String FIXTURE_URI = "/api/task/1";
+	@Autowired
+	private UserJPARepository userRepo;
+
+	@Autowired
+	private ProjectJPARepository projectRepo;
 	
 	@Autowired
 	private TaskJPARepository taskRepo;
 
 	@Autowired
-	private ProjectJPARepository projectRepo;
-
-	@Autowired
-	private UserJPARepository userRepo;
-	
-	@Autowired
 	private PasswordEncoder encoder;
-	
+
 	@LocalServerPort
 	private int port;
-	
+
+	private static final String FIXTURE_EMAIL = "user@email.com";
+	private static final String FIXTURE_PASSWORD = "somePassword";
+	private static final String FIXTURE_URI = "/api/task/";
+
 	private String sessionId;
 	private String csrfToken;
-	private UserJPA user;
-	private ProjectJPA project;
 
+	private ProjectJPA projectJPA;
+	
 	@BeforeEach
 	void setUp() {
 		RestAssured.port = port;
@@ -58,57 +60,72 @@ class RestDeleteTaskIT {
 		userRepo.flush();
 		setSessionData();
 	}
-
+	
 	@Test
-	void test_deleteTask_success() {
-		TaskJPA task = taskRepo.save(new TaskJPA("task name", "task descr", false, project));
-		project.getTasks().add(task);
-		projectRepo.save(project);
-
-		given()
-			.auth()	.basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
-			.header("X-XSRF-TOKEN", csrfToken)
-			.cookie("XSRF-TOKEN", csrfToken)
-			.sessionId(sessionId)
-		.when()
-			.delete("/api/task/"+task.getId())
-		.then()
-			.statusCode(200);
+	void test_updateTask_success() {
+		TaskJPA taskJPA = taskRepo.saveAndFlush(new TaskJPA(null, "task name", "descr", false, projectJPA, 0));
+		projectJPA.getTasks().add(taskJPA);
+		projectRepo.saveAndFlush(projectJPA);
 		
-		assertThat(taskRepo.findAll()).isEmpty();
-	}
-
-	@Test
-	void test_deleteTask_whenTaskNotPresent_shouldReturnUnauthorized() {
-		given()
-			.auth()	.basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
+		Response response = given()
+			.auth().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
 			.header("X-XSRF-TOKEN", csrfToken)
 			.cookie("XSRF-TOKEN", csrfToken)
 			.sessionId(sessionId)
+			.contentType(MediaType.APPLICATION_JSON_VALUE)
+			.accept(MediaType.APPLICATION_JSON_VALUE)
+			.body(new NewTaskWebDto("new name", "new descr"))
 		.when()
-			.delete(FIXTURE_URI)
+			.put(FIXTURE_URI+taskJPA.getId())
 		.then()
-			.statusCode(401);
+			.statusCode(200)
+			.extract().response();
+		
+		Task responseTask = response.getBody().as(Task.class);
+		
+		TaskJPA changedTask = taskRepo.findById(taskJPA.getId()).get();
+		assertThat(changedTask.isCompleted()).isEqualTo(responseTask.isCompleted())
+			.isFalse();
+		assertThat(changedTask.getName()).matches(responseTask.getName())
+			.matches("new name");
+		assertThat(changedTask.getDescription()).matches(responseTask.getDescription())
+			.matches("new descr");
+		assertThat(changedTask.getOrderInProject()).isEqualTo(responseTask.getOrderInProject())
+			.isZero();
+		assertThat(changedTask.getId()).isEqualTo(responseTask.getId());
+		
+	}
+	
+	@Test
+	void test_toggleTask_whenTaskDontExists() {
+
+		given()
+			.auth().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
+			.header("X-XSRF-TOKEN", csrfToken)
+			.cookie("XSRF-TOKEN", csrfToken)
+			.sessionId(sessionId)
+			.accept(MediaType.APPLICATION_JSON_VALUE)
+		.when()
+			.put(FIXTURE_URI+"2")
+		.then()
+			.statusCode(400);
 	}
 	
 	private void setSessionData() {
-		user = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
-		user.setEnabled(true);
-		userRepo.save(user);
-		project = projectRepo.save(new ProjectJPA("project name", user));
-		user.getProjects().add(project);
-		userRepo.save(user);
-		userRepo.flush();
-		projectRepo.flush();
+		UserJPA userJPA = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
+		userJPA.setEnabled(true);
+		userRepo.save(userJPA);
+		projectJPA = projectRepo.saveAndFlush(new ProjectJPA(null, "test project", userJPA));
+		userJPA.getProjects().add(projectJPA);
+		userRepo.saveAndFlush(userJPA);
 		
 		Response response = given()
 				.auth().preemptive().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 			.when()
-				.get(FIXTURE_URI);
+				.get("/api/tasks");
 
 		sessionId = response.getSessionId();
 		csrfToken = response.cookie("XSRF-TOKEN");
 	}
-
 }

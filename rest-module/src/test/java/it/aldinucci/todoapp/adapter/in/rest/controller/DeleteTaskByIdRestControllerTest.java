@@ -1,12 +1,16 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.DeleteTaskByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
-import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {DeleteTaskByIdRestController.class})
@@ -54,23 +57,6 @@ class DeleteTaskByIdRestControllerTest {
 		InOrder inOrder = Mockito.inOrder(authorize,deleteTask);
 		TaskIdDTO model = new TaskIdDTO(6);
 		inOrder.verify(authorize).check("user@email.org", model);
-		inOrder.verify(deleteTask).delete(model);
-	}
-
-	@Test
-	@WithMockUser("user")
-	void test_deleteTask_whenNotPresent_shouldReturnNotFound() throws Exception {
-		AppTaskNotFoundException exception = new AppTaskNotFoundException("no task");
-		doThrow(exception).when(deleteTask).delete(isA(TaskIdDTO.class));
-		
-		mvc.perform(delete("/api/task/5")
-				.with(csrf())
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound());
-		
-		InOrder inOrder = Mockito.inOrder(authorize,deleteTask);
-		TaskIdDTO model = new TaskIdDTO(5L);
-		inOrder.verify(authorize).check("user", model);
 		inOrder.verify(deleteTask).delete(model);
 	}
 	

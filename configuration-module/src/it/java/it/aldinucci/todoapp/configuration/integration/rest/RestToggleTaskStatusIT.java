@@ -3,6 +3,8 @@ package it.aldinucci.todoapp.configuration.integration.rest;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,32 +27,32 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-class RestDeleteTaskIT {
+public class RestToggleTaskStatusIT {
 
-	private static final String FIXTURE_EMAIL = "user@email.com";
-	private static final String FIXTURE_PASSWORD = "somePassword";
-	private static final String FIXTURE_URI = "/api/task/1";
+	@Autowired
+	private UserJPARepository userRepo;
+
+	@Autowired
+	private ProjectJPARepository projectRepo;
 	
 	@Autowired
 	private TaskJPARepository taskRepo;
 
 	@Autowired
-	private ProjectJPARepository projectRepo;
-
-	@Autowired
-	private UserJPARepository userRepo;
-	
-	@Autowired
 	private PasswordEncoder encoder;
-	
+
 	@LocalServerPort
 	private int port;
-	
+
+	private static final String FIXTURE_EMAIL = "user@email.com";
+	private static final String FIXTURE_PASSWORD = "somePassword";
+	private static final String FIXTURE_URI = "/api/task/";
+
 	private String sessionId;
 	private String csrfToken;
-	private UserJPA user;
-	private ProjectJPA project;
 
+	private ProjectJPA projectJPA;
+	
 	@BeforeEach
 	void setUp() {
 		RestAssured.port = port;
@@ -58,57 +60,60 @@ class RestDeleteTaskIT {
 		userRepo.flush();
 		setSessionData();
 	}
-
+	
 	@Test
-	void test_deleteTask_success() {
-		TaskJPA task = taskRepo.save(new TaskJPA("task name", "task descr", false, project));
-		project.getTasks().add(task);
-		projectRepo.save(project);
-
+	void test_toggleTask_success() {
+		TaskJPA taskJPA = taskRepo.saveAndFlush(new TaskJPA(null, "task name", "descr", false, projectJPA, 0));
+		projectJPA.getTasks().add(taskJPA);
+		projectRepo.saveAndFlush(projectJPA);
+		
 		given()
-			.auth()	.basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
+			.auth().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
 			.header("X-XSRF-TOKEN", csrfToken)
 			.cookie("XSRF-TOKEN", csrfToken)
 			.sessionId(sessionId)
+			.accept(MediaType.APPLICATION_JSON_VALUE)
 		.when()
-			.delete("/api/task/"+task.getId())
+			.put(FIXTURE_URI+taskJPA.getId()+"/completed/toggle")
 		.then()
 			.statusCode(200);
 		
-		assertThat(taskRepo.findAll()).isEmpty();
+		Optional<TaskJPA> changedTask = taskRepo.findById(taskJPA.getId());
+		assertThat(changedTask).isPresent();
+		assertThat(changedTask.get().isCompleted()).isTrue();
 	}
-
+	
+	
 	@Test
-	void test_deleteTask_whenTaskNotPresent_shouldReturnUnauthorized() {
+	void test_toggleTask_whenTaskDontExists() {
+
 		given()
-			.auth()	.basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
+			.auth().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
 			.header("X-XSRF-TOKEN", csrfToken)
 			.cookie("XSRF-TOKEN", csrfToken)
 			.sessionId(sessionId)
+			.accept(MediaType.APPLICATION_JSON_VALUE)
 		.when()
-			.delete(FIXTURE_URI)
+			.put(FIXTURE_URI+"2/completed/toggle")
 		.then()
 			.statusCode(401);
 	}
 	
 	private void setSessionData() {
-		user = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
-		user.setEnabled(true);
-		userRepo.save(user);
-		project = projectRepo.save(new ProjectJPA("project name", user));
-		user.getProjects().add(project);
-		userRepo.save(user);
-		userRepo.flush();
-		projectRepo.flush();
+		UserJPA userJPA = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
+		userJPA.setEnabled(true);
+		userRepo.save(userJPA);
+		projectJPA = projectRepo.saveAndFlush(new ProjectJPA(null, "test project", userJPA));
+		userJPA.getProjects().add(projectJPA);
+		userRepo.saveAndFlush(userJPA);
 		
 		Response response = given()
 				.auth().preemptive().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 			.when()
-				.get(FIXTURE_URI);
+				.get("/api/tasks");
 
 		sessionId = response.getSessionId();
 		csrfToken = response.cookie("XSRF-TOKEN");
 	}
-
 }

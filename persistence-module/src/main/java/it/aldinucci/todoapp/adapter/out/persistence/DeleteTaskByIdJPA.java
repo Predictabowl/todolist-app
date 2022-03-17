@@ -1,12 +1,13 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.TaskJPARepository;
 import it.aldinucci.todoapp.application.port.out.DeleteTaskByIdDriverPort;
-import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 
 @Component
 public class DeleteTaskByIdJPA implements DeleteTaskByIdDriverPort{
@@ -20,10 +21,12 @@ public class DeleteTaskByIdJPA implements DeleteTaskByIdDriverPort{
 
 
 	@Override
-	public void delete(long id) throws AppTaskNotFoundException{
-		TaskJPA task = taskRepository.findById(id).orElseThrow(()
-				-> new AppTaskNotFoundException("Could not find Task with id: "+id));
-		task.getProject().getTasks().remove(task);
-		taskRepository.delete(task);
+	public void delete(long id){
+		Optional<TaskJPA> optional = taskRepository.findById(id);
+		if (optional.isPresent()) {		
+			TaskJPA taskJPA = optional.get();
+			taskJPA.getProject().getTasks().remove(taskJPA);
+			taskRepository.delete(taskJPA);
+		}
 	}
 }
