@@ -1,5 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.web.controller.view;
 
+import static org.awaitility.Awaitility.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,8 @@ import org.springframework.validation.BindingResult;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -145,10 +149,26 @@ class IndexWebViewTest {
 		assertThat(logoutForm.getActionAttribute()).matches("/logout");
 		assertThat(logoutForm.getMethodAttribute()).matches("post");
 		
+		DomElement logoutLink = page.getElementById("logout-link");
+		assertThat(logoutLink.isDisplayed()).isFalse();
 		page.getHtmlElementById("user-menu").mouseOver();
-		page.getElementById("logout-link").click();
+		logoutLink.click();
 		
 		verify(loginWebController).login();
 	}
+	
+	
+//	@Test
+//	@WithMockUser(FIXTURE_EMAIL)
+//	void test_sidebar_visibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {
+//		HtmlPage page = webClient.getPage(BASE_URL);
+//		
+//		assertThat(page.getHtmlElementById("sidebar").isDisplayed()).isTrue();
+//		
+//		page.getHtmlElementById("sidebar-button").click();
+//
+//		await().atMost(3, TimeUnit.SECONDS).untilAsserted(() ->
+//				assertThat(page.getHtmlElementById("sidebar").isDisplayed()).isFalse());
+//	}
 
 }

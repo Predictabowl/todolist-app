@@ -133,7 +133,7 @@ class ProjectWebViewTest {
 	
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
-	void test_projectView_shouldContrainCreateTaskForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+	void test_projectView_shouldContainCreateTaskForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		when(createTaskController.createNewTask(any(),any(), any(), any())).thenReturn("test-view-page");
 		
@@ -180,9 +180,9 @@ class ProjectWebViewTest {
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_changeTaskCompletedStatus() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = Arrays.asList(
-				new Task(11L, "first task", "desc 1", false),
-				new Task(13L, "second task", "desc 2", false),
-				new Task(15L, "third task", "desc 3", true));
+				new Task(11L, "first task", "desc 1", false, 1),
+				new Task(13L, "second task", "desc 2", false, 2),
+				new Task(15L, "third task", "desc 3", true, 3));
 		
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
@@ -202,6 +202,29 @@ class ProjectWebViewTest {
 		assertThat(form15.getActionAttribute()).matches("/web/project/5/task/15/toggle/completed");
 		assertThat(form15.getButtonByName("submit-button")).isNotNull();
 		assertThat(form13.getMethodAttribute()).matches("post");
+		
+		HtmlUnorderedList tasksDom = page.getHtmlElementById("tasks-list");
+		assertThat(tasksDom.isAncestorOf(form11)).isTrue();
+		assertThat(tasksDom.isAncestorOf(form13)).isTrue();
+		assertThat(tasksDom.isAncestorOf(form15)).isFalse();
+		
+		HtmlUnorderedList completedTasksDom = page.getHtmlElementById("completed-tasks-list");
+		assertThat(completedTasksDom.isAncestorOf(form11)).isFalse();
+		assertThat(completedTasksDom.isAncestorOf(form13)).isFalse();
+		assertThat(completedTasksDom.isAncestorOf(form15)).isTrue();
+	}
+	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_visibility_ofCompletedTasks() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
+		
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		
+		assertThat(page.getHtmlElementById("completed-tasks").isDisplayed()).isFalse();
+		page.getHtmlElementById("activeProject-menu-trigger").mouseOver();
+		page.getHtmlElementById("toggle-completed-tasks").click();
+		assertThat(page.getHtmlElementById("completed-tasks").isDisplayed()).isTrue();
 	}
 	
 }

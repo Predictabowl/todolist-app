@@ -56,6 +56,8 @@ class UserRegistrationIT {
 	
 	@BeforeEach
 	void setUp() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		userRepo.deleteAll();
+		userRepo.flush();
 		mailServer = new GreenMail(ServerSetupTest.SMTP)
 				.withConfiguration(GreenMailConfiguration.aConfig()
 						.withUser("todolist@email.it", "mailPassword"));
@@ -74,22 +76,24 @@ class UserRegistrationIT {
 		webDriver.get("http://localhost:"+appPort+"/user/register");
 		webDriver.findElement(By.name("email")).sendKeys("test@email.it");
 		webDriver.findElement(By.name("username")).sendKeys("Test User");
-		webDriver.findElement(By.name("password")).sendKeys("password");
-		webDriver.findElement(By.name("confirmedPassword")).sendKeys("password");
+		webDriver.findElement(By.name("password")).sendKeys("userPassword");
+		webDriver.findElement(By.name("confirmedPassword")).sendKeys("userPassword");
 		webDriver.findElement(By.name("form-submit")).click();
 		
 		Optional<UserJPA> optional = userRepo.findByEmail("test@email.it");
 		assertThat(optional).isPresent();
 		UserJPA userJPA = optional.get();
 		assertThat(userJPA.getUsername()).matches("Test User");
-		assertThat(encoder.matches("password", userJPA.getPassword())).isTrue();
+		assertThat(encoder.matches("userPassword", userJPA.getPassword())).isTrue();
 		assertThat(userJPA.isEnabled()).isFalse();
 		
 		Optional<VerificationTokenJPA> optionalToken = verificationTokenRepo.findByUser(userJPA);
 		assertThat(optionalToken).isPresent();
 		
-		MimeMessage receivedMessage = mailServer.getReceivedMessages()[0];
-		String messageBody = receivedMessage.getContent().toString();
+		MimeMessage[] receivedMessages = mailServer.getReceivedMessages();
+		assertThat(receivedMessages).hasSize(1);
+		
+		String messageBody = receivedMessages[0].getContent().toString();
 		assertThat(messageBody).contains(optionalToken.get().getToken());
 		
 		String verificationUrl = "http://"+messageBody.split("http://")[1].trim();

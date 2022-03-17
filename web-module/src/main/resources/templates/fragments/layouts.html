@@ -50,8 +50,8 @@
 								<a class="has-text-warning has-background-dark" th:text="#{no.projects}"></a>
 							</div>
 							<div th:unless="${projects.empty}">
-								<ul th:each="project : ${projects}">
-									<li>
+								<ul>
+									<li th:each="project : ${projects}">
 										<a class="has-text-link" th:text="${project.name}"
 											th:href="@{/web/project/{id}/tasks (id=${project.id})}">
 										</a>
