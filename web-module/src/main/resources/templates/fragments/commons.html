@@ -6,92 +6,6 @@
 </head>
 <body>
 
-
-	<!-- 	NAVBAR BULMA -->
-	<div th:fragment="BNavbar (username)">
-		<nav class="navbar has-background-dark"	aria-label="main navigation bar">
-			<div class="navbar-brand">
-				<a href="" class="navbar-item title is-4 has-text-light"
-					th:text="#{appname}"> </a>
-			</div>
-			<div class="navbar-menu is-active">
-				<div class="navbar-start">
-					<div class="navbar-item">
-						<a class="icon has-text-primary" id="sidebar-button">
-							<em class="fas fa-bars"></em>
-						</a>
-					</div>
-					<div class="navbar-item">
-						<a class="icon has-text-primary" th:title="#{new.project}" id="open-new-project-card">
-							<em class="fas fa-plus"></em>
-						</a>
-					</div>
-				</div>
-				<div class="navbar-end">
-					<div class="navbar-item has-dropdown is-hoverable">
-						<a class="navbar-link has-text-primary"> 
-							<em class="fa-solid fa-2x fa-language"></em>
-						</a>
-						<div class="navbar-dropdown">
-							<a class="navbar-item" th:href="@{''(lang=en)}">English</a>
-							<a class="navbar-item" th:href="@{''(lang=it)}">Italiano</a>
-						</div>
-					</div>
-					<div class="navbar-item">
-						<div class="navbar-item has-dropdown is-hoverable" id="user-menu">
-							<a class="navbar-link has-text-primary" th:text="${username}"></a>
-							<div class="navbar-dropdown">
-								<a class="navbar-item" id="logout-link">
-									<em class="fa-solid fa-arrow-right-from-bracket"></em>
-									<span class="ml-1" th:text="#{logout}"></span>								
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</nav>
-
-		<form th:action="@{/logout}" id="logout-form" name="logout-form" method="post"></form>
-		
-		<div class="modal" id="modal-project-form-card">
-			<div class="modal-background"></div>
-			<div class="hero is-fullheight">
-				<div class="hero-body">
-						<div class="modal-card">
-							<header class="modal-card-head">
-								<p class="modal-card-title" th:text="#{new.project}"></p>
-								<button class="delete"
-									id="close-new-project-card">
-								</button>
-							</header>
-							<form th:action="@{/web/project/new}" name="new-project-form" method="post">
-								<section class="modal-card-body">
-										<div class="field">
-											<input class="input is-rounded" name="name" placeholder="Project Name" required>
-										 </div>
-								</section>
-								<footer class="modal-card-foot">
-									<button class="button is-success is-rounded" name="submit-button" type="submit" th:text="#{create}">
-									</button>
-									<button class="button is-rounded" id="cancel-new-project-card" type="button" th:text="#{cancel}">
-									</button>
-								</footer>
-							</form>
-						</div>
-				</div>
-			</div>
-		</div>
-		
-		<script type="text/javascript">
-			$("#logout-link").click(function() {
-				$("#logout-form").submit();
-			});
-			$("#open-new-project-card, #cancel-new-project-card, #close-new-project-card").click(function() {
-				$("#modal-project-form-card").toggle("slow");
-			})
-		</script>
-	</div>
 		
 	<!-- INPUT TEXT WITH OBJECT FIELDS REFERENCED AND ERROR DISPLAY -->
 	<div th:fragment="inputWithField (fieldName, placeHolder, inputType)">
@@ -112,26 +26,87 @@
 	</div>
 	
 	
-	<!-- COMPLETED TASK FORM -->
-	<div class="is-inline-flex" th:fragment="toggleTaskCompletedForm (activeProject, task, colorClass)">
-		<div>
-			<form th:action="@{'/web/project/'+${activeProject.id}+'/task/'+${task.id}+'/toggle/completed'}" 
-					th:name="'complete-task-'+${task.id}+'-form'" method="post">
-				<button th:class="'button is-small is-outlined is-circular '+${colorClass}"
-					type="submit" name="submit-button">
-					<span class="icon">
-						<em class="fas fa-check"></em>
-					</span>
-				</button>
-			</form>
+	<!-- TASK LIST ITEM -->
+	<div class="is-flex is-justify-content-space-between" th:fragment="taskListItem (activeProject, task, colorClass)">
+		<div class="is-flex">
+			<div>
+				<form th:action="@{'/web/project/'+${activeProject.id}+'/task/'+${task.id}+'/toggle/completed'}" 
+						th:name="'complete-task-'+${task.id}+'-form'" method="post">
+					<button th:class="'button is-small is-outlined is-circular '+${colorClass}"
+						type="submit" name="submit-button">
+						<span class="icon">
+							<em class="fas fa-check"></em>
+						</span>
+					</button>
+				</form>
+			</div>
+			<div class="ml-4">
+					<span class="title is-5" th:text="${task.name}"></span>
+					<p th:text="${task.description}"></p>
+			</div>
 		</div>
-		<div class="ml-4">
-			<p>
-				<span class="title is-5" th:text="${task.name}"></span>
-			</p>
-			<p th:text="${task.description}"></p>
+		<div class="dropdown is-hoverable is-right">
+			<div class="dropdown-trigger" th:id="'task-'+${task.id}+'-menu-trigger'">
+				<span
+					class="button is-circular is-small is-light is-info">
+					<em class="fas fa-ellipsis"></em>
+				</span>
+			</div>
+			<div class="dropdown-menu">
+				<div class="dropdown-content">
+					<a class="dropdown-item" th:text="#{edit.task}">
+					</a>
+					<hr class="dropdown-divider">
+					<a class="dropdown-item" th:id="'task-'+${task.id}+'-delete-trigger'" 
+							th:text="#{delete.task}">
+					</a>
+				</div>
+			</div>
 		</div>
+		<script th:inline="javascript">
+			$("#task-"+[[${task.id}]]+"-delete-trigger").click(function(){
+				confirm("Evviva");
+			})
+		</script>
 	</div>
 
+	<!-- GENERIC FORM SUBMIT BUTTON -->
+	<button th:fragment="genericFormSubmitButton (textValue)" class="button is-success is-rounded is-light" 
+		type="submit" name="submit-button" th:text="${textValue}">
+	</button>
+	
+	<!-- CANCEL BUTTON -->
+	<button th:fragment="genericFormCancelButton (uniqueId)"	class="button is-rounded is-light" 
+		th:id="${uniqueId}" name="cancel-button" type="button" th:text="#{cancel}">
+	</button>
+	
+	<!-- CONFIRMATION CARD -->
+	<div th:fragment="genericConfirmationBox (header, uniqueId, formAction, formMethod, message)">
+		<div class="modal" th:id="${uniqueId}+'-card'">
+			<div class="modal-background"></div>
+			<div class="hero is-fullheight">
+				<div class="hero-body">
+					<div class="modal-card">
+						<header class="modal-card-head">
+							<p class="modal-card-title"
+								th:text="${header}">
+							</p>
+							<button class="delete" th:id="${uniqueId}+'-close'">
+							</button>
+						</header>
+						<form th:action="@{${formAction}}"	th:name="${uniqueId}+'-form'" th:method="${formMethod}">
+							<section class="modal-card-body">
+								<p th:text="${message}"></p>
+							</section>
+							<footer class="modal-card-foot">
+								<button th:replace=" :: genericFormSubmitButton(#{confirm})"></button>
+								<button th:replace=" :: genericFormCancelButton(${uniqueId}+'-cancel')"></button>
+							</footer>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

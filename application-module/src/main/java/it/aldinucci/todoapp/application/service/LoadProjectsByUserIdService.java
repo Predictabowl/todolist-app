@@ -26,7 +26,9 @@ public class LoadProjectsByUserIdService implements LoadProjectsByUserUsePort{
 	
 	@Override
 	public List<Project> load(UserIdDTO userId) throws AppUserNotFoundException {
-		return loadProjectsPort.load(userId.getEmail());
+		return loadProjectsPort.load(userId.getEmail()).stream().sorted(
+				(p1,p2) ->	p1.getName().compareTo(p2.getName()))
+				.toList();
 	}
 
 }

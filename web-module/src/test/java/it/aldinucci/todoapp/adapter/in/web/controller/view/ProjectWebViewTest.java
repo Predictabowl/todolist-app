@@ -1,7 +1,9 @@
 package it.aldinucci.todoapp.adapter.in.web.controller.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,12 +34,15 @@ import org.springframework.validation.BindingResult;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.CreateTaskWebController;
+import it.aldinucci.todoapp.adapter.in.web.controller.DeleteProjectWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.ProjectWebController;
+import it.aldinucci.todoapp.adapter.in.web.controller.UpdateProjectWebController;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
@@ -47,6 +53,7 @@ import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
+import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
 import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -54,6 +61,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @WebMvcTest(controllers = {ProjectWebController.class})
 @PropertySource("classpath:messages.properties")
 class ProjectWebViewTest {
+
+	private static final String TEST_VIEW_PAGE = "test-view-page";
 
 	private static final String FIXTURE_EMAIL = "test@email.it";
 	
@@ -76,7 +85,13 @@ class ProjectWebViewTest {
 	private InputModelAuthorization<User> authorizeUser;
 	
 	@MockBean
-	CreateTaskWebController createTaskController;
+	private CreateTaskWebController createTaskController;
+	
+	@MockBean
+	private UpdateProjectWebController updateProjectController;
+	
+	@MockBean
+	private DeleteProjectWebController deleteProjectController;
 	
 	@Autowired
 	private Environment env;
@@ -135,7 +150,7 @@ class ProjectWebViewTest {
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_projectView_shouldContainCreateTaskForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
-		when(createTaskController.createNewTask(any(),any(), any(), any())).thenReturn("test-view-page");
+		when(createTaskController.createNewTask(any(),any(), any(), any())).thenReturn(TEST_VIEW_PAGE);
 		
 		HtmlPage page = webClient.getPage("/web/project/5/tasks");
 		page.getElementById("add-task-link").click();
@@ -227,4 +242,92 @@ class ProjectWebViewTest {
 		assertThat(page.getHtmlElementById("completed-tasks").isDisplayed()).isTrue();
 	}
 	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_updateProject() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
+		when(updateProjectController.updateProjectWebEndPoint(any(), anyLong(), any(), any()))
+			.thenReturn(TEST_VIEW_PAGE);
+		
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		
+		HtmlForm form = page.getFormByName("activeProject-edit-form");
+		assertThat(form.isDisplayed()).isFalse();
+		
+		page.getHtmlElementById("activeProject-menu-trigger").mouseOver();
+		HtmlElement triggerLink = page.getHtmlElementById("activeProject-edit-trigger");
+		assertThat(triggerLink.getTextContent()).matches(env.getProperty("edit.project"));
+		triggerLink.click();
+		
+		assertThat(form.isDisplayed()).isTrue();
+		assertThat(form.getMethodAttribute()).matches("post");
+		assertThat(form.getActionAttribute()).matches("/web/project/5");
+		form.getInputByName("name").setValueAttribute("New project name");
+		
+		HtmlButton button = form.getButtonByName("submit-button");
+		assertThat(button.getTextContent()).matches(env.getProperty("confirm"));
+		button.click();
+		
+		verify(updateProjectController).updateProjectWebEndPoint(
+				isA(Authentication.class), 
+				eq(5L), 
+				eq(new ProjectDataWebDto("New project name")), 
+				isA(BindingResult.class));
+	}
+	
+	@Test
+	@WithMockUser
+	void test_deleteProject() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
+		when(deleteProjectController.deleteProjectWebEndpoint(any(), anyLong()))
+			.thenReturn(TEST_VIEW_PAGE);
+		
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		
+		page.getHtmlElementById("activeProject-menu-trigger").mouseOver();
+		HtmlElement triggerLink = page.getHtmlElementById("activeProject-delete-trigger");
+		assertThat(triggerLink.getTextContent()).matches(env.getProperty("delete.project"));
+		HtmlForm form = page.getFormByName("activeProject-delete-form");
+		assertThat(form.getActionAttribute()).matches("/web/project/5");
+
+		triggerLink.click();
+		form.getButtonByName("submit-button").click();
+		
+		verify(deleteProjectController).deleteProjectWebEndpoint(isA(Authentication.class), eq(5L));
+	}
+	
+	@Test
+	@WithMockUser
+	void test_deleteProject_confirmationBox_visibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
+		
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		
+		page.getHtmlElementById("activeProject-menu-trigger").mouseOver();
+		HtmlForm form = page.getFormByName("activeProject-delete-form");
+		assertThat(form.isDisplayed()).isFalse();
+
+		page.getHtmlElementById("activeProject-delete-trigger").click();
+		assertThat(form.isDisplayed()).isTrue();
+		
+		form.getButtonByName("cancel-button").click();
+		assertThat(form.isDisplayed()).isFalse();
+	}
+	
+	@Test
+	@WithMockUser
+	void test_deleteTask() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		List<Task> tasks = new LinkedList<>();
+		tasks.add(new Task(4L, "task name", "task description", false, 3));
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
+		
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		page.getHtmlElementById("task-4-menu-trigger").mouseOver();
+		HtmlElement linkTrigger = page.getHtmlElementById("task-4-delete-trigger");
+		assertThat(linkTrigger.getTextContent()).matches(env.getProperty("delete.task"));
+		
+//		HtmlForm form = page.getFormByName("task-4-delete-form");
+		
+		fail("Not Implemented");
+	}
 }

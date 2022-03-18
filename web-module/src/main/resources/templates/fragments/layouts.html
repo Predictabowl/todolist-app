@@ -33,7 +33,7 @@
 
 	<!-- App base layout -->
 	<div th:fragment="app-layout(username, content, projects)">
-		<div th:replace="fragments/commons :: BNavbar(${username})"></div>
+		<div th:replace="fragments/navbar :: BNavbar(${username})"></div>
 		<div class="columns main-window">
 			<section
 				class="column section auto-scroll has-background-grey-lighter is-one-fifth" id="sidebar">
