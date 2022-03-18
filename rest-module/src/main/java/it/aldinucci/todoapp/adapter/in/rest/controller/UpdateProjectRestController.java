@@ -18,6 +18,7 @@ import it.aldinucci.todoapp.application.port.in.UpdateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.Project;
+import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
@@ -42,7 +43,8 @@ public class UpdateProjectRestController {
 
 	@PutMapping
 	public ResponseEntity<Optional<Project>> updateProjectEndPoint(Authentication authentication,
-				@PathVariable long projectId, @Valid @RequestBody ProjectDataWebDto projectData) {
+				@PathVariable long projectId, @Valid @RequestBody ProjectDataWebDto projectData) 
+						throws AppProjectNotFoundException{
 		
 		ProjectIdDTO idDTO = new ProjectIdDTO(projectId);
 		authorize.check(authentication.getName(), idDTO);

@@ -1,8 +1,11 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,11 +32,12 @@ import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
+import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = { LoadTaskByProjectIdRestController.class })
 @ExtendWith(SpringExtension.class)
-@Import(AppRestSecurityConfig.class)
+@Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class LoadTaskByProjectIdRestControllerTest {
 
 	@Autowired
@@ -69,18 +73,16 @@ class LoadTaskByProjectIdRestControllerTest {
 	
 	@Test
 	@WithMockUser("testmail")
-	void test_loadTasks_whenProjectNotFound_shouldReturnBadRequest() throws Exception {
-		when(usePort.load(isA(ProjectIdDTO.class))).thenThrow(new AppProjectNotFoundException("return message"));
+	void test_loadTasks_whenProjectNotFound_shouldReturnNotFound() throws Exception {
+		doThrow(new AppProjectNotFoundException("return message")).when(authorize).check(anyString(), any());
 		
 		mvc.perform(get("/api/project/1/tasks")
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isBadRequest())
+			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("return message")));
 		
-		InOrder inOrder = inOrder(usePort,authorize);
-		ProjectIdDTO model = new ProjectIdDTO(1L);
-		inOrder.verify(authorize).check("testmail", model);
-		inOrder.verify(usePort).load(model);
+		verify(authorize).check("testmail", new ProjectIdDTO(1L));
+		verifyNoInteractions(usePort);
 	}
 	
 	@Test

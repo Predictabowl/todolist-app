@@ -36,14 +36,9 @@ public class LoadUnfinishedTaskByProjectIdRestController {
 	}
 
 	@GetMapping("/project/{projectId}/tasks/unfinished")
-	public List<Task> getTasksByProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId){
+	public List<Task> getTasksByProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId)
+				throws AppProjectNotFoundException{
 		authorize.check(authentication.getName(), projectId);
 		return loadProjectTasks.load(projectId);
 	}
-	
-	@ExceptionHandler(AppProjectNotFoundException.class)
-	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-	}
-		
 }

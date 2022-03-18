@@ -32,13 +32,10 @@ public class ToggleTaskCompleteStatusRestController {
 	}
 
 	@PutMapping
-	public void toggleTaskCompleted(Authentication authentication, TaskIdDTO taskId){
+	public void toggleTaskCompleted(Authentication authentication, TaskIdDTO taskId)
+				throws AppTaskNotFoundException{
 		authorize.check(authentication.getName(), taskId);
 		toggleTaskStatus.toggle(taskId);
 	}
 	
-	@ExceptionHandler(AppTaskNotFoundException.class)
-	public ResponseEntity<String> taskNotFoundHandler(HttpServletRequest request, Throwable ex){
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-	}
 }

@@ -18,6 +18,7 @@ import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
 
 class NewTaskWebAuthorizationTest {
@@ -59,13 +60,13 @@ class NewTaskWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorize_whenUserNotFound_shouldThrow() {
+	void test_authorize_whenProjectNotFound_shouldThrow() {
 		NewTaskDTOIn newTask = new NewTaskDTOIn("task name", "descr", 3L);
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.empty());
 		
 		assertThatThrownBy(() -> authorize.check("email1", newTask))
-			.isInstanceOf(UnauthorizedWebAccessException.class)
-			.hasMessage("Could not find Project's user");
+			.isInstanceOf(AppProjectNotFoundException.class)
+			.hasMessage("Could not find Project with id: 3");
 		
 		verify(loadUser).load(new ProjectIdDTO(3L));
 	}

@@ -79,7 +79,7 @@ class RestDeleteTaskIT {
 	}
 
 	@Test
-	void test_deleteTask_whenTaskNotPresent_shouldReturnUnauthorized() {
+	void test_deleteTask_whenTaskNotPresent_shouldReturnNotFound() {
 		given()
 			.auth()	.basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
 			.header("X-XSRF-TOKEN", csrfToken)
@@ -88,7 +88,7 @@ class RestDeleteTaskIT {
 		.when()
 			.delete(FIXTURE_URI)
 		.then()
-			.statusCode(401);
+			.statusCode(404);
 	}
 	
 	private void setSessionData() {

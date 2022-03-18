@@ -1,14 +1,10 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,10 +32,5 @@ public class CreateProjectRestController {
 			@Valid @RequestBody NewProjectWebDto newProject) throws AppUserNotFoundException {
 		NewProjectDTOIn projectDto = new NewProjectDTOIn(newProject.name(), authentication.getName());
 		return createProject.create(projectDto);
-	}
-
-	@ExceptionHandler(AppUserNotFoundException.class)
-	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 }

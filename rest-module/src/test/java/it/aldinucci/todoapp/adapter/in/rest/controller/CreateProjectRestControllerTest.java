@@ -33,10 +33,11 @@ import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.NewProjectWebDto;
+import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {CreateProjectRestController.class})
-@Import({AppRestSecurityConfig.class})
+@Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class CreateProjectRestControllerTest {
 
 	private static final String FIXTURE_URL = "/api/project/create";
@@ -92,7 +93,7 @@ class CreateProjectRestControllerTest {
 	
 	@Test
 	@WithMockUser("test@email.it")
-	void test_createProject_whenUserNotFound_shouldReturnBadRequest() throws JsonProcessingException, Exception {
+	void test_createProject_whenUserNotFound_shouldReturnNotFound() throws JsonProcessingException, Exception {
 		when(createPort.create(isA(NewProjectDTOIn.class)))
 			.thenThrow(new AppUserNotFoundException("test message"));
 		
@@ -101,7 +102,7 @@ class CreateProjectRestControllerTest {
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(new NewProjectWebDto("test name"))))
-			.andExpect(status().isBadRequest())
+			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$",is("test message")));
 		
 		verify(createPort).create(new NewProjectDTOIn("test name", "test@email.it"));

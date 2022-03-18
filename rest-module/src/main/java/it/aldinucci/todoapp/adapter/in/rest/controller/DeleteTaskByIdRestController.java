@@ -37,8 +37,4 @@ public class DeleteTaskByIdRestController {
 		deleteTask.delete(taskId);
 	}
 
-	@ExceptionHandler(AppTaskNotFoundException.class)
-	public ResponseEntity<String> notFoundHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	}
 }

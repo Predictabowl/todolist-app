@@ -18,6 +18,7 @@ import it.aldinucci.todoapp.application.port.in.UpdateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -38,7 +39,8 @@ public class UpdateTaskRestController {
 
 	@PutMapping
 	public ResponseEntity<Optional<Task>> updateTaskEndPoint(Authentication authentication,
-				@PathVariable long taskId, @Valid @RequestBody TaskDataWebDto taskData) {
+				@PathVariable long taskId, @Valid @RequestBody TaskDataWebDto taskData) 
+						throws AppTaskNotFoundException{
 		
 		TaskIdDTO idDTO = new TaskIdDTO(taskId);
 		authorize.check(authentication.getName(), idDTO);

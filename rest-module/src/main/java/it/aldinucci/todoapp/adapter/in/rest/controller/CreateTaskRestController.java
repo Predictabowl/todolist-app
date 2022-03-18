@@ -39,10 +39,4 @@ public class CreateTaskRestController {
 		authorize.check(authentication.getName(), newTask);
 		return createTask.create(newTask);
 	}
-
-	@ExceptionHandler(AppProjectNotFoundException.class)
-	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-	}
-
 }

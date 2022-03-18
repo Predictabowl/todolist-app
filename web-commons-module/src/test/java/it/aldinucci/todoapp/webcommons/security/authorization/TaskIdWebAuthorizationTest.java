@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
 
 class TaskIdWebAuthorizationTest {
@@ -60,13 +61,13 @@ class TaskIdWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorizationWhenCannotFindUser_shouldThrow() {
+	void test_authorizationWhenCannotFindTask_shouldThrow() {
 		TaskIdDTO taskId = new TaskIdDTO(3L);
 		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(Optional.empty());
 		
 		assertThatThrownBy(() -> authorize.check("different email", taskId))
-			.isInstanceOf(UnauthorizedWebAccessException.class)
-			.hasMessage("Could not find the user owner of the task with id: 3");
+			.isInstanceOf(AppTaskNotFoundException.class)
+			.hasMessage("Could not find Task with id: 3");
 		
 		verify(loadUser).load(taskId);
 	}

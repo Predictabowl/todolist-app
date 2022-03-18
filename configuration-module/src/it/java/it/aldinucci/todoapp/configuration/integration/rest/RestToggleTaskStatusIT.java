@@ -96,7 +96,7 @@ class RestToggleTaskStatusIT {
 		.when()
 			.put(FIXTURE_URI+"2/completed/toggle")
 		.then()
-			.statusCode(401);
+			.statusCode(404);
 	}
 	
 	private void setSessionData() {

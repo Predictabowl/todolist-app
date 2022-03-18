@@ -2,7 +2,9 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -26,11 +28,12 @@ import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfi
 import it.aldinucci.todoapp.application.port.in.ToggleTaskCompleteStatusUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
+import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = ToggleTaskCompleteStatusRestController.class)
 @ExtendWith(SpringExtension.class)
-@Import(AppRestSecurityConfig.class)
+@Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class ToggleTaskCompleteStatusRestControllerTest {
 
 	@Autowired
@@ -83,19 +86,17 @@ class ToggleTaskCompleteStatusRestControllerTest {
 	
 	@Test
 	@WithMockUser("user@email.it")
-	void test_toggleStatus_whenTaskNotFound_shouldReturnBadRequest() throws Exception {
-		doThrow(new AppTaskNotFoundException("test message")).when(togglePort).toggle(any());
+	void test_toggleStatus_whenTaskNotFound_shouldReturnNotFound() throws Exception {
+		doThrow(new AppTaskNotFoundException("test message")).when(authorize).check(anyString(), any());
 		
 		mvc.perform(put("/api/task/5/completed/toggle")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isBadRequest())
+			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		InOrder inOrder = Mockito.inOrder(authorize, togglePort);
-		TaskIdDTO idDTO = new TaskIdDTO(5);
-		inOrder.verify(authorize).check("user@email.it", idDTO);
-		inOrder.verify(togglePort).toggle(idDTO);
+		verify(authorize).check("user@email.it", new TaskIdDTO(5));
+		verifyNoInteractions(togglePort);
 	}
 	
 	@Test

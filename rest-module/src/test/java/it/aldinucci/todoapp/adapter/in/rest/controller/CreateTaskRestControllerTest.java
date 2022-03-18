@@ -2,7 +2,11 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -32,11 +36,13 @@ import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
+import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {CreateTaskRestController.class})
-@Import({AppRestSecurityConfig.class})
+@Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class CreateTaskRestControllerTest {
 	
 	private static final String FIXTURE_URL = "/api/task/create";
@@ -100,22 +106,20 @@ class CreateTaskRestControllerTest {
 	
 	@Test
 	@WithMockUser("email")
-	void test_createTask_whenProjectNotFound_shouldReturnBadRequest() throws JsonProcessingException, Exception {
+	void test_createTask_whenProjectNotFound_shouldReturnNotFound() throws JsonProcessingException, Exception {
+		doThrow(new AppProjectNotFoundException("test message")).when(authorize).check(anyString(), any());
 		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "description",11L);
-		when(createTask.create(isA(NewTaskDTOIn.class)))
-			.thenThrow(new AppProjectNotFoundException("test message"));
 		
 		mvc.perform(post(FIXTURE_URL)
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(taskDto)))
-			.andExpect(status().isBadRequest())
+			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$",is("test message")));
 		
-		InOrder inOrder = Mockito.inOrder(authorize,createTask);
-		inOrder.verify(authorize).check("email", taskDto);
-		inOrder.verify(createTask).create(taskDto);
+		verify(authorize).check("email", taskDto);
+		verifyNoInteractions(createTask);
 	}
 	
 	@Test
@@ -141,6 +145,23 @@ class CreateTaskRestControllerTest {
 			.andExpect(status().isForbidden());
 		
 		verifyNoInteractions(authorize);
+		verifyNoInteractions(createTask);
+	}
+	
+	@Test
+	@WithMockUser("mock@user.it")
+	void test_createTask_whenProjectIsMissing_shouldReturnNotFound() throws JsonProcessingException, Exception {
+		doThrow(new AppProjectNotFoundException("test message")).when(authorize).check(any(), any());
+		
+		mvc.perform(post(FIXTURE_URL)
+				.with(csrf())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", 1))))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$", is("test message")));
+		
+		verify(authorize).check("mock@user.it", new NewTaskDTOIn("task name", "description", 1));
 		verifyNoInteractions(createTask);
 	}
 }

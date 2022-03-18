@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
 
 class ProjectIdWebAuthorizationTest {
@@ -60,13 +61,13 @@ class ProjectIdWebAuthorizationTest {
 	}
 	
 	@Test
-	void test_authorizationWhenCantFindUser_shouldThrow() {
+	void test_authorizationWhenCantFindProject_shouldThrow() {
 		ProjectIdDTO projectId = new ProjectIdDTO(3L);
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.empty());
 		
 		assertThatThrownBy(() -> authorize.check("different email", projectId))
-			.isInstanceOf(UnauthorizedWebAccessException.class)
-			.hasMessage("Could not find Project owner");
+			.isInstanceOf(AppProjectNotFoundException.class)
+			.hasMessage("Could not find Project with id: 3");
 		
 		verify(loadUser).load(projectId);
 	}

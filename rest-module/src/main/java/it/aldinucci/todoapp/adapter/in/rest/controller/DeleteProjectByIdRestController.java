@@ -38,9 +38,4 @@ public class DeleteProjectByIdRestController {
 		authorize.check(authentication.getName(), projectId);
 		deleteProject.delete(projectId);
 	}
-
-	@ExceptionHandler(AppProjectNotFoundException.class)
-	public ResponseEntity<String> notFoundHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	}
 }

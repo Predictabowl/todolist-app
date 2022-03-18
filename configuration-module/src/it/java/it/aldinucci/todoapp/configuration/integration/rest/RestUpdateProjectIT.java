@@ -98,7 +98,7 @@ class RestUpdateProjectIT {
 		.when()
 			.put(FIXTURE_URI+"2")
 		.then()
-			.statusCode(401);
+			.statusCode(404);
 	}
 	
 	private void setSessionData() {

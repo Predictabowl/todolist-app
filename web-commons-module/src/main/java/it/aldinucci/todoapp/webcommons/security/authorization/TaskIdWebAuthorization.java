@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.domain.User;
+import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
 
 @Component
@@ -21,10 +22,11 @@ public class TaskIdWebAuthorization implements InputModelAuthorization<TaskIdDTO
 	}
 
 	@Override
-	public void check(String authenticatedEmail, TaskIdDTO model) throws UnauthorizedWebAccessException {
+	public void check(String authenticatedEmail, TaskIdDTO model) 
+			throws UnauthorizedWebAccessException, AppTaskNotFoundException {
 		Optional<User> user = loadUser.load(model);
 		if(user.isEmpty())
-			throw new UnauthorizedWebAccessException("Could not find the user owner of the task with id: "+model.taskId());
+			throw new AppTaskNotFoundException("Could not find Task with id: "+model.taskId());
 		if(!authenticatedEmail.equals(user.get().getEmail()))
 			throw new UnauthorizedWebAccessException("This operation is not permitted for the authenticated user");
 	}

@@ -35,9 +35,4 @@ public class LoadProjectsByUserRestController {
 		return loadProjects.load(new UserIdDTO(authentication.getName()));
 	}
 
-	@ExceptionHandler(AppUserNotFoundException.class)
-	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-	}
-	
 }

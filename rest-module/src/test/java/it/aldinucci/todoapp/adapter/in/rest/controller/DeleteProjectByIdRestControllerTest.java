@@ -1,12 +1,16 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -22,15 +26,18 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.DeleteProjectByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
+import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {DeleteProjectByIdRestController.class})
 @ExtendWith(SpringExtension.class)
-@Import(AppRestSecurityConfig.class)
+@Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class DeleteProjectByIdRestControllerTest {
 
 	@Autowired
@@ -95,6 +102,21 @@ class DeleteProjectByIdRestControllerTest {
 			.andExpect(status().isForbidden());
 		
 		verifyNoInteractions(authorize);
+		verifyNoInteractions(deleteProject);
+	}
+	
+	@Test
+	@WithMockUser("mock@user.it")
+	void test_deleteProject_whenProjectIsMissing_shouldReturnNotFound() throws JsonProcessingException, Exception {
+		doThrow(new AppProjectNotFoundException("test message")).when(authorize).check(any(), any());
+		
+		mvc.perform(delete("/api/project/3")
+				.with(csrf())
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$", is("test message")));
+		
+		verify(authorize).check("mock@user.it", new ProjectIdDTO(3));
 		verifyNoInteractions(deleteProject);
 	}
 }
