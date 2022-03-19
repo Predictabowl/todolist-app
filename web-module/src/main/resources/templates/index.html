@@ -8,11 +8,11 @@
 	<div th:replace="fragments/layouts :: app-layout(${user.username}, ~{::#content}, ${projects})">
 		<div id="content">
 			<div th:if="${activeProject != null}" id="active-project-section">
-				<div class="is-flex is-justify-content-space-between">
+				<div class="is-flex is-justify-content-space-between mb-3">
 				<!-- PROJECT NAME -->
 					<div>
-						<h1 class="title" th:text="${activeProject.name}" id="activeProject-title">
-						</h1>
+						<span class="title" th:text="${activeProject.name}" id="activeProject-title">
+						</span>
 						<!-- EDIT PROJECT FORM -->
 						<form th:action="@{/web/project/{projectId} (projectId =${activeProject.id})}"
 								 th:method="put" name="activeProject-edit-form" id="activeProject-edit-form" 
@@ -29,7 +29,7 @@
 					</div>
 					
 					<!-- PROJECT DROPDOWN MENU -->
-					<div class="dropdown is-hoverable is-right">
+					<div class="dropdown is-hoverable is-right is-align-self-center">
 						<div class="dropdown-trigger" id="activeProject-menu-trigger">
 							<span class="button has-background-light">
 								<em class="fas fa-lg fa-ellipsis"></em>
@@ -102,6 +102,11 @@
 								, 'delete', #{sure.you.want.to.delete.project}+' '+${activeProject.name}+'?')">
 				</div>
 				
+				<!-- DELETE TASK FORM -->
+				<div th:replace="fragments/commons :: genericConfirmationBox(#{delete.task}, 'task-delete'
+								, '#', 'delete', #{sure.you.want.to.delete.task}+'?')">
+				</div>
+				
 				
 			</div>
 		</div>
@@ -113,6 +118,7 @@
 			$("#add-task-link").toggle();
 			$("#new-task-form-container").toggle();
 		})
+		
 		$("#toggle-completed-tasks").click(function(){
 			$("#completed-tasks").toggle("slow", function(){
 				$("#show-task-label").toggle();
@@ -134,7 +140,7 @@
 			$("#activeProject-title").toggle();
 		})
 		
-		$("#activeProject-delete-trigger, #activeProject-delete-cancel, #activeProject-delete-close").click(function() {
+		$("#activeProject-delete-trigger").click(function() {
 			$("#activeProject-delete-card").toggle();
 		})
 	</script>

@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.web.controller.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -41,6 +40,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.CreateTaskWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.DeleteProjectWebController;
+import it.aldinucci.todoapp.adapter.in.web.controller.DeleteTaskWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.ProjectWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.UpdateProjectWebController;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
@@ -92,6 +92,9 @@ class ProjectWebViewTest {
 	
 	@MockBean
 	private DeleteProjectWebController deleteProjectController;
+	
+	@MockBean
+	private DeleteTaskWebController deleteTaskController;
 	
 	@Autowired
 	private Environment env;
@@ -148,7 +151,7 @@ class ProjectWebViewTest {
 	
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
-	void test_projectView_shouldContainCreateTaskForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+	void test_projectView_CreateTask() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		when(createTaskController.createNewTask(any(),any(), any(), any())).thenReturn(TEST_VIEW_PAGE);
 		
@@ -156,7 +159,7 @@ class ProjectWebViewTest {
 		page.getElementById("add-task-link").click();
 		HtmlForm form = page.getFormByName("new-task-form");
 		form.getInputByName("name").setValueAttribute("test task");
-		form.getTextAreaByName("description").setText("Test description");
+		form.getTextAreaByName("description").setText("Test description\nNewline");
 		HtmlButton formButton = form.getButtonByName("submit-button");
 
 		assertThat(formButton.getTextContent()).matches(env.getProperty("add"));
@@ -166,7 +169,7 @@ class ProjectWebViewTest {
 		verify(createTaskController).createNewTask(
 				isA(Authentication.class),
 				eq(new ProjectIdDTO(5)),
-				eq(new NewTaskWebDto("test task", "Test description")),
+				eq(new NewTaskWebDto("test task", "Test description\r\nNewline")),
 				isA(BindingResult.class));
 		
 	}
@@ -307,10 +310,17 @@ class ProjectWebViewTest {
 		HtmlForm form = page.getFormByName("activeProject-delete-form");
 		assertThat(form.isDisplayed()).isFalse();
 
-		page.getHtmlElementById("activeProject-delete-trigger").click();
+		HtmlElement triggerLink = page.getHtmlElementById("activeProject-delete-trigger");
+		triggerLink.click();
 		assertThat(form.isDisplayed()).isTrue();
 		
 		form.getButtonByName("cancel-button").click();
+		assertThat(form.isDisplayed()).isFalse();
+		
+		triggerLink.click();
+		assertThat(form.isDisplayed()).isTrue();
+		
+		page.getElementById("activeProject-delete-close").click();
 		assertThat(form.isDisplayed()).isFalse();
 	}
 	
@@ -320,14 +330,47 @@ class ProjectWebViewTest {
 		List<Task> tasks = new LinkedList<>();
 		tasks.add(new Task(4L, "task name", "task description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
+		when(deleteTaskController.deleteTaskEndPoint(any(), anyLong(), anyLong()))
+			.thenReturn(TEST_VIEW_PAGE);
 		
 		HtmlPage page = webClient.getPage("/web/project/5/tasks");
 		page.getHtmlElementById("task-4-menu-trigger").mouseOver();
 		HtmlElement linkTrigger = page.getHtmlElementById("task-4-delete-trigger");
 		assertThat(linkTrigger.getTextContent()).matches(env.getProperty("delete.task"));
+		linkTrigger.click();
 		
-//		HtmlForm form = page.getFormByName("task-4-delete-form");
+		HtmlForm form = page.getFormByName("task-delete-form");
+		assertThat(form.getActionAttribute()).matches("/web/project/5/task/4");
+		form.getButtonByName("submit-button").click();
+
+		verify(deleteTaskController).deleteTaskEndPoint(isA(Authentication.class), eq(5L), eq(4L));
+	}
+	
+	@Test
+	@WithMockUser
+	void test_deleteTask_confirmationBox_visibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		List<Task> tasks = new LinkedList<>();
+		tasks.add(new Task(6L, "task name", "task description", false, 3));
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
-		fail("Not Implemented");
+		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		
+		page.getHtmlElementById("task-6-menu-trigger").mouseOver();
+		HtmlForm form = page.getFormByName("task-delete-form");
+		assertThat(form.isDisplayed()).isFalse();
+		
+		HtmlElement linkTrigger = page.getHtmlElementById("task-6-delete-trigger");
+		linkTrigger.click();
+		assertThat(form.isDisplayed()).isTrue();
+
+		form.getButtonByName("cancel-button").click();
+		assertThat(form.isDisplayed()).isFalse();
+		
+		linkTrigger.click();
+		assertThat(form.isDisplayed()).isTrue();
+		
+		page.getElementById("task-delete-close").click();
+		assertThat(form.isDisplayed()).isFalse();
 	}
 }

@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
 
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;

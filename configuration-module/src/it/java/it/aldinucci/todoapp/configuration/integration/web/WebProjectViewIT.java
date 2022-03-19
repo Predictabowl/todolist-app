@@ -68,14 +68,14 @@ class WebProjectViewIT {
 		webDriver.findElement(ByName.name("name")).sendKeys("New Test Project");
 		webDriver.findElement(By.name("submit-button")).click();
 		
-		assertThat(webDriver.findElement(By.cssSelector("h1")).getText())
+		assertThat(webDriver.findElement(By.id("activeProject-title")).getText())
 			.contains("New Test Project");		
 		
 		webDriver.findElement(ById.id("open-new-project-card")).click();
 		webDriver.findElement(ByName.name("name")).sendKeys("Second Test Project");
 		webDriver.findElement(By.name("submit-button")).click();
 		
-		assertThat(webDriver.findElement(By.cssSelector("h1")).getText())
+		assertThat(webDriver.findElement(By.id("activeProject-title")).getText())
 			.contains("Second Test Project");
 		
 		List<ProjectJPA> projects = projectRepo.findAll();
@@ -108,7 +108,7 @@ class WebProjectViewIT {
 			.matches(baseUrl+"/web/project/"+project2.getId()+"/tasks");
 		
 		project1Link.click();
-		assertThat(webDriver.findElement(By.cssSelector("h1")).getText())
+		assertThat(webDriver.findElement(By.id("activeProject-title")).getText())
 			.contains("project 1");
 	}
 	
