@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -31,15 +31,22 @@ class LoadProjectsByUserIdServiceTest {
 	private LoadProjectsByUserIdService service;
 	
 	@Test
-	void test_serviceShouldMap_and_delegateToDriverPort() throws AppUserNotFoundException {
+	void test_serviceOrderProjectsByName() throws AppUserNotFoundException {
 		UserIdDTO userId = new UserIdDTO("test@email.it");
-		List<Project> projects = Collections.emptyList();
+		List<Project> projects = new LinkedList<Project>();
+		Project project1 = new Project(3L, "Test Project");
+		Project project2 = new Project(5L, "Some Project");
+		Project project3 = new Project(7L, "First Project");
+		projects.add(project1);
+		projects.add(project2);
+		projects.add(project3);
+		
 		when(port.load(isA(String.class))).thenReturn(projects);
 		
 		List<Project> loadedProjects = service.load(userId);
 		
 		verify(port).load("test@email.it");
-		assertThat(loadedProjects).isSameAs(projects);
+		assertThat(loadedProjects).containsExactly(project3, project2, project1);
 	}
 
 }

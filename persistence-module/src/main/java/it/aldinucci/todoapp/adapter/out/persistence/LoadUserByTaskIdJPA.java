@@ -1,5 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,10 +27,12 @@ public class LoadUserByTaskIdJPA implements LoadUserByTaskIdDriverPort{
 
 
 	@Override
-	public User load(long taskId) throws AppTaskNotFoundException {
-		TaskJPA task = repository.findById(taskId).orElseThrow(() -> 
-			new AppTaskNotFoundException("Task not found with id: "+taskId));
-		return mapper.map(task.getProject().getUser());
+	public Optional<User> load(long taskId) throws AppTaskNotFoundException {
+		Optional<TaskJPA> task = repository.findById(taskId);
+		if(task.isEmpty())
+			return Optional.empty();
+		
+		return Optional.of(mapper.map(task.get().getProject().getUser()));
 	}
 
 }

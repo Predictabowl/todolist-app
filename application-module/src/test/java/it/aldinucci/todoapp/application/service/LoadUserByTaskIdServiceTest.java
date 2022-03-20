@@ -6,6 +6,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -34,12 +36,13 @@ class LoadUserByTaskIdServiceTest {
 	void test_loadUser_successful() throws AppTaskNotFoundException {
 		TaskIdDTO taskId = new TaskIdDTO(1L);
 		User user = new User("email", "username", "password");
-		when(driverPort.load(anyLong())).thenReturn(user);
+		Optional<User> optional = Optional.of(user);
+		when(driverPort.load(anyLong())).thenReturn(optional);
 		
-		User loadedUser = loadService.load(taskId);
+		Optional<User> loadedUser = loadService.load(taskId);
 		
 		verify(driverPort).load(1);
-		assertThat(loadedUser).isSameAs(user);
+		assertThat(loadedUser).isSameAs(optional);
 	}
-
+	
 }

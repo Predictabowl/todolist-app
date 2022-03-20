@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.util.NestedServletException;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
@@ -41,13 +41,16 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {ProjectWebController.class})
 @ExtendWith(SpringExtension.class)
 class ProjectWebControllerTest {
 
+	private static final String BASE_URL = "/web/project/";
 	private static final String FIXTURE_EMAIL = "test@email.it";
 	private static final long FIXTURE_PROJECT_ID = 7;
 	private static final ProjectIdDTO FIXTURE_PROJECT_ID_DTO = new ProjectIdDTO(FIXTURE_PROJECT_ID);
@@ -83,7 +86,7 @@ class ProjectWebControllerTest {
 				new Project(FIXTURE_PROJECT_ID, "first project"),
 				new Project(3L, "second project"));
 		when(loadProjects.load(userIdDTO)).thenReturn(projects);
-		when(loadUser.load(FIXTURE_PROJECT_ID_DTO)).thenReturn(fixtureUser);
+		when(loadUser.load(FIXTURE_PROJECT_ID_DTO)).thenReturn(Optional.of(fixtureUser));
 		when(userMapper.map(fixtureUser)).thenReturn(new UserWebDto("username", FIXTURE_EMAIL));
 	}
 	
@@ -93,7 +96,7 @@ class ProjectWebControllerTest {
 		UserIdDTO userIdDTO = new UserIdDTO(FIXTURE_EMAIL);
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		
-		mvc.perform(get("/project/"+FIXTURE_PROJECT_ID+"/tasks")
+		mvc.perform(get(BASE_URL+FIXTURE_PROJECT_ID+"/tasks")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(view().name("index"))
@@ -117,14 +120,14 @@ class ProjectWebControllerTest {
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_couldNotFindActiveProject_betweenTheListOfProjects_shouldThrow() throws Exception {
-		when(loadUser.load(any())).thenReturn(fixtureUser);
+		when(loadUser.load(any())).thenReturn(Optional.of(fixtureUser));
 		List<Task> tasks = Arrays.asList(
 				new Task(5L, "task 1", "descr 1"),
 				new Task(11L, "task 2", "descr 2"));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
 		
-		MockHttpServletRequestBuilder requestBuilder = get("/project/21/tasks")
+		MockHttpServletRequestBuilder requestBuilder = get(BASE_URL+"21/tasks")
 			.accept(MediaType.APPLICATION_JSON);
 		
 		assertThatThrownBy(() -> mvc.perform(requestBuilder))
@@ -144,19 +147,21 @@ class ProjectWebControllerTest {
 	@Test
 	@WithMockUser("another@user.it")
 	void test_viewWithFewTasks_shouldCallAuthorizationCorrectly() throws Exception {
-		List<Task> tasks = Arrays.asList(
-				new Task(5L, "task 1", "descr 1"),
-				new Task(11L, "task 2", "descr 2"));
+		Task task1 = new Task(5L, "task 1", "descr 1", false);
+		Task task2 = new Task(11L, "task 2", "descr 2", false);
+		Task task3 = new Task(17L, "task 3", "descr 3", true);
+		List<Task> tasks = Arrays.asList(task1,	task3, task2);
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
-		mvc.perform(get("/project/"+FIXTURE_PROJECT_ID+"/tasks")
+		mvc.perform(get(BASE_URL+FIXTURE_PROJECT_ID+"/tasks")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(view().name("index"))
 			.andExpect(model().attribute("user", new UserWebDto("username",FIXTURE_EMAIL)))
 			.andExpect(model().attribute("projects", projects))
 			.andExpect(model().attribute("activeProject", projects.get(0)))
-			.andExpect(model().attribute("tasks", tasks));
+			.andExpect(model().attribute("tasks", Arrays.asList(task1, task2)))
+			.andExpect(model().attribute("completedTasks", Arrays.asList(task3)));
 		
 		InOrder inOrder = inOrder(loadUser, loadProjects, loadTasks, userMapper, authorize);
 		inOrder.verify(loadUser).load(FIXTURE_PROJECT_ID_DTO);
@@ -166,5 +171,24 @@ class ProjectWebControllerTest {
 		inOrder.verify(loadTasks).load(FIXTURE_PROJECT_ID_DTO);
 	}
 	
-	
+	@Test
+	@WithMockUser("test@email.it")
+	void test_viewWhenCannotFindProjectUser_shouldThrow() {
+		when(loadUser.load(any())).thenReturn(Optional.empty());
+		
+		MockHttpServletRequestBuilder requestBuilder = get(BASE_URL+"21/tasks")
+			.accept(MediaType.APPLICATION_JSON);
+		
+		assertThatThrownBy(() -> mvc.perform(requestBuilder))
+			.isInstanceOf(NestedServletException.class)
+			.getCause()
+				.isInstanceOf(AppUserNotFoundException.class)
+				.hasMessageEndingWith("Critical Data Integrity error while searching the User of project with id: 21");
+		
+		verify(loadUser).load(new ProjectIdDTO(21));
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(userMapper);
+		verifyNoInteractions(loadProjects);
+		verifyNoInteractions(loadTasks);
+	}
 }

@@ -32,8 +32,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.RegisterUserDto;
-import it.aldinucci.todoapp.adapter.in.web.validator.RegisterUserValidator;
 import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
@@ -43,6 +41,8 @@ import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
+import it.aldinucci.todoapp.webcommons.dto.validator.RegisterUserValidator;
 
 @WebMvcTest (controllers = {RegisterUserWebController.class})
 @ExtendWith(SpringExtension.class)

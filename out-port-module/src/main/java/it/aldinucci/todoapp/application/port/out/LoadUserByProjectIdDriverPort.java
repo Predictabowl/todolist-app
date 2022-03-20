@@ -1,9 +1,10 @@
 package it.aldinucci.todoapp.application.port.out;
 
+import java.util.Optional;
+
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 public interface LoadUserByProjectIdDriverPort {
 
-	public User load(long projectId) throws AppProjectNotFoundException;
+	public Optional<User> load(long projectId);
 }

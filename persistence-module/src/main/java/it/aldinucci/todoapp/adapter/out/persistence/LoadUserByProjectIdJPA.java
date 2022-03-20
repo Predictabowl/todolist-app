@@ -1,5 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +28,11 @@ public class LoadUserByProjectIdJPA implements LoadUserByProjectIdDriverPort{
 
 
 	@Override
-	public User load(long projectId) throws AppProjectNotFoundException{
-		ProjectJPA project = projectRepo.findById(projectId).orElseThrow(() 
-				-> new AppProjectNotFoundException("Project not found with id: "+projectId));
-		return mapper.map(project.getUser());
+	public Optional<User> load(long projectId) throws AppProjectNotFoundException{
+		Optional<ProjectJPA> project = projectRepo.findById(projectId);
+		if (project.isEmpty())
+			return Optional.empty();
+		return Optional.of(mapper.map(project.get().getUser()));
 	}
 
 }

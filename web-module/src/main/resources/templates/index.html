@@ -8,52 +8,142 @@
 	<div th:replace="fragments/layouts :: app-layout(${user.username}, ~{::#content}, ${projects})">
 		<div id="content">
 			<div th:if="${activeProject != null}" id="active-project-section">
-				<h1 class="title" th:text="${activeProject.name}"></h1>
+				<div class="is-flex is-justify-content-space-between mb-3">
+				<!-- PROJECT NAME -->
+					<div>
+						<span class="title" th:text="${activeProject.name}" id="activeProject-title">
+						</span>
+						<!-- EDIT PROJECT FORM -->
+						<form th:action="@{/web/project/{projectId} (projectId =${activeProject.id})}"
+								 th:method="put" name="activeProject-edit-form" id="activeProject-edit-form" 
+								 class="is-not-displayed mb-4">
+							<div class="field">
+								<input class="input is-large is-rounded" name="name" th:value="${activeProject.name}"
+									th:placeholder="${activeProject.name}" type="text" />
+							 </div>
+							<div class="control">
+								<button th:replace="fragments/commons :: genericFormSubmitButton(#{confirm})"></button>
+								<button th:replace="fragments/commons :: genericFormCancelButton('activeProject-edit-cancel')"></button>
+							</div>
+						</form>
+					</div>
+					
+					<!-- PROJECT DROPDOWN MENU -->
+					<div class="dropdown is-hoverable is-right is-align-self-center">
+						<div class="dropdown-trigger" id="activeProject-menu-trigger">
+							<span class="button has-background-light">
+								<em class="fas fa-lg fa-ellipsis"></em>
+							</span>
+						</div>
+						<div class="dropdown-menu">
+							<div class="dropdown-content">
+								<a class="dropdown-item" id="activeProject-edit-trigger" th:text="#{edit.project}">
+								</a>
+								<a class="dropdown-item" id="toggle-completed-tasks">
+									<span th:text="#{show.completed.tasks}" id="show-task-label"></span>
+									<span class="is-not-displayed" th:text="#{hide.completed.tasks}" id="hide-task-label"></span>
+								</a>
+								<hr class="dropdown-divider">
+								<a class="dropdown-item" th:text="#{delete.project}" id="activeProject-delete-trigger">
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- TASKS LIST -->
 				<ul id="tasks-list">
 					<li class="box" th:each="task : ${tasks}">
-						<p>
-							<span class="title is-5" th:text="${task.name}"></span>
-						</p>
-						<p th:text="${task.description}"></p>
+						<div th:replace="fragments/tasks :: taskListItem(${activeProject}, ${task}, 'is-success')">
+						</div>
 					</li>
 				</ul>
 				
 				<div class="mt-5">
-					<div id="add-task-link">
-						<a href="#">
-							<span class="icon">
-								<em class="fas fa-plus"></em>
-							</span>
-							<span
-								th:text="#{add.task}">
-							</span>
-						</a>
-					</div>
-					<div class="box" id="new-task-form-container" style="display:none;">
-						<form th:action="@{/project/{id}/task/new (id=${activeProject.id})}" 
+					<a href="#" class="button is-info is-outlined is-rounded" id="add-task-link">
+						<span class="icon">
+							<em class="fas fa-plus"></em>
+						</span>
+						<span
+							th:text="#{add.task}">
+						</span>
+					</a>
+					<!-- NEW TASK FORM -->
+					<div class="box is-not-displayed" id="new-task-form-container">
+						<form th:action="@{/web/project/{id}/task/new (id=${activeProject.id})}" 
 								name="new-task-form" method="post"
 								th:object="${newTaskWebDto}">
 							<div class="field" th:insert="fragments/commons::inputWithField('name', 'Name', 'text')"></div>
 							<div class="field">
-								<textarea class="textarea" type="text" placeholder="Description" name="description" ></textarea>
+								<textarea class="textarea" placeholder="Description" name="description" ></textarea>
 								<label class="help is-danger"	th:if="${#fields.hasErrors('description')}" th:id="'input-helper-description'" th:errors="*{'description'}"></label>
 							</div>
 							<div class="control">
-								<button class="button is-success is-rounded" type="submit" name="submit-button" th:text="#{add}"></button>
-								<button class="button is-rounded" type="button" id="close-new-task-form">Placeholder</button>
+								<button th:replace="fragments/commons :: genericFormSubmitButton(#{add})"></button>
+								<button th:replace="fragments/commons :: genericFormCancelButton('close-new-task-form')"></button>
 							</div>
 						</form>
 					</div>
 				</div>
+
+				<!-- COMPLETED TASKS LIST -->
+				<div class="mt-5 p-2 has-background-warning is-not-displayed" id="completed-tasks">
+					<ul id="completed-tasks-list">
+						<li class="box" th:each="task : ${completedTasks}">
+							<div th:replace="fragments/tasks :: taskListItem(${activeProject}, ${task}, 'is-danger')">
+							</div>
+						</li>
+					</ul>
+				</div>
+				
+				<!-- DELETE PROJECT CONFIRM -->
+				<div th:replace="fragments/commons :: genericConfirmationBox(#{delete.project}, 'activeProject-delete'
+								, '/web/project/'+${activeProject.id}
+								, 'delete', #{sure.you.want.to.delete.project}+' '+${activeProject.name}+'?')">
+				</div>
+				
+				<!-- DELETE TASK CONFIRM -->
+				<div th:replace="fragments/commons :: genericConfirmationBox(#{delete.task}, 'task-delete'
+								, '#', 'delete', #{sure.you.want.to.delete.task}+'?')">
+				</div>
+				
+				
 			</div>
 		</div>
 	</div>
+	
 	
 	<script type="text/javascript">
 		$("#add-task-link, #close-new-task-form").click(function(){
 			$("#add-task-link").toggle();
 			$("#new-task-form-container").toggle();
 		})
+		
+		$("#toggle-completed-tasks").click(function(){
+			$("#completed-tasks").toggle("slow", function(){
+				$("#show-task-label").toggle();
+				$("#hide-task-label").toggle();
+				localStorage.setItem("hiddenCompletedTasks", $("#completed-tasks").css("display") == "none");
+			});
+		})
+		
+		$("#completed-tasks").ready(function(){
+			if (localStorage.getItem("hiddenCompletedTasks") == "false"){
+				$("#completed-tasks").show();
+				$("#show-task-label").hide();
+				$("#hide-task-label").show();
+			}
+		})
+		
+		$("#activeProject-edit-trigger, #activeProject-edit-cancel").click(function(){
+			$("#activeProject-edit-form").toggle();
+			$("#activeProject-title").toggle();
+		})
+		
+		$("#activeProject-delete-trigger").click(function() {
+			$("#activeProject-delete-card").toggle();
+		})
+		
 	</script>
 
 </body>

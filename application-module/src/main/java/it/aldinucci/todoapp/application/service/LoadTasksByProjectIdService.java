@@ -24,10 +24,10 @@ public class LoadTasksByProjectIdService implements LoadTasksByProjectUsePort{
 		this.loadTasks = loadTasks;
 	}
 
-
 	@Override
 	public List<Task> load(ProjectIdDTO projectId) throws AppProjectNotFoundException {
-		return loadTasks.load(projectId.getProjectId());
+		return loadTasks.load(projectId.projectId()).stream().sorted(
+				(t1,t2) -> t1.getOrderInProject() - t2.getOrderInProject()).toList();
 	}
-
+	
 }

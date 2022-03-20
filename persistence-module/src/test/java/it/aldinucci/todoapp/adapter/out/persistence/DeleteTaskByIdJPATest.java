@@ -1,7 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
-import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -28,15 +27,7 @@ class DeleteTaskByIdJPATest {
 	private TestEntityManager entityManager;
 	
 	@Test
-	void test_deleteTaskWhenNotPresent_shouldThrow() {
-		assertThatThrownBy(() -> deleteTask.delete(5L))
-			.isInstanceOf(AppTaskNotFoundException.class)
-			.hasMessage("Could not find Task with id: 5");
-	}
-	
-	
-	@Test
-	void test_deleteTask_successful() throws AppTaskNotFoundException {
+	void test_deleteTask_successful() {
 		UserJPA user = new UserJPA("email", "username", "password");
 		entityManager.persist(user);
 		ProjectJPA project = new ProjectJPA("project name", user);
@@ -53,6 +44,13 @@ class DeleteTaskByIdJPATest {
 		
 		assertThat(entityManager.find(TaskJPA.class, task1.getId())).isNull();
 		assertThat(project.getTasks()).containsExactly(task2);
+	}
+	
+	@Test
+	void test_deleteTask_whenTaskMissing() {
+		
+		assertThatCode(() -> deleteTask.delete(1))
+			.doesNotThrowAnyException();
 	}
 
 }

@@ -3,13 +3,8 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +15,7 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/projects")
 public class LoadProjectsByUserRestController {
 
 	private LoadProjectsByUserUsePort loadProjects;
@@ -30,13 +25,9 @@ public class LoadProjectsByUserRestController {
 		this.loadProjects = loadProjects;
 	}
 
-	@GetMapping("/projects")
+	@GetMapping
 	public List<Project> loadProjectsEndPoint(Authentication authentication) throws AppUserNotFoundException {
 		return loadProjects.load(new UserIdDTO(authentication.getName()));
 	}
 
-	@ExceptionHandler(AppUserNotFoundException.class)
-	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-	}
 }

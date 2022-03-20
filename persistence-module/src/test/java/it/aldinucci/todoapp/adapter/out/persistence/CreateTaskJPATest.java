@@ -42,12 +42,10 @@ class CreateTaskJPATest {
 	
 	@Test
 	void test_createNewTask_successful() throws AppProjectNotFoundException {
-		UserJPA userJPA = new UserJPA(null, TEST_EMAIL, "username", "password");
-		entityManager.persist(userJPA);
-		ProjectJPA projectJPA = new ProjectJPA("project name", userJPA);
-		userJPA.getProjects().add(projectJPA);
-		entityManager.persist(projectJPA);
-		NewTaskData newTask = new NewTaskData("task name", "task description", projectJPA.getId());
+		ProjectJPA projectJPA = getFixtureProject();
+		entityManager.flush();
+		
+		NewTaskData newTask = new NewTaskData("task name", "task description", false, projectJPA.getId(), 3);
 		Task task = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task);
 		
@@ -59,12 +57,24 @@ class CreateTaskJPATest {
 		verify(mapper).map(createdTask);
 		assertThat(returnedTask).isSameAs(task);
 		assertThat(createdTask.getProject()).usingRecursiveComparison().isEqualTo(projectJPA);
+		assertThat(createdTask.getOrderInProject()).isEqualTo(3);
+		assertThat(createdTask.getDescription()).matches("task description");
+		assertThat(createdTask.getName()).matches("task name");
 		assertThat(projectJPA.getTasks()).containsExactly(createdTask);
+	}
+
+	private ProjectJPA getFixtureProject() {
+		UserJPA userJPA = new UserJPA(null, TEST_EMAIL, "username", "password");
+		entityManager.persist(userJPA);
+		ProjectJPA projectJPA = new ProjectJPA("project name", userJPA);
+		userJPA.getProjects().add(projectJPA);
+		entityManager.persist(projectJPA);
+		return projectJPA;
 	}
 	
 	@Test
 	void test_createNewTask_whenProjectNotPresent() {
-		NewTaskData newTask = new NewTaskData("task name", "task description", 1L);
+		NewTaskData newTask = new NewTaskData("task name", "task description", false, 1L, 5);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
 			.isInstanceOf(AppProjectNotFoundException.class)

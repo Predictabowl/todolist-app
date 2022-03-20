@@ -1,0 +1,20 @@
+# docker-compose.yml
+# This composer is meant to be run for integration tests launched from Eclipse
+# Do NOT run it with Maven full build test
+version: "3.9"
+
+services:
+   database:
+      image: postgres:14.2
+      environment:
+         - POSTGRES_USER=testUser
+         - POSTGRES_PASSWORD=password
+         - POSTGRES_DB=todoListAppTestDb
+      volumes:
+         - database-data:/var/lib/postresql/data/
+      ports:
+         - "5432:5432"
+         
+volumes:
+   database-data:
+

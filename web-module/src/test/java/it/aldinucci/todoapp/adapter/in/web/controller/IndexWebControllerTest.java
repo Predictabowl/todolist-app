@@ -31,7 +31,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.util.NestedServletException;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
@@ -39,10 +38,13 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 
 @WebMvcTest(controllers = { IndexWebController.class })
 @ExtendWith(SpringExtension.class)
 class IndexWebControllerTest {
+
+	private static final String BASE_URL = "/web";
 
 	private static final String FIXTURE_EMAIL = "email@test.it";
 
@@ -77,7 +79,7 @@ class IndexWebControllerTest {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(Collections.emptyList());
 		when(mapper.map(isA(User.class))).thenReturn(userWebDto);
 
-		mvc.perform(get("/"))
+		mvc.perform(get(BASE_URL))
 			.andExpect(status().isOk())
 			.andExpect(view().name("index"))
 			.andExpect(model().attribute("user", userWebDto))
@@ -102,7 +104,7 @@ class IndexWebControllerTest {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
 		when(mapper.map(isA(User.class))).thenReturn(userWebDto);
 
-		mvc.perform(get("/"))
+		mvc.perform(get(BASE_URL))
 			.andExpect(status().isOk())
 			.andExpect(view().name("index"))
 			.andExpect(model().attribute("user", userWebDto))
@@ -122,7 +124,7 @@ class IndexWebControllerTest {
 		when(loadUser.load(isA(UserIdDTO.class))).thenReturn(Optional.empty());
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(Collections.emptyList());
 		
-		MockHttpServletRequestBuilder requestBuilder = get("/");
+		MockHttpServletRequestBuilder requestBuilder = get(BASE_URL);
 		
 		assertThatThrownBy(() -> mvc.perform(requestBuilder))
 			.isInstanceOf(NestedServletException.class)
@@ -137,11 +139,19 @@ class IndexWebControllerTest {
 	
 	@Test
 	void test_indexController_withoutAuthorization() throws Exception {
-		mvc.perform(get("/"))
+		mvc.perform(get(BASE_URL))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrlPattern("**/login"));
 		
 		verifyNoInteractions(sut);
+	}
+	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_indexController_shouldRedirecToHomePage() throws Exception {
+		mvc.perform(get("/"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:"+BASE_URL));
 	}
 
 }

@@ -1,11 +1,12 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,18 +47,17 @@ class LoadUserByProjectIdJPATest {
 		User user = new User();
 		when(mapper.map(isA(UserJPA.class))).thenReturn(user);
 		
-		User loadedUser = loadUser.load(projectJpa.getId());
+		Optional<User> loadedUser = loadUser.load(projectJpa.getId());
 		
 		verify(mapper).map(userJpa);
-		assertThat(loadedUser).isSameAs(user);
+		assertThat(loadedUser).containsSame(user);
 	}
 	
 	@Test
 	void test_loadUser_whenProjectNotPresent() {
-		assertThatThrownBy(() -> loadUser.load(3))
-			.isInstanceOf(AppProjectNotFoundException.class)
-			.hasMessage("Project not found with id: 3");
-		
+		Optional<User> loadedUser = loadUser.load(3);
+
+		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);
 	}
 

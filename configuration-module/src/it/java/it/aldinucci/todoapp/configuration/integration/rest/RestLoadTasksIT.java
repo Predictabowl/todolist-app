@@ -90,7 +90,7 @@ class RestLoadTasksIT {
 				new Task(task1.getId(), "task 1", "descr 1", false),
 				new Task(task2.getId(), "task 2", "descr 2", true));
 	}
-
+	
 	private void setSessionData() {
 		UserJPA user = new UserJPA(FIXTURE_EMAIL, "utente", encoder.encode(FIXTURE_PASSWORD));
 		user.setEnabled(true);

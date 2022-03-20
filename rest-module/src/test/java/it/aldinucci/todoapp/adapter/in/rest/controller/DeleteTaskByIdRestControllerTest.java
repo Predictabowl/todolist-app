@@ -1,11 +1,13 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import static org.mockito.ArgumentMatchers.isA;
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -21,15 +23,18 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.DeleteTaskByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
-import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
+import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {DeleteTaskByIdRestController.class})
 @ExtendWith(SpringExtension.class)
-@Import(AppRestSecurityConfig.class)
+@Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class DeleteTaskByIdRestControllerTest {
 
 	@Autowired
@@ -56,23 +61,6 @@ class DeleteTaskByIdRestControllerTest {
 		inOrder.verify(authorize).check("user@email.org", model);
 		inOrder.verify(deleteTask).delete(model);
 	}
-
-	@Test
-	@WithMockUser("user")
-	void test_deleteTask_whenNotPresent_shouldReturnNotFound() throws Exception {
-		AppTaskNotFoundException exception = new AppTaskNotFoundException("no task");
-		doThrow(exception).when(deleteTask).delete(isA(TaskIdDTO.class));
-		
-		mvc.perform(delete("/api/task/5")
-				.with(csrf())
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound());
-		
-		InOrder inOrder = Mockito.inOrder(authorize,deleteTask);
-		TaskIdDTO model = new TaskIdDTO(5L);
-		inOrder.verify(authorize).check("user", model);
-		inOrder.verify(deleteTask).delete(model);
-	}
 	
 	@Test
 	void test_deleteTask_withoutAuthentication_shouldReturnUnathorized() throws Exception {
@@ -89,11 +77,26 @@ class DeleteTaskByIdRestControllerTest {
 	@Test
 	@WithMockUser
 	void test_deleteTask_withoutCsrfToken_shouldReturnForbidden() throws Exception {
-		mvc.perform(post("/api/task/2")
+		mvc.perform(delete("/api/task/2")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isForbidden());
 		
 		verifyNoInteractions(authorize);
+		verifyNoInteractions(deleteTask);
+	}
+	
+	@Test
+	@WithMockUser("mock@user.it")
+	void test_deleteTask_whenTaskIsMissing_shouldReturnNotFound() throws JsonProcessingException, Exception {
+		doThrow(new AppTaskNotFoundException("test message")).when(authorize).check(any(), any());
+		
+		mvc.perform(delete("/api/task/3")
+				.with(csrf())
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$", is("test message")));
+		
+		verify(authorize).check("mock@user.it", new TaskIdDTO(3));
 		verifyNoInteractions(deleteTask);
 	}
 }

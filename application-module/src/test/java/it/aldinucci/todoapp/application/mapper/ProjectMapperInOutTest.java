@@ -17,8 +17,8 @@ class ProjectMapperInOutTest {
 		NewProjectDTOIn dtoIn = new NewProjectDTOIn("name", "user@email.it");
 		NewProjectData dtoOut = mapper.map(dtoIn);
 		
-		assertThat(dtoOut.getName()).isEqualTo(dtoIn.getName());
-		assertThat(dtoOut.getUserEmail()).isEqualTo(dtoIn.getUserEmail());
+		assertThat(dtoOut.name()).isEqualTo(dtoIn.getName());
+		assertThat(dtoOut.userEmail()).isEqualTo(dtoIn.getUserEmail());
 	}
 
 }

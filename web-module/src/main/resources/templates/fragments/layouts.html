@@ -33,7 +33,7 @@
 
 	<!-- App base layout -->
 	<div th:fragment="app-layout(username, content, projects)">
-		<div th:replace="fragments/commons :: BNavbar(${username})"></div>
+		<div th:replace="fragments/navbar :: BNavbar(${username})"></div>
 		<div class="columns main-window">
 			<section
 				class="column section auto-scroll has-background-grey-lighter is-one-fifth" id="sidebar">
@@ -50,10 +50,10 @@
 								<a class="has-text-warning has-background-dark" th:text="#{no.projects}"></a>
 							</div>
 							<div th:unless="${projects.empty}">
-								<ul th:each="project : ${projects}">
-									<li>
+								<ul>
+									<li th:each="project : ${projects}">
 										<a class="has-text-link" th:text="${project.name}"
-											th:href="@{/project/{id}/tasks (id=${project.id})}">
+											th:href="@{/web/project/{id}/tasks (id=${project.id})}">
 										</a>
 									</li>
 								</ul>
@@ -88,7 +88,7 @@
 			});
 	
 			$("#sidebar-button").click(function() {
-				$("#sidebar").toggle("slide", function(){
+				$("#sidebar").toggle("slow", function(){
 					localStorage.setItem("hiddenSideBar", $("#sidebar").css("display") == "none");
 				});
 			});

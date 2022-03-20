@@ -22,15 +22,16 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
-import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
+import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
 
 @WebMvcTest(controllers = {LoadProjectsByUserRestController.class})
 @ExtendWith(SpringExtension.class)
-@Import(AppRestSecurityConfig.class)
+@Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class LoadProjectsByUserRestControllerTest {
 	
 	@Autowired
@@ -61,13 +62,13 @@ class LoadProjectsByUserRestControllerTest {
 
 	@Test
 	@WithMockUser("test@email")
-	void test_loadProjects_whenUserNotFound_shouldReturnBadRequest() throws Exception {
+	void test_loadProjects_whenUserNotFound_shouldReturnBotFound() throws Exception {
 		when(loadProjects.load(isA(UserIdDTO.class)))
 			.thenThrow(new AppUserNotFoundException("test user not found"));
 		
 		mvc.perform(get("/api/projects")
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isBadRequest())
+			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test user not found")));
 		
 		verify(loadProjects).load(new UserIdDTO("test@email"));

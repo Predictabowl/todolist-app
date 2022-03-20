@@ -1,6 +1,8 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -11,21 +13,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.NewTaskWebDto;
-import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
+import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
+import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @Controller
-@RequestMapping("/project/{projectId}")
+@RequestMapping("/web/project/{projectId}")
 public class ProjectWebController {
 	
 	private LoadTasksByProjectUsePort loadTasks;
@@ -50,17 +54,24 @@ public class ProjectWebController {
 	@GetMapping("/tasks")
 	public String getTasks(Authentication authentication, Model model, @Valid ProjectIdDTO projectId,
 				NewTaskWebDto newTaskWebDto) {
-		User user = loadUser.load(projectId);
 		
+		User user = loadUser.load(projectId).orElseThrow(() -> 
+				new AppUserNotFoundException("Critical Data Integrity error while searching the User of project with id: "
+						+projectId.projectId()));
 		authorize.check(authentication.getName(), user);
+		
 		model.addAttribute("user", userMapper.map(user));
 		List<Project> projects = loadProjects.load(new UserIdDTO(user.getEmail()));
 		model.addAttribute("projects", projects);
 		model.addAttribute("activeProject",	projects.stream()
-				.filter(p -> p.getId().equals(projectId.getProjectId())).findFirst()
+				.filter(p -> p.getId().equals(projectId.projectId())).findFirst()
 					.orElseThrow(() -> new AppProjectNotFoundException(
-							"Critical Data Integrity error while searching project with id: "+projectId.getProjectId())));
-		model.addAttribute("tasks",loadTasks.load(projectId));
+							"Critical Data Integrity error while searching project with id: "+projectId.projectId())));
+		
+		Map<Boolean, List<Task>> tasks = loadTasks.load(projectId).stream()
+				.collect(Collectors.partitioningBy(Task::isCompleted));
+		model.addAttribute("tasks",tasks.get(false));
+		model.addAttribute("completedTasks",tasks.get(true));
 		
 		return "index";
 	}

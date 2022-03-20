@@ -1,10 +1,11 @@
 package it.aldinucci.todoapp.application.port.in;
 
+import java.util.Optional;
+
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 public interface LoadUserByProjectIdUsePort {
 
-	public User load(ProjectIdDTO projectId) throws AppProjectNotFoundException;
+	public Optional<User> load(ProjectIdDTO projectId);
 }

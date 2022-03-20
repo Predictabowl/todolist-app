@@ -104,7 +104,7 @@ class RestCreateNewTaskIT {
 	}
 	
 	@Test
-	void test_createNewTask_whenProjectNotPresent() {
+	void test_createNewTask_whenProjectNotPresent_shouldReturnNotFound() {
 		
 		given()
 			.auth().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
@@ -117,7 +117,7 @@ class RestCreateNewTaskIT {
 		.when()
 			.post(FIXTURE_URI)
 		.then()
-			.statusCode(400);
+			.statusCode(404);
 		
 		assertThat(taskRepo.findAll()).isEmpty();
 	}

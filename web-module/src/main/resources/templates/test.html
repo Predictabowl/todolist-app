@@ -24,37 +24,7 @@
 					</div>
 				</ul>
 			</aside>
-							<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
+				
 		</section>
 		<section class="section column auto-scroll has-background-white-ter" id="main-window">
 			<div class="container">
@@ -75,37 +45,17 @@
 						</tbody>
 					</table>
 				</div>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
-				<p>test</p>
+			</div>
+			<div class="mt-6">
+				<form th:action="@{/user/register/test}" method="post">
+					<div class="field">
+						<textarea class="textarea" rows="" cols="" name="posted" th:text="${posted}"></textarea>
+					</div>
+					<button class="button" type="submit">Press</button>
+				</form>
+			</div>
+			<div th:if="${posted != null}">
+				<p th:utext="${#strings.replace(#strings.escapeXml(posted),'&#10','&lt;br&gt;')}"></p>
 			</div>
 		</section>
 	</div>

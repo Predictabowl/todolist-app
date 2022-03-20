@@ -26,17 +26,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.aldinucci.todoapp.adapter.in.rest.dto.NewProjectRestDto;
+import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
-import it.aldinucci.todoapp.webcommons.config.security.AppRestSecurityConfig;
+import it.aldinucci.todoapp.webcommons.dto.NewProjectWebDto;
+import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {CreateProjectRestController.class})
-@Import({AppRestSecurityConfig.class})
+@Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class CreateProjectRestControllerTest {
 
 	private static final String FIXTURE_URL = "/api/project/create";
@@ -59,7 +60,7 @@ class CreateProjectRestControllerTest {
 	@WithMockUser("user@email.it")
 	void test_createProject_successful() throws JsonProcessingException, Exception {
 		Project project = new Project(2L, "test project");
-		NewProjectRestDto restDto = new NewProjectRestDto("another name");
+		NewProjectWebDto restDto = new NewProjectWebDto("another name");
 		when(createPort.create(isA(NewProjectDTOIn.class)))
 			.thenReturn(project);
 		
@@ -84,7 +85,7 @@ class CreateProjectRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewProjectRestDto(""))))
+				.content(objectMapper.writeValueAsString(new NewProjectWebDto(""))))
 			.andExpect(status().isBadRequest());
 		
 		verifyNoInteractions(createPort);
@@ -92,7 +93,7 @@ class CreateProjectRestControllerTest {
 	
 	@Test
 	@WithMockUser("test@email.it")
-	void test_createProject_whenUserNotFound_shouldReturnBadRequest() throws JsonProcessingException, Exception {
+	void test_createProject_whenUserNotFound_shouldReturnNotFound() throws JsonProcessingException, Exception {
 		when(createPort.create(isA(NewProjectDTOIn.class)))
 			.thenThrow(new AppUserNotFoundException("test message"));
 		
@@ -100,8 +101,8 @@ class CreateProjectRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewProjectRestDto("test name"))))
-			.andExpect(status().isBadRequest())
+				.content(objectMapper.writeValueAsString(new NewProjectWebDto("test name"))))
+			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$",is("test message")));
 		
 		verify(createPort).create(new NewProjectDTOIn("test name", "test@email.it"));
@@ -113,7 +114,7 @@ class CreateProjectRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewProjectRestDto("test name"))))
+				.content(objectMapper.writeValueAsString(new NewProjectWebDto("test name"))))
 			.andExpect(status().isUnauthorized());
 		
 		verifyNoInteractions(createPort);

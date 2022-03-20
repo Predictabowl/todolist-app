@@ -15,9 +15,9 @@ public class VerificationLinkDTO extends AutoValidatingInputModel<VerificationLi
 	@NotNull
 	@URL
 	@NotEmpty
-	private String link;
+	private final String link;
 	
-	private AppEmail email;
+	private final AppEmail email;
 
 	public VerificationLinkDTO(String link, String email) {
 		this.link = link;

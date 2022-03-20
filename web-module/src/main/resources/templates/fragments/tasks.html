@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+		
+	<!-- TASK LIST ITEM -->
+	<div class="is-flex is-justify-content-space-between" th:fragment="taskListItem (activeProject, task, colorClass)">
+		<div>
+				<!-- Task description box -->
+				<div th:id="'task-'+${task.id}+'-description-box'">
+					<div class="is-flex" >
+						<div class="is-align-self-center">
+							<form
+								th:action="@{'/web/project/'+${activeProject.id}+'/task/'+${task.id}+'/toggle/completed'}"
+								th:name="'complete-task-'+${task.id}+'-form'" method="post">
+								<button
+									th:class="'button is-small is-outlined is-circular '+${colorClass}"
+									type="submit" name="submit-button">
+									<span class="icon">
+										<em class="fas fa-check"></em>
+									</span>
+								</button>
+							</form>
+						</div>
+						<div class="ml-4">
+							<span class="title is-5"
+								th:text="${task.name}">
+							</span>
+							<p
+								th:utext="${#strings.replace(#strings.escapeXml(task.description),'&#10','&lt;br&gt;')}">
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Edit Task form -->
+			<div class="is-not-displayed" th:id="'task-'+${task.id}+'-edit-box'">
+				<form th:action="@{/web/project/{projectId}/task/{taskId} (projectId = ${activeProject.id}, taskId = ${task.id})}" 
+						th:name="'task-'+${task.id}+'-edit-form'" th:method="put">
+					<input class="input field is-rounded" name="name" th:value="${task.name}" />
+					<textarea class="textarea field is-small" name="description" th:text="${task.description}"></textarea>
+					<div class="control">
+						<button th:replace="fragments/commons :: genericFormSubmitButton (#{confirm})"></button>
+						<button th:replace="fragments/commons :: genericFormCancelButton ('task-'+${task.id}+'-edit-cancel')"></button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- Task dropdown menu -->
+		<div class="dropdown is-hoverable is-right is-align-self-flex-start">
+			<div class="dropdown-trigger"
+				th:id="'task-'+${task.id}+'-menu-trigger'">
+				<span
+					class="button is-circular is-small is-light">
+					<em class="fas fa-ellipsis"></em>
+				</span>
+			</div>
+			<div class="dropdown-menu">
+				<div class="dropdown-content">
+					<a class="dropdown-item" th:id="'task-'+${task.id}+'-edit-trigger'" th:text="#{edit.task}">
+					</a>
+					<hr class="dropdown-divider">
+					<a class="dropdown-item" th:id="'task-'+${task.id}+'-delete-trigger'"  th:text="#{delete.task}">
+					</a>
+				</div>
+			</div>
+		</div>
+		
+		<script th:inline="javascript" type="text/javascript">
+			$(/*[[${'#task-'+task.id+'-delete-trigger'}]]*/
+					).click(function(){
+				$("#task-delete-form").attr("action",/*[[${'/web/project/'+activeProject.id+'/task/'+task.id}]]*/
+						);
+				$("#task-delete-card").toggle();
+			})
+			
+			$(/*[[${'#task-'+task.id+'-edit-trigger, #task-'+task.id+'-edit-cancel'}]]*/
+					).click(function(){
+				$(/*[[${'#task-'+task.id+'-edit-box'}]]*/
+						).toggle();
+				$(/*[[${'#task-'+task.id+'-description-box'}]]*/
+						).toggle();
+			})
+		</script>
+	</div>
+
+</body>
+</html>

@@ -9,13 +9,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.NewProjectWebDto;
 import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
 import it.aldinucci.todoapp.domain.Project;
+import it.aldinucci.todoapp.webcommons.dto.NewProjectWebDto;
 
 @Controller
-@RequestMapping("/project/new")
+@RequestMapping("web/project/new")
 public class CreateProjectWebController {
 
 	private CreateProjectUsePort createProject;
@@ -31,10 +31,10 @@ public class CreateProjectWebController {
 	public String createProject(Authentication authentication,@Valid NewProjectWebDto newProjectWebDto,
 			BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
-			return "redirect:/";
+			return "redirect:/web";
 		
 		Project project = createProject.create(
-				new NewProjectDTOIn(newProjectWebDto.getName(),authentication.getName()));
-		return "redirect:/project/"+project.getId()+"/tasks";
+				new NewProjectDTOIn(newProjectWebDto.name(),authentication.getName()));
+		return "redirect:/web/project/"+project.getId()+"/tasks";
 	}
 }

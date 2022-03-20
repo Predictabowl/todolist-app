@@ -34,14 +34,14 @@ public class CreateVerificationTokenJPA implements CreateUserVerificationTokenDr
 
 	@Override
 	public VerificationToken create(VerificationTokenData token) throws AppUserNotFoundException, AppUserAlreadyHaveVerificationTokenException {
-		UserJPA user = userRepo.findByEmail(token.getUserEmail()).orElseThrow(() ->
-				new AppUserNotFoundException("User not found with email: "+token.getUserEmail()));
+		UserJPA user = userRepo.findByEmail(token.userEmail()).orElseThrow(() ->
+				new AppUserNotFoundException("User not found with email: "+token.userEmail()));
 		
 		Optional<VerificationTokenJPA> optional = tokenRepo.findByUser(user);
 		if (optional.isPresent())
 			throw new AppUserAlreadyHaveVerificationTokenException();
 		
-		VerificationTokenJPA tokenJpa = tokenRepo.save(new VerificationTokenJPA(token.getToken(), user, token.getExpiryDate()));
+		VerificationTokenJPA tokenJpa = tokenRepo.save(new VerificationTokenJPA(token.token(), user, token.expiryDate()));
 		return mapper.map(tokenJpa);
 	}
 

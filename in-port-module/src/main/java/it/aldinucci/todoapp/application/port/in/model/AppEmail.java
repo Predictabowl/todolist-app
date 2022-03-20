@@ -21,7 +21,7 @@ public class AppEmail extends AutoValidatingInputModel<AppEmail>{
 		this.email = this.email.toLowerCase();
 	}
 
-	public final String getEmail() {
+	public String getEmail() {
 		return email;
 	}
 

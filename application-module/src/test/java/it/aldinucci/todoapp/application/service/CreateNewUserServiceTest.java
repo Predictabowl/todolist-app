@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -29,15 +28,11 @@ import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
-import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 class CreateNewUserServiceTest {
 
 	private static final String FIXTURE_EMAIL = "test@email.it";
 
-	@Mock
-	private AppGenericMapper<NewUserDTOIn, NewUserData> mapper;
-	
 	@Mock
 	private CreateUserDriverPort createUser;
 	
@@ -61,25 +56,21 @@ class CreateNewUserServiceTest {
 	@Test
 	void test_createUserSuccess_shouldCallPort() throws AppEmailAlreadyRegisteredException {
 		NewUserDTOIn newUserIn = new NewUserDTOIn("name", FIXTURE_EMAIL, "password");
-		NewUserData newUserOut = spy(new NewUserData("test", "user@email.it", "pass"));
 		User createdUser = new User("email", "user", "pass");
 		VerificationToken token = new VerificationToken();
 		when(createUser.create(isA(NewUserData.class))).thenReturn(createdUser);
-		when(mapper.map(newUserIn)).thenReturn(newUserOut);
 		when(encoder.encode(isA(CharSequence.class))).thenReturn("encoded password");
 		when(loadUser.load(isA(String.class))).thenReturn(Optional.empty());
 		when(createToken.create(anyString())).thenReturn(token);
 		
 		NewUserDtoOut newUserDtoOut = service.create(newUserIn);
 		
-		assertThat(newUserDtoOut.getUser()).isSameAs(createdUser);
-		assertThat(newUserDtoOut.getToken()).isSameAs(token);
-		InOrder inOrder = Mockito.inOrder(createUser,mapper,encoder,newUserOut,loadUser, createToken);
+		assertThat(newUserDtoOut.user()).isSameAs(createdUser);
+		assertThat(newUserDtoOut.token()).isSameAs(token);
+		InOrder inOrder = Mockito.inOrder(createUser,encoder, loadUser, createToken);
 		inOrder.verify(loadUser).load(FIXTURE_EMAIL);
-		inOrder.verify(mapper).map(newUserIn);
-		inOrder.verify(encoder).encode("pass");
-		inOrder.verify(newUserOut).setPassword("encoded password");
-		inOrder.verify(createUser).create(newUserOut);
+		inOrder.verify(encoder).encode("password");
+		inOrder.verify(createUser).create(new NewUserData("name", FIXTURE_EMAIL, "encoded password"));
 		inOrder.verify(createToken).create(FIXTURE_EMAIL);
 	}
 	
@@ -94,7 +85,6 @@ class CreateNewUserServiceTest {
 			.hasMessage("There's already an user registered with the email: test@email.it");
 		
 		verify(loadUser).load(FIXTURE_EMAIL);
-		verifyNoInteractions(mapper);
 		verifyNoInteractions(encoder);
 		verifyNoInteractions(createUser);
 		verifyNoInteractions(createToken);

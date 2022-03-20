@@ -1,14 +1,9 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,8 +32,4 @@ public class DeleteTaskByIdRestController {
 		deleteTask.delete(taskId);
 	}
 
-	@ExceptionHandler(AppTaskNotFoundException.class)
-	public ResponseEntity<String> notFoundHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	}
 }

@@ -1,15 +1,11 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,10 +33,5 @@ public class DeleteProjectByIdRestController {
 			throws AppProjectNotFoundException {
 		authorize.check(authentication.getName(), projectId);
 		deleteProject.delete(projectId);
-	}
-
-	@ExceptionHandler(AppProjectNotFoundException.class)
-	public ResponseEntity<String> notFoundHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }

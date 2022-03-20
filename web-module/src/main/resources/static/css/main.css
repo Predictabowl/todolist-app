@@ -17,5 +17,13 @@
 	overflow: auto;
 }
 
+.is-circular{
+	border-radius: 50% !important;
+}
+
+.is-not-displayed{
+	display: none;
+}
+
 
 

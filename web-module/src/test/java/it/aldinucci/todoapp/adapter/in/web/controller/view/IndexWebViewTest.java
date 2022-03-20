@@ -29,26 +29,31 @@ import org.springframework.validation.BindingResult;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.CreateProjectWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.IndexWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
-import it.aldinucci.todoapp.adapter.in.web.dto.NewProjectWebDto;
-import it.aldinucci.todoapp.adapter.in.web.dto.UserWebDto;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.webcommons.dto.NewProjectWebDto;
+import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {IndexWebController.class})
 @PropertySource("classpath:messages.properties")
 class IndexWebViewTest {
 	
+	private static final String BASE_URL = "/web";
+
 	private static final String FIXTURE_EMAIL = "test@email.it";
 	
 	@Autowired
@@ -92,9 +97,9 @@ class IndexWebViewTest {
 	void test_indexView_when_thereAreNoProjects() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(Collections.emptyList());
 		
-		HtmlPage page = webClient.getPage("/");
+		HtmlPage page = webClient.getPage(BASE_URL);
 				
-		assertThat(page.getBody().getTextContent())
+		assertThat(page.getHtmlElementById("sidebar").getTextContent())
 			.contains(env.getProperty("no.projects"));
 	}
 	
@@ -103,14 +108,22 @@ class IndexWebViewTest {
 	void test_indexView_when_thereAreProjects() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
 		
-		HtmlPage page = webClient.getPage("/");
+		HtmlPage page = webClient.getPage(BASE_URL);
+		HtmlElement sidebar = page.getHtmlElementById("sidebar");
+		assertThat(sidebar.isDisplayed()).isTrue();
 		
-		assertThat(page.getAnchorByHref("/project/2/tasks").getTextContent())
-			.matches("test project");
-		assertThat(page.getAnchorByHref("/project/5/tasks").getTextContent())
-			.matches("second project");
-		assertThat(page.getAnchorByHref("/project/7/tasks").getTextContent())
-			.matches("project test");
+		HtmlAnchor project1 = page.getAnchorByHref("/web/project/2/tasks");
+		assertThat(sidebar.isAncestorOf(project1)).isTrue();
+		assertThat(project1.getTextContent()).matches("test project");
+		
+		HtmlAnchor project2 = page.getAnchorByHref("/web/project/5/tasks");
+		assertThat(sidebar.isAncestorOf(project2)).isTrue();
+		assertThat(project2.getTextContent()).matches("second project");
+		
+		HtmlAnchor project3 = page.getAnchorByHref("/web/project/7/tasks");
+		assertThat(sidebar.isAncestorOf(project3)).isTrue();
+		assertThat(project3.getTextContent()).matches("project test");
+		
 	}
 	
 	@Test
@@ -119,7 +132,7 @@ class IndexWebViewTest {
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
 		when(createProjectWebController.createProject(any(), any(), any())).thenReturn("test-view-page");
 		
-		HtmlPage page = webClient.getPage("/");
+		HtmlPage page = webClient.getPage(BASE_URL);
 		page.getHtmlElementById("open-new-project-card").click();
 		
 		HtmlForm form = page.getFormByName("new-project-form");
@@ -137,16 +150,43 @@ class IndexWebViewTest {
 	void test_logoutForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loginWebController.login()).thenReturn("test-view-page");
 		
-		HtmlPage page = webClient.getPage("/");
+		HtmlPage page = webClient.getPage(BASE_URL);
 		
 		HtmlForm logoutForm = page.getFormByName("logout-form");
 		assertThat(logoutForm.getActionAttribute()).matches("/logout");
 		assertThat(logoutForm.getMethodAttribute()).matches("post");
 		
+		DomElement logoutLink = page.getElementById("logout-link");
+		assertThat(logoutLink.isDisplayed()).isFalse();
 		page.getHtmlElementById("user-menu").mouseOver();
-		page.getElementById("logout-link").click();
+		logoutLink.click();
 		
 		verify(loginWebController).login();
 	}
+	
+	
+	/*
+	 * This test doesn't work with jquery toggle("slow")
+	 * it work with "fast" and with instant.
+	 * I assume it's because html browser don't support it, 
+	 * because no matter the waiting delay it still doesn't work 
+	 */
+//	@Test
+//	@WithMockUser(FIXTURE_EMAIL)
+//	void test_sidebar_visibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {
+//		HtmlPage page = webClient.getPage(BASE_URL);
+//		
+//		assertThat(page.getHtmlElementById("sidebar").isDisplayed()).isTrue();
+//		
+//		page.getHtmlElementById("sidebar-button").click();
+//
+//		await().atMost(3, TimeUnit.SECONDS).untilAsserted(() ->
+//				assertThat(page.getHtmlElementById("sidebar").isDisplayed()).isFalse());
+//		
+//		page.getHtmlElementById("sidebar-button").click();
+//
+//		await().atMost(3, TimeUnit.SECONDS).untilAsserted(() ->
+//				assertThat(page.getHtmlElementById("sidebar").isDisplayed()).isTrue());
+//	}
 
 }

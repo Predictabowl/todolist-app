@@ -40,19 +40,19 @@ class CreateProjectWebControllerTest {
 		when(createProject.create(isA(NewProjectDTOIn.class))).thenReturn(new Project(4L, "Project name"));
 		NewProjectDTOIn newProjectDTOIn = new NewProjectDTOIn("new project", "user@email.it");
 
-		mvc.perform(post("/project/new")
+		mvc.perform(post("/web/project/new")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("name", "new project"))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/project/4/tasks"));
+			.andExpect(view().name("redirect:/web/project/4/tasks"));
 		
 		verify(createProject).create(newProjectDTOIn);
 	}
 	
 	@Test
 	void test_createProject_withoutAuthorization_shouldRedirect() throws Exception {
-		mvc.perform(post("/project/new")
+		mvc.perform(post("/web/project/new")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("name", "new project"))
@@ -65,12 +65,12 @@ class CreateProjectWebControllerTest {
 	@Test
 	@WithMockUser("user@email.it")
 	void test_createProject_withEmptyName_shouldRedirect() throws Exception {
-		mvc.perform(post("/project/new")
+		mvc.perform(post("/web/project/new")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("name", ""))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(redirectedUrl("/"));
+			.andExpect(redirectedUrl("/web"));
 		
 		verifyNoInteractions(createProject);
 	}

@@ -9,14 +9,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import it.aldinucci.todoapp.adapter.in.web.dto.NewTaskWebDto;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @Controller
-@RequestMapping("/project/{projectId}/task/new")
+@RequestMapping("/web/project/{projectId}/task/new")
 public class CreateTaskWebController {
 
 	private InputModelAuthorization<ProjectIdDTO> authorize;
@@ -35,10 +35,10 @@ public class CreateTaskWebController {
 		if(!bindingResult.hasErrors()) {
 			authorize.check(auth.getName(), projectId);
 			createTask.create(new NewTaskDTOIn(
-					newTaskWebDto.getName(),
-					newTaskWebDto.getDescription(),
-					projectId.getProjectId()));
+					newTaskWebDto.name(),
+					newTaskWebDto.description(),
+					projectId.projectId()));
 		}
-		return "redirect:/project/"+projectId.getProjectId()+"/tasks";
+		return "redirect:/web/project/"+projectId.projectId()+"/tasks";
 	}
 }
