@@ -35,7 +35,9 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.CreateTaskWebController;
@@ -43,6 +45,7 @@ import it.aldinucci.todoapp.adapter.in.web.controller.DeleteProjectWebController
 import it.aldinucci.todoapp.adapter.in.web.controller.DeleteTaskWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.ProjectWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.UpdateProjectWebController;
+import it.aldinucci.todoapp.adapter.in.web.controller.UpdateTaskWebController;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
@@ -54,6 +57,7 @@ import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
 import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
+import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -95,6 +99,9 @@ class ProjectWebViewTest {
 	
 	@MockBean
 	private DeleteTaskWebController deleteTaskController;
+	
+	@MockBean
+	private UpdateTaskWebController updateTaskController;
 	
 	@Autowired
 	private Environment env;
@@ -352,7 +359,6 @@ class ProjectWebViewTest {
 		List<Task> tasks = new LinkedList<>();
 		tasks.add(new Task(6L, "task name", "task description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
-		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
 		HtmlPage page = webClient.getPage("/web/project/5/tasks");
 		
@@ -372,5 +378,63 @@ class ProjectWebViewTest {
 		
 		page.getElementById("task-delete-close").click();
 		assertThat(form.isDisplayed()).isFalse();
+	}
+	
+	@Test
+	@WithMockUser
+	void test_editTask_formVisibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		List<Task> tasks = new LinkedList<>();
+		tasks.add(new Task(11L, "task name", "task description", false, 3));
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
+		
+		HtmlPage page = webClient.getPage("/web/project/7/tasks");
+		
+		page.getHtmlElementById("task-11-menu-trigger").mouseOver();
+		HtmlElement taskDescription = page.getHtmlElementById("task-11-description-box");
+		HtmlForm form = page.getFormByName("task-11-edit-form");
+		assertThat(taskDescription.isDisplayed()).isTrue();
+		assertThat(form.isDisplayed()).isFalse();
+		
+		HtmlElement linkTrigger = page.getHtmlElementById("task-11-edit-trigger");
+		linkTrigger.click();
+		assertThat(taskDescription.isDisplayed()).isFalse();
+		assertThat(form.isDisplayed()).isTrue();
+
+		form.getButtonByName("cancel-button").click();
+		assertThat(taskDescription.isDisplayed()).isTrue();
+		assertThat(form.isDisplayed()).isFalse();
+		
+	}
+	
+	@Test
+	@WithMockUser
+	void test_editTask_formFunctionality() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		List<Task> tasks = new LinkedList<>();
+		tasks.add(new Task(11L, "task test name", "task test description", false, 3));
+		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
+		when(updateTaskController.updateTaskEndPoint(any(), anyLong(), anyLong(), any(), any()))
+			.thenReturn(TEST_VIEW_PAGE);
+		
+		HtmlPage page = webClient.getPage("/web/project/7/tasks");
+		
+		page.getHtmlElementById("task-11-menu-trigger").mouseOver();
+		page.getHtmlElementById("task-11-edit-trigger").click();
+		
+		HtmlForm form = page.getFormByName("task-11-edit-form");
+		assertThat(form.getActionAttribute()).matches("/web/project/7/task/11");
+		
+		HtmlInput nameInput = form.getInputByName("name");
+		assertThat(nameInput.getValueAttribute()).matches("task test name");
+		
+		HtmlTextArea descriptionInput = form.getTextAreaByName("description");
+		assertThat(descriptionInput.getTextContent()).matches("task test description");
+		
+		nameInput.setValueAttribute("new task name");
+		descriptionInput.setText("task new description");
+		form.getButtonByName("submit-button").click();
+		
+		verify(updateTaskController).updateTaskEndPoint(isA(Authentication.class), 
+				eq(7L), eq(11L), eq(new TaskDataWebDto("new task name", "task new description"))
+				, isA(BindingResult.class));
 	}
 }

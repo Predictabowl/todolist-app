@@ -25,7 +25,6 @@ public class DeleteTaskWebController {
 		this.deleteTask = deleteTask;
 	}
 
-
 	@DeleteMapping
 	public String deleteTaskEndPoint(Authentication authentication, @PathVariable long projectId, @PathVariable long taskId) {
 		TaskIdDTO idDTO = new TaskIdDTO(taskId);

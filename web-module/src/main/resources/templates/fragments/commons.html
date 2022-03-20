@@ -25,68 +25,18 @@
 		</div>
 	</div>
 	
-	
-	<!-- TASK LIST ITEM -->
-	<div class="is-flex is-justify-content-space-between" th:fragment="taskListItem (activeProject, task, colorClass)">
-		<div class="is-flex">
-			<div class="is-align-self-center">
-				<form th:action="@{'/web/project/'+${activeProject.id}+'/task/'+${task.id}+'/toggle/completed'}" 
-						th:name="'complete-task-'+${task.id}+'-form'" method="post">
-					<button th:class="'button is-small is-outlined is-circular '+${colorClass}"
-						type="submit" name="submit-button">
-						<span class="icon">
-							<em class="fas fa-check"></em>
-						</span>
-					</button>
-				</form>
-			</div>
-			<div class="ml-4">
-				
-				<div>
-					<span class="title is-5"
-						th:text="${task.name}">
-					</span>
-				</div>
-				<p th:utext="${#strings.replace(#strings.escapeXml(task.description),'&#10','&lt;br&gt;')}"></p>
-			</div>
-		</div>
-		<div class="dropdown is-hoverable is-right is-align-self-flex-start">
-			<div class="dropdown-trigger"
-				th:id="'task-'+${task.id}+'-menu-trigger'">
-				<span
-					class="button is-circular is-small is-light">
-					<em class="fas fa-ellipsis"></em>
-				</span>
-			</div>
-			<div class="dropdown-menu">
-				<div class="dropdown-content">
-					<a class="dropdown-item" th:text="#{edit.task}">
-					</a>
-					<hr class="dropdown-divider">
-					<a class="dropdown-item" th:id="'task-'+${task.id}+'-delete-trigger'"  th:text="#{delete.task}"
-							th:attr="data-action='/web/project/'+${activeProject.id}+'/task/'+${task.id}">
-					</a>
-				</div>
-			</div>
-		</div>
-		<script th:inline="javascript">
-			$(/*[[${'#task-'+task.id+'-delete-trigger'}]]*/
-					).click(function(){
-				$("#task-delete-form").attr("action",$(this).attr("data-action"));
-				$("#task-delete-card").toggle();
-			})
-		</script>
-	</div>
 
 	<!-- GENERIC FORM SUBMIT BUTTON -->
 	<button th:fragment="genericFormSubmitButton (textValue)" class="button is-success is-rounded" 
 		type="submit" name="submit-button" th:text="${textValue}">
 	</button>
 	
+	
 	<!-- CANCEL BUTTON -->
 	<button th:fragment="genericFormCancelButton (uniqueId)"	class="button is-rounded" 
 		th:id="${uniqueId}" name="cancel-button" type="button" th:text="#{cancel}">
 	</button>
+	
 	
 	<!-- CONFIRMATION CARD -->
 	<div th:fragment="genericConfirmationBox (header, uniqueId, formAction, formMethod, message)">
@@ -103,16 +53,16 @@
 								th:id="${uniqueId}+'-close'">
 							</button>
 						</header>
-						<form th:action="@{${formAction}}"	th:name="${uniqueId}+'-form'" th:id="${uniqueId}+'-form'"
-								 th:method="${formMethod}">
-							<section class="modal-card-body">
-								<p th:text="${message}"></p>
-							</section>
-							<footer class="modal-card-foot">
+						<section class="modal-card-body">
+							<p th:text="${message}"></p>
+						</section>
+						<footer class="modal-card-foot">
+							<form th:action="@{${formAction}}"	th:name="${uniqueId}+'-form'" th:id="${uniqueId}+'-form'"
+									th:method="${formMethod}">
 								<button th:replace=" :: genericFormSubmitButton(#{confirm})"></button>
 								<button th:replace=" :: genericFormCancelButton(${uniqueId}+'-cancel')"></button>
-							</footer>
-						</form>
+							</form>
+						</footer>
 					</div>
 				</div>
 			</div>

@@ -54,7 +54,7 @@
 				<!-- TASKS LIST -->
 				<ul id="tasks-list">
 					<li class="box" th:each="task : ${tasks}">
-						<div th:replace="fragments/commons :: taskListItem(${activeProject}, ${task}, 'is-success')">
+						<div th:replace="fragments/tasks :: taskListItem(${activeProject}, ${task}, 'is-success')">
 						</div>
 					</li>
 				</ul>
@@ -90,19 +90,19 @@
 				<div class="mt-5 p-2 has-background-warning is-not-displayed" id="completed-tasks">
 					<ul id="completed-tasks-list">
 						<li class="box" th:each="task : ${completedTasks}">
-							<div th:replace="fragments/commons :: taskListItem(${activeProject}, ${task}, 'is-danger')">
+							<div th:replace="fragments/tasks :: taskListItem(${activeProject}, ${task}, 'is-danger')">
 							</div>
 						</li>
 					</ul>
 				</div>
 				
-				<!-- DELETE PROJECT FORM -->
+				<!-- DELETE PROJECT CONFIRM -->
 				<div th:replace="fragments/commons :: genericConfirmationBox(#{delete.project}, 'activeProject-delete'
 								, '/web/project/'+${activeProject.id}
 								, 'delete', #{sure.you.want.to.delete.project}+' '+${activeProject.name}+'?')">
 				</div>
 				
-				<!-- DELETE TASK FORM -->
+				<!-- DELETE TASK CONFIRM -->
 				<div th:replace="fragments/commons :: genericConfirmationBox(#{delete.task}, 'task-delete'
 								, '#', 'delete', #{sure.you.want.to.delete.task}+'?')">
 				</div>
@@ -143,6 +143,7 @@
 		$("#activeProject-delete-trigger").click(function() {
 			$("#activeProject-delete-card").toggle();
 		})
+		
 	</script>
 
 </body>

@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,15 +55,20 @@ class WebTasksViewIT {
 	private String baseUrl;
 	
 	private WebDriver webDriver;
-
+	
 	private ProjectJPA project;
 	
 	@BeforeEach
 	void setUp() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		databaseSetup();
-		webDriver = new HtmlUnitDriver();
+		webDriver = new HtmlUnitDriver(true);
 		baseUrl = "http://localhost:"+appPort;
 		doLogin();
+	}
+	
+	@AfterEach
+	void tearDown() {
+		webDriver.quit();
 	}
 
 	@Test
@@ -107,7 +114,7 @@ class WebTasksViewIT {
 		tasks.add(task2);
 		tasks.add(task3);
 		project.setTasks(tasks);
-		projectRepo.saveAndFlush(project);
+		project = projectRepo.saveAndFlush(project);
 		
 		webDriver.get(baseUrl+"/web/project/"+project.getId()+"/tasks");
 		
@@ -137,20 +144,78 @@ class WebTasksViewIT {
 		projectRepo.saveAndFlush(project);
 		
 		webDriver.get(baseUrl+"/web/project/"+project.getId()+"/tasks");
-		WebElement hoverMenu = webDriver.findElement(By.id("activeProject-menu-trigger"));
-		Actions action = new Actions(webDriver);
-		action.moveToElement(hoverMenu).perform();
-		webDriver.findElement(By.id("toggle-completed-tasks")).click();
 		
-		WebElement toggleTaskForm = webDriver.findElement(By.name("complete-task-"+task1.getId()+"-form"));
-		toggleTaskForm.findElement(By.name("submit-button")).click();
+		webDriver.findElement(By.name("complete-task-"+task1.getId()+"-form"))
+			.findElement(By.name("submit-button")).click();
 		
 		assertThat(taskRepo.findById(task1.getId()).get().isCompleted()).isTrue();
 		
-		toggleTaskForm = webDriver.findElement(By.name("complete-task-"+task1.getId()+"-form"));
-		toggleTaskForm.findElement(By.name("submit-button")).click();
+		Actions action = new Actions(webDriver);
+		action.moveToElement(webDriver.findElement(By.id("activeProject-menu-trigger")))
+			.perform();
+		webDriver.findElement(By.id("toggle-completed-tasks")).click();
+		
+		webDriver.findElement(By.name("complete-task-"+task1.getId()+"-form"))
+			.findElement(By.name("submit-button")).click();
 		
 		assertThat(taskRepo.findById(task1.getId()).get().isCompleted()).isFalse();
+	}
+	
+	@Test
+	void test_deleteTask() throws InterruptedException {
+		TaskJPA task1 = taskRepo.save(new TaskJPA("task 1", "descr 1", false, project));
+		TaskJPA task2 = taskRepo.saveAndFlush(new TaskJPA("task 2", "descr 2", false, project));
+		List<TaskJPA> tasks = new LinkedList<>();
+		tasks.add(task1);
+		tasks.add(task2);
+		project.setTasks(tasks);
+		project = projectRepo.saveAndFlush(project);
+		
+		webDriver.get(baseUrl+"/web/project/"+project.getId()+"/tasks");
+		
+		Actions actions = new Actions(webDriver);
+		actions.moveToElement(webDriver.findElement(By.id("task-"+task1.getId()+"-menu-trigger")))
+			.perform();
+		
+		webDriver.findElement(By.id("task-"+task1.getId()+"-delete-trigger")).click();
+		webDriver.findElement(By.id("task-delete-form")).findElement(By.name("submit-button"))
+			.click();
+		
+		assertThat(taskRepo.findAll()).containsExactly(task2);
+	}
+	
+	@Test
+	void test_updateTask() {
+		TaskJPA task1 = taskRepo.saveAndFlush(new TaskJPA("task 1", "descr 1", false, project));
+		List<TaskJPA> tasks = new LinkedList<>();
+		tasks.add(task1);
+		project.setTasks(tasks);
+		project = projectRepo.saveAndFlush(project);
+		
+		webDriver.get(baseUrl+"/web/project/"+project.getId()+"/tasks");
+		
+		WebElement hoverMenu = webDriver.findElement(By.id("task-"+task1.getId()+"-menu-trigger"));
+		Actions actions = new Actions(webDriver);
+		actions.moveToElement(hoverMenu).perform();
+		
+		webDriver.findElement(By.id("task-"+task1.getId()+"-edit-trigger")).click();
+		WebElement editForm = webDriver.findElement(By.name("task-"+task1.getId()+"-edit-form"));
+		WebElement inputName = editForm.findElement(By.name("name"));
+		WebElement inputDescription = editForm.findElement(By.name("description"));
+		
+		assertThat(inputName.getAttribute("value")).matches("task 1");
+		assertThat(inputDescription.getText()).matches("descr 1");
+		
+		inputName.clear();
+		inputName.sendKeys("new task name");
+		inputDescription.clear();
+		inputDescription.sendKeys("new description");
+		editForm.findElement(By.name("submit-button")).click();
+		
+		Optional<TaskJPA> updatedTask = taskRepo.findById(task1.getId());
+		assertThat(updatedTask).isPresent();
+		assertThat(updatedTask.get().getName()).matches("new task name");
+		assertThat(updatedTask.get().getDescription()).matches("new description");
 	}
 	
 	private void databaseSetup() {

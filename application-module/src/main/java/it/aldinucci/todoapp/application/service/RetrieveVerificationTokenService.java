@@ -42,7 +42,7 @@ public class RetrieveVerificationTokenService implements RetrieveVerificationTok
 
 
 	@Override
-	public VerificationToken get(UserIdDTO userId) throws AppUserNotFoundException{
+	public VerificationToken get(UserIdDTO userId){
 		User user = loadUser.load(userId.getEmail()).orElseThrow(() ->
 				new AppUserNotFoundException("Could not find user with email: " + userId.getEmail()));
 		

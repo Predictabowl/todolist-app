@@ -59,14 +59,11 @@
 			<artifactId>greenmail-junit5</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!--
 		<dependency>
-			<groupId>org.apache.james</groupId>
-			<artifactId>james-server-testing</artifactId>
-			<version>3.7.0</version>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
 			<scope>test</scope>
 		</dependency>
-		-->
 	</dependencies>
 
 	<build>

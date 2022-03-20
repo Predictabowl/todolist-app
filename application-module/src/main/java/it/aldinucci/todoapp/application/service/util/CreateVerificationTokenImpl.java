@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.application.port.out.CreateUserVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.VerificationTokenData;
 import it.aldinucci.todoapp.domain.VerificationToken;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
+import it.aldinucci.todoapp.exception.AppVerificationTokenAlreadyExistsException;
 
 @Component
 public class CreateVerificationTokenImpl implements CreateVerificationToken {
@@ -24,7 +26,7 @@ public class CreateVerificationTokenImpl implements CreateVerificationToken {
 	}
 
 	@Override
-	public VerificationToken create(String email) {
+	public VerificationToken create(String email) throws AppVerificationTokenAlreadyExistsException {
 		VerificationTokenData tokenDto = new VerificationTokenData(
 				tokenStringGenerator.generate(),
 				dateGenerator.generate(),
