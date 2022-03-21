@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.URL;
 import it.aldinucci.todoapp.application.port.in.model.AppEmail;
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
-public class VerificationLinkDTO extends AutoValidatingInputModel<VerificationLinkDTO>{
+public class EmailLinkDTO extends AutoValidatingInputModel<EmailLinkDTO>{
 
 	@NotNull
 	@URL
@@ -19,7 +19,7 @@ public class VerificationLinkDTO extends AutoValidatingInputModel<VerificationLi
 	
 	private final AppEmail email;
 
-	public VerificationLinkDTO(String link, String email) {
+	public EmailLinkDTO(String link, String email) {
 		this.link = link;
 		this.email = new AppEmail(email);
 		validateSelf();
@@ -46,13 +46,13 @@ public class VerificationLinkDTO extends AutoValidatingInputModel<VerificationLi
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		VerificationLinkDTO other = (VerificationLinkDTO) obj;
+		EmailLinkDTO other = (EmailLinkDTO) obj;
 		return Objects.equals(email, other.email) && Objects.equals(link, other.link);
 	}
 
 	@Override
 	public String toString() {
-		return "VerificantionLinkDTO [link=" + link + ", email=" + email + "]";
+		return "EmailLinkDTO [link=" + link + ", email=" + email + "]";
 	}
 
 }

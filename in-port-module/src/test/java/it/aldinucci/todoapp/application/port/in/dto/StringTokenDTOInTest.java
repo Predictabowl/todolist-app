@@ -6,17 +6,17 @@ import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Test;
 
-class VerifyTokenDTOInTest {
+class StringTokenDTOInTest {
 
 	@Test
 	void test_whenTokenNull_shouldthrow() {
-		assertThatThrownBy(() -> new VerifyTokenDTOIn(null))
+		assertThatThrownBy(() -> new StringTokenDTOIn(null))
 			.isInstanceOf(ConstraintViolationException.class);
 	}
 	
 	@Test
 	void test_whenTokenEmpty_shouldthrow() {
-		assertThatThrownBy(() -> new VerifyTokenDTOIn(""))
+		assertThatThrownBy(() -> new StringTokenDTOIn(""))
 			.isInstanceOf(ConstraintViolationException.class);
 	}
 

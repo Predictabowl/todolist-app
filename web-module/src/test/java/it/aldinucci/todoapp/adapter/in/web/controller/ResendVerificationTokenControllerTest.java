@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
-import it.aldinucci.todoapp.application.port.in.dto.VerificationLinkDTO;
+import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
@@ -76,7 +76,7 @@ class ResendVerificationTokenControllerTest {
 		ModelAndViewAssert.assertViewName(modelAndView, "login/register.sent.verification");
 		ModelAndViewAssert.assertModelAttributeValue(modelAndView, "useremail", FIXTURE_EMAIL);
 		verify(retrieveToken).get(userId);
-		verify(sendMail).send(new VerificationLinkDTO(
+		verify(sendMail).send(new EmailLinkDTO(
 				"http://differenthost.org:23/user/register/verification/code",
 				FIXTURE_EMAIL));
 	}

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.VerifyUserEmailUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.VerifyTokenDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
@@ -38,7 +38,7 @@ public class VerifyUserEmailService implements VerifyUserEmailUsePort {
 	}
 
 	@Override
-	public boolean verify(VerifyTokenDTOIn tokenDto) throws AppUserNotFoundException{
+	public boolean verify(StringTokenDTOIn tokenDto) throws AppUserNotFoundException{
 		Optional<VerificationToken> loadedToken = loadToken.load(tokenDto.getToken());
 		if (loadedToken.isEmpty())
 			return false;

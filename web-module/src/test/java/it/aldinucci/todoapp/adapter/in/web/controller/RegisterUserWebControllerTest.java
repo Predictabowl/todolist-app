@@ -36,7 +36,7 @@ import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
-import it.aldinucci.todoapp.application.port.in.dto.VerificationLinkDTO;
+import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
@@ -193,7 +193,7 @@ class RegisterUserWebControllerTest {
 		inOrder.verify(mapper).map(registerUserDto);
 		inOrder.verify(createUser).create(newUserDTOIn);
 		inOrder.verify(sendMail)
-			.send(new VerificationLinkDTO("http://hostsomewhere.org:123/user/register/verification/token-code", FIXTURE_EMAIL));
+			.send(new EmailLinkDTO("http://hostsomewhere.org:123/user/register/verification/token-code", FIXTURE_EMAIL));
 
 	}
 

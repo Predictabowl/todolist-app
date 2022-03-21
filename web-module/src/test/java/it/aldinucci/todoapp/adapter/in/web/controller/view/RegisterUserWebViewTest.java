@@ -41,7 +41,7 @@ import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
-import it.aldinucci.todoapp.application.port.in.dto.VerificationLinkDTO;
+import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
@@ -96,7 +96,7 @@ class RegisterUserWebViewTest {
 				new NewUserDtoOut(
 						new User("user@email.it",null,null),
 						new VerificationToken()));
-		doNothing().when(sendMail).send(isA(VerificationLinkDTO.class));
+		doNothing().when(sendMail).send(isA(EmailLinkDTO.class));
 		
 		page = webClient.getPage("/user/register");
 	}

@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
-import it.aldinucci.todoapp.application.port.in.dto.VerificationLinkDTO;
+import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
 
 
 @WebMvcTest(controllers = {RegisterUserWebController.class})
@@ -22,7 +22,7 @@ class AppLinksBuilderTest {
 	
 	@Test
 	void test() {
-		VerificationLinkDTO linkDto = AppLinksBuilder.buildVerificationLink("http://homepage.com", "token-code", "test@email.it");
+		EmailLinkDTO linkDto = AppLinksBuilder.buildVerificationLink("http://homepage.com", "token-code", "test@email.it");
 		
 		assertThat(linkDto.getEmail()).matches("test@email.it");
 		assertThat(linkDto.getLink()).matches("http://homepage.com/user/register/verification/token-code");

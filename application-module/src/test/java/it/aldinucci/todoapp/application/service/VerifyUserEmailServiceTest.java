@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import it.aldinucci.todoapp.application.port.in.dto.VerifyTokenDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
@@ -57,7 +57,7 @@ class VerifyUserEmailServiceTest {
 
 	@Test
 	void test_verificationWhenTokenNotFound_shouldFail() {
-		VerifyTokenDTOIn tokenDto = new VerifyTokenDTOIn(FIXTURE_TOKEN_STRING);
+		StringTokenDTOIn tokenDto = new StringTokenDTOIn(FIXTURE_TOKEN_STRING);
 		when(loadToken.load(isA(String.class))).thenReturn(Optional.empty());
 		
 		boolean verifyResult = service.verify(tokenDto);
@@ -71,7 +71,7 @@ class VerifyUserEmailServiceTest {
 
 	@Test
 	void test_verificationWhenTokenExpired_shouldFail_andDeleteToken() {
-		VerifyTokenDTOIn tokenDto = new VerifyTokenDTOIn(FIXTURE_TOKEN_STRING);
+		StringTokenDTOIn tokenDto = new StringTokenDTOIn(FIXTURE_TOKEN_STRING);
 		calendar.add(Calendar.DAY_OF_MONTH, -1);
 		VerificationToken token = new VerificationToken(FIXTURE_TOKEN_STRING, calendar.getTime(), FIXTURE_EMAIL);
 		when(loadToken.load(isA(String.class))).thenReturn(Optional.of(token));
@@ -88,7 +88,7 @@ class VerifyUserEmailServiceTest {
 	
 	@Test
 	void test_verificationWhenCannotFindUser_shouldFail() {
-		VerifyTokenDTOIn tokenDto = new VerifyTokenDTOIn(FIXTURE_TOKEN_STRING);
+		StringTokenDTOIn tokenDto = new StringTokenDTOIn(FIXTURE_TOKEN_STRING);
 		calendar.add(Calendar.DAY_OF_MONTH, +1);
 		VerificationToken token = new VerificationToken(FIXTURE_TOKEN_STRING, calendar.getTime(), FIXTURE_EMAIL);
 		when(loadToken.load(isA(String.class))).thenReturn(Optional.of(token));
@@ -106,7 +106,7 @@ class VerifyUserEmailServiceTest {
 	
 	@Test
 	void test_verificationSuccess_shouldDeleteToken_andUpdateUser() {
-		VerifyTokenDTOIn tokenDto = new VerifyTokenDTOIn(FIXTURE_TOKEN_STRING);
+		StringTokenDTOIn tokenDto = new StringTokenDTOIn(FIXTURE_TOKEN_STRING);
 		calendar.add(Calendar.DAY_OF_MONTH, +1);
 		VerificationToken token = new VerificationToken(FIXTURE_TOKEN_STRING, calendar.getTime(), FIXTURE_EMAIL);
 		when(loadToken.load(isA(String.class))).thenReturn(Optional.of(token));

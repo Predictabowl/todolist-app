@@ -31,7 +31,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.UserRegisterVerificationController;
 import it.aldinucci.todoapp.application.port.in.VerifyUserEmailUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.VerifyTokenDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 
 /**
  * We don't need to verify the correct use of the mocked beans, that's responsibility of controller's tests.
@@ -69,7 +69,7 @@ class UserRegisterVerificationViewTest {
 	
 	@Test
 	void test_viewWhenVerify_successful() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
-		VerifyTokenDTOIn token = new VerifyTokenDTOIn(FIXTURE_TOKEN);
+		StringTokenDTOIn token = new StringTokenDTOIn(FIXTURE_TOKEN);
 		when(verifyEmail.verify(token)).thenReturn(true);
 		
 		page = webClient.getPage("/user/register/verification/"+FIXTURE_TOKEN);
@@ -88,7 +88,7 @@ class UserRegisterVerificationViewTest {
 	
 	@Test
 	void test_viewWhenVerifyFails_theTokenMustBeInvalid() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
-		VerifyTokenDTOIn token = new VerifyTokenDTOIn(FIXTURE_TOKEN);
+		StringTokenDTOIn token = new StringTokenDTOIn(FIXTURE_TOKEN);
 		when(verifyEmail.verify(token)).thenReturn(false);
 		
 		page = webClient.getPage("/user/register/verification/"+FIXTURE_TOKEN);

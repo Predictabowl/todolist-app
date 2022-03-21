@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.aldinucci.todoapp.application.port.in.VerifyUserEmailUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.VerifyTokenDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @Controller
@@ -25,7 +25,7 @@ public class UserRegisterVerificationController {
 	}
 
 	@GetMapping("/{token}")
-	public String confirmRegistration(@Valid VerifyTokenDTOIn token, Model model) {
+	public String confirmRegistration(@Valid StringTokenDTOIn token, Model model) {
 		try {
 			model.addAttribute("accountVerified", verifyUser.verify(token));
 		} catch (AppUserNotFoundException e) {

@@ -7,13 +7,13 @@ import javax.validation.constraints.NotNull;
 
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
-public class VerifyTokenDTOIn extends AutoValidatingInputModel<VerifyTokenDTOIn>{
+public class StringTokenDTOIn extends AutoValidatingInputModel<StringTokenDTOIn>{
 	
 	@NotNull
 	@NotEmpty
 	private final String token;
 
-	public VerifyTokenDTOIn(String token) {
+	public StringTokenDTOIn(String token) {
 		this.token = token;
 		validateSelf();
 	}
@@ -35,13 +35,13 @@ public class VerifyTokenDTOIn extends AutoValidatingInputModel<VerifyTokenDTOIn>
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		VerifyTokenDTOIn other = (VerifyTokenDTOIn) obj;
+		StringTokenDTOIn other = (StringTokenDTOIn) obj;
 		return Objects.equals(token, other.token);
 	}
 
 	@Override
 	public String toString() {
-		return "VerifyTokenDTOIn [token=" + token + "]";
+		return "StringTokenDTOIn [token=" + token + "]";
 	}
 	
 }

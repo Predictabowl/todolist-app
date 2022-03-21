@@ -36,7 +36,7 @@ import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
-import it.aldinucci.todoapp.application.port.in.dto.VerificationLinkDTO;
+import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
@@ -88,7 +88,7 @@ class RegisterSentNotificationViewTest {
 		when(userValidator.supports(RegisterUserDto.class)).thenReturn(true);
 		doNothing().when(userValidator).validate(any(), any());
 		when(mapper.map(isA(RegisterUserDto.class))).thenReturn(new NewUserDTOIn("name", FIXTURE_EMAIL, "test"));
-		doNothing().when(sendMail).send(isA(VerificationLinkDTO.class));
+		doNothing().when(sendMail).send(isA(EmailLinkDTO.class));
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 	}
 	
