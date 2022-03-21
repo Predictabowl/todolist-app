@@ -6,26 +6,23 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import it.aldinucci.todoapp.config.ApplicationPropertyNames;
 import it.aldinucci.todoapp.util.AppPropertiesReader;
 
 @Component
-public class VerificationTokenExpiryDateGeneratorImpl implements VerificationTokenExpiryDateGenerator {  
-	
-	public static final int DEFAULT_TOKEN_DURATION = 1440;
+public class TokenExpiryDateGeneratorImpl implements TokenExpiryDateGenerator {  
 	
 	private AppPropertiesReader propReader;
 	
 	@Autowired
-	public VerificationTokenExpiryDateGeneratorImpl(AppPropertiesReader propReader) {
+	public TokenExpiryDateGeneratorImpl(AppPropertiesReader propReader) {
 		this.propReader = propReader;
 	}
 
 
 	@Override
-	public Date generate() {
-		Integer property = propReader.get(ApplicationPropertyNames.VERIFICATION_TOKEN_DURATION,
-				Integer.class, DEFAULT_TOKEN_DURATION);
+	public Date generate(String durationPropertyName, int defaultMinutes) {
+		Integer property = propReader.get(durationPropertyName,
+				Integer.class, defaultMinutes);
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MINUTE, property);
 		return calendar.getTime();

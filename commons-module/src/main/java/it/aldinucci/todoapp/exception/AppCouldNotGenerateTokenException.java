@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.exception;
 
-public class AppCouldNotGenerateVerificationTokenException extends RuntimeException{
+public class AppCouldNotGenerateTokenException extends RuntimeException{
 
 	/**
 	 * 

@@ -84,10 +84,46 @@ class JPAEntityConstraintsTest {
 	}
 	
 	@Test
-	void test_cannotDeleteUser_beforeDeletingToken() {
+	void test_cannotDeleteUser_beforeDeletingVerificationToken() {
 		UserJPA user = new UserJPA(null, "mail@email", "username", "password");
 		entityManager.persist(user);
 		VerificationTokenJPA token = new VerificationTokenJPA("code", user, Calendar.getInstance().getTime());
+		entityManager.persist(token);
+		entityManager.flush();
+		
+		entityManager.remove(user);
+		entityManager.flush();
+		
+		entityManager.refresh(user);
+		assertThat(user).isNotNull();
+		
+		entityManager.remove(token);
+		entityManager.remove(user);
+		entityManager.flush();
+		
+		assertThat(entityManager.find(UserJPA.class, user.getId())).isNull();
+	}
+	
+	@Test
+	void test_deleteResetPasswordToken_shouldNotCascade_onUser() {
+		UserJPA user = new UserJPA(null, "mail@email", "username", "password");
+		entityManager.persist(user);
+		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA("code", user, Calendar.getInstance().getTime());
+		entityManager.persist(token);
+		entityManager.flush();
+		
+		entityManager.remove(token);
+		entityManager.flush();
+		
+		entityManager.refresh(user);
+		assertThat(user).isNotNull();
+	}
+	
+	@Test
+	void test_cannotDeleteUser_beforeDeletingRestPasswordToken() {
+		UserJPA user = new UserJPA(null, "mail@email", "username", "password");
+		entityManager.persist(user);
+		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA("code", user, Calendar.getInstance().getTime());
 		entityManager.persist(token);
 		entityManager.flush();
 		

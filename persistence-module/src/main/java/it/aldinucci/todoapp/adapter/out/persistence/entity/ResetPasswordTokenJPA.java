@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-public class VerificationTokenJPA {
+public class ResetPasswordTokenJPA {
 
 	@Id
 	private Long id;
@@ -32,52 +32,52 @@ public class VerificationTokenJPA {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date expiryDate;
 
-	public VerificationTokenJPA() {
+	public ResetPasswordTokenJPA() {
 	}
 
-	public VerificationTokenJPA(Long id, String token, UserJPA user, Date expiryDate) {
+	public ResetPasswordTokenJPA(Long id, String token, UserJPA user, Date expiryDate) {
 		this.id = id;
 		this.token = token;
 		this.user = user;
 		this.expiryDate = expiryDate;
 	}
 	
-	public VerificationTokenJPA(String token, UserJPA user, Date expiryDate) {
+	public ResetPasswordTokenJPA(String token, UserJPA user, Date expiryDate) {
 		this.id = null;
 		this.token = token;
 		this.user = user;
 		this.expiryDate = expiryDate;
 	}
 
-	public final Long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public final void setId(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public final String getToken() {
+	public String getToken() {
 		return token;
 	}
 
-	public final void setToken(String token) {
+	public void setToken(String token) {
 		this.token = token;
 	}
 
-	public final UserJPA getUser() {
+	public UserJPA getUser() {
 		return user;
 	}
 
-	public final void setUser(UserJPA user) {
+	public void setUser(UserJPA user) {
 		this.user = user;
 	}
 
-	public final Date getExpiryDate() {
+	public Date getExpiryDate() {
 		return expiryDate;
 	}
 
-	public final void setExpiryDate(Date expiryDate) {
+	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
 
@@ -94,14 +94,14 @@ public class VerificationTokenJPA {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		VerificationTokenJPA other = (VerificationTokenJPA) obj;
+		ResetPasswordTokenJPA other = (ResetPasswordTokenJPA) obj;
 		return Objects.equals(expiryDate, other.expiryDate) && Objects.equals(id, other.id)
 				&& Objects.equals(token, other.token) && Objects.equals(user, other.user);
 	}
 
 	@Override
 	public String toString() {
-		return "VerificationTokenJPA [id=" + id + ", token=" + token + ", user=" + user + ", expiryDate=" + expiryDate
+		return "ResetPasswordTokenJPA [id=" + id + ", token=" + token + ", user=" + user + ", expiryDate=" + expiryDate
 				+ "]";
 	}
 

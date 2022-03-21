@@ -1,5 +1,6 @@
 package it.aldinucci.todoapp.application.service.util;
 
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_TOKEN_DURATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -16,10 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import it.aldinucci.todoapp.config.ApplicationPropertyNames;
 import it.aldinucci.todoapp.util.AppPropertiesReader;
 
-class VerificationTokenExpiryDateGeneratorImplTest {
+class TokenExpiryDateGeneratorImplTest {
 
 	private static final int FIXTURE_TOKEN_DURATION = 25;
 
@@ -27,7 +27,7 @@ class VerificationTokenExpiryDateGeneratorImplTest {
 	private AppPropertiesReader propReader;
 
 	@InjectMocks
-	private VerificationTokenExpiryDateGeneratorImpl dateGen;
+	private TokenExpiryDateGeneratorImpl dateGen;
 
 	private Calendar calendar;
 
@@ -42,16 +42,13 @@ class VerificationTokenExpiryDateGeneratorImplTest {
 	void test_DateCalculation() {
 		calendar.add(Calendar.MINUTE, FIXTURE_TOKEN_DURATION);
 		
-		Date generatedDate = dateGen.generate();
+		Date generatedDate = dateGen.generate(VERIFICATION_TOKEN_DURATION, 78);
 		
 		assertThat(generatedDate)
 			.isInSameHourWindowAs(Calendar.getInstance().getTime())
 			.hasMinute(calendar.get(Calendar.MINUTE));
 		
-		verify(propReader).get(
-				ApplicationPropertyNames.VERIFICATION_TOKEN_DURATION,
-				Integer.class,
-				VerificationTokenExpiryDateGeneratorImpl.DEFAULT_TOKEN_DURATION);
+		verify(propReader).get(VERIFICATION_TOKEN_DURATION, Integer.class, 78);
 	}
 
 }

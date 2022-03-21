@@ -14,6 +14,7 @@ public class ApplicationPropertyNames {
 	public static final String VERIFICATION_EMAIL_SSL= "todolist.verification.email.ssl";
 	public static final String VERIFICATION_EMAIL_DEBUG= "todolist.verification.email.debug";
 	
+	public static final String RESET_PASSWORD_TOKEN_DURATION = "todolist.reset.password.token.duration";
 	
 	private ApplicationPropertyNames() {
 	}
