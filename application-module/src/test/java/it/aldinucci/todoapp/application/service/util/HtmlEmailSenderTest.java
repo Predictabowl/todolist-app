@@ -2,6 +2,7 @@ package it.aldinucci.todoapp.application.service.util;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import java.io.IOException;
 import java.security.Security;
@@ -10,6 +11,7 @@ import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +47,11 @@ class HtmlEmailSenderTest {
 						.withUser("test@email.it", "testPassword"));
 		mailServer.start();
 	}
+	
+	@AfterEach
+	void tearDown() {
+		mailServer.stop();
+	}
 
 	@Test
 	void test_sendEmail() throws MessagingException, IOException {
@@ -66,6 +73,17 @@ class HtmlEmailSenderTest {
 		assertThat(from).hasSize(1);
 		assertThat(from[0].toString()).matches("test@email.it");
 	}
+	
+//	@Test
+//	void test_sendEmail_withMalformedInput() throws MessagingException {
+//		String content = "<a href='#'> this is html </a>";
+//		
+//		assertThatCode(() -> emailSender.send("", "Sending Test", content))
+//			.doesNotThrowAnyException();
+//
+//		MimeMessage[] receivedMessages = mailServer.getReceivedMessages();
+//		assertThat(receivedMessages).isEmpty();
+//	}
 
 
 }
