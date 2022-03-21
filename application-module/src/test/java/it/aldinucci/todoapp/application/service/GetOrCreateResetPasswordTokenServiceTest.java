@@ -17,10 +17,11 @@ import org.mockito.Mock;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteRestPasswordTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadResetPasswordTokenByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.UserExistsDriverPort;
 import it.aldinucci.todoapp.application.service.util.CreateResetPasswordToken;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
 
-class RetrieveResetPasswordTokenServiceTest {
+class GetOrCreateResetPasswordTokenServiceTest {
 
 	private static final String FIXTURE_EMAIL = "test@email.it"; 
 	
@@ -31,9 +32,12 @@ class RetrieveResetPasswordTokenServiceTest {
 	private DeleteRestPasswordTokenDriverPort deleteToken;
 	
 	@Mock
+	private UserExistsDriverPort userExists;
+	
+	@Mock
 	private LoadResetPasswordTokenByEmailDriverPort loadToken;
 	
-	private RetrieveResetPasswordTokenService sut;
+	private GetOrCreateResetPasswordTokenService sut;
 	
 	private Calendar calendar;
 	
@@ -47,7 +51,7 @@ class RetrieveResetPasswordTokenServiceTest {
 	@BeforeEach
 	void setUp() {
 		openMocks(this); 
-		sut = new RetrieveResetPasswordTokenService(loadToken, deleteToken, createToken);
+		sut = new GetOrCreateResetPasswordTokenService(userExists, loadToken, deleteToken, createToken);
 		calendar = Calendar.getInstance();
 	}
 	
@@ -56,10 +60,12 @@ class RetrieveResetPasswordTokenServiceTest {
 		calendar.add(Calendar.HOUR, 1);
 		ResetPasswordToken token = new ResetPasswordToken("code", calendar.getTime(), FIXTURE_EMAIL);
 		when(loadToken.load(FIXTURE_EMAIL)).thenReturn(Optional.of(token));
+		when(userExists.exists(anyString())).thenReturn(true);
 		
-		ResetPasswordToken createdToken = sut.get(new UserIdDTO(FIXTURE_EMAIL));
+		Optional<ResetPasswordToken> createdToken = sut.get(new UserIdDTO(FIXTURE_EMAIL));
 		
-		assertThat(createdToken).isSameAs(token);
+		assertThat(createdToken).containsSame(token);
+		verify(userExists).exists(FIXTURE_EMAIL);
 		verify(loadToken).load(FIXTURE_EMAIL);
 		verifyNoInteractions(createToken);
 		verifyNoInteractions(deleteToken);
@@ -71,11 +77,13 @@ class RetrieveResetPasswordTokenServiceTest {
 		ResetPasswordToken token = new ResetPasswordToken("code", calendar.getTime(), FIXTURE_EMAIL);
 		when(loadToken.load(FIXTURE_EMAIL)).thenReturn(Optional.empty());
 		when(createToken.create(anyString())).thenReturn(token);
+		when(userExists.exists(anyString())).thenReturn(true);
 		UserIdDTO userIdDTO = new UserIdDTO(FIXTURE_EMAIL);
 		
-		ResetPasswordToken createdToken = sut.get(userIdDTO);
+		Optional<ResetPasswordToken> createdToken = sut.get(userIdDTO);
 		
-		assertThat(createdToken).isSameAs(token);
+		assertThat(createdToken).containsSame(token);
+		verify(userExists).exists(FIXTURE_EMAIL);
 		verify(loadToken).load(FIXTURE_EMAIL);
 		verify(createToken).create(FIXTURE_EMAIL);
 		verifyNoInteractions(deleteToken);
@@ -88,14 +96,29 @@ class RetrieveResetPasswordTokenServiceTest {
 		ResetPasswordToken token = new ResetPasswordToken("new code", Calendar.getInstance().getTime(), FIXTURE_EMAIL);
 		when(loadToken.load(FIXTURE_EMAIL)).thenReturn(Optional.of(oldToken));
 		when(createToken.create(anyString())).thenReturn(token);
+		when(userExists.exists(anyString())).thenReturn(true);
 		UserIdDTO userIdDTO = new UserIdDTO(FIXTURE_EMAIL);
 		
-		ResetPasswordToken createdToken = sut.get(userIdDTO);
+		Optional<ResetPasswordToken> createdToken = sut.get(userIdDTO);
 		
-		assertThat(createdToken).isSameAs(token);
+		assertThat(createdToken).containsSame(token);
+		verify(userExists).exists(FIXTURE_EMAIL);
 		verify(loadToken).load(FIXTURE_EMAIL);
 		verify(deleteToken).delete("old code");
 		verify(createToken).create(FIXTURE_EMAIL);
 	}
 	
+	
+	@Test
+	void test_get_whenUserNotExists() {
+		when(userExists.exists(anyString())).thenReturn(false);
+		
+		Optional<ResetPasswordToken> createdToken = sut.get(new UserIdDTO(FIXTURE_EMAIL));
+		
+		assertThat(createdToken).isEmpty();
+		verify(userExists).exists(FIXTURE_EMAIL);
+		verifyNoInteractions(loadToken);
+		verifyNoInteractions(deleteToken);
+		verifyNoInteractions(createToken);
+	}
 }

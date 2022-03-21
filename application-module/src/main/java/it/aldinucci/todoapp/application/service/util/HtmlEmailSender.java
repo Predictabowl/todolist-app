@@ -3,9 +3,7 @@ package it.aldinucci.todoapp.application.service.util;
 import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_ADDRESS;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,31 +18,27 @@ public class HtmlEmailSender implements EmailSender {
 	private String emailAddress;
 
 	private JavaMailSender emailSender;
-
-	private final Logger logger;
+	private MimeMessageHelper mimeMessageHelper;
 
 	@Autowired
-	public HtmlEmailSender(JavaMailSender emailSender) {
+	public HtmlEmailSender(JavaMailSender emailSender, MimeMessageHelper mimeMessageHelper) {
 		super();
 		this.emailSender = emailSender;
-		logger = LoggerFactory.getLogger(HtmlEmailSender.class);
+		this.mimeMessageHelper = mimeMessageHelper;
 	}
 
 	@Override
 	public void send(String to, String subject, String content) {
-		MimeMessage message = emailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
 		try {
-			helper.setSubject(subject);
-			helper.setFrom(emailAddress);
-			helper.setTo(to);
-			helper.setText(content, true);
+			mimeMessageHelper.setSubject(subject);
+			mimeMessageHelper.setFrom(emailAddress);
+			mimeMessageHelper.setTo(to);
+			mimeMessageHelper.setText(content, true);
+			emailSender.send(mimeMessageHelper.getMimeMessage());
 		} catch (MessagingException e) {
-			logger.error("Error while creating email message", e);
+			LoggerFactory.getLogger(HtmlEmailSender.class)
+				.error("Error while creating email message", e);
 		}
-
-		emailSender.send(message);
-
 	}
 
 }

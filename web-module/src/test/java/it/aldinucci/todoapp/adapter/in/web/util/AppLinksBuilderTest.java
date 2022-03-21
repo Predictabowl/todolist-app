@@ -21,11 +21,19 @@ class AppLinksBuilderTest {
 	private RegisterUserWebController test;
 	
 	@Test
-	void test() {
+	void test_verificationLink() {
 		EmailLinkDTO linkDto = AppLinksBuilder.buildVerificationLink("http://homepage.com", "token-code", "test@email.it");
 		
 		assertThat(linkDto.getEmail()).matches("test@email.it");
 		assertThat(linkDto.getLink()).matches("http://homepage.com/user/register/verification/token-code");
+	}
+	
+	@Test
+	void test_resetPasswordLink() {
+		EmailLinkDTO linkDto = AppLinksBuilder.buildResetPasswordLink("http://homepage.com", "token-code", "test@email.it");
+		
+		assertThat(linkDto.getEmail()).matches("test@email.it");
+		assertThat(linkDto.getLink()).matches("http://homepage.com/user/register/password/reset/verification/token-code");
 	}
 
 }

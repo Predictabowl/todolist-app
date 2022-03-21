@@ -1,6 +1,7 @@
 # docker-compose.yml
 # This docker compose is emant to be used to test the full application manually.
-# Do NOT have it run when launching tests
+# Do NOT have it run when launching tests!
+# To launch integration tests separately (from eclipse) use the one inside the configuration-module folder
 version: "3.9"
 
 services:

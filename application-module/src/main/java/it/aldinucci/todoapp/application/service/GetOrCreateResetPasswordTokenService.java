@@ -8,43 +8,49 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.aldinucci.todoapp.application.port.in.RetrievePasswordResetTokenUsePort;
+import it.aldinucci.todoapp.application.port.in.GetOrCreatePasswordResetTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteRestPasswordTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadResetPasswordTokenByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.UserExistsDriverPort;
 import it.aldinucci.todoapp.application.service.util.CreateResetPasswordToken;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @Service
 @Transactional
-public class RetrieveResetPasswordTokenService implements RetrievePasswordResetTokenUsePort{
+public class GetOrCreateResetPasswordTokenService implements GetOrCreatePasswordResetTokenUsePort{
 
+	private UserExistsDriverPort userExists;
 	private LoadResetPasswordTokenByEmailDriverPort loadToken;
 	private DeleteRestPasswordTokenDriverPort deleteToken;
 	private CreateResetPasswordToken createToken;
 	
 	@Autowired
-	public RetrieveResetPasswordTokenService(LoadResetPasswordTokenByEmailDriverPort loadToken,
-			DeleteRestPasswordTokenDriverPort deleteToken, CreateResetPasswordToken createToken) {
+	public GetOrCreateResetPasswordTokenService(UserExistsDriverPort userExists,
+			LoadResetPasswordTokenByEmailDriverPort loadToken, DeleteRestPasswordTokenDriverPort deleteToken,
+			CreateResetPasswordToken createToken) {
 		super();
+		this.userExists = userExists;
 		this.loadToken = loadToken;
 		this.deleteToken = deleteToken;
 		this.createToken = createToken;
 	}
 
+
 	@Override
-	public ResetPasswordToken get(UserIdDTO userId) throws AppUserNotFoundException {
+	public Optional<ResetPasswordToken> get(UserIdDTO userId) {
+		if(!userExists.exists(userId.getEmail()))
+			return Optional.empty();
+		
 		Optional<ResetPasswordToken> optional = loadToken.load(userId.getEmail());
 		if(optional.isPresent()) {
-			ResetPasswordToken oldToken = optional.get();
-			if(oldToken.isExpired(Calendar.getInstance().getTime()))
-				deleteToken.delete(oldToken.getToken());
-			else
-				return oldToken;
+			if(!optional.get().isExpired(Calendar.getInstance().getTime()))
+				return optional;
+			deleteToken.delete(optional.get().getToken());
 		}
 		
-		return createToken.create(userId.getEmail());
+		return Optional.of(createToken.create(userId.getEmail()));
 	}
 
 }

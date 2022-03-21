@@ -2,6 +2,7 @@ package it.aldinucci.todoapp.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -13,7 +14,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
@@ -25,6 +25,7 @@ import it.aldinucci.todoapp.application.port.out.dto.UserData;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
+import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 class VerifyUserEmailServiceTest {
 	
@@ -44,7 +45,9 @@ class VerifyUserEmailServiceTest {
 	@Mock
 	private DeleteVerificationTokenDriverPort deleteToken;
 	
-	@InjectMocks
+	@Mock
+	private AppGenericMapper<User, UserData> mapper;
+	
 	private VerifyUserEmailService service;
 
 	private Calendar calendar;
@@ -53,6 +56,7 @@ class VerifyUserEmailServiceTest {
 	void setUp() {
 		openMocks(this);
 		calendar = Calendar.getInstance();
+		service = new VerifyUserEmailService(loadToken, loadUser, updateUser, deleteToken, mapper);
 	}
 
 	@Test
@@ -67,6 +71,7 @@ class VerifyUserEmailServiceTest {
 		verifyNoInteractions(updateUser);
 		verifyNoInteractions(loadUser);
 		verifyNoInteractions(deleteToken);
+		verifyNoInteractions(mapper);
 	}
 
 	@Test
@@ -83,6 +88,7 @@ class VerifyUserEmailServiceTest {
 		verify(deleteToken).delete(FIXTURE_TOKEN_STRING);
 		verifyNoInteractions(updateUser);
 		verifyNoInteractions(loadUser);
+		verifyNoInteractions(mapper);
 	}
 	
 	
@@ -102,16 +108,19 @@ class VerifyUserEmailServiceTest {
 		verify(deleteToken).delete(FIXTURE_TOKEN_STRING);
 		verify(loadUser).load(FIXTURE_EMAIL);
 		verifyNoInteractions(updateUser);
+		verifyNoInteractions(mapper);
 	}
 	
 	@Test
 	void test_verificationSuccess_shouldDeleteToken_andUpdateUser() {
 		StringTokenDTOIn tokenDto = new StringTokenDTOIn(FIXTURE_TOKEN_STRING);
+		UserData userData = new UserData("a name", FIXTURE_EMAIL, "a password", false);
 		calendar.add(Calendar.DAY_OF_MONTH, +1);
 		VerificationToken token = new VerificationToken(FIXTURE_TOKEN_STRING, calendar.getTime(), FIXTURE_EMAIL);
 		when(loadToken.load(isA(String.class))).thenReturn(Optional.of(token));
 		when(loadUser.load(isA(String.class))).thenReturn(
 				Optional.of(new User(FIXTURE_EMAIL, "username", "password", false)));
+		when(mapper.map(any())).thenReturn(userData);
 		
 		boolean verifyResult = service.verify(tokenDto);
 		
@@ -119,6 +128,7 @@ class VerifyUserEmailServiceTest {
 		verify(loadToken).load(FIXTURE_TOKEN_STRING);
 		verify(deleteToken).delete(FIXTURE_TOKEN_STRING);
 		verify(loadUser).load(FIXTURE_EMAIL);
-		verify(updateUser).update(new UserData("username", FIXTURE_EMAIL, "password", true));
+		verify(mapper).map(new User(FIXTURE_EMAIL, "username", "password", true));
+		verify(updateUser).update(userData);
 	}
 }

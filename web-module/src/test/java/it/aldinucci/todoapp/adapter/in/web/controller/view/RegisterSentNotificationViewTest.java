@@ -110,7 +110,7 @@ class RegisterSentNotificationViewTest {
 
 		String textContent = page.getBody().getTextContent();
 		assertThat(textContent)
-			.contains(env.getProperty("verification.mail.was.sent"))
+			.contains(env.getProperty("mail.was.sent"))
 			.contains(FIXTURE_EMAIL);
 	}
 

@@ -2,10 +2,11 @@ package it.aldinucci.todoapp.application.service.util;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.io.IOException;
 import java.security.Security;
+import java.time.Duration;
 
 import javax.mail.Address;
 import javax.mail.MessagingException;
@@ -36,7 +37,7 @@ class HtmlEmailSenderTest {
 
 	@Autowired
 	private HtmlEmailSender emailSender;
-
+	
 	private GreenMail mailServer;
 
 	@BeforeEach
@@ -56,7 +57,9 @@ class HtmlEmailSenderTest {
 	@Test
 	void test_sendEmail() throws MessagingException, IOException {
 		String content = "<a href='#'> this is html </a>";
-		emailSender.send("unknown@email.org", "Sending Test", content);
+		
+		assertTimeout(Duration.ofSeconds(5), () -> 
+			emailSender.send("unknown@email.org", "Sending Test", content));
 
 		MimeMessage[] receivedMessages = mailServer.getReceivedMessages();
 		assertThat(receivedMessages).hasSize(1);
@@ -73,17 +76,6 @@ class HtmlEmailSenderTest {
 		assertThat(from).hasSize(1);
 		assertThat(from[0].toString()).matches("test@email.it");
 	}
-	
-//	@Test
-//	void test_sendEmail_withMalformedInput() throws MessagingException {
-//		String content = "<a href='#'> this is html </a>";
-//		
-//		assertThatCode(() -> emailSender.send("", "Sending Test", content))
-//			.doesNotThrowAnyException();
-//
-//		MimeMessage[] receivedMessages = mailServer.getReceivedMessages();
-//		assertThat(receivedMessages).isEmpty();
-//	}
 
 
 }

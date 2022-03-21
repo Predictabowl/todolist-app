@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.application.service;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
@@ -16,19 +15,19 @@ import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
-import it.aldinucci.todoapp.exception.AppVerificationTokenAlreadyExistsException;
+import it.aldinucci.todoapp.util.AppPasswordEncoder;
 
 @Service
 @Transactional
-public class CreateNewUserService implements CreateUserUsePort{
+public class CreateNewUserService implements CreateUserUsePort {
 
 	private CreateUserDriverPort createUser;
-	private PasswordEncoder encoder;
+	private AppPasswordEncoder encoder;
 	private LoadUserByEmailDriverPort loadUser;
 	private CreateVerificationToken createToken;
-	
+
 	@Autowired
-	public CreateNewUserService(CreateUserDriverPort createUser, PasswordEncoder encoder,
+	public CreateNewUserService(CreateUserDriverPort createUser, AppPasswordEncoder encoder,
 			LoadUserByEmailDriverPort loadUser, CreateVerificationToken createToken) {
 		super();
 		this.createUser = createUser;
@@ -37,21 +36,17 @@ public class CreateNewUserService implements CreateUserUsePort{
 		this.createToken = createToken;
 	}
 
-
-
 	@Override
-	public NewUserDtoOut create(NewUserDTOIn newUser) throws AppEmailAlreadyRegisteredException{
-		if(loadUser.load(newUser.getEmail()).isPresent())
-			throw new AppEmailAlreadyRegisteredException("There's already an user registered with the email: " + 
-					newUser.getEmail());
-		
-		User user = createUser.create(new NewUserData(
-				newUser.getUsername(), 
-				newUser.getEmail(), 
-				encoder.encode(newUser.getPassword())));
-		
+	public NewUserDtoOut create(NewUserDTOIn newUser) throws AppEmailAlreadyRegisteredException {
+		if (loadUser.load(newUser.getEmail()).isPresent())
+			throw new AppEmailAlreadyRegisteredException(
+					"There's already an user registered with the email: " + newUser.getEmail());
+
+		User user = createUser.create(
+				new NewUserData(newUser.getUsername(), newUser.getEmail(), encoder.encode(newUser.getPassword())));
+
 		VerificationToken token = createToken.create(newUser.getEmail());
-		
+
 		return new NewUserDtoOut(user, token);
 	}
 
