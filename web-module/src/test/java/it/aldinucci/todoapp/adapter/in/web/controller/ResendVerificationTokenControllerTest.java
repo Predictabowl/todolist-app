@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.ModelAndView;
 
-import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
+import it.aldinucci.todoapp.application.port.in.GetOrCreateVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
@@ -38,7 +40,7 @@ class ResendVerificationTokenControllerTest {
 	private static final String FIXTURE_EMAIL = "email@test.org";
 	
 	@MockBean
-	private RetrieveVerificationTokenUsePort retrieveToken;
+	private GetOrCreateVerificationTokenUsePort retrieveToken;
 	
 	@MockBean
 	private SendVerificationEmailUsePort sendMail;
@@ -60,7 +62,7 @@ class ResendVerificationTokenControllerTest {
 	void test_resendVerificationPostMapping_success() throws Exception {
 		UserIdDTO userId = new UserIdDTO(FIXTURE_EMAIL);
 		VerificationToken token = new VerificationToken("code", null, FIXTURE_EMAIL);
-		when(retrieveToken.get(isA(UserIdDTO.class))).thenReturn(token);
+		when(retrieveToken.get(isA(UserIdDTO.class))).thenReturn(Optional.of(token));
 
 		ModelAndView modelAndView = mvc.perform(post("/user/register/resend/verification")
 				.with(csrf())
@@ -103,8 +105,7 @@ class ResendVerificationTokenControllerTest {
 	@Test
 	void test_resendVerificationPostMapping_whenUserNotFound() throws Exception {
 		UserIdDTO userId = new UserIdDTO(FIXTURE_EMAIL);
-		when(retrieveToken.get(isA(UserIdDTO.class))).thenThrow(
-				new AppUserNotFoundException("not found message"));
+		when(retrieveToken.get(isA(UserIdDTO.class))).thenReturn(Optional.empty());
 
 		ModelAndView modelAndView = mvc.perform(post("/user/register/resend/verification")
 				.with(csrf())

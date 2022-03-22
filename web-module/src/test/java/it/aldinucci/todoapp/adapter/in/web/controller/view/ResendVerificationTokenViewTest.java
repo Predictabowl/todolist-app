@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,12 +31,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.ResendVerificationTokenController;
-import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
+import it.aldinucci.todoapp.application.port.in.GetOrCreateVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
+import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
+import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.EmailWebDto;
 
 @ExtendWith(SpringExtension.class)
@@ -47,7 +50,7 @@ class ResendVerificationTokenViewTest {
 	private WebClient webClient;
 	
 	@MockBean
-	private RetrieveVerificationTokenUsePort retrieveToken;
+	private GetOrCreateVerificationTokenUsePort retrieveToken;
 	
 	@MockBean
 	private SendVerificationEmailUsePort sendMail;
@@ -61,8 +64,8 @@ class ResendVerificationTokenViewTest {
 	private HtmlPage page;
 
 	@BeforeEach
-	void setUp() throws FailingHttpStatusCodeException, MalformedURLException, IOException, AppEmailAlreadyRegisteredException {
-		when(retrieveToken.get(isA(UserIdDTO.class))).thenReturn(new VerificationToken());
+	void setUp() throws FailingHttpStatusCodeException, MalformedURLException, IOException, AppEmailAlreadyRegisteredException, AppUserNotFoundException, AppUserEmailAlreadyVerifiedException {
+		when(retrieveToken.get(isA(UserIdDTO.class))).thenReturn(Optional.of(new VerificationToken()));
 		doNothing().when(sendMail).send(isA(EmailLinkDTO.class));
 		
 		page = webClient.getPage("/user/register/resend/verification");

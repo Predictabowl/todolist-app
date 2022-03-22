@@ -28,9 +28,8 @@ import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
-import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
-class RetrieveVerificationTokenServiceTest {
+class GetOrCreateVerificationTokenServiceTest {
 
 	private static final String FIXTURE_USER_EMAIL = "test@email.it";
 
@@ -47,7 +46,7 @@ class RetrieveVerificationTokenServiceTest {
 	private CreateVerificationToken createToken;
 	
 	@InjectMocks
-	private RetrieveVerificationTokenService sut;
+	private GetOrCreateVerificationTokenService sut;
 	
 	private Calendar calendar;
 	
@@ -58,21 +57,21 @@ class RetrieveVerificationTokenServiceTest {
 	}
 	
 	@Test
-	void test_retrieveToken_whenIsMissing_shouldCreateOne() {
+	void test_retrieveToken_whenIsMissing_shouldCreateOne() throws AppUserEmailAlreadyVerifiedException {
 		VerificationToken token = new VerificationToken("not so random string", calendar.getTime(), "user@test.it");
 		UserIdDTO userId = new UserIdDTO(FIXTURE_USER_EMAIL);
 		when(createToken.create(anyString())).thenReturn(token);
 		when(loadUser.load(isA(String.class))).thenReturn(Optional.of(new User(FIXTURE_USER_EMAIL, "name", "password", false)));
 		when(loadToken.load(anyString())).thenReturn(Optional.empty());
 		
-		VerificationToken createdToken = sut.get(userId);
+		Optional<VerificationToken> createdToken = sut.get(userId);
 		
 		InOrder inOrder = Mockito.inOrder(createToken, loadUser, loadToken);
 		inOrder.verify(loadUser).load(FIXTURE_USER_EMAIL);
 		inOrder.verify(loadToken).load(FIXTURE_USER_EMAIL);
 		inOrder.verify(createToken).create(FIXTURE_USER_EMAIL);
 		verifyNoInteractions(deleteToken);
-		assertThat(createdToken).isSameAs(token);
+		assertThat(createdToken).containsSame(token);
 				
 	}
 	
@@ -93,14 +92,13 @@ class RetrieveVerificationTokenServiceTest {
 	}
 
 	@Test
-	void test_retrieveToken_whenUserMissing_shouldThrow() {
+	void test_retrieveToken_whenUserMissing() throws AppUserEmailAlreadyVerifiedException {
 		when(loadUser.load(isA(String.class))).thenReturn(Optional.empty());
 		UserIdDTO userId = new UserIdDTO(FIXTURE_USER_EMAIL);
 		
-		assertThatThrownBy(() -> sut.get(userId))
-			.isInstanceOf(AppUserNotFoundException.class)
-			.hasMessage("Could not find user with email: "+FIXTURE_USER_EMAIL);
+		Optional<VerificationToken> optional = sut.get(userId);
 		
+		assertThat(optional).isEmpty();
 		verify(loadUser).load(FIXTURE_USER_EMAIL);
 		verifyNoInteractions(deleteToken);
 		verifyNoInteractions(createToken);
@@ -108,7 +106,7 @@ class RetrieveVerificationTokenServiceTest {
 	}
 	
 	@Test
-	void test_retrieveToken_whenTokenIsNotExpired_shouldReturnIt() {
+	void test_retrieveToken_whenTokenIsNotExpired_shouldReturnIt() throws AppUserEmailAlreadyVerifiedException {
 		when(loadUser.load(isA(String.class)))
 			.thenReturn(Optional.of(new User(FIXTURE_USER_EMAIL, "name", "password", false)));
 		UserIdDTO userId = new UserIdDTO(FIXTURE_USER_EMAIL);
@@ -116,9 +114,9 @@ class RetrieveVerificationTokenServiceTest {
 		VerificationToken token = new VerificationToken("token-code", calendar.getTime(), FIXTURE_USER_EMAIL);
 		when(loadToken.load(anyString())).thenReturn(Optional.of(token));
 		
-		VerificationToken loadedToken = sut.get(userId);
+		Optional<VerificationToken> loadedToken = sut.get(userId);
 		
-		assertThat(loadedToken).isSameAs(token);
+		assertThat(loadedToken).containsSame(token);
 		verify(loadUser).load(FIXTURE_USER_EMAIL);
 		verify(loadToken).load(FIXTURE_USER_EMAIL);
 		verifyNoInteractions(deleteToken);
@@ -126,7 +124,7 @@ class RetrieveVerificationTokenServiceTest {
 	}
 	
 	@Test
-	void test_retrieveToken_whenTokenIsExpired_shouldDeleteTheOldOne_andCreateNewOne() {
+	void test_retrieveToken_whenTokenIsExpired_shouldDeleteTheOldOne_andCreateNewOne() throws AppUserEmailAlreadyVerifiedException {
 		when(loadUser.load(isA(String.class)))
 			.thenReturn(Optional.of(new User(FIXTURE_USER_EMAIL, "name", "password", false)));
 		UserIdDTO userId = new UserIdDTO(FIXTURE_USER_EMAIL);
@@ -136,9 +134,9 @@ class RetrieveVerificationTokenServiceTest {
 		when(loadToken.load(anyString())).thenReturn(Optional.of(oldToken));
 		when(createToken.create(anyString())).thenReturn(newToken);
 		
-		VerificationToken loadedToken = sut.get(userId);
+		Optional<VerificationToken> loadedToken = sut.get(userId);
 		
-		assertThat(loadedToken).isSameAs(newToken);
+		assertThat(loadedToken).containsSame(newToken);
 		InOrder inOrder = Mockito.inOrder(loadUser,loadToken, deleteToken, createToken);
 		inOrder.verify(loadUser).load(FIXTURE_USER_EMAIL);
 		inOrder.verify(loadToken).load(FIXTURE_USER_EMAIL);

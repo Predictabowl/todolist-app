@@ -2,6 +2,8 @@ package it.aldinucci.todoapp.adapter.in.web.controller;
 
 import static it.aldinucci.todoapp.adapter.in.web.util.AppLinksBuilder.buildVerificationLink;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
+import it.aldinucci.todoapp.application.port.in.GetOrCreateVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
+import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.EmailWebDto;
@@ -27,11 +30,11 @@ public class ResendVerificationTokenController {
 	
 	private static final String EMAIL_REQUEST_VIEW = "login/email.request";
 	
-	private RetrieveVerificationTokenUsePort retrieveToken;
+	private GetOrCreateVerificationTokenUsePort retrieveToken;
 	private SendVerificationEmailUsePort sendMail;
 	
 	@Autowired
-	public ResendVerificationTokenController(RetrieveVerificationTokenUsePort retrieveToken,
+	public ResendVerificationTokenController(GetOrCreateVerificationTokenUsePort retrieveToken,
 			SendVerificationEmailUsePort sendMail) {
 		super();
 		this.retrieveToken = retrieveToken;
@@ -51,17 +54,19 @@ public class ResendVerificationTokenController {
 		if(bindingResult.hasErrors())
 			return modelAndView;
 
-		String token;
+		Optional<VerificationToken> optionalToken;
 		try {
-			token = retrieveToken.get(new UserIdDTO(emailWebDto.email())).getToken();
-		} catch (AppUserNotFoundException e) {
-			modelAndView.addObject("emailNotFound", true);
-			return modelAndView;
+			optionalToken = retrieveToken.get(new UserIdDTO(emailWebDto.email()));
+			if (optionalToken.isEmpty()) {
+				modelAndView.addObject("emailNotFound", true);
+				return modelAndView;
+			}
 		}  catch (AppUserEmailAlreadyVerifiedException e) {
 			modelAndView.addObject("emailAlreadyVerified", true);
 			return modelAndView;
 		}
 		
+		String token = optionalToken.get().getToken();
 		sendMail.send(buildVerificationLink(
 				ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString(),
 				token, emailWebDto.email()));

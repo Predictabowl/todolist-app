@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.aldinucci.todoapp.application.port.in.RetrieveVerificationTokenUsePort;
+import it.aldinucci.todoapp.application.port.in.GetOrCreateVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificatinTokenByUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
@@ -17,11 +17,10 @@ import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
-import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @Service
 @Transactional
-public class RetrieveVerificationTokenService implements RetrieveVerificationTokenUsePort {
+public class GetOrCreateVerificationTokenService implements GetOrCreateVerificationTokenUsePort {
 	
 	private LoadUserByEmailDriverPort loadUser;
 	private LoadVerificationTokenByEmailDriverPort loadToken;
@@ -30,7 +29,7 @@ public class RetrieveVerificationTokenService implements RetrieveVerificationTok
 
 
 	@Autowired
-	public RetrieveVerificationTokenService(LoadUserByEmailDriverPort loadUser,
+	public GetOrCreateVerificationTokenService(LoadUserByEmailDriverPort loadUser,
 			LoadVerificationTokenByEmailDriverPort loadToken, DeleteVerificatinTokenByUserDriverPort deleteToken,
 			CreateVerificationToken createToken) {
 		super();
@@ -42,22 +41,22 @@ public class RetrieveVerificationTokenService implements RetrieveVerificationTok
 
 
 	@Override
-	public VerificationToken get(UserIdDTO userId){
-		User user = loadUser.load(userId.getEmail()).orElseThrow(() ->
-				new AppUserNotFoundException("Could not find user with email: " + userId.getEmail()));
+	public Optional<VerificationToken> get(UserIdDTO userId) throws AppUserEmailAlreadyVerifiedException{
+		Optional<User> optionalUser = loadUser.load(userId.getEmail());
+		if(optionalUser.isEmpty())
+			return Optional.empty();
 		
-		if (user.isEnabled())
+		if (optionalUser.get().isEnabled())
 			throw new AppUserEmailAlreadyVerifiedException("Email "+userId.getEmail()+" is already verified.");
 		
 		Optional<VerificationToken> token = loadToken.load(userId.getEmail());
 		if (token.isPresent()) {
-			if(token.get().isExpired(Calendar.getInstance().getTime()))
-				deleteToken.delete(userId.getEmail());
-			else
-				return token.get();
+			if(!token.get().isExpired(Calendar.getInstance().getTime()))
+				return token;
+			deleteToken.delete(userId.getEmail());
 		}
 		
-		return createToken.create(userId.getEmail());
+		return Optional.of(createToken.create(userId.getEmail()));
 	}
 
 }
