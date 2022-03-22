@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Calendar;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -57,10 +56,6 @@ class RegisterUserWebControllerTest {
 	@Autowired
 	private MockMvc mvc;
 	
-	@BeforeEach
-	void setUp() {
-	}
-
 	@Test
 	void test_getRegisterPage() throws Exception {
 		ModelAndView modelAndView = mvc.perform(get(FIXTURE_URI))
@@ -95,7 +90,7 @@ class RegisterUserWebControllerTest {
 	}
 	
 	@Test
-	void test_postRegister_whenEmailsDontMatch() throws Exception {
+	void test_postRegister_whenPasswordDontMatch() throws Exception {
 		RegisterUserDto registerUserDto = new RegisterUserDto("email@test.it", "test name", "test 1", "test 2");
 				
 		mvc.perform(
@@ -105,6 +100,27 @@ class RegisterUserWebControllerTest {
 				.param("username", "test name")
 				.param("password", "test 1")
 				.param("confirmedPassword", "test 2"))
+			.andExpect(status().is2xxSuccessful())
+			.andExpect(view().name(FIXTURE_REGISTER_VIEW))
+			.andExpect(model().attribute("registerUserDto", registerUserDto))
+			.andExpect(model().attributeDoesNotExist("emailExists"));
+		
+		verifyNoInteractions(createUser);
+		verifyNoInteractions(mapper);
+		verifyNoInteractions(sendMail);
+	}
+	
+	@Test
+	void test_postRegister_whenPasswordIsInvalid() throws Exception {
+		RegisterUserDto registerUserDto = new RegisterUserDto("email@test.it", "test name", "", "");
+				
+		mvc.perform(
+			post(FIXTURE_URI)
+				.with(csrf())
+				.param("email", "email@test.it")
+				.param("username", "test name")
+				.param("password", "")
+				.param("confirmedPassword", ""))
 			.andExpect(status().is2xxSuccessful())
 			.andExpect(view().name(FIXTURE_REGISTER_VIEW))
 			.andExpect(model().attribute("registerUserDto", registerUserDto))

@@ -80,7 +80,7 @@ class RegisterSentNotificationViewTest {
 	
 	@BeforeEach
 	void setUp() {
-		when(mapper.map(isA(RegisterUserDto.class))).thenReturn(new NewUserDTOIn("name", FIXTURE_EMAIL, "test"));
+		when(mapper.map(isA(RegisterUserDto.class))).thenReturn(new NewUserDTOIn("name", FIXTURE_EMAIL, "test2"));
 		doNothing().when(sendMail).send(isA(EmailLinkDTO.class));
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 	}
@@ -97,8 +97,8 @@ class RegisterSentNotificationViewTest {
 		webRequest.setRequestParameters(Arrays.asList(
 				new NameValuePair("email", FIXTURE_EMAIL),
 				new NameValuePair("username", "user"),
-				new NameValuePair("password", "pass"),
-				new NameValuePair("confirmedPassword", "pass")));
+				new NameValuePair("password", "passw"),
+				new NameValuePair("confirmedPassword", "passw")));
 		page = webClient.getPage(webRequest);
 
 		String textContent = page.getBody().getTextContent();

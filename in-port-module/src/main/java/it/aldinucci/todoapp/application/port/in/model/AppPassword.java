@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.application.port.in.model;
 
 import java.util.Objects;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -11,8 +10,7 @@ import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 public class AppPassword extends AutoValidatingInputModel<AppPassword>{
 
 	@NotNull
-	@NotEmpty
-	@Size(max = 255)
+	@Size(min = 5, max = 50)
 	private final String password;
 
 	public AppPassword(String email){

@@ -44,7 +44,7 @@ import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
-import it.aldinucci.todoapp.webcommons.dto.NewProjectWebDto;
+import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
 import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 
 @ExtendWith(SpringExtension.class)
@@ -141,7 +141,7 @@ class IndexWebViewTest {
 		
 		verify(createProjectWebController).createProject(
 				isA(Authentication.class), 
-				eq(new NewProjectWebDto("Test Project")),
+				eq(new ProjectDataWebDto("Test Project")),
 				isA(BindingResult.class));
 	}
 	

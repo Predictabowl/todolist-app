@@ -77,7 +77,7 @@ class RegisterUserWebViewTest {
 	
 	@BeforeEach
 	void setUp() throws FailingHttpStatusCodeException, MalformedURLException, IOException, AppEmailAlreadyRegisteredException {
-		when(mapper.map(isA(RegisterUserDto.class))).thenReturn(new NewUserDTOIn("name", "user@email.it", "test"));
+		when(mapper.map(isA(RegisterUserDto.class))).thenReturn(new NewUserDTOIn("name", "user@email.it", "test pass"));
 		when(createUser.create(isA(NewUserDTOIn.class))).thenReturn(
 				new NewUserDtoOut(
 						new User("user@email.it",null,null),
@@ -93,11 +93,11 @@ class RegisterUserWebViewTest {
 		HtmlForm form = page.getFormByName("user-register");
 		form.getInputByName("email").setValueAttribute("user@email.it");
 		form.getInputByName("username").setValueAttribute("name");
-		form.getInputByName("password").setValueAttribute("test");
-		form.getInputByName("confirmedPassword").setValueAttribute("test");
+		form.getInputByName("password").setValueAttribute("test pass");
+		form.getInputByName("confirmedPassword").setValueAttribute("test pass");
 		form.getButtonByName("form-submit").click();
 		
-		RegisterUserDto userDto = new RegisterUserDto("user@email.it", "name", "test", "test");
+		RegisterUserDto userDto = new RegisterUserDto("user@email.it", "name", "test pass", "test pass");
 		ArgumentCaptor<BindingResult> bindingResult = ArgumentCaptor.forClass(BindingResult.class);
 		verify(controller).postRegistrationPage(eq(userDto), bindingResult.capture());
 		assertThat(bindingResult.getValue().getAllErrors()).isEmpty();

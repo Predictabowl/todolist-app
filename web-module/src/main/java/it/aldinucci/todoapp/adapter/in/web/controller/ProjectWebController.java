@@ -24,7 +24,7 @@ import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
-import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
+import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -53,7 +53,7 @@ public class ProjectWebController {
 
 	@GetMapping("/tasks")
 	public String getTasks(Authentication authentication, Model model, @Valid ProjectIdDTO projectId,
-				NewTaskWebDto newTaskWebDto) {
+				TaskDataWebDto newTaskWebDto) {
 		
 		User user = loadUser.load(projectId).orElseThrow(() -> 
 				new AppUserNotFoundException("Critical Data Integrity error while searching the User of project with id: "

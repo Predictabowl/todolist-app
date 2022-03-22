@@ -18,7 +18,7 @@
 							<input class="input is-rounded" type="email" id="username"
 								name="username" placeholder="Email" required/> 
 							<span class="icon is-small is-left">
-								<i class="fas fa-envelope"></i>
+								<em class="fas fa-envelope"></em>
 							</span>
 						</div>
 					</div>
@@ -27,7 +27,7 @@
 							<input class="input is-rounded" type="password" id="password"
 								name="password" placeholder="Password" required/>
 							<span class="icon is-small is-left">
-								<i class="fas fa-key"></i>
+								<em class="fas fa-key"></em>
 							</span>
 						</div>
 					</div>
@@ -39,6 +39,9 @@
 			</div>
 			<div class="mt-4">
 				<a class="link" th:href="@{/user/register}" th:text="#{register}"></a>
+			</div>
+			<div class="mt-3">
+				<a class="link" th:href="@{/user/register/password/reset}" th:text="#{password.reset}"></a>
 			</div>
 		</div>
 	</section>

@@ -55,7 +55,6 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
-import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
 import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
 import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
@@ -176,7 +175,7 @@ class ProjectWebViewTest {
 		verify(createTaskController).createNewTask(
 				isA(Authentication.class),
 				eq(new ProjectIdDTO(5)),
-				eq(new NewTaskWebDto("test task", "Test description\r\nNewline")),
+				eq(new TaskDataWebDto("test task", "Test description\r\nNewline")),
 				isA(BindingResult.class));
 		
 	}

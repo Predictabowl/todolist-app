@@ -14,10 +14,10 @@
 					<label class="help is-danger" th:if="${emailAlreadyVerified != null}" th:text="#{email.exists}"></label>
 				</div>
 				<div class="control">
-					<button class="button is-link is-rounded" type="submit" name="submit-button" value="Register in" th:text="#{send}"></button>
+					<button th:replace="fragments/commons :: genericFormSubmitButton(#{send})"></button>
 				</div>
 			</form>
-			<div>
+			<div class="mt-4">
 				<a th:href="@{/login}" th:text="#{back.to.login}"></a>
 			</div>
 		</div>

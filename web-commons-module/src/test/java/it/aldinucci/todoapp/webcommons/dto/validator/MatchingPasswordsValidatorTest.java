@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import it.aldinucci.todoapp.webcommons.dto.InputPasswordsDto;
+import it.aldinucci.todoapp.webcommons.model.InputPasswords;
 
 class MatchingPasswordsValidatorTest {
 
@@ -27,7 +27,7 @@ class MatchingPasswordsValidatorTest {
 	
 	@Test
 	void test_validate_success() {
-		InputPasswordsDto passwords = new InputPasswordsDto("pass", "pass");
+		InputPasswords passwords = new InputPasswords("pass", "pass");
 		
 		boolean valid = matchingValidator.isValid(passwords, context);
 		
@@ -37,7 +37,7 @@ class MatchingPasswordsValidatorTest {
 	
 	@Test
 	void test_validate_failure() {
-		InputPasswordsDto passwords = new InputPasswordsDto("pass 1", "pass 2");
+		InputPasswords passwords = new InputPasswords("pass 1", "pass 2");
 		
 		boolean valid = matchingValidator.isValid(passwords, context);
 		

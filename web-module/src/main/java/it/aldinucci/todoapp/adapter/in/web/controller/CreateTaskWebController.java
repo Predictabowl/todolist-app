@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
-import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
+import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @Controller
@@ -30,7 +30,7 @@ public class CreateTaskWebController {
 	}
 	
 	@PostMapping
-	public String createNewTask(Authentication auth, ProjectIdDTO projectId, @Valid NewTaskWebDto newTaskWebDto,
+	public String createNewTask(Authentication auth, ProjectIdDTO projectId, @Valid TaskDataWebDto newTaskWebDto,
 			BindingResult  bindingResult) {
 		if(!bindingResult.hasErrors()) {
 			authorize.check(auth.getName(), projectId);

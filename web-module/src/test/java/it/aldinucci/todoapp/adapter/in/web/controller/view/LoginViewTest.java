@@ -3,6 +3,7 @@ package it.aldinucci.todoapp.adapter.in.web.controller.view;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,15 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.ui.Model;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
+import it.aldinucci.todoapp.adapter.in.web.controller.RequestResetPasswordWebController;
+import it.aldinucci.todoapp.webcommons.dto.EmailWebDto;
 import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
 
 @ExtendWith(SpringExtension.class)
@@ -37,6 +42,9 @@ class LoginViewTest {
 	@MockBean
 	private RegisterUserWebController registerController;
 	
+	@MockBean
+	private RequestResetPasswordWebController resetPasswordController;
+	
 	private HtmlPage page;
 	
 	@BeforeEach
@@ -46,11 +54,24 @@ class LoginViewTest {
 	}
 	
 	@Test
-	void test_registerLink() {
-		assertThatCode(() -> page.getAnchorByHref("/user/register").click())
-			.doesNotThrowAnyException();
+	void test_registerLink() throws IOException {
+		HtmlAnchor registerLink = page.getAnchorByHref("/user/register");
+
+		assertThat(registerLink.getTextContent()).matches("Register");
 		
+		registerLink.click();
 		verify(registerController).showRegistrationPage(new RegisterUserDto(null, null, null, null));
+	}
+	
+	@Test
+	void test_resetPasswordLink() throws IOException {
+		when(resetPasswordController.emailRequest(any(), any())).thenReturn("test-view-page");
+		
+		HtmlAnchor passwordResetLink = page.getAnchorByHref("/user/register/password/reset");
+		assertThat(passwordResetLink.getTextContent()).matches("Password reset");
+		passwordResetLink.click();
+		
+		verify(resetPasswordController).emailRequest(eq(new EmailWebDto(null)), isA(Model.class));
 	}
 	
 	@Test

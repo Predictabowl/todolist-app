@@ -13,7 +13,6 @@ import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 import it.aldinucci.todoapp.application.port.out.DeleteRestPasswordTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadResetPasswordTokenDriverPort;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
-import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @Service
 @Transactional
@@ -31,7 +30,7 @@ public class VerifyResetPasswordTokenService implements VerifyResetPasswordToken
 	}
 
 	@Override
-	public boolean verify(StringTokenDTOIn token) throws AppUserNotFoundException {
+	public boolean verify(StringTokenDTOIn token) {
 		Optional<ResetPasswordToken> optional = loadToken.load(token.getToken());
 
 		if (optional.isEmpty())

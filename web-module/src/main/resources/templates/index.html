@@ -72,7 +72,7 @@
 					<div class="box is-not-displayed" id="new-task-form-container">
 						<form th:action="@{/web/project/{id}/task/new (id=${activeProject.id})}" 
 								name="new-task-form" method="post"
-								th:object="${newTaskWebDto}">
+								th:object="${taskDataWebDto}">
 							<div class="field" th:insert="fragments/commons::inputWithField('name', 'Name', 'text')"></div>
 							<div class="field">
 								<textarea class="textarea" placeholder="Description" name="description" ></textarea>

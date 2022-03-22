@@ -23,7 +23,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.ProjectJPAReposit
 import it.aldinucci.todoapp.adapter.out.persistence.repository.TaskJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
 import it.aldinucci.todoapp.domain.Task;
-import it.aldinucci.todoapp.webcommons.dto.NewTaskWebDto;
+import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
@@ -74,7 +74,7 @@ class RestUpdateTaskIT {
 			.sessionId(sessionId)
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.accept(MediaType.APPLICATION_JSON_VALUE)
-			.body(new NewTaskWebDto("new name", "new descr"))
+			.body(new TaskDataWebDto("new name", "new descr"))
 		.when()
 			.put(FIXTURE_URI+taskJPA.getId())
 		.then()

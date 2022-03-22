@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import it.aldinucci.todoapp.webcommons.dto.validator.annotation.MatchingPasswords;
+import it.aldinucci.todoapp.webcommons.model.InputPasswords;
 
 public class RegisterUserDto {
 	
@@ -23,12 +24,12 @@ public class RegisterUserDto {
 		
 		@MatchingPasswords
 		@Valid
-		private final InputPasswordsDto passwords;
+		private final InputPasswords passwords;
 		
 		public RegisterUserDto(String email, String username, String password, String confirmedPassword) {
 			this.email = email;
 			this.username = username;
-			passwords = new InputPasswordsDto(password, confirmedPassword);
+			passwords = new InputPasswords(password, confirmedPassword);
 		}
 
 		public final String getEmail() {
@@ -45,6 +46,10 @@ public class RegisterUserDto {
 		
 		public final String getConfirmedPassword() {
 			return passwords.confirmedPassword();
+		}
+		
+		public final InputPasswords getPasswords() {
+			return passwords;
 		}
 
 		@Override

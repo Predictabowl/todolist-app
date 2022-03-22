@@ -7,6 +7,19 @@
 <body>
 
 		
+	<!-- PASSWORD INPUT TEXT-->
+	<div class="field" th:fragment="inputPassword (fieldName, placeHolder)">
+		<div class="control has-icons-left">
+			<input th:class="'input is-rounded ' +${#fields.hasErrors('passwords.'+fieldName) ? 'is-danger' : 'is-success'}" type="password"
+				th:placeholder="${placeHolder}" th:field="*{__${fieldName}__}" required />
+			<label class="help is-danger"	th:if="${#fields.hasErrors('passwords.'+fieldName)}" th:id="'input-helper-passwords.'+${fieldName}" 
+				th:errors="*{__${'passwords.'+fieldName}__}"></label>
+	    	<span class="icon is-small is-left">
+				<em class="fas fa-key"></em>
+			</span>
+		</div>
+	</div>
+		
 	<!-- INPUT TEXT WITH OBJECT FIELDS REFERENCED AND ERROR DISPLAY -->
 	<div th:fragment="inputWithField (fieldName, placeHolder, inputType)">
 		<input th:class="'input is-rounded ' +${#fields.hasErrors(fieldName) ? 'is-danger' : 'is-success'}" th:type="${inputType}"
@@ -18,7 +31,7 @@
 	<!-- Add icon on the left of the input field -->
 	<div th:fragment="inputFieldWithIcon (fieldName, placeHolder, inputType, iconClass)">
 		<div class="control has-icons-left">
-			<div th:insert="~{::inputWithField(__${fieldName}__, __${placeHolder}__, __${inputType}__)}"></div>
+			<div th:replace="~{::inputWithField(__${fieldName}__, __${placeHolder}__, __${inputType}__)}"></div>
 	    	<span class="icon is-small is-left">
 				<em th:class="'fas ' +${iconClass}"></em>
 			</span>
