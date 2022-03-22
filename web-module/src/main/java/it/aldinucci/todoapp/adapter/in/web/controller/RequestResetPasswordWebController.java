@@ -24,9 +24,9 @@ import it.aldinucci.todoapp.webcommons.dto.EmailWebDto;
 
 @Controller
 @RequestMapping("/user/register/password/reset")
-public class ResetPasswordWebController {
+public class RequestResetPasswordWebController {
 
-	private static final String EMAIL_VIEW = "/user/register/password/reset";
+	private static final String BASE_URL = "/user/register/password/reset";
 	private static final String EMAIL_REQUEST_VIEW = "login/email.request";
 	
 	private GetOrCreatePasswordResetTokenUsePort retrieveToken;
@@ -34,7 +34,7 @@ public class ResetPasswordWebController {
 	
 
 	@Autowired
-	public ResetPasswordWebController(GetOrCreatePasswordResetTokenUsePort retrieveToken,
+	public RequestResetPasswordWebController(GetOrCreatePasswordResetTokenUsePort retrieveToken,
 			SendResetPasswordEmailUsePort sendEmail) {
 		super();
 		this.retrieveToken = retrieveToken;
@@ -43,14 +43,14 @@ public class ResetPasswordWebController {
 
 	@GetMapping
 	public String emailRequest(EmailWebDto email, Model model) {
-		model.addAttribute("actionLink", EMAIL_VIEW);
+		model.addAttribute("actionLink", BASE_URL);
 		return EMAIL_REQUEST_VIEW;
 	}
 	
 	@PostMapping
 	public ModelAndView tokenCreation(@Valid EmailWebDto email, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView(EMAIL_REQUEST_VIEW);
-		modelAndView.addObject("actionLink", EMAIL_VIEW);
+		modelAndView.addObject("actionLink", BASE_URL);
 		if(bindingResult.hasErrors())
 			return modelAndView;
 		

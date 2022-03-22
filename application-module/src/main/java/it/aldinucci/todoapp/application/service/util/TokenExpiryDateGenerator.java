@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.application.service.util;
 
-import java.time.Duration;
 import java.util.Date;
 
 public interface TokenExpiryDateGenerator {

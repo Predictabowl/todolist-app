@@ -15,7 +15,6 @@ import it.aldinucci.todoapp.application.port.out.LoadResetPasswordTokenByEmailDr
 import it.aldinucci.todoapp.application.port.out.UserExistsDriverPort;
 import it.aldinucci.todoapp.application.service.util.CreateResetPasswordToken;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
-import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @Service
 @Transactional

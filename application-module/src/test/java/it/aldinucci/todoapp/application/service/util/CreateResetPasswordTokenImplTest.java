@@ -1,18 +1,15 @@
 package it.aldinucci.todoapp.application.service.util;
 
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.RESET_PASSWORD_TOKEN_DURATION;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import static it.aldinucci.todoapp.config.ApplicationPropertyNames.RESET_PASSWORD_TOKEN_DURATION;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -7,9 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,7 +20,6 @@ import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
-import it.aldinucci.todoapp.webcommons.dto.validator.RegisterUserValidator;
 
 @Controller
 @RequestMapping("/user/register")
@@ -34,17 +31,15 @@ public class RegisterUserWebController {
 	
 	private CreateUserUsePort createUser;
 	private AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper;
-	private RegisterUserValidator registerUserValidator;
 	private SendVerificationEmailUsePort sendVerificationEmail;
 	
 	@Autowired
 	public RegisterUserWebController(CreateUserUsePort createUser,
-			AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper, RegisterUserValidator registerUserValidator,
+			AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper,
 			SendVerificationEmailUsePort sendVerificationEmail) {
 		super();
 		this.createUser = createUser;
 		this.mapper = mapper;
-		this.registerUserValidator = registerUserValidator;
 		this.sendVerificationEmail = sendVerificationEmail;
 	}
 
@@ -76,8 +71,4 @@ public class RegisterUserWebController {
 		return modelAndView;
 	}
 
-	@InitBinder(value = "registerUserDto")
-	void initRegisterUserValidator(WebDataBinder binder) {
-		binder.setValidator(registerUserValidator);
-	}
 }

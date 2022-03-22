@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.adapter.in.web.controller.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -34,15 +33,14 @@ import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
 import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
-import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
-import it.aldinucci.todoapp.webcommons.dto.validator.RegisterUserValidator;
 
 /**
  * These test class should only check if the view will interact correctly with the
@@ -70,9 +68,6 @@ class RegisterSentNotificationViewTest {
 	private AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper;
 	
 	@MockBean
-	private RegisterUserValidator userValidator;
-	
-	@MockBean
 	private SendVerificationEmailUsePort sendMail;
 	
 	@MockBean
@@ -85,8 +80,6 @@ class RegisterSentNotificationViewTest {
 	
 	@BeforeEach
 	void setUp() {
-		when(userValidator.supports(RegisterUserDto.class)).thenReturn(true);
-		doNothing().when(userValidator).validate(any(), any());
 		when(mapper.map(isA(RegisterUserDto.class))).thenReturn(new NewUserDTOIn("name", FIXTURE_EMAIL, "test"));
 		doNothing().when(sendMail).send(isA(EmailLinkDTO.class));
 		LocaleContextHolder.setLocale(Locale.ENGLISH);

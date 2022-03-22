@@ -12,6 +12,6 @@ public class AppLinksBuilder {
 	}
 	
 	public static EmailLinkDTO buildResetPasswordLink(String contextPath, String tokenCode, String email) {
-		return new EmailLinkDTO(contextPath+"/user/register/password/reset/verification/"+tokenCode, email);
+		return new EmailLinkDTO(contextPath+"/user/register/password/reset/perform/"+tokenCode, email);
 	}
 }

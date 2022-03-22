@@ -16,7 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ResetPasswordTokenJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
-import it.aldinucci.todoapp.domain.ResetPasswordToken;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)

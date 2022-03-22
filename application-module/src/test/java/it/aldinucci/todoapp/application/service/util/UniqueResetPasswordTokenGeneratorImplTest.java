@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.application.service.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
@@ -15,7 +14,6 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import java.time.Duration;
 import java.util.Calendar;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +23,6 @@ import org.mockito.Mockito;
 
 import it.aldinucci.todoapp.application.port.out.DeleteRestPasswordTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadResetPasswordTokenDriverPort;
-import it.aldinucci.todoapp.domain.ResetPasswordToken;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
 import it.aldinucci.todoapp.exception.AppCouldNotGenerateTokenException;
 

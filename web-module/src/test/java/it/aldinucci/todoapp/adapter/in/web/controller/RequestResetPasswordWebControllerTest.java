@@ -30,9 +30,9 @@ import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
 
-@WebMvcTest(controllers = {ResetPasswordWebController.class})
+@WebMvcTest(controllers = {RequestResetPasswordWebController.class})
 @ExtendWith(SpringExtension.class)
-class ResetPasswordWebControllerTest {
+class RequestResetPasswordWebControllerTest {
 
 	private static final String FIXTURE_EMAIL = "email@test.it";
 
@@ -127,10 +127,9 @@ class ResetPasswordWebControllerTest {
 			.andExpect(model().attributeDoesNotExist("actionLink"))
 			.andExpect(model().attribute("useremail", FIXTURE_EMAIL));
 		
-		UserIdDTO userIdDTO = new UserIdDTO(FIXTURE_EMAIL);
-		verify(retrieveToken).get(userIdDTO);
+		verify(retrieveToken).get(new UserIdDTO(FIXTURE_EMAIL));
 		verify(sendEmail).send(new EmailLinkDTO(
-				String.format("http://server:333%s/verification/%s", BASE_URL, "code"), 
+				String.format("http://server:333%s/perform/%s", BASE_URL, "code"), 
 				FIXTURE_EMAIL));
 	}
 

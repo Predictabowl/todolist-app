@@ -33,7 +33,7 @@ class AppLinksBuilderTest {
 		EmailLinkDTO linkDto = AppLinksBuilder.buildResetPasswordLink("http://homepage.com", "token-code", "test@email.it");
 		
 		assertThat(linkDto.getEmail()).matches("test@email.it");
-		assertThat(linkDto.getLink()).matches("http://homepage.com/user/register/password/reset/verification/token-code");
+		assertThat(linkDto.getLink()).matches("http://homepage.com/user/register/password/reset/perform/token-code");
 	}
 
 }

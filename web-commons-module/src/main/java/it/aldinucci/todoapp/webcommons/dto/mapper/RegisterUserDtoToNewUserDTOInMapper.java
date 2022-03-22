@@ -11,7 +11,7 @@ public class RegisterUserDtoToNewUserDTOInMapper implements AppGenericMapper<Reg
 
 	@Override
 	public NewUserDTOIn map(RegisterUserDto model) {
-		return new NewUserDTOIn(model.username(), model.email(), model.password());
+		return new NewUserDTOIn(model.getUsername(), model.getEmail(), model.getPassword());
 	}
 
 }
