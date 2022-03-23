@@ -95,7 +95,7 @@ class RegisterUserWebViewTest {
 		form.getInputByName("username").setValueAttribute("name");
 		form.getInputByName("password").setValueAttribute("test pass");
 		form.getInputByName("confirmedPassword").setValueAttribute("test pass");
-		form.getButtonByName("form-submit").click();
+		form.getButtonByName("submit-button").click();
 		
 		RegisterUserDto userDto = new RegisterUserDto("user@email.it", "name", "test pass", "test pass");
 		ArgumentCaptor<BindingResult> bindingResult = ArgumentCaptor.forClass(BindingResult.class);
@@ -111,7 +111,7 @@ class RegisterUserWebViewTest {
 		form.getInputByName("username").setValueAttribute("name");
 		form.getInputByName("password").setValueAttribute("pass1");
 		form.getInputByName("confirmedPassword").setValueAttribute("pass2");
-		form.getButtonByName("form-submit").click();
+		form.getButtonByName("submit-button").click();
 		
 		RegisterUserDto userDto = new RegisterUserDto("useremail.it", "name", "pass1", "pass2");
 		ArgumentCaptor<BindingResult> bindingResult = ArgumentCaptor.forClass(BindingResult.class);

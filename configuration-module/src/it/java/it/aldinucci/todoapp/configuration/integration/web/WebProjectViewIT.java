@@ -185,6 +185,6 @@ class WebProjectViewIT {
 		
 		webDriver.findElement(By.name("username")).sendKeys("user@email.it");
 		webDriver.findElement(By.name("password")).sendKeys("test2Pass");
-		webDriver.findElement(By.name("log-in")).click();
+		webDriver.findElement(By.name("submit-button")).click();
 	}
 }

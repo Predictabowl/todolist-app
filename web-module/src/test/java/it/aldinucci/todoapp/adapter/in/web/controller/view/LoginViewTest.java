@@ -84,7 +84,7 @@ class LoginViewTest {
 	 	assertThatCode(() -> form.getInputByName("password").setValueAttribute("password"))
 	 		.doesNotThrowAnyException();
 		
-	 	assertThatCode(() -> form.getButtonByName("log-in").click())
+	 	assertThatCode(() -> form.getButtonByName("submit-button").click())
 	 		.doesNotThrowAnyException();
 		
 		assertThat(form.getActionAttribute()).matches("/login");
