@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import it.aldinucci.todoapp.adapter.out.persistence.entity.ResetPasswordTokenJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
 
@@ -28,21 +29,24 @@ class DeleteUserByEmailJPATest {
 	private TestEntityManager entityManager;
 
 	@Test
-	void test_deleteUserShouldAlsoDeleteVerificationTokens() {
+	void test_deleteUserShouldAlsoDeleteTokens() {
 		UserJPA user = new UserJPA("email", "name", "pass");
 		entityManager.persist(user);
-		VerificationTokenJPA token = new VerificationTokenJPA("code", user, Calendar.getInstance().getTime());
-		entityManager.persist(token);
+		VerificationTokenJPA vToken = entityManager.persist(
+				new VerificationTokenJPA("code", user, Calendar.getInstance().getTime()));
+		ResetPasswordTokenJPA rpToken = entityManager.persist(
+				new ResetPasswordTokenJPA("code", user, Calendar.getInstance().getTime()));
 		entityManager.flush();
 
 		deleteUser.delete("email");
 
 		assertThat(entityManager.find(UserJPA.class, user.getId())).isNull();
-		assertThat(entityManager.find(VerificationTokenJPA.class, token.getId())).isNull();
+		assertThat(entityManager.find(VerificationTokenJPA.class, vToken.getId())).isNull();
+		assertThat(entityManager.find(ResetPasswordTokenJPA.class, rpToken.getId())).isNull();
 	}
 
 	@Test
-	void test_deleteUser_whenVerificationTokenNotPresent() {
+	void test_deleteUser_whenTokenNotPresent() {
 		UserJPA user = new UserJPA("email", "name", "pass");
 		entityManager.persist(user);
 		entityManager.flush();

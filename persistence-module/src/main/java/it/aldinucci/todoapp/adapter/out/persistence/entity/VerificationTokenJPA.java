@@ -49,41 +49,41 @@ public class VerificationTokenJPA {
 		this.expiryDate = expiryDate;
 	}
 
-	public Long getId() {
+	public final Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public final void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getToken() {
+	public final String getToken() {
 		return token;
 	}
 
-	public void setToken(String token) {
+	public final void setToken(String token) {
 		this.token = token;
 	}
 
-	public UserJPA getUser() {
+	public final UserJPA getUser() {
 		return user;
 	}
 
-	public void setUser(UserJPA user) {
+	public final void setUser(UserJPA user) {
 		this.user = user;
 	}
 
-	public Date getExpiryDate() {
+	public final Date getExpiryDate() {
 		return expiryDate;
 	}
 
-	public void setExpiryDate(Date expiryDate) {
+	public final void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(expiryDate, id, token);
+		return Objects.hash(expiryDate, id, token, user);
 	}
 
 	@Override
@@ -96,12 +96,13 @@ public class VerificationTokenJPA {
 			return false;
 		VerificationTokenJPA other = (VerificationTokenJPA) obj;
 		return Objects.equals(expiryDate, other.expiryDate) && Objects.equals(id, other.id)
-				&& Objects.equals(token, other.token);
+				&& Objects.equals(token, other.token) && Objects.equals(user, other.user);
 	}
 
 	@Override
 	public String toString() {
-		return "VerificationTokenJPA [id=" + id + ", token=" + token + ", expiryDate=" + expiryDate + "]";
+		return "VerificationTokenJPA [id=" + id + ", token=" + token + ", user=" + user + ", expiryDate=" + expiryDate
+				+ "]";
 	}
 
 

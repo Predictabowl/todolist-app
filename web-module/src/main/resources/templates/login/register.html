@@ -13,8 +13,12 @@
 					<label class="help is-danger" th:if="${emailExists != null}" th:text="#{email.exists}"></label>
 				</div>
 				<div class="field" th:insert="fragments/commons::inputFieldWithIcon('username', 'Username', 'text', 'fa-user')"></div>
-				<div class="field" th:insert="~{fragments/commons::inputFieldWithIcon('password','Password', 'password', 'fa-key')}"></div>
-				<div class="field" th:insert="~{fragments/commons::inputFieldWithIcon('confirmedPassword','Repeat-Password', 'password', 'fa-key')}"></div>
+				<div th:replace="fragments/commons :: inputPassword('password', 'Password')"> </div>
+				<div th:replace="fragments/commons :: inputPassword('confirmedPassword', 'Repeat Password')"> </div>
+				<div class="field">
+					<label class="help is-danger"	th:if="${#fields.hasErrors('passwords')}" id="input-helper-passwords" 
+						th:errors="*{passwords}"></label>
+				</div>
 				<div class="control">
 					<button class="button is-primary is-rounded" type="submit" name="form-submit" value="Register in" th:text="#{register}"></button>
 				</div>					

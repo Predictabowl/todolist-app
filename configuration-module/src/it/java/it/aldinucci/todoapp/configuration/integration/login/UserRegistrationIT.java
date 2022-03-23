@@ -96,8 +96,10 @@ class UserRegistrationIT {
 		String messageBody = receivedMessages[0].getContent().toString();
 		assertThat(messageBody).contains(optionalToken.get().getToken());
 		
-		String verificationUrl = "http://"+messageBody.split("http://")[1].trim();
-		
+		String verificationUrl = messageBody.substring(
+				messageBody.indexOf("href='")+6,
+				messageBody.indexOf("'>V"));
+				
 		webDriver.get(verificationUrl);
 		
 		UserJPA updatedUserJpa = userRepo.findByEmail("test@email.it").get();

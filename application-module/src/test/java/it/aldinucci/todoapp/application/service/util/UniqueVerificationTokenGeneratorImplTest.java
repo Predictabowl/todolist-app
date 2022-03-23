@@ -2,6 +2,7 @@ package it.aldinucci.todoapp.application.service.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -9,6 +10,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -22,7 +24,7 @@ import org.mockito.Mockito;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.domain.VerificationToken;
-import it.aldinucci.todoapp.exception.AppCouldNotGenerateVerificationTokenException;
+import it.aldinucci.todoapp.exception.AppCouldNotGenerateTokenException;
 
 class UniqueVerificationTokenGeneratorImplTest {
 
@@ -106,8 +108,9 @@ class UniqueVerificationTokenGeneratorImplTest {
 	VerificationToken token = new VerificationToken("random string", calendar.getTime(), "user@test.it");
 	when(loadToken.load(isA(String.class))).thenReturn(Optional.of(token));
 	
-	assertThatThrownBy(() -> tokenGenerator.generate())
-		.isInstanceOf(AppCouldNotGenerateVerificationTokenException.class);
+	assertTimeoutPreemptively(Duration.ofSeconds(5), () -> 
+		assertThatThrownBy(() -> tokenGenerator.generate())
+			.isInstanceOf(AppCouldNotGenerateTokenException.class));
 	
 	}
 

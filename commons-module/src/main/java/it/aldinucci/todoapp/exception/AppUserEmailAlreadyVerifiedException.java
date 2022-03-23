@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.exception;
 
-public class AppUserEmailAlreadyVerifiedException extends RuntimeException{
+public class AppUserEmailAlreadyVerifiedException extends Exception{
 
 	/**
 	 * 

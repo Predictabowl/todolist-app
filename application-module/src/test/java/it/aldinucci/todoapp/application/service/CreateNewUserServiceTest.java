@@ -13,11 +13,12 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
@@ -28,7 +29,9 @@ import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
+import it.aldinucci.todoapp.util.AppPasswordEncoder;
 
+@ExtendWith(SpringExtension.class)
 class CreateNewUserServiceTest {
 
 	private static final String FIXTURE_EMAIL = "test@email.it";
@@ -37,7 +40,7 @@ class CreateNewUserServiceTest {
 	private CreateUserDriverPort createUser;
 	
 	@Mock
-	private PasswordEncoder encoder;
+	private AppPasswordEncoder encoder;
 	
 	@Mock 
 	private LoadUserByEmailDriverPort loadUser;
@@ -59,7 +62,7 @@ class CreateNewUserServiceTest {
 		User createdUser = new User("email", "user", "pass");
 		VerificationToken token = new VerificationToken();
 		when(createUser.create(isA(NewUserData.class))).thenReturn(createdUser);
-		when(encoder.encode(isA(CharSequence.class))).thenReturn("encoded password");
+		when(encoder.encode(anyString())).thenReturn("encoded password");
 		when(loadUser.load(isA(String.class))).thenReturn(Optional.empty());
 		when(createToken.create(anyString())).thenReturn(token);
 		

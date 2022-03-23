@@ -1,14 +1,25 @@
 package it.aldinucci.todoapp.application.config;
 
-import static it.aldinucci.todoapp.config.ApplicationPropertyNames.*;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_ADDRESS;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_AUTH;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_DEBUG;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_HOST;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_PASSWORD;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_PORT;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_PROTOCOL;
+import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_SSL;
 
 import java.util.Properties;
 
+import javax.mail.internet.MimeMessage;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Configuration
 public class ApplicationBeansProvider {
@@ -44,13 +55,24 @@ public class ApplicationBeansProvider {
 	    mailSender.setPort(emailPort);
 	    mailSender.setUsername(emailAddress);
 	    mailSender.setPassword(emailPassword);
+	    mailSender.setProtocol(emailProtocol);
 
 	    Properties props = mailSender.getJavaMailProperties();
-	    props.put("mail.transport.protocol", emailProtocol);
+//	    props.put("mail.transport.protocol", emailProtocol);
 	    props.put("mail.smtp.auth", emailAuth);
 	    props.put("mail.smtp.ssl.enable", emailSsl);
 	    props.put("mail.debug", emailDebug);
 	    
 	    return mailSender;
+	}
+	
+	@Bean
+	public MimeMessage getMimeMessage(@Autowired JavaMailSender javaMailSender) {
+		return javaMailSender.createMimeMessage();
+	}
+	
+	@Bean
+	public MimeMessageHelper getMimeMessageHelper(@Autowired MimeMessage mimeMessage) {
+		return new MimeMessageHelper(mimeMessage);
 	}
 }

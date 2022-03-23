@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.application.port.in.VerifyUserEmailUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.VerifyTokenDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @WebMvcTest (controllers = {UserRegisterVerificationController.class})
@@ -37,38 +37,38 @@ class UserRegisterVerificationControllerTest {
 	
 	@Test
 	void test_verificationSuccessful() throws Exception {
-		when(verifyUser.verify(isA(VerifyTokenDTOIn.class))).thenReturn(true);
+		when(verifyUser.verify(isA(StringTokenDTOIn.class))).thenReturn(true);
 		
 		mvc.perform(get("/user/register/verification/"+FIXTURE_TOKEN))
 			.andExpect(status().isOk())
 			.andExpect(view().name(FIXTURE_RESULT_VIEW))
 			.andExpect(model().attribute("accountVerified", true));
 		
-		verify(verifyUser).verify(new VerifyTokenDTOIn(FIXTURE_TOKEN));
+		verify(verifyUser).verify(new StringTokenDTOIn(FIXTURE_TOKEN));
 	}
 	
 	@Test
 	void test_verification_Failure() throws Exception {
-		when(verifyUser.verify(isA(VerifyTokenDTOIn.class))).thenReturn(false);
+		when(verifyUser.verify(isA(StringTokenDTOIn.class))).thenReturn(false);
 		
 		mvc.perform(get("/user/register/verification/"+FIXTURE_TOKEN))
 			.andExpect(status().isOk())
 			.andExpect(view().name(FIXTURE_RESULT_VIEW))
 			.andExpect(model().attribute("accountVerified", false));
 		
-		verify(verifyUser).verify(new VerifyTokenDTOIn(FIXTURE_TOKEN));
+		verify(verifyUser).verify(new StringTokenDTOIn(FIXTURE_TOKEN));
 	}
 	
 	@Test
 	void test_verificationWhenUserNotExists() throws Exception {
-		when(verifyUser.verify(isA(VerifyTokenDTOIn.class)))
+		when(verifyUser.verify(isA(StringTokenDTOIn.class)))
 			.thenThrow(new AppUserNotFoundException("some error"));
 		
 		mvc.perform(get("/user/register/verification/"+FIXTURE_TOKEN))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/user/register"));
 		
-		verify(verifyUser).verify(new VerifyTokenDTOIn(FIXTURE_TOKEN));
+		verify(verifyUser).verify(new StringTokenDTOIn(FIXTURE_TOKEN));
 	}
 	
 	

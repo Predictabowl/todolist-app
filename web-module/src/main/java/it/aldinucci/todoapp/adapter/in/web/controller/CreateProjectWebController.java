@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
 import it.aldinucci.todoapp.domain.Project;
-import it.aldinucci.todoapp.webcommons.dto.NewProjectWebDto;
+import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
 
 @Controller
 @RequestMapping("web/project/new")
@@ -28,7 +28,7 @@ public class CreateProjectWebController {
 
 
 	@PostMapping
-	public String createProject(Authentication authentication,@Valid NewProjectWebDto newProjectWebDto,
+	public String createProject(Authentication authentication,@Valid ProjectDataWebDto newProjectWebDto,
 			BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
 			return "redirect:/web";

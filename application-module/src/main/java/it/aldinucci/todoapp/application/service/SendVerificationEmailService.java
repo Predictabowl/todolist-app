@@ -1,39 +1,31 @@
 package it.aldinucci.todoapp.application.service;
 
-import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_ADDRESS;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.VerificationLinkDTO;
+import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
+import it.aldinucci.todoapp.application.service.util.EmailSender;
 
 @Service
 public class SendVerificationEmailService implements SendVerificationEmailUsePort {
 
-	@Value("${" + VERIFICATION_EMAIL_ADDRESS + "}")
-	private String emailAddress;
-
-	private JavaMailSender emailSender;
+	private EmailSender emailSender;
 
 	@Autowired
-	public SendVerificationEmailService(JavaMailSender emailSender) {
+	public SendVerificationEmailService(EmailSender emailSender) {
+		super();
 		this.emailSender = emailSender;
 	}
-
+	
+	/*
+	 * Need to generalize the message with properties
+	 */
 	@Override
-	public void send(VerificationLinkDTO link) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setSubject("Account Verification");
-		message.setFrom(emailAddress);
-		message.setTo(link.getEmail());
-		message.setText("Verification email...\n" +
-				"Click on the following link: " + link.getLink());
-		emailSender.send(message);
-
+	public void send(EmailLinkDTO link) {
+		emailSender.send(link.getEmail(), "Account Verification",
+				String.format("Please click on the following link to activate your account:<br><br>"
+						+ "<a href='%s'>Verification link</a>", link.getLink()));
 	}
 
 }
