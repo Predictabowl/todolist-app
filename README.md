@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/Predictabowl/todolist-app/badge.svg?branch=master)](https://coveralls.io/github/Predictabowl/todolist-app?branch=master)
+
 # Todolist
 
 ## Maven build

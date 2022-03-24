@@ -120,7 +120,7 @@ class ProjectWebViewTest {
 		when(mapper.map(user)).thenReturn(new UserWebDto("username", FIXTURE_EMAIL));
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
 	}
-	
+
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_projectView_shouldContainsAllTask() throws FailingHttpStatusCodeException, MalformedURLException, IOException {

@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static org.awaitility.Awaitility.await;
 
 import java.io.IOException;
@@ -27,6 +26,15 @@ import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetupTest;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+
+/**
+ * If running these tests outside of the maven build, as in the IDE,
+ * then the application must be running beforehand, and it should be
+ * manually relaunched after every run to reset its state
+ * 
+ * @author piero
+ *
+ */
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TodolistApplicationE2E {
@@ -62,7 +70,7 @@ class TodolistApplicationE2E {
 
 	@Test
 	@Order(1)
-	void test_register_andLogin() throws IOException, MessagingException, InterruptedException {
+	void test_register_andLogin() throws IOException, MessagingException {
 		webDriver.get(baseUrl);
 
 		webDriver.findElement(By.cssSelector("a[href*='/user/register'")).click();
@@ -87,7 +95,7 @@ class TodolistApplicationE2E {
 	
 	@Test
 	@Order(2)
-	void test_resetPassword() throws IOException, MessagingException, InterruptedException {
+	void test_resetPassword() throws IOException, MessagingException {
 		webDriver.get(baseUrl+"/login");
 
 		webDriver.findElement(By.cssSelector("a[href*='/user/register/password/reset")).click();
@@ -113,7 +121,7 @@ class TodolistApplicationE2E {
 	
 	@Test
 	@Order(3)
-	void test_createAndEditProjects() throws InterruptedException {
+	void test_createAndEditProjects() {
 		webDriver.get(baseUrl+"/web");
 		
 		webDriver.findElement(By.id("open-new-project-card")).click();
@@ -146,27 +154,130 @@ class TodolistApplicationE2E {
 
 	@Test
 	@Order(4)
-	void test_createAndEditTask() throws InterruptedException {
-		fail("Test not implemented Yet!");
+	void test_createAndEditTask() {
+		webDriver.get(baseUrl+"/web");
+		webDriver.findElements(By.cssSelector("a[href*='/web/project")).stream()
+			.filter(e -> e.getText().contains("First Project")).findFirst().get().click();
 		
+		webDriver.findElement(By.id("add-task-link")).click();
+		WebElement newTaskForm = webDriver.findElement(By.name("new-task-form"));
+		newTaskForm.findElement(By.name("name")).sendKeys("New Task");
+		newTaskForm.findElement(By.name("description")).sendKeys("This is a task description");
+		newTaskForm.findElement(By.name("submit-button")).click();
+		
+		WebElement taskList = webDriver.findElement(By.id("tasks-list"));
+		assertThat(taskList.getText())
+			.contains("New Task")
+			.contains("This is a task description");
+		
+		Actions actions = new Actions(webDriver);
+		actions.moveToElement(taskList.findElement(By.className("dropdown-trigger")))
+			.perform();
+		taskList.findElement(By.partialLinkText("Edit Task")).click();
+		
+		WebElement editTaskForm = taskList.findElements(By.cssSelector("form")).stream().filter(e 
+				-> e.getAttribute("name").endsWith("-edit-form")).findFirst().get();
+		WebElement nameInput = editTaskForm.findElement(By.name("name"));
+		nameInput.clear();
+		nameInput.sendKeys("Old Task");
+		editTaskForm.findElement(By.name("description")).sendKeys(" (edited)");
+		editTaskForm.findElement(By.name("submit-button")).click();
+		
+		assertThat(webDriver.findElement(By.id("tasks-list")).getText())
+			.contains("Old Task")
+			.contains("This is a task description (edited)");
 	}
+	
+	@Test
+	@Order(5)
+	void test_toggleTaskStatus(){
+		WebElement taskList = webDriver.findElement(By.id("tasks-list"));
+		
+		WebElement toggleForm = taskList.findElements(By.tagName("form")).stream().filter(e ->
+				e.getAttribute("name").startsWith("complete-task-")).findFirst().get();
+		toggleForm.findElement(By.name("submit-button")).click();
+		
+		 assertThat(webDriver.findElement(By.id("tasks-list")).
+				 findElements(By.cssSelector("li"))).isEmpty();
+		 
+		Actions actions = new Actions(webDriver);
+		actions.moveToElement(webDriver.findElement(By.id("activeProject-menu-trigger")))
+			.perform();
+		webDriver.findElement(By.id("toggle-completed-tasks")).click();
+		
+		WebElement completedTaskList = webDriver.findElement(By.id("completed-tasks-list"));
+		await().atMost(Duration.ofSeconds(3)).ignoreExceptions().untilAsserted(() -> 
+			assertThat(completedTaskList.findElements(By.cssSelector("li")).get(0).getText())
+				.contains("Old Task")
+				.contains("This is a task description (edited)"));
+		
+		toggleForm = completedTaskList.findElements(By.tagName("form")).stream().filter(e ->
+			e.getAttribute("name").startsWith("complete-task-")).findFirst().get();
+		toggleForm.findElement(By.name("submit-button")).click();
+		
+		
+		assertThat(webDriver.findElement(By.id("completed-tasks-list"))
+				.findElements(By.cssSelector("li"))).isEmpty();
+
+		assertThat(webDriver.findElement(By.id("tasks-list"))
+				.findElement(By.cssSelector("li")).getText())
+			.contains("Old Task")
+			.contains("This is a task description (edited)");
+	}
+	
+	@Test
+	@Order(6)
+	void test_deleteTask(){
+		WebElement taskList = webDriver.findElement(By.id("tasks-list"));
+		Actions actions = new Actions(webDriver);
+		actions.moveToElement(taskList.findElement(By.className("dropdown-trigger")))
+			.perform();
+		taskList.findElement(By.partialLinkText("Delete Task")).click();
+		
+		webDriver.findElement(By.id("task-delete-form"))
+			.findElement(By.name("submit-button")).click();
+		
+		
+		assertThat(webDriver.findElement(By.id("tasks-list"))
+				.findElements(By.cssSelector("li"))).isEmpty();
+		assertThat(webDriver.findElement(By.id("completed-tasks-list"))
+				.findElements(By.cssSelector("li"))).isEmpty();
+	}
+	
+	@Test
+	@Order(7)
+	void test_deleteProject() {
+		Actions actions = new Actions(webDriver);
+		actions.moveToElement(webDriver.findElement(By.id("activeProject-menu-trigger")))
+			.perform();
+		webDriver.findElement(By.id("activeProject-delete-trigger")).click();
+		
+		await().atMost(Duration.ofSeconds(3)).ignoreExceptions().untilAsserted(() 
+			-> webDriver.findElement(By.id("activeProject-delete-form"))
+				.findElement(By.name("submit-button")).click());
+		
+		assertThat(webDriver.getCurrentUrl()).endsWith(baseUrl+"/web");
+		assertThat(webDriver.findElement(By.id("project-list"))
+				.findElements(By.cssSelector("li"))).isEmpty();
+	}
+	
+	@Test
+	@Order(8)
+	void test_logOut() {
+		Actions actions = new Actions(webDriver);
+		actions.moveToElement(webDriver.findElement(By.id("user-menu")))
+			.perform();
+		webDriver.findElement(By.id("logout-link")).click();
+		
+		assertThat(webDriver.getCurrentUrl().trim()).endsWith(baseUrl+"/login?logout");
+		webDriver.get(baseUrl+"/web");
+		assertThat(webDriver.getCurrentUrl().trim()).matches(baseUrl+"/login");
+	}
+	
 	private String recoverLink(MimeMessage message) throws IOException, MessagingException {
 		String messageContent = message.getContent().toString();
-		int start = messageContent.indexOf("href='") + 6;
-		int end = messageContent.indexOf("'>");
-		return messageContent.substring(start, end);
+		return messageContent.substring(
+				messageContent.indexOf("href='") + 6,
+				messageContent.indexOf("'>"));
 	}
-
-//	private void clearDatabase() {
-//		entityManager.getTransaction().begin();
-//		List<VerificationToken> vTokens = entityManager.createQuery("from VerificationToken", VerificationToken.class)
-//				.getResultList();
-//		vTokens.stream().forEach(t -> entityManager.remove(vTokens));
-//		List<ResetPasswordToken> rpTokens = entityManager
-//				.createQuery("from ResetPasswordToken", ResetPasswordToken.class).getResultList();
-//		rpTokens.stream().forEach(t -> entityManager.remove(t));
-//		List<UserJPA> users = entityManager.createQuery("from UserJPA", UserJPA.class).getResultList();
-//		users.stream().forEach(u -> entityManager.remove(u));
-//		entityManager.getTransaction().commit();
-//	}
 }
