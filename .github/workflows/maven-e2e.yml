@@ -39,7 +39,7 @@ jobs:
            with:
               name: surefire-report
               path: '**/target/site'   
-         - name: Build with Maven (unit and integration tests)
+         - name: Build with Maven (end to end only)
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
            run: mvn --batch-mode --update-snapshots verify -Pe2e-tests

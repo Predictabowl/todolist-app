@@ -210,10 +210,12 @@
 					<version>0.8.7</version>
 					<configuration>
 						<excludes>
-							<exclude>**/exceptions/*.*</exclude>
+							<exclude>**/exception/*.*</exclude>
 							<exclude>**/TodolistAppApplication.*</exclude>
 							<exclude>**/domain/*.*</exclude>
 							<exclude>**/dto/*.*</exclude>
+							<exclude>**/entity/*.*</exclude>
+							<exclude>**/model/*.*</exclude>
 						</excludes>
 					</configuration>
 					<executions>
