@@ -37,7 +37,7 @@
 		<div class="columns main-window">
 			<section
 				class="column section auto-scroll has-background-grey-lighter is-one-fifth" id="sidebar">
-				<aside class="menu">
+				<aside class="menu" id="sidebar-menu">
 					<ul class="menu-list">
 						<a class="menu-label is-active" href="#" id="toggle-project-list">
 							<span class="icon is-small"> 
@@ -70,7 +70,7 @@
 		</div>
 		<script type="text/javascript">
 			$("#toggle-project-list").click(function() {
-				$("#project-list").toggle("fast", function(){
+				$("#project-list").slideToggle("fast", function(){
 					$("#project-list-angle").toggleClass("fa-angle-down");
 					$("#project-list-angle").toggleClass("fa-angle-right");
 					$("#toggle-project-list").toggleClass("is-active");
