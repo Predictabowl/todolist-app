@@ -8,7 +8,7 @@ jobs:
    build:
       name: Build
       runs-on: ubuntu-latest
-      
+
       steps:
          - uses: actions/checkout@v2
            with:
@@ -36,7 +36,9 @@ jobs:
              
          - name: JUnit Report
            uses: actions/upload-artifact@v2
-           path: '**/target/site'
+           with:
+              name: surefire-report
+              path: '**/target/site'
            
          - name: Build with Maven (unit and integration tests)
            env:

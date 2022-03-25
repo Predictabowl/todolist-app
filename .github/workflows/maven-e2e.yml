@@ -36,7 +36,9 @@ jobs:
              restore-keys: ${{ runner.os }}-m2
          - name: JUnit Report
            uses: actions/upload-artifact@v2
-           path: '**/target/site'   
+           with:
+              name: surefire-report
+              path: '**/target/site'   
          - name: Build with Maven (unit and integration tests)
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
