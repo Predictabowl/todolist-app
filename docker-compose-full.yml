@@ -1,6 +1,7 @@
-# docker-compose.yml
-# This docker compose is emant to be used to test the full application manually.
-# Do NOT have it run when launching tests
+# docker-compose-full.yml
+# Launch the whole application for local testing.
+# the application need to be built beforehand and dockerized with the
+# Dockerfile located in the this same folder with the command: docker build -t todolist .
 version: "3.9"
 
 services:
@@ -35,7 +36,16 @@ services:
          - ROUNDCUBEMAIL_DEFAULT_PORT=3143       # IMAP port
          - ROUNDCUBEMAIL_SMTP_SERVER=mailserver   # SMTP server - tls:// prefix for STARTTLS, ssl:// for SSL/TLS
          - ROUNDCUBEMAIL_SMTP_PORT=3025          # SMTP port
-
+   todolist:
+      image: todolist:latest
+      depends_on:
+         - database
+         - mailserver
+      environment:
+         - spring.datasource.url=jdbc:postgresql://database:5432/todoListAppTestDb
+         - todolist.verification.email.host=mailserver
+      ports:
+         - 8080:8080
 
          
 volumes:

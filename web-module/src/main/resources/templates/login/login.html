@@ -32,8 +32,7 @@
 						</div>
 					</div>
 					<div class="control">
-						<button class="button is-rounded is-success" name="log-in" type="submit" value="Log in"
-							th:text="#{login}"></button>
+						<button th:replace="fragments/commons :: genericFormSubmitButton(#{login})"></button>
 					</div>
 				</form>
 			</div>

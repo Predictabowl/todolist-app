@@ -20,7 +20,7 @@
 						th:errors="*{passwords}"></label>
 				</div>
 				<div class="control">
-					<button class="button is-primary is-rounded" type="submit" name="form-submit" value="Register in" th:text="#{register}"></button>
+					<button th:replace="fragments/commons :: genericFormSubmitButton(#{register})"></button>
 				</div>					
 			</form>
 			<div class="mt-4">

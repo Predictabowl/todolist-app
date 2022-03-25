@@ -36,10 +36,9 @@ public class UniqueResetPasswordTokenGeneratorImpl implements UniqueResetPasswor
 		int i = 0;
 		while(tokenCode.isEmpty() && i < MAX_LOOP_NUMBER) {
 			tokenCode = randStringGen.generate();
-			Optional<ResetPasswordToken> optional = loadToken.load(tokenCode);
-			if(optional.isPresent()) {
-				ResetPasswordToken token = optional.get();
-				if (token.isExpired(Calendar.getInstance().getTime()))
+			Optional<ResetPasswordToken> oldToken = loadToken.load(tokenCode);
+			if(oldToken.isPresent()) {
+				if (oldToken.get().isExpired(Calendar.getInstance().getTime()))
 					deleteToken.delete(tokenCode);
 				else
 					tokenCode = "";

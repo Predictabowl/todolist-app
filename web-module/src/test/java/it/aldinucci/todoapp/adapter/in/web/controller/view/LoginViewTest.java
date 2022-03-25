@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.Model;
 
@@ -29,6 +30,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.RequestResetPasswordWebController;
+import it.aldinucci.todoapp.adapter.in.web.security.config.AppWebSecurityConfig;
 import it.aldinucci.todoapp.webcommons.dto.EmailWebDto;
 import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
 
@@ -84,7 +86,7 @@ class LoginViewTest {
 	 	assertThatCode(() -> form.getInputByName("password").setValueAttribute("password"))
 	 		.doesNotThrowAnyException();
 		
-	 	assertThatCode(() -> form.getButtonByName("log-in").click())
+	 	assertThatCode(() -> form.getButtonByName("submit-button").click())
 	 		.doesNotThrowAnyException();
 		
 		assertThat(form.getActionAttribute()).matches("/login");

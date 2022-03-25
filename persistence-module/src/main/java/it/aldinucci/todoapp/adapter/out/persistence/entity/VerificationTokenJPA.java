@@ -49,35 +49,35 @@ public class VerificationTokenJPA {
 		this.expiryDate = expiryDate;
 	}
 
-	public final Long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public final void setId(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public final String getToken() {
+	public String getToken() {
 		return token;
 	}
 
-	public final void setToken(String token) {
+	public void setToken(String token) {
 		this.token = token;
 	}
 
-	public final UserJPA getUser() {
+	public UserJPA getUser() {
 		return user;
 	}
 
-	public final void setUser(UserJPA user) {
+	public void setUser(UserJPA user) {
 		this.user = user;
 	}
 
-	public final Date getExpiryDate() {
+	public Date getExpiryDate() {
 		return expiryDate;
 	}
 
-	public final void setExpiryDate(Date expiryDate) {
+	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
 

@@ -37,7 +37,6 @@ services:
          - ROUNDCUBEMAIL_SMTP_SERVER=mailserver   # SMTP server - tls:// prefix for STARTTLS, ssl:// for SSL/TLS
          - ROUNDCUBEMAIL_SMTP_PORT=3025          # SMTP port
 
-
          
 volumes:
    database-data:

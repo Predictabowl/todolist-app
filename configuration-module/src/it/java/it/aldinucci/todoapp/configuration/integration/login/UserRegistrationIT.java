@@ -68,6 +68,7 @@ class UserRegistrationIT {
 	@AfterEach
 	void tearDown() {
 		webDriver.quit();
+		mailServer.stop();
 	}
 	
 	@Test
@@ -78,7 +79,7 @@ class UserRegistrationIT {
 		webDriver.findElement(By.name("username")).sendKeys("Test User");
 		webDriver.findElement(By.name("password")).sendKeys("userPassword");
 		webDriver.findElement(By.name("confirmedPassword")).sendKeys("userPassword");
-		webDriver.findElement(By.name("form-submit")).click();
+		webDriver.findElement(By.name("submit-button")).click();
 		
 		Optional<UserJPA> optional = userRepo.findByEmail("test@email.it");
 		assertThat(optional).isPresent();
