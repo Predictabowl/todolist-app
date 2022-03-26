@@ -30,7 +30,7 @@ public class UpdateTaskService implements UpdateTaskUsePort{
 	public Optional<Task> update(TaskIdDTO taskId, TaskDataDTOIn taskData) {
 		Optional<Task> optional = loadTask.load(taskId.taskId());
 		if (optional.isEmpty())
-			return optional;
+			return Optional.empty();
 		
 		Task task = optional.get();
 		task.setDescription(taskData.getDescription());

@@ -12,14 +12,19 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import it.aldinucci.todoapp.application.port.out.DeleteRestPasswordTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadResetPasswordTokenDriverPort;
@@ -106,11 +111,28 @@ class UniqueResetPasswordTokenGeneratorImplTest {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
 		ResetPasswordToken token = new ResetPasswordToken("random string", calendar.getTime(), "user@test.it");
-		when(loadToken.load(isA(String.class))).thenReturn(Optional.of(token));
+		when(loadToken.load(anyString())).thenReturn(Optional.of(token));
 		
 		assertTimeoutPreemptively(Duration.ofSeconds(5), () -> 
 			assertThatThrownBy(() -> sut.generate())
 				.isInstanceOf(AppCouldNotGenerateTokenException.class));
 	
+	}
+	
+	@Test
+	void test_tokenCreationNotUnique_maximumNumberOfLoops_boundaryTest() {
+		int numIterations = 2048;
+		String[] arguments = IntStream.range(0, numIterations).mapToObj(i -> "token").toList().toArray(new String[0]);
+		arguments[numIterations-1] = "different token";
+		when(randStringGen.generate()).thenReturn("token",arguments);
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
+		ResetPasswordToken token = new ResetPasswordToken("random string", calendar.getTime(), "user@test.it");
+		when(loadToken.load("token")).thenReturn(Optional.of(token));
+		when(loadToken.load("different token")).thenReturn(Optional.empty());
+		
+		assertTimeoutPreemptively(Duration.ofSeconds(5), () -> 
+			assertThatThrownBy(() -> sut.generate())
+				.isInstanceOf(AppCouldNotGenerateTokenException.class));
 	}
 }

@@ -45,9 +45,10 @@ public class UniqueResetPasswordTokenGeneratorImpl implements UniqueResetPasswor
 			}
 			i++;
 		}
-		
-		if(i >= MAX_LOOP_NUMBER)
+
+		if(tokenCode.isEmpty())
 			throw new AppCouldNotGenerateTokenException();
+		
 		return tokenCode;
 	}
 

@@ -65,8 +65,10 @@ class HtmlEmailSenderTest {
 	void test_sendEmail_success() throws MessagingException, IOException {
 		String content = "<a href='#'> this is html </a>";
 		
-		assertTimeout(Duration.ofSeconds(5), () -> 
-			emailSender.send("unknown@email.org", "Sending Test", content));
+		assertThatCode(() -> 
+				assertTimeout(Duration.ofSeconds(5), () -> 
+					emailSender.send("unknown@email.org", "Sending Test", content)))
+			.doesNotThrowAnyException();
 
 		MimeMessage[] receivedMessages = mailServer.getReceivedMessages();
 		assertThat(receivedMessages).hasSize(1);
@@ -80,7 +82,7 @@ class HtmlEmailSenderTest {
 		assertThat(recipients[0].toString()).matches("unknown@email.org");
 
 		Address[] from = msg.getFrom();
-		assertThat(from).hasSize(1);
+		assertThat(from).isNotNull();
 		assertThat(from[0].toString()).matches("test@email.it");
 	}
 	

@@ -3,6 +3,7 @@ package it.aldinucci.todoapp.application.service.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -13,6 +14,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import java.time.Duration;
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,7 @@ import org.mockito.Mockito;
 
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
+import it.aldinucci.todoapp.domain.ResetPasswordToken;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppCouldNotGenerateTokenException;
 
@@ -106,12 +109,29 @@ class UniqueVerificationTokenGeneratorImplTest {
 	Calendar calendar = Calendar.getInstance();
 	calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
 	VerificationToken token = new VerificationToken("random string", calendar.getTime(), "user@test.it");
-	when(loadToken.load(isA(String.class))).thenReturn(Optional.of(token));
+	when(loadToken.load(anyString())).thenReturn(Optional.of(token));
 	
 	assertTimeoutPreemptively(Duration.ofSeconds(5), () -> 
 		assertThatThrownBy(() -> tokenGenerator.generate())
 			.isInstanceOf(AppCouldNotGenerateTokenException.class));
 	
+	}
+	
+	@Test
+	void test_tokenCreationNotUnique_maximumNumberOfLoops_boundaryTest() {
+		int numIterations = 2048;
+		String[] arguments = IntStream.range(0, numIterations).mapToObj(i -> "token").toList().toArray(new String[0]);
+		arguments[numIterations-1] = "different token";
+		when(randStringGen.generate()).thenReturn("token",arguments);
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
+		VerificationToken token = new VerificationToken("random string", calendar.getTime(), "user@test.it");
+		when(loadToken.load("token")).thenReturn(Optional.of(token));
+		when(loadToken.load("different token")).thenReturn(Optional.empty());
+		
+		assertTimeoutPreemptively(Duration.ofSeconds(5), () -> 
+			assertThatThrownBy(() -> tokenGenerator.generate())
+				.isInstanceOf(AppCouldNotGenerateTokenException.class));
 	}
 
 }

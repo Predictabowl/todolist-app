@@ -58,7 +58,6 @@ public class ApplicationBeansProvider {
 	    mailSender.setProtocol(emailProtocol);
 
 	    Properties props = mailSender.getJavaMailProperties();
-//	    props.put("mail.transport.protocol", emailProtocol);
 	    props.put("mail.smtp.auth", emailAuth);
 	    props.put("mail.smtp.ssl.enable", emailSsl);
 	    props.put("mail.debug", emailDebug);

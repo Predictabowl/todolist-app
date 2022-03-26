@@ -43,3 +43,4 @@ jobs:
                mvn --batch-mode --update-snapshots verify
                sonar:sonar -Dsonar.projectKey=Predictabowl_todolist-app
                coveralls:report -DrepoToken=$COVERALLS_REPO_TOKEN
+               -Pmutation-test
