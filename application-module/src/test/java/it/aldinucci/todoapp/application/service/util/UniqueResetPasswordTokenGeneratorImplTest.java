@@ -12,9 +12,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -23,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import it.aldinucci.todoapp.application.port.out.DeleteRestPasswordTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadResetPasswordTokenDriverPort;

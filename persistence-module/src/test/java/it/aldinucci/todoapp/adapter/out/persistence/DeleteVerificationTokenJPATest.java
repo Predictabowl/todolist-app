@@ -1,7 +1,6 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 
 import java.util.Calendar;
 import java.util.List;

@@ -13,6 +13,7 @@ jobs:
       name: Build
       runs-on: ubuntu-latest
       
+      
       steps:
          - uses: actions/checkout@v2
            with:
@@ -38,8 +39,8 @@ jobs:
            uses: actions/upload-artifact@v2
            with:
               name: surefire-report
-              path: '**/target/site'   
-         - name: Build with Maven (end to end only)
+              path: '**/target/site'
+         - uses: browser-actions/setup-chrome@latest
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
            run: mvn --batch-mode --update-snapshots verify -Pe2e-tests

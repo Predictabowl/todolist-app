@@ -25,7 +25,6 @@ import org.mockito.Mockito;
 
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
-import it.aldinucci.todoapp.domain.ResetPasswordToken;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppCouldNotGenerateTokenException;
 
