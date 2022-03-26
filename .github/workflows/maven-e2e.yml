@@ -2,11 +2,6 @@ name: Java_CI E2E tests
 
 on:
    push:
-      branches:
-         - master
-   pull_request:
-      branches:
-         - master
 
 jobs:
    build:
@@ -38,7 +33,8 @@ jobs:
            uses: actions/upload-artifact@v2
            with:
               name: surefire-report
-              path: '**/target/site'   
+              path: '**/target/site'
+         - uses: browser-actions/setup-chrome@latest
          - name: Build with Maven (end to end only)
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
