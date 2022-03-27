@@ -40,7 +40,10 @@ jobs:
            with:
               name: surefire-report
               path: '**/target/site'
-         - uses: browser-actions/setup-chrome@latest
+         - name: Start XVFB
+           run: Xvfb :99 &
+         - name: Build with Maven (end to end only)
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-           run: mvn --batch-mode --update-snapshots verify -Pe2e-tests
+              DISPLAY: :99
+           run: mvn --batch-mode --update-snapshots verify -Pe2e-tests           
