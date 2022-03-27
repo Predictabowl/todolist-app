@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.webcommons.dto.validator.annotation;
+package it.aldinucci.todoapp.webcommons.validator.annotation;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import it.aldinucci.todoapp.webcommons.dto.validator.MatchingPasswordsValidator;
+import it.aldinucci.todoapp.webcommons.validator.MatchingPasswordsValidator;
 
 @Constraint(validatedBy = MatchingPasswordsValidator.class)
 @Target({TYPE, FIELD, ANNOTATION_TYPE})

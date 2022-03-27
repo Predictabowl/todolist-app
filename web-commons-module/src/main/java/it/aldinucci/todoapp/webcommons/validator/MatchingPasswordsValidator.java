@@ -1,10 +1,10 @@
-package it.aldinucci.todoapp.webcommons.dto.validator;
+package it.aldinucci.todoapp.webcommons.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import it.aldinucci.todoapp.webcommons.dto.validator.annotation.MatchingPasswords;
 import it.aldinucci.todoapp.webcommons.model.InputPasswords;
+import it.aldinucci.todoapp.webcommons.validator.annotation.MatchingPasswords;
 
 public class MatchingPasswordsValidator implements ConstraintValidator<MatchingPasswords, InputPasswords>{
 

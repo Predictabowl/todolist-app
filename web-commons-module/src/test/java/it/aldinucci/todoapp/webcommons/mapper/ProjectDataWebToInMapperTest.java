@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.webcommons.dto.mapper;
+package it.aldinucci.todoapp.webcommons.mapper;
 
 
 import static org.assertj.core.api.Assertions.assertThat;

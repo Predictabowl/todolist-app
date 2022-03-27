@@ -8,8 +8,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import it.aldinucci.todoapp.webcommons.dto.validator.annotation.MatchingPasswords;
 import it.aldinucci.todoapp.webcommons.model.InputPasswords;
+import it.aldinucci.todoapp.webcommons.validator.annotation.MatchingPasswords;
 
 public class RegisterUserDto {
 	

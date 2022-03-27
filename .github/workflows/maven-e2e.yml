@@ -1,4 +1,4 @@
-name: Java_CI E2E tests
+name: Java CI E2E
 
 on:
    push:

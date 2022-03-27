@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.webcommons.dto.validator;
+package it.aldinucci.todoapp.webcommons.validator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verifyNoInteractions;

@@ -4,8 +4,8 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 
-import it.aldinucci.todoapp.webcommons.dto.validator.annotation.MatchingPasswords;
 import it.aldinucci.todoapp.webcommons.model.InputPasswords;
+import it.aldinucci.todoapp.webcommons.validator.annotation.MatchingPasswords;
 
 public class InputPasswordsDto {
 
