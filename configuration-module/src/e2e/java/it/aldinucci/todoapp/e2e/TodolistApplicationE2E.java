@@ -54,7 +54,8 @@ class TodolistApplicationE2E {
 
 	@BeforeAll
 	static void setUpClass() {
-		WebDriverManager.chromedriver().setup();
+//		WebDriverManager.chromedriver().setup();
+		WebDriverManager.chromiumdriver().setup();
 		mailServer = new GreenMail(ServerSetupTest.SMTP)
 				.withConfiguration(GreenMailConfiguration.aConfig().withUser("todolist@email.it", "mailPassword"));
 		mailServer.start();
