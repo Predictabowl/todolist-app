@@ -6,6 +6,12 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>configuration-module</artifactId>
+	
+	<properties>
+		<sonar.issue.ignore.multicriteria>cm1</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria.cm1.ruleKey>java:S3577</sonar.issue.ignore.multicriteria.cm1.ruleKey>
+		<sonar.issue.ignore.multicriteria.cm1.resourceKey>**/e2e/**/*E2E.*</sonar.issue.ignore.multicriteria.cm1.resourceKey>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -87,7 +93,20 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>			
 		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-maven</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
+	
 	
 	<profiles>
 		<profile>

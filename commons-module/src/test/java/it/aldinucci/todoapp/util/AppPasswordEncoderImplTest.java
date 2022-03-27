@@ -21,7 +21,7 @@ class AppPasswordEncoderImplTest {
 	private PasswordEncoder encoder;
 	
 	@Test
-	void test() {
+	void test_encode() {
 		appEncoder = new AppPasswordEncoderImpl(encoder);
 		String raw = "a string";
 		
@@ -30,4 +30,10 @@ class AppPasswordEncoderImplTest {
 		assertThat(encoder.matches(raw, encoded)).isTrue();
 	}
 
+	@Test
+	void test_getEncoder() {
+		appEncoder = new AppPasswordEncoderImpl(encoder);
+
+		assertThat(appEncoder.getEncoder()).isSameAs(encoder);
+	}
 }

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,8 +33,21 @@ class LoadUnfinishedTasksServiceTest {
 	}
 	
 	@Test
-	void test_loadUnfinishedTasks_successful() {
+	void test_loadUnfinishedTasks_whenNoTasks() {
 		List<Task> tasks = Collections.emptyList();
+		
+		when(driverPort.load(anyLong())).thenReturn(tasks);
+		
+		List<Task> loadedTasks = service.load(new ProjectIdDTO(2));
+		
+		verify(driverPort).load(2);
+		assertThat(loadedTasks).isSameAs(tasks);
+	}
+	
+	@Test
+	void test_loadUnfinishedTasks_successful() {
+		List<Task> tasks = Arrays.asList(
+				new Task(3L, "task", "descr", true, 4));
 		
 		when(driverPort.load(anyLong())).thenReturn(tasks);
 		

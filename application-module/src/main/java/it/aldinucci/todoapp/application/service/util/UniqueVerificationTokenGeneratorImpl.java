@@ -51,7 +51,7 @@ public class UniqueVerificationTokenGeneratorImpl implements UniqueVerificationT
 			}
 			i++;
 		}
-		if (i >= MAX_LOOP_NUMBER)
+		if (tokenString.isEmpty())
 			throw new AppCouldNotGenerateTokenException();
 		
 		return tokenString;

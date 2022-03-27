@@ -3,7 +3,8 @@ package it.aldinucci.todoapp.adapter.in.web.controller.view;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.Model;
 
@@ -30,7 +30,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.RegisterUserWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.RequestResetPasswordWebController;
-import it.aldinucci.todoapp.adapter.in.web.security.config.AppWebSecurityConfig;
 import it.aldinucci.todoapp.webcommons.dto.EmailWebDto;
 import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
 

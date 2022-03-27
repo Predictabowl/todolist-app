@@ -13,6 +13,7 @@ jobs:
       name: Build
       runs-on: ubuntu-latest
       
+      
       steps:
          - uses: actions/checkout@v2
            with:
@@ -38,8 +39,11 @@ jobs:
            uses: actions/upload-artifact@v2
            with:
               name: surefire-report
-              path: '**/target/site'   
+              path: '**/target/site'
+         - name: Configure XVFB
+           run: Xvfb :99 &
          - name: Build with Maven (end to end only)
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-           run: mvn --batch-mode --update-snapshots verify -Pe2e-tests
+              DISPLAY: :99
+           run: mvn --batch-mode --update-snapshots verify -Pe2e-tests           
