@@ -8,7 +8,7 @@
 	<artifactId>web-module</artifactId>
 	
 	<properties>
-		<sonar.sources>scr/main/resources</sonar.sources>
+		<sonar.sources>src/main/resources</sonar.sources>
 	</properties>
 
 	<dependencies>
