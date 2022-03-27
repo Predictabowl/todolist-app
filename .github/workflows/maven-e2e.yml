@@ -40,7 +40,7 @@ jobs:
            with:
               name: surefire-report
               path: '**/target/site'
-         - name: Start XVFB
+         - name: Configure XVFB
            run: Xvfb :99 &
          - name: Build with Maven (end to end only)
            env:
