@@ -30,7 +30,6 @@
 			**/AutoValidatingInputModel.*,
 			**/UserDetailsImpl.*,
 		</sonar.coverage.exclusions>
-		<sonar.sources>web-module/scr/main/resources</sonar.sources>
 		<postgres.test.username>testUser</postgres.test.username>
 		<postgres.test.password>password</postgres.test.password>
 		<postgres.test.container.port>5432</postgres.test.container.port>

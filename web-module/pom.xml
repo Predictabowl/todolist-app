@@ -6,6 +6,10 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>web-module</artifactId>
+	
+	<properties>
+		<sonar.sources>scr/main/resources</sonar.sources>
+	</properties>
 
 	<dependencies>
 		<dependency>
