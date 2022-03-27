@@ -30,9 +30,13 @@
 			**/AutoValidatingInputModel.*,
 			**/UserDetailsImpl.*,
 		</sonar.coverage.exclusions>
+		<sonar.sources>scr/main/resources</sonar.sources>
 		<postgres.test.username>testUser</postgres.test.username>
 		<postgres.test.password>password</postgres.test.password>
 		<postgres.test.container.port>5432</postgres.test.container.port>
+		<sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria.e1.ruleKey>java:S3577</sonar.issue.ignore.multicriteria.e1.ruleKey>
+		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/e2e/**/*E2E.*</sonar.issue.ignore.multicriteria.e1.resourceKey>
 	</properties>
 
 	<modules>
