@@ -37,6 +37,7 @@
 		<sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
 		<sonar.issue.ignore.multicriteria.e1.ruleKey>java:S3577</sonar.issue.ignore.multicriteria.e1.ruleKey>
 		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/e2e/**/*E2E.*</sonar.issue.ignore.multicriteria.e1.resourceKey>
+		<skip.integration-tests>true</skip.integration-tests>
 	</properties>
 
 	<modules>
