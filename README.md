@@ -1,5 +1,6 @@
 ![example workflow](https://github.com/Predictabowl/todolist-app/actions/workflows/maven.yml/badge.svg)
 ![example workflow](https://github.com/Predictabowl/todolist-app/actions/workflows/maven-e2e.yml/badge.svg)
+![example workflow](https://github.com/Predictabowl/todolist-app/actions/workflows/maven-mutation.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/Predictabowl/todolist-app/badge.svg?branch=master)](https://coveralls.io/github/Predictabowl/todolist-app?branch=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Predictabowl_todolist-app&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Predictabowl_todolist-app)
 

@@ -1,8 +1,12 @@
-name: Java CI unit, integration
+name: Java CI mutation
 
 on: 
    push:
+      branches:
+         - master
    pull_request:
+      branches:
+         - master
 
 jobs:
    build:
@@ -19,26 +23,17 @@ jobs:
            with:
              java-version: '17'
              distribution: 'adopt'
-             
-         - name: Cache SonarCloud packages
-           uses: actions/cache@v3
-           with:
-             path: ~/.sonar/cache
-             key: ${{ runner.os }}-sonar
-             restore-keys: ${{ runner.os }}-sonar
-             
+                         
          - name: Cache Maven packages
            uses: actions/cache@v3
            with:
              path: ~/.m2
              key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml') }}
              restore-keys: ${{ runner.os }}-m2              
-         - name: Build with Maven (unit and integration tests)
+         - name: Build with Maven (mutation tests)
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               COVERALLS_REPO_TOKEN: ${{secrets.COVERALLS_TOKEN}} 
            run: >
-               mvn --batch-mode --update-snapshots verify
-               sonar:sonar -Dsonar.projectKey=Predictabowl_todolist-app
-               coveralls:report -DrepoToken=$COVERALLS_REPO_TOKEN
+               mvn --batch-mode --update-snapshots test
+               -Pmutation-test,skip-unit-tests
