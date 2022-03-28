@@ -1,0 +1,1 @@
+web: java -jar configuration-module/target/configuration-module-0.0.1-SNAPSHOT.jar
