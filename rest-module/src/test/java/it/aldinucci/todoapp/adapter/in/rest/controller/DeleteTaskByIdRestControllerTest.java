@@ -29,7 +29,7 @@ import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfi
 import it.aldinucci.todoapp.application.port.in.DeleteTaskByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
-import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
+import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {DeleteTaskByIdRestController.class})

@@ -31,7 +31,7 @@ import it.aldinucci.todoapp.application.port.in.LoadUnfinishedTasksByProjectIdUs
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
-import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
+import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = { LoadUnfinishedTaskByProjectIdRestController.class })

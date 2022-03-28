@@ -33,7 +33,7 @@ import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
-import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
+import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {CreateProjectRestController.class})

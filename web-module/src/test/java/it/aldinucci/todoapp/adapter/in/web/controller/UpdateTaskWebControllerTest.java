@@ -1,9 +1,8 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -13,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -20,24 +21,24 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.web.util.NestedServletException;
 
 import it.aldinucci.todoapp.application.port.in.UpdateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
-import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {UpdateTaskWebController.class})
 @ExtendWith(SpringExtension.class)
-@Import({AppWebExceptionHandlers.class})
 class UpdateTaskWebControllerTest {
 
 	private static final String FIXTURE_EMAIL = "email@test.it";
@@ -132,20 +133,26 @@ class UpdateTaskWebControllerTest {
 	
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
-	void test_upateTask_whenTaskIdNotFound() throws Exception {
-		doThrow(new AppTaskNotFoundException("test message")).when(authorize)
-			.check(anyString(), any());
+	void test_upateTask_whenTaskIdNotFound_afterSucessfulAuthorize_shouldThrow() throws Exception {
+		TaskDataDTOIn dataDTOIn = new TaskDataDTOIn("test name", "test descr");
+		when(mapper.map(any())).thenReturn(dataDTOIn);
+		when(updateTask.update(any(), any())).thenReturn(Optional.empty());
 		
-		mvc.perform(put("/web/project/1/task/3")
+		MockHttpServletRequestBuilder requestBuilder = put("/web/project/1/task/3")
 			.with(csrf())
 			.contentType(MediaType.APPLICATION_JSON)
 			.param("name", "new name")
-			.param("description", "new descr"))
-		.andExpect(status().isNotFound());
+			.param("description", "new descr");
+		
+		assertThatThrownBy(() -> mvc.perform(requestBuilder))
+			.isInstanceOf(NestedServletException.class)
+			.getCause()
+				.isInstanceOf(AppTaskNotFoundException.class)
+				.hasMessage("Could not find Task with id: 3");
 		
 		verify(authorize).check(FIXTURE_EMAIL, new TaskIdDTO(3));
-		verifyNoInteractions(mapper);
-		verifyNoInteractions(updateTask);
+		verify(mapper).map(new TaskDataWebDto("new name", "new descr"));
+		verify(updateTask).update(new TaskIdDTO(3), dataDTOIn);
 	}
 	
 	@Test
@@ -153,6 +160,7 @@ class UpdateTaskWebControllerTest {
 	void test_upateTask_success() throws Exception {
 		TaskDataDTOIn dataDTOIn = new TaskDataDTOIn("test name", "test descr");
 		when(mapper.map(any())).thenReturn(dataDTOIn);
+		when(updateTask.update(any(), any())).thenReturn(Optional.of(new Task()));
 		
 		mvc.perform(put("/web/project/1/task/3")
 			.with(csrf())

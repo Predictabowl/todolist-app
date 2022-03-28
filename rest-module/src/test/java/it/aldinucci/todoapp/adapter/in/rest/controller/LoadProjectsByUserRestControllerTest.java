@@ -27,7 +27,7 @@ import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
-import it.aldinucci.todoapp.webcommons.exception.AppWebExceptionHandlers;
+import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 
 @WebMvcTest(controllers = {LoadProjectsByUserRestController.class})
 @ExtendWith(SpringExtension.class)

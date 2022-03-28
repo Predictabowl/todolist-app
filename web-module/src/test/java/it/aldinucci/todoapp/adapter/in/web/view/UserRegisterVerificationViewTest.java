@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.adapter.in.web.controller.view;
+package it.aldinucci.todoapp.adapter.in.web.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

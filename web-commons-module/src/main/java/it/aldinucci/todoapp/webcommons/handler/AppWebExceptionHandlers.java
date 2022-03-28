@@ -1,4 +1,4 @@
-package it.aldinucci.todoapp.webcommons.exception;
+package it.aldinucci.todoapp.webcommons.handler;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
+import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
 
 @ControllerAdvice
 public class AppWebExceptionHandlers extends ResponseEntityExceptionHandler{

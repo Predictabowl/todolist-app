@@ -1,8 +1,8 @@
-package it.aldinucci.todoapp.adapter.in.rest;
+package it.aldinucci.todoapp.webcommons.handler;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TestApplication {
+public class MockApplication {
 
 }
