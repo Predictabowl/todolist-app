@@ -112,6 +112,7 @@
 	
 	
 	<profiles>
+	
 		<profile>
 			<id>e2e-tests</id>
 			<build>
