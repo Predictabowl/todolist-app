@@ -29,7 +29,7 @@
 			**/model/*.*,
 			**/AutoValidatingInputModel.*,
 			**/UserDetailsImpl.*,
-			**/TodolistApplication
+			**/TodolistApplication.*
 		</sonar.coverage.exclusions>
 		<postgres.test.username>testUser</postgres.test.username>
 		<postgres.test.password>password</postgres.test.password>
