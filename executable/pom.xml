@@ -5,7 +5,7 @@
 		<artifactId>todolist-app</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>configuration-module</artifactId>
+	<artifactId>executable</artifactId>
 	
 	<dependencies>
 		<dependency>
@@ -87,16 +87,14 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 			</plugin>	
-			<!--
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 			</plugin>
-			-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>			
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
