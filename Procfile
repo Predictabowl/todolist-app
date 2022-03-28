@@ -1,1 +1,1 @@
-web: java -jar -Dserver.port=$PORT configuration-module/target/configuration-module-0.0.1-SNAPSHOT.jar
+web: java -jar -Dserver.port=$PORT executable/target/executable-0.0.1-SNAPSHOT.jar

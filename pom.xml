@@ -353,11 +353,32 @@
 				<skip.unit-tests>true</skip.unit-tests>
 			</properties>
 		</profile>
+		
 		<profile>
 			<id>skip-integration-tests</id>
 			<properties>
 				<skip.integration-tests>true</skip.integration-tests>
 			</properties>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>io.fabric8</groupId>
+							<artifactId>docker-maven-plugin</artifactId>
+							<executions>
+							<execution>
+								<id>docker:start</id>
+								<phase>none</phase>
+							</execution>
+							<execution>
+								<id>docker:stop</id>
+								<phase>none</phase>
+							</execution>
+							</executions>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
 		</profile>
 		
 		<profile>
@@ -427,7 +448,7 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
+		</profile>		
 	</profiles>
 
 </project>
