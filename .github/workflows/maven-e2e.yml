@@ -1,4 +1,4 @@
-name: Java CI E2E
+name: Java CI end to end
 
 on:
    push:

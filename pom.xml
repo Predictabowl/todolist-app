@@ -221,6 +221,7 @@
 							<exclude>**/dto/*.*</exclude>
 							<exclude>**/entity/*.*</exclude>
 							<exclude>**/model/*.*</exclude>
+							<exclude>**/AutoValidatingInputModel.*</exclude>
 						</excludes>
 					</configuration>
 					<executions>

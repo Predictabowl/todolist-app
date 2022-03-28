@@ -30,17 +30,6 @@
 						</excludedClasses>
 					</configuration>
 				</plugin>
-				
-				<plugin>
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
-					<configuration>
-						<excludes>
-							<exclude>**/AutoValidatingInputModel.*</exclude>
-						</excludes>
-					</configuration>
-				</plugin>
-				
 			</plugins>
 		</pluginManagement>
 	</build>
