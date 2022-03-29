@@ -20,9 +20,9 @@ public class DeleteProjectByIdJPA implements DeleteProjectByIdDriverPort{
 
 	@Override
 	public void delete(String id) throws AppProjectNotFoundException{
-		Long longId;
+		long longId;
 		try {
-			longId = Long.valueOf(id);
+			longId = Long.parseLong(id);
 		} catch (NumberFormatException e) {
 			throw new AppProjectNotFoundException("Could not find Project", e);
 		}

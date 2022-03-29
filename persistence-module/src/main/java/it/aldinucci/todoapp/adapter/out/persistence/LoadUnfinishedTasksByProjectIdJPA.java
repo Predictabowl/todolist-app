@@ -27,9 +27,9 @@ public class LoadUnfinishedTasksByProjectIdJPA implements LoadUnfinishedTasksDri
 
 	@Override
 	public List<Task> load(String projectId) {
-		Long longId;
+		long longId;
 		try {
-			longId = Long.valueOf(projectId);
+			longId = Long.parseLong(projectId);
 		} catch (Exception e) {
 			throw new AppProjectNotFoundException("Could not find project with id: "+projectId, e);
 		}

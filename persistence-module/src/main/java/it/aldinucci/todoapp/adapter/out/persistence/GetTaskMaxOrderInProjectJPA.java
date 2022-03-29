@@ -24,9 +24,9 @@ public class GetTaskMaxOrderInProjectJPA implements GetTaskMaxOrderInProjectDriv
 
 	@Override
 	public OptionalInt get(String projectId) throws AppProjectNotFoundException {
-		Long longId;
+		long longId;
 		try {
-			longId = Long.valueOf(projectId);
+			longId = Long.parseLong(projectId);
 		} catch (NumberFormatException e) {
 			return OptionalInt.empty();
 		}

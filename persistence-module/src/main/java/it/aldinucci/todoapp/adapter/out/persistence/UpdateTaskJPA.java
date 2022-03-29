@@ -27,9 +27,9 @@ public class UpdateTaskJPA implements UpdateTaskDriverPort{
 
 	@Override
 	public Optional<Task> update(Task task) {
-		Long longId;
+		long longId;
 		try {
-			longId = Long.valueOf(task.getId());
+			longId = Long.parseLong(task.getId());
 		} catch (NumberFormatException e) {
 			return Optional.empty();
 		}

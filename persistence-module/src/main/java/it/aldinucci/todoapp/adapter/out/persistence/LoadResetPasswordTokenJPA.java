@@ -11,6 +11,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.ResetPasswordToke
 import it.aldinucci.todoapp.application.port.out.LoadResetPasswordTokenDriverPort;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.util.ValidationUtils;
 
 @Component
 public class LoadResetPasswordTokenJPA implements LoadResetPasswordTokenDriverPort{
@@ -29,13 +30,10 @@ public class LoadResetPasswordTokenJPA implements LoadResetPasswordTokenDriverPo
 
 	@Override
 	public Optional<ResetPasswordToken> load(String tokenString) {
-		UUID uuid;
-		try {
-			uuid = UUID.fromString(tokenString);
-		} catch (IllegalArgumentException e) {
+		if (!ValidationUtils.isValidUUID(tokenString))
 			return Optional.empty();
-		}
-		Optional<ResetPasswordTokenJPA> token = tokenRepo.findByToken(uuid);
+			
+		Optional<ResetPasswordTokenJPA> token = tokenRepo.findByToken(UUID.fromString(tokenString));
 		if(token.isEmpty())
 			return Optional.empty();
 		

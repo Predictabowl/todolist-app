@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ResetPasswordTokenJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ResetPasswordTokenJPARepository;
 import it.aldinucci.todoapp.application.port.out.DeleteRestPasswordTokenDriverPort;
+import it.aldinucci.todoapp.util.ValidationUtils;
 
 @Component
 public class DeleteResetPasswordTokenJPA implements DeleteRestPasswordTokenDriverPort{
@@ -24,16 +25,11 @@ public class DeleteResetPasswordTokenJPA implements DeleteRestPasswordTokenDrive
 
 	@Override
 	public void delete(String token) {
-		UUID uuid;
-		try {
-			uuid = UUID.fromString(token);
-		} catch (IllegalArgumentException e) {
-			return;
+		if (ValidationUtils.isValidUUID(token)) {
+			Optional<ResetPasswordTokenJPA> optional = tokenRepo.findByToken(UUID.fromString(token));
+			if(optional.isPresent())
+				tokenRepo.delete(optional.get());
 		}
-		
-		Optional<ResetPasswordTokenJPA> optional = tokenRepo.findByToken(uuid);
-		if(optional.isPresent())
-			tokenRepo.delete(optional.get());
 	}
 
 }

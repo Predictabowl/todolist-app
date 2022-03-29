@@ -30,9 +30,9 @@ public class LoadTasksByProjectIdJPA implements LoadTasksByProjectIdDriverPort{
 
 	@Override
 	public List<Task> load(String projectId) throws AppProjectNotFoundException{
-		Long longId;
+		long longId;
 		try {
-			longId = Long.valueOf(projectId);
+			longId = Long.parseLong(projectId);
 		} catch (NumberFormatException e) {
 			throw new AppProjectNotFoundException("Could not find project with id: "+projectId);
 		}

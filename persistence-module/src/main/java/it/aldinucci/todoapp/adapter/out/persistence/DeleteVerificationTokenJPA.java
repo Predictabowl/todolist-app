@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.VerificationTokenJPARepository;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
+import it.aldinucci.todoapp.util.ValidationUtils;
 
 @Component
 public class DeleteVerificationTokenJPA implements DeleteVerificationTokenDriverPort{
@@ -23,16 +24,11 @@ public class DeleteVerificationTokenJPA implements DeleteVerificationTokenDriver
 
 	@Override
 	public void delete(String tokenCode){
-		UUID uuid;
-		try {
-			uuid = UUID.fromString(tokenCode);
-		} catch (IllegalArgumentException e) {
-			return;
-		}
-		
-		Optional<VerificationTokenJPA> optionalToken  = tokenRepo.findByToken(uuid);
-		if(optionalToken.isPresent()) {
-			tokenRepo.delete(optionalToken.get());
+		if (ValidationUtils.isValidUUID(tokenCode)) {
+			Optional<VerificationTokenJPA> optionalToken  = tokenRepo.findByToken(UUID.fromString(tokenCode));
+			if(optionalToken.isPresent()) {
+				tokenRepo.delete(optionalToken.get());
+			}
 		}
 	}
 

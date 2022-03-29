@@ -82,5 +82,16 @@ class CreateTaskJPATest {
 		
 		verifyNoInteractions(mapper);
 	}
+	
+	@Test
+	void test_createNewTask_whenProjectIdIsInvalid() {
+		NewTaskData newTask = new NewTaskData("task name", "task description", false, "invalid", 5);
+		
+		assertThatThrownBy(() -> createTask.create(newTask))
+			.isInstanceOf(AppProjectNotFoundException.class)
+			.hasMessage("Project not found with id: invalid");
+		
+		verifyNoInteractions(mapper);
+	}
 
 }

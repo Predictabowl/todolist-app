@@ -22,9 +22,9 @@ public class DeleteTaskByIdJPA implements DeleteTaskByIdDriverPort{
 
 	@Override
 	public void delete(String id){
-		Long longId;
+		long longId;
 		try {
-			longId = Long.valueOf(id);
+			longId = Long.parseLong(id);
 		} catch (NumberFormatException e) {
 			return;
 		}

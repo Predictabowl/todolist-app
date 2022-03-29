@@ -28,9 +28,9 @@ public class LoadUserByTaskIdJPA implements LoadUserByTaskIdDriverPort{
 
 	@Override
 	public Optional<User> load(String taskId) throws AppTaskNotFoundException {
-		Long longId;
+		long longId;
 		try {
-			longId = Long.valueOf(taskId);
+			longId = Long.parseLong(taskId);
 		} catch (NumberFormatException e) {
 			return Optional.empty();
 		}

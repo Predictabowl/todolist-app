@@ -11,6 +11,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.VerificationToken
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.util.ValidationUtils;
 
 @Component
 public class LoadVerificationTokenJPA implements LoadVerificationTokenDriverPort{
@@ -28,14 +29,10 @@ public class LoadVerificationTokenJPA implements LoadVerificationTokenDriverPort
 
 	@Override
 	public Optional<VerificationToken> load(String tokenString) {
-		UUID token;
-		try {
-			token = UUID.fromString(tokenString);
-		} catch (IllegalArgumentException e) {
+		if (!ValidationUtils.isValidUUID(tokenString))
 			return Optional.empty();
-		}
 		
-		Optional<VerificationTokenJPA> tokenJPA = tokenRepo.findByToken(token);
+		Optional<VerificationTokenJPA> tokenJPA = tokenRepo.findByToken(UUID.fromString(tokenString));
 		if (tokenJPA.isEmpty())
 			return Optional.empty();
 		return Optional.of(mapper.map(tokenJPA.get()));

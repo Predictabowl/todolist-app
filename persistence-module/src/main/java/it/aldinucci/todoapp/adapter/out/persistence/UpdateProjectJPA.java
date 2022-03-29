@@ -26,9 +26,9 @@ public class UpdateProjectJPA implements UpdateProjectDriverPort{
 
 	@Override
 	public Optional<Project> update(Project project) {
-		Long longId; 
+		long longId; 
 		try {
-			longId = Long.valueOf(project.getId());
+			longId = Long.parseLong(project.getId());
 		} catch (NumberFormatException e) {
 			return Optional.empty();
 		}

@@ -29,9 +29,9 @@ public class LoadUserByProjectIdJPA implements LoadUserByProjectIdDriverPort{
 
 	@Override
 	public Optional<User> load(String projectId) throws AppProjectNotFoundException{
-		Long longId;
+		long longId;
 		try {
-			longId = Long.valueOf(projectId);
+			longId = Long.parseLong(projectId);
 		}catch (Exception e) {
 			return Optional.empty();
 		}
