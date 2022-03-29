@@ -45,7 +45,7 @@ class CreateTaskJPATest {
 		ProjectJPA projectJPA = getFixtureProject();
 		entityManager.flush();
 		
-		NewTaskData newTask = new NewTaskData("task name", "task description", false, projectJPA.getId(), 3);
+		NewTaskData newTask = new NewTaskData("task name", "task description", false, projectJPA.getId().toString(), 3);
 		Task task = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task);
 		
@@ -74,7 +74,7 @@ class CreateTaskJPATest {
 	
 	@Test
 	void test_createNewTask_whenProjectNotPresent() {
-		NewTaskData newTask = new NewTaskData("task name", "task description", false, 1L, 5);
+		NewTaskData newTask = new NewTaskData("task name", "task description", false, "1", 5);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
 			.isInstanceOf(AppProjectNotFoundException.class)

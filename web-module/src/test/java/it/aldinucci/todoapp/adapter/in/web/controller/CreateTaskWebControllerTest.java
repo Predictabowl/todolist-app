@@ -41,24 +41,24 @@ class CreateTaskWebControllerTest {
 	@WithMockUser("user@email.it")
 	void test_createNewTask() throws Exception {
 		
-		mvc.perform(post("/web/project/3/task/new")
+		mvc.perform(post("/web/project/3P/task/new")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("name", "task name")
 				.param("description", "task descr"))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(redirectedUrl("/web/project/3/tasks"));
+			.andExpect(redirectedUrl("/web/project/3P/tasks"));
 		
 		InOrder inOrder = Mockito.inOrder(authorize, createTask);
-		inOrder.verify(authorize).check("user@email.it", new ProjectIdDTO(3));
-		inOrder.verify(createTask).create(new NewTaskDTOIn("task name", "task descr", 3));
+		inOrder.verify(authorize).check("user@email.it", new ProjectIdDTO("3P"));
+		inOrder.verify(createTask).create(new NewTaskDTOIn("task name", "task descr", "3P"));
 	}
 	
 	@Test
 	@WithMockUser("user@email.it")
 	void test_createNewTask_csrfCheck() throws Exception {
 		
-		mvc.perform(post("/web/project/3/task/new")
+		mvc.perform(post("/web/project/3P/task/new")
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("name", "task name")
 				.param("description", "task descr"))
@@ -72,13 +72,13 @@ class CreateTaskWebControllerTest {
 	@WithMockUser("user@email.it")
 	void test_createNewTask_whenInputValidationFail_shouldRedirect() throws Exception {
 		
-		mvc.perform(post("/web/project/3/task/new")
+		mvc.perform(post("/web/project/3P/task/new")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("name", "")
 				.param("description", "task descr"))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(redirectedUrl("/web/project/3/tasks"));
+			.andExpect(redirectedUrl("/web/project/3P/tasks"));
 
 		verifyNoInteractions(authorize);
 		verifyNoInteractions(createTask);

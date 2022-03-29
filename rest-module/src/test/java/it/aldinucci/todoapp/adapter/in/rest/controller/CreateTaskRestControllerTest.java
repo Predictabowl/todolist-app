@@ -67,7 +67,7 @@ class CreateTaskRestControllerTest {
 	@WithMockUser("user email")
 	void test_createTask_successful() throws JsonProcessingException, Exception {
 		Task task = new Task(1L, "new task", "task description");
-		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "test description", 2L);
+		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "test description", "2L");
 		when(createTask.create(isA(NewTaskDTOIn.class)))
 			.thenReturn(task);
 		
@@ -107,7 +107,7 @@ class CreateTaskRestControllerTest {
 	@WithMockUser("email")
 	void test_createTask_whenProjectNotFound_shouldReturnNotFound() throws JsonProcessingException, Exception {
 		doThrow(new AppProjectNotFoundException("test message")).when(authorize).check(anyString(), any());
-		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "description",11L);
+		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "description","11L");
 		
 		mvc.perform(post(FIXTURE_URL)
 				.with(csrf())
@@ -127,7 +127,7 @@ class CreateTaskRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", 1))))
+				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", "1P"))))
 			.andExpect(status().isUnauthorized());
 		
 		verifyNoInteractions(authorize);
@@ -140,7 +140,7 @@ class CreateTaskRestControllerTest {
 		mvc.perform(post(FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", 1))))
+				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", "1P"))))
 			.andExpect(status().isForbidden());
 		
 		verifyNoInteractions(authorize);
@@ -156,11 +156,11 @@ class CreateTaskRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", 1))))
+				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", "1P"))))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		verify(authorize).check("mock@user.it", new NewTaskDTOIn("task name", "description", 1));
+		verify(authorize).check("mock@user.it", new NewTaskDTOIn("task name", "description", "1P"));
 		verifyNoInteractions(createTask);
 	}
 }

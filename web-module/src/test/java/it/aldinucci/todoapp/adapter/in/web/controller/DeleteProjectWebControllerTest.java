@@ -63,26 +63,14 @@ class DeleteProjectWebControllerTest {
 	
 	@Test
 	@WithMockUser(FIXTURE_USER_EMAIL)
-	void test_deleteProject_withInvalidId() throws Exception {
-		
-		mvc.perform(delete(FIXTURE_TEST_URL+"2a")
-				.with(csrf()))
-				.andExpect(status().isBadRequest());
-		
-		verifyNoInteractions(authorize);
-		verifyNoInteractions(deleteProject);
-	}
-	
-	@Test
-	@WithMockUser(FIXTURE_USER_EMAIL)
 	void test_deleteProject_success() throws Exception {
 		
-		mvc.perform(delete(FIXTURE_TEST_URL+"7")
+		mvc.perform(delete(FIXTURE_TEST_URL+"7D")
 				.with(csrf()))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/web"));
 		
-		ProjectIdDTO idDTO = new ProjectIdDTO(7);
+		ProjectIdDTO idDTO = new ProjectIdDTO("7D");
 		verify(authorize).check(FIXTURE_USER_EMAIL, idDTO);
 		verify(deleteProject).delete(idDTO);
 	}

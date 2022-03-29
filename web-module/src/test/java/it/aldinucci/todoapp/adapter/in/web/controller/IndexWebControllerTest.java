@@ -99,8 +99,8 @@ class IndexWebControllerTest {
 		UserWebDto userWebDto = new UserWebDto("username", FIXTURE_EMAIL);
 		when(loadUser.load(isA(UserIdDTO.class))).thenReturn(Optional.of(user));
 		List<Project> projects = Arrays.asList(
-				new Project(2L, "test project"),
-				new Project(7L, "different test"));
+				new Project("2L", "test project"),
+				new Project("7L", "different test"));
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
 		when(mapper.map(isA(User.class))).thenReturn(userWebDto);
 

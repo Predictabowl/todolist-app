@@ -49,7 +49,7 @@ class LoadUnfinishedTasksByProjectIdJPATest {
 			.thenReturn(task1)
 			.thenReturn(task2);
 		
-		List<Task> tasks = adapter.load(2);
+		List<Task> tasks = adapter.load("2");
 		
 		verify(repository).findByProjectIdAndCompletedFalse(2);
 		assertThat(tasks).containsExactly(task1,task2);

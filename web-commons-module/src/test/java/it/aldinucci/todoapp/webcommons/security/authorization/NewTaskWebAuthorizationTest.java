@@ -36,19 +36,19 @@ class NewTaskWebAuthorizationTest {
 	
 	@Test
 	void test_authorizeSuccess(){
-		NewTaskDTOIn newTask = new NewTaskDTOIn("task name", "descr", 3L);
+		NewTaskDTOIn newTask = new NewTaskDTOIn("task name", "descr", "3L");
 		User user = new User("email1", "username", "password");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.of(user));
 		
 		assertThatCode(() -> authorize.check("email1", newTask))
 			.doesNotThrowAnyException();
 		
-		verify(loadUser).load(new ProjectIdDTO(3L));
+		verify(loadUser).load(new ProjectIdDTO("3L"));
 	}
 
 	@Test
 	void test_authorizeWhenProjectIdDoesNotBelongToAuthenticateUser_shouldThrow(){
-		NewTaskDTOIn newTask = new NewTaskDTOIn("task name", "descr", 3L);
+		NewTaskDTOIn newTask = new NewTaskDTOIn("task name", "descr", "3L");
 		User user = new User("another email", "username", "password");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.of(user));
 		
@@ -56,18 +56,18 @@ class NewTaskWebAuthorizationTest {
 			.isInstanceOf(UnauthorizedWebAccessException.class)
 			.hasMessage("Operation not authorized for the autheticated user");
 		
-		verify(loadUser).load(new ProjectIdDTO(3L));
+		verify(loadUser).load(new ProjectIdDTO("3L"));
 	}
 	
 	@Test
 	void test_authorize_whenProjectNotFound_shouldThrow() {
-		NewTaskDTOIn newTask = new NewTaskDTOIn("task name", "descr", 3L);
+		NewTaskDTOIn newTask = new NewTaskDTOIn("task name", "descr", "3L");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.empty());
 		
 		assertThatThrownBy(() -> authorize.check("email1", newTask))
 			.isInstanceOf(AppProjectNotFoundException.class)
-			.hasMessage("Could not find Project with id: 3");
+			.hasMessage("Could not find Project with id: 3L");
 		
-		verify(loadUser).load(new ProjectIdDTO(3L));
+		verify(loadUser).load(new ProjectIdDTO("3L"));
 	}
 }

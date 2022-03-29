@@ -6,5 +6,5 @@ import it.aldinucci.todoapp.domain.Task;
 
 public interface LoadUnfinishedTasksDriverPort {
 
-	public List<Task> load(long projectId);
+	public List<Task> load(String projectId);
 }

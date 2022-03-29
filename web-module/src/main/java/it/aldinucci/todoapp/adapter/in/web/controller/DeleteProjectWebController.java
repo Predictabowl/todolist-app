@@ -29,7 +29,7 @@ public class DeleteProjectWebController {
 
 
 	@DeleteMapping
-	public String deleteProjectWebEndpoint(Authentication authentication, @PathVariable long projectId) {
+	public String deleteProjectWebEndpoint(Authentication authentication, @PathVariable String projectId) {
 		ProjectIdDTO idDTO = new ProjectIdDTO(projectId);
 		authorize.check(authentication.getName(), idDTO);
 		deleteProject.delete(idDTO);

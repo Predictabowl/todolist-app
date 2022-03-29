@@ -57,7 +57,7 @@ class LoadUnfinishedTaskByProjectIdRestControllerTest {
 		Task task2 = new Task(7L, "project 2", "description 2");
 		when(usePort.load(isA(ProjectIdDTO.class))).thenReturn(Arrays.asList(task1, task2));
 		
-		mvc.perform(get("/api/project/3"+FIXTURE_URL)
+		mvc.perform(get("/api/project/3L"+FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].id", is(2)))
@@ -68,8 +68,8 @@ class LoadUnfinishedTaskByProjectIdRestControllerTest {
 			.andExpect(jsonPath("$[1].description", is("description 2")));
 		
 		InOrder inOrder = Mockito.inOrder(usePort,authorize);
-		inOrder.verify(authorize).check("test@email.org", new ProjectIdDTO(3L));
-		inOrder.verify(usePort).load(new ProjectIdDTO(3L));
+		inOrder.verify(authorize).check("test@email.org", new ProjectIdDTO("3L"));
+		inOrder.verify(usePort).load(new ProjectIdDTO("3L"));
 	}
 	
 	@Test
@@ -77,12 +77,12 @@ class LoadUnfinishedTaskByProjectIdRestControllerTest {
 	void test_loadTasks_whenProjectNotFound_shouldReturnNotFound() throws Exception {
 		doThrow(new AppProjectNotFoundException("message")).when(authorize).check(any(), any());
 		
-		mvc.perform(get("/api/project/1"+FIXTURE_URL)
+		mvc.perform(get("/api/project/1L"+FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("message")));
 		
-		verify(authorize).check("testmail", new ProjectIdDTO(1L));
+		verify(authorize).check("testmail", new ProjectIdDTO("1L"));
 	}
 	
 	@Test

@@ -39,7 +39,7 @@ public class UpdateTaskWebController {
 	@PutMapping
 	public String updateTaskEndPoint(
 				Authentication authentication,
-				@PathVariable long projectId,
+				@PathVariable String projectId,
 				@PathVariable long taskId,
 				@Valid TaskDataWebDto taskData,
 				BindingResult bindingResult) {

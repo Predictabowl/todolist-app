@@ -39,7 +39,7 @@ class UpdateProjectJPATest {
 	
 	@Test
 	void test_update_whenProjectIsMissing() {
-		Optional<Project> optional = sut.update(new Project(2L, "name"));
+		Optional<Project> optional = sut.update(new Project("2", "name"));
 		
 		assertThat(optional).isEmpty();
 		assertThat(entityManager.getEntityManager().createQuery("from ProjectJPA", ProjectJPA.class).getResultList())
@@ -55,10 +55,10 @@ class UpdateProjectJPATest {
 		user.getProjects().add(projectJpa);
 		entityManager.flush();
 		entityManager.detach(projectJpa);
-		Project testProject = new Project(11L, "different");
+		Project testProject = new Project("11", "different");
 		when(mapper.map(isA(ProjectJPA.class))).thenReturn(testProject);
 		
-		Project newProject = new Project(projectJpa.getId(), "new name");
+		Project newProject = new Project(projectJpa.getId().toString(), "new name");
 		
 		Optional<Project> optional = sut.update(newProject);
 		

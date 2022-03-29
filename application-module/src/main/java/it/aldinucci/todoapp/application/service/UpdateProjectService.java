@@ -29,7 +29,7 @@ public class UpdateProjectService implements UpdateProjectUsePort{
 	@Override
 	public Optional<Project> update(ProjectIdDTO projectId, ProjectDataDTOIn data) {
 		return updateProject.update(new Project(
-				projectId.projectId(),
+				projectId.getProjectId(),
 				data.getName()));
 	}
 

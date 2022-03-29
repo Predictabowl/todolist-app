@@ -23,7 +23,7 @@ public class DeleteProjectService implements DeleteProjectByIdUsePort{
 
 	@Override
 	public void delete(ProjectIdDTO id) throws AppProjectNotFoundException {
-		deleteProjectPort.delete(id.projectId());
+		deleteProjectPort.delete(id.getProjectId());
 	}
 
 }

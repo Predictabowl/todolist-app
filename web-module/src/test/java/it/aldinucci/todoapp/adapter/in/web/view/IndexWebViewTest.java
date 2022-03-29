@@ -85,9 +85,9 @@ class IndexWebViewTest {
 	void setUp() {
 		user = new User(FIXTURE_EMAIL, "username", "password");
 		projects = Arrays.asList(
-				new Project(2L, "test project"),
-				new Project(5L, "second project"),
-				new Project(7L, "project test"));
+				new Project("2L", "test project"),
+				new Project("5L", "second project"),
+				new Project("7L", "project test"));
 		when(loadUserByEmail.load(new UserIdDTO(FIXTURE_EMAIL))).thenReturn(Optional.of(user));
 		when(mapper.map(user)).thenReturn(new UserWebDto("username", FIXTURE_EMAIL));
 	}
@@ -112,15 +112,15 @@ class IndexWebViewTest {
 		HtmlElement sidebar = page.getHtmlElementById("sidebar");
 		assertThat(sidebar.isDisplayed()).isTrue();
 		
-		HtmlAnchor project1 = page.getAnchorByHref("/web/project/2/tasks");
+		HtmlAnchor project1 = page.getAnchorByHref("/web/project/2L/tasks");
 		assertThat(sidebar.isAncestorOf(project1)).isTrue();
 		assertThat(project1.getTextContent()).matches("test project");
 		
-		HtmlAnchor project2 = page.getAnchorByHref("/web/project/5/tasks");
+		HtmlAnchor project2 = page.getAnchorByHref("/web/project/5L/tasks");
 		assertThat(sidebar.isAncestorOf(project2)).isTrue();
 		assertThat(project2.getTextContent()).matches("second project");
 		
-		HtmlAnchor project3 = page.getAnchorByHref("/web/project/7/tasks");
+		HtmlAnchor project3 = page.getAnchorByHref("/web/project/7L/tasks");
 		assertThat(sidebar.isAncestorOf(project3)).isTrue();
 		assertThat(project3.getTextContent()).matches("project test");
 		
@@ -166,27 +166,8 @@ class IndexWebViewTest {
 	
 	
 	/*
-	 * This test doesn't work with jquery toggle("slow")
+	 * Testing animation visbility doesn't work with jquery toggle("slow")
 	 * it work with "fast" and with instant.
-	 * I assume it's because html browser don't support it, 
-	 * because no matter the waiting delay it still doesn't work 
+	 * It can be tested with Selenium though, so will be tested in E2E
 	 */
-//	@Test
-//	@WithMockUser(FIXTURE_EMAIL)
-//	void test_sidebar_visibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {
-//		HtmlPage page = webClient.getPage(BASE_URL);
-//		
-//		assertThat(page.getHtmlElementById("sidebar").isDisplayed()).isTrue();
-//		
-//		page.getHtmlElementById("sidebar-button").click();
-//
-//		await().atMost(3, TimeUnit.SECONDS).untilAsserted(() ->
-//				assertThat(page.getHtmlElementById("sidebar").isDisplayed()).isFalse());
-//		
-//		page.getHtmlElementById("sidebar-button").click();
-//
-//		await().atMost(3, TimeUnit.SECONDS).untilAsserted(() ->
-//				assertThat(page.getHtmlElementById("sidebar").isDisplayed()).isTrue());
-//	}
-
 }

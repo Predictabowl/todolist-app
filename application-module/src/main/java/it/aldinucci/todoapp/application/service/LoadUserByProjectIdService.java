@@ -26,7 +26,7 @@ public class LoadUserByProjectIdService implements LoadUserByProjectIdUsePort{
 
 	@Override
 	public Optional<User> load(ProjectIdDTO projectId) throws AppProjectNotFoundException{
-		return loadUser.load(projectId.projectId());
+		return loadUser.load(projectId.getProjectId());
 	}
 
 }

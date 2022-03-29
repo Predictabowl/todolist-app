@@ -52,7 +52,7 @@ class ProjectWebControllerTest {
 
 	private static final String BASE_URL = "/web/project/";
 	private static final String FIXTURE_EMAIL = "test@email.it";
-	private static final long FIXTURE_PROJECT_ID = 7;
+	private static final String FIXTURE_PROJECT_ID = "id7";
 	private static final ProjectIdDTO FIXTURE_PROJECT_ID_DTO = new ProjectIdDTO(FIXTURE_PROJECT_ID);
 	
 	@Autowired
@@ -84,7 +84,7 @@ class ProjectWebControllerTest {
 		UserIdDTO userIdDTO = new UserIdDTO(FIXTURE_EMAIL);
 		projects = Arrays.asList(
 				new Project(FIXTURE_PROJECT_ID, "first project"),
-				new Project(3L, "second project"));
+				new Project("3L", "second project"));
 		when(loadProjects.load(userIdDTO)).thenReturn(projects);
 		when(loadUser.load(FIXTURE_PROJECT_ID_DTO)).thenReturn(Optional.of(fixtureUser));
 		when(userMapper.map(fixtureUser)).thenReturn(new UserWebDto("username", FIXTURE_EMAIL));
@@ -137,7 +137,7 @@ class ProjectWebControllerTest {
 				.hasMessageEndingWith("Critical Data Integrity error while searching project with id: 21");
 		
 		InOrder inOrder = inOrder(loadUser, loadProjects, userMapper, authorize);
-		inOrder.verify(loadUser).load(new ProjectIdDTO(21));
+		inOrder.verify(loadUser).load(new ProjectIdDTO("21"));
 		inOrder.verify(authorize).check(FIXTURE_EMAIL, fixtureUser);
 		inOrder.verify(userMapper).map(fixtureUser);
 		inOrder.verify(loadProjects).load(new UserIdDTO(FIXTURE_EMAIL));
@@ -185,7 +185,7 @@ class ProjectWebControllerTest {
 				.isInstanceOf(AppUserNotFoundException.class)
 				.hasMessageEndingWith("Critical Data Integrity error while searching the User of project with id: 21");
 		
-		verify(loadUser).load(new ProjectIdDTO(21));
+		verify(loadUser).load(new ProjectIdDTO("21"));
 		verifyNoInteractions(authorize);
 		verifyNoInteractions(userMapper);
 		verifyNoInteractions(loadProjects);

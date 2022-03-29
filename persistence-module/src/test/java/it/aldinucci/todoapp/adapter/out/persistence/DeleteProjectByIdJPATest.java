@@ -28,7 +28,7 @@ class DeleteProjectByIdJPATest {
 	
 	@Test
 	void test_deleteProject_WhenNotPresent() {
-		assertThatThrownBy(() -> deleteProject.delete(3L))
+		assertThatThrownBy(() -> deleteProject.delete("3"))
 			.isInstanceOf(AppProjectNotFoundException.class)
 			.hasMessage("Could not find Project with id: 3");
 	}
@@ -44,7 +44,7 @@ class DeleteProjectByIdJPATest {
 		entityManager.persistAndFlush(task);
 		project.getTasks().add(task);
 		
-		deleteProject.delete(project.getId());
+		deleteProject.delete(project.getId().toString());
 		
 		assertThat(entityManager.find(ProjectJPA.class,project.getId())).isNull();
 		assertThat(entityManager.find(TaskJPA.class, task.getId())).isNull();

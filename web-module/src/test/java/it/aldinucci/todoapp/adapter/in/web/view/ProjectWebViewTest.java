@@ -2,7 +2,7 @@ package it.aldinucci.todoapp.adapter.in.web.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -113,9 +113,9 @@ class ProjectWebViewTest {
 	void setUp() {
 		user = new User(FIXTURE_EMAIL, "username", "password");
 		projects = Arrays.asList(
-				new Project(2L, "test project"),
-				new Project(5L, "second project"),
-				new Project(7L, "project test"));
+				new Project("2L", "test project"),
+				new Project("5L", "second project"),
+				new Project("7L", "project test"));
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.of(user));
 		when(mapper.map(user)).thenReturn(new UserWebDto("username", FIXTURE_EMAIL));
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
@@ -131,7 +131,7 @@ class ProjectWebViewTest {
 		
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		
 		assertThat(page.getHtmlElementById("active-project-section").getTextContent())
 			.contains("second project");
@@ -161,7 +161,7 @@ class ProjectWebViewTest {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		when(createTaskController.createNewTask(any(),any(), any(), any())).thenReturn(TEST_VIEW_PAGE);
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		page.getElementById("add-task-link").click();
 		HtmlForm form = page.getFormByName("new-task-form");
 		form.getInputByName("name").setValueAttribute("test task");
@@ -174,7 +174,7 @@ class ProjectWebViewTest {
 	
 		verify(createTaskController).createNewTask(
 				isA(Authentication.class),
-				eq(new ProjectIdDTO(5)),
+				eq(new ProjectIdDTO("5L")),
 				eq(new TaskDataWebDto("test task", "Test description\r\nNewline")),
 				isA(BindingResult.class));
 		
@@ -185,7 +185,7 @@ class ProjectWebViewTest {
 	void test_projectView_closeCreateTaskForm() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		page.getElementById("add-task-link").click();
 		HtmlForm form = page.getFormByName("new-task-form");
 		HtmlButton formButton = form.getButtonByName("cancel-button");
@@ -210,20 +210,20 @@ class ProjectWebViewTest {
 		
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		
 		HtmlForm form13 = page.getFormByName("complete-task-13-form");
-		assertThat(form13.getActionAttribute()).matches("/web/project/5/task/13/toggle/completed");
+		assertThat(form13.getActionAttribute()).matches("/web/project/5L/task/13/toggle/completed");
 		assertThat(form13.getButtonByName("submit-button")).isNotNull();
 		assertThat(form13.getMethodAttribute()).matches("post");
 		
 		HtmlForm form11 = page.getFormByName("complete-task-11-form");
-		assertThat(form11.getActionAttribute()).matches("/web/project/5/task/11/toggle/completed");
+		assertThat(form11.getActionAttribute()).matches("/web/project/5L/task/11/toggle/completed");
 		assertThat(form11.getButtonByName("submit-button")).isNotNull();
 		assertThat(form13.getMethodAttribute()).matches("post");
 		
 		HtmlForm form15 = page.getFormByName("complete-task-15-form");
-		assertThat(form15.getActionAttribute()).matches("/web/project/5/task/15/toggle/completed");
+		assertThat(form15.getActionAttribute()).matches("/web/project/5L/task/15/toggle/completed");
 		assertThat(form15.getButtonByName("submit-button")).isNotNull();
 		assertThat(form13.getMethodAttribute()).matches("post");
 		
@@ -243,7 +243,7 @@ class ProjectWebViewTest {
 	void test_visibility_ofCompletedTasks() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		
 		assertThat(page.getHtmlElementById("completed-tasks").isDisplayed()).isFalse();
 		page.getHtmlElementById("activeProject-menu-trigger").mouseOver();
@@ -255,10 +255,10 @@ class ProjectWebViewTest {
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_updateProject() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
-		when(updateProjectController.updateProjectWebEndPoint(any(), anyLong(), any(), any()))
+		when(updateProjectController.updateProjectWebEndPoint(any(), anyString(), any(), any()))
 			.thenReturn(TEST_VIEW_PAGE);
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		
 		HtmlForm form = page.getFormByName("activeProject-edit-form");
 		assertThat(form.isDisplayed()).isFalse();
@@ -270,7 +270,7 @@ class ProjectWebViewTest {
 		
 		assertThat(form.isDisplayed()).isTrue();
 		assertThat(form.getMethodAttribute()).matches("post");
-		assertThat(form.getActionAttribute()).matches("/web/project/5");
+		assertThat(form.getActionAttribute()).matches("/web/project/5L");
 		form.getInputByName("name").setValueAttribute("New project name");
 		
 		HtmlButton button = form.getButtonByName("submit-button");
@@ -279,7 +279,7 @@ class ProjectWebViewTest {
 		
 		verify(updateProjectController).updateProjectWebEndPoint(
 				isA(Authentication.class), 
-				eq(5L), 
+				eq("5L"), 
 				eq(new ProjectDataWebDto("New project name")), 
 				isA(BindingResult.class));
 	}
@@ -288,21 +288,21 @@ class ProjectWebViewTest {
 	@WithMockUser
 	void test_deleteProject() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
-		when(deleteProjectController.deleteProjectWebEndpoint(any(), anyLong()))
+		when(deleteProjectController.deleteProjectWebEndpoint(any(), anyString()))
 			.thenReturn(TEST_VIEW_PAGE);
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		
 		page.getHtmlElementById("activeProject-menu-trigger").mouseOver();
 		HtmlElement triggerLink = page.getHtmlElementById("activeProject-delete-trigger");
 		assertThat(triggerLink.getTextContent()).matches(env.getProperty("delete.project"));
 		HtmlForm form = page.getFormByName("activeProject-delete-form");
-		assertThat(form.getActionAttribute()).matches("/web/project/5");
+		assertThat(form.getActionAttribute()).matches("/web/project/5L");
 
 		triggerLink.click();
 		form.getButtonByName("submit-button").click();
 		
-		verify(deleteProjectController).deleteProjectWebEndpoint(isA(Authentication.class), eq(5L));
+		verify(deleteProjectController).deleteProjectWebEndpoint(isA(Authentication.class), eq("5L"));
 	}
 	
 	@Test
@@ -310,7 +310,7 @@ class ProjectWebViewTest {
 	void test_deleteProject_confirmationBox_visibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		
 		page.getHtmlElementById("activeProject-menu-trigger").mouseOver();
 		HtmlForm form = page.getFormByName("activeProject-delete-form");
@@ -336,20 +336,20 @@ class ProjectWebViewTest {
 		List<Task> tasks = new LinkedList<>();
 		tasks.add(new Task(4L, "task name", "task description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
-		when(deleteTaskController.deleteTaskEndPoint(any(), anyLong(), anyLong()))
+		when(deleteTaskController.deleteTaskEndPoint(any(), anyString(), anyLong()))
 			.thenReturn(TEST_VIEW_PAGE);
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		page.getHtmlElementById("task-4-menu-trigger").mouseOver();
 		HtmlElement linkTrigger = page.getHtmlElementById("task-4-delete-trigger");
 		assertThat(linkTrigger.getTextContent()).matches(env.getProperty("delete.task"));
 		linkTrigger.click();
 		
 		HtmlForm form = page.getFormByName("task-delete-form");
-		assertThat(form.getActionAttribute()).matches("/web/project/5/task/4");
+		assertThat(form.getActionAttribute()).matches("/web/project/5L/task/4");
 		form.getButtonByName("submit-button").click();
 
-		verify(deleteTaskController).deleteTaskEndPoint(isA(Authentication.class), eq(5L), eq(4L));
+		verify(deleteTaskController).deleteTaskEndPoint(isA(Authentication.class), eq("5L"), eq(4L));
 	}
 	
 	@Test
@@ -359,7 +359,7 @@ class ProjectWebViewTest {
 		tasks.add(new Task(6L, "task name", "task description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
-		HtmlPage page = webClient.getPage("/web/project/5/tasks");
+		HtmlPage page = webClient.getPage("/web/project/5L/tasks");
 		
 		page.getHtmlElementById("task-6-menu-trigger").mouseOver();
 		HtmlForm form = page.getFormByName("task-delete-form");
@@ -386,7 +386,7 @@ class ProjectWebViewTest {
 		tasks.add(new Task(11L, "task name", "task description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
-		HtmlPage page = webClient.getPage("/web/project/7/tasks");
+		HtmlPage page = webClient.getPage("/web/project/7L/tasks");
 		
 		page.getHtmlElementById("task-11-menu-trigger").mouseOver();
 		HtmlElement taskDescription = page.getHtmlElementById("task-11-description-box");
@@ -411,16 +411,16 @@ class ProjectWebViewTest {
 		List<Task> tasks = new LinkedList<>();
 		tasks.add(new Task(11L, "task test name", "task test description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
-		when(updateTaskController.updateTaskEndPoint(any(), anyLong(), anyLong(), any(), any()))
+		when(updateTaskController.updateTaskEndPoint(any(), anyString(), anyLong(), any(), any()))
 			.thenReturn(TEST_VIEW_PAGE);
 		
-		HtmlPage page = webClient.getPage("/web/project/7/tasks");
+		HtmlPage page = webClient.getPage("/web/project/7L/tasks");
 		
 		page.getHtmlElementById("task-11-menu-trigger").mouseOver();
 		page.getHtmlElementById("task-11-edit-trigger").click();
 		
 		HtmlForm form = page.getFormByName("task-11-edit-form");
-		assertThat(form.getActionAttribute()).matches("/web/project/7/task/11");
+		assertThat(form.getActionAttribute()).matches("/web/project/7L/task/11");
 		
 		HtmlInput nameInput = form.getInputByName("name");
 		assertThat(nameInput.getValueAttribute()).matches("task test name");
@@ -433,7 +433,7 @@ class ProjectWebViewTest {
 		form.getButtonByName("submit-button").click();
 		
 		verify(updateTaskController).updateTaskEndPoint(isA(Authentication.class), 
-				eq(7L), eq(11L), eq(new TaskDataWebDto("new task name", "task new description"))
+				eq("7L"), eq(11L), eq(new TaskDataWebDto("new task name", "task new description"))
 				, isA(BindingResult.class));
 	}
 }

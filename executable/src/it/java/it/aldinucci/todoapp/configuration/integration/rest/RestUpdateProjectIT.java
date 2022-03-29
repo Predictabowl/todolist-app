@@ -77,7 +77,7 @@ class RestUpdateProjectIT {
 			.extract().response();
 		
 		Project project = response.getBody().as(Project.class);
-		assertThat(project.getId()).isEqualTo(projectJpa.getId());
+		assertThat(project.getId()).matches(projectJpa.getId().toString());
 		assertThat(project.getName()).isEqualTo("new name");
 		
 		ProjectJPA updatedProject = projectRepo.findById(projectJpa.getId()).get();

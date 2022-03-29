@@ -103,21 +103,6 @@ class UpdateTaskWebControllerTest {
 	
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
-	void test_upateTask_withInvalidProjectId() throws Exception {
-		mvc.perform(put("/web/project/1a/task/3")
-			.with(csrf())
-			.contentType(MediaType.APPLICATION_JSON)
-			.param("name", "new name")
-			.param("description", "new descr"))
-		.andExpect(status().isBadRequest());
-		
-		verifyNoInteractions(authorize);
-		verifyNoInteractions(updateTask);
-		verifyNoInteractions(mapper);
-	}
-	
-	@Test
-	@WithMockUser(FIXTURE_EMAIL)
 	void test_upateTask_withInvalidTaskId() throws Exception {
 		mvc.perform(put("/web/project/1/task/3s")
 			.with(csrf())

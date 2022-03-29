@@ -6,6 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import it.aldinucci.todoapp.application.port.in.model.StringId;
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
 public class NewTaskDTOIn extends AutoValidatingInputModel<NewTaskDTOIn>{
@@ -19,12 +20,12 @@ public class NewTaskDTOIn extends AutoValidatingInputModel<NewTaskDTOIn>{
 	@Size(max = 1024)
 	private final String description;
 	
-	private final long projectId;
+	private final StringId projectId;
 	
-	public NewTaskDTOIn(String name, String description, long projectId) {
+	public NewTaskDTOIn(String name, String description, String projectId) {
 		this.name = name;
 		this.description = description;
-		this.projectId = projectId;
+		this.projectId = new StringId(projectId);
 		validateSelf();
 	}
 
@@ -36,10 +37,11 @@ public class NewTaskDTOIn extends AutoValidatingInputModel<NewTaskDTOIn>{
 		return description;
 	}
 
-	public long getProjectId() {
-		return projectId;
+	public String getProjectId() {
+		return projectId.getId();
 	}
 
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(description, name, projectId);
@@ -55,7 +57,7 @@ public class NewTaskDTOIn extends AutoValidatingInputModel<NewTaskDTOIn>{
 			return false;
 		NewTaskDTOIn other = (NewTaskDTOIn) obj;
 		return Objects.equals(description, other.description) && Objects.equals(name, other.name)
-				&& projectId == other.projectId;
+				&& Objects.equals(projectId, other.projectId);
 	}
 
 	@Override

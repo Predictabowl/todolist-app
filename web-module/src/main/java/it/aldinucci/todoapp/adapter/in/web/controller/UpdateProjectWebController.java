@@ -41,7 +41,7 @@ public class UpdateProjectWebController {
 
 
 	@PutMapping
-	public String updateProjectWebEndPoint(Authentication authentication, @PathVariable long projectId,
+	public String updateProjectWebEndPoint(Authentication authentication, @PathVariable String projectId,
 			@Valid ProjectDataWebDto projectData, BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
 			return "redirect:/web/project/"+projectId+"/tasks";

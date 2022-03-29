@@ -26,7 +26,7 @@ public class DeleteTaskWebController {
 	}
 
 	@DeleteMapping
-	public String deleteTaskEndPoint(Authentication authentication, @PathVariable long projectId, @PathVariable long taskId) {
+	public String deleteTaskEndPoint(Authentication authentication, @PathVariable String projectId, @PathVariable long taskId) {
 		TaskIdDTO idDTO = new TaskIdDTO(taskId);
 		authorize.check(authentication.getName(), idDTO);
 		deleteTask.delete(idDTO);

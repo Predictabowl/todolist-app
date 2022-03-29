@@ -54,13 +54,13 @@ class DeleteProjectByIdRestControllerTest {
 	@WithMockUser("user@email.org")
 	void test_deleteProject_successful() throws Exception {
 		
-		mvc.perform(delete("/api/project/5")
+		mvc.perform(delete("/api/project/5L")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
 		
 		InOrder inOrder = Mockito.inOrder(authorize,deleteProject);
-		ProjectIdDTO model = new ProjectIdDTO(5L);
+		ProjectIdDTO model = new ProjectIdDTO("5L");
 		inOrder.verify(authorize).check("user@email.org", model);
 		inOrder.verify(deleteProject).delete(model);
 	}
@@ -71,13 +71,13 @@ class DeleteProjectByIdRestControllerTest {
 		AppProjectNotFoundException exception = new AppProjectNotFoundException("no project");
 		doThrow(exception).when(deleteProject).delete(isA(ProjectIdDTO.class));
 		
-		mvc.perform(delete("/api/project/5")
+		mvc.perform(delete("/api/project/5L")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
 		
 		InOrder inOrder = Mockito.inOrder(authorize,deleteProject);
-		ProjectIdDTO model = new ProjectIdDTO(5L);
+		ProjectIdDTO model = new ProjectIdDTO("5L");
 		inOrder.verify(authorize).check("user", model);
 		inOrder.verify(deleteProject).delete(model);
 	}
@@ -110,13 +110,13 @@ class DeleteProjectByIdRestControllerTest {
 	void test_deleteProject_whenProjectIsMissing_shouldReturnNotFound() throws JsonProcessingException, Exception {
 		doThrow(new AppProjectNotFoundException("test message")).when(authorize).check(any(), any());
 		
-		mvc.perform(delete("/api/project/3")
+		mvc.perform(delete("/api/project/3C")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		verify(authorize).check("mock@user.it", new ProjectIdDTO(3));
+		verify(authorize).check("mock@user.it", new ProjectIdDTO("3C"));
 		verifyNoInteractions(deleteProject);
 	}
 }

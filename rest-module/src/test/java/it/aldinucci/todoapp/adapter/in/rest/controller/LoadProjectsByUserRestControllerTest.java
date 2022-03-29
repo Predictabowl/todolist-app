@@ -43,17 +43,17 @@ class LoadProjectsByUserRestControllerTest {
 	@Test
 	@WithMockUser("test@email")
 	void test_loadProjects_successful() throws Exception {
-		Project project1 = new Project(2L, "test project");
-		Project project2 = new Project(5L, "another test project");
+		Project project1 = new Project("2L", "test project");
+		Project project2 = new Project("5L", "another test project");
 		when(loadProjects.load(isA(UserIdDTO.class)))
 			.thenReturn(asList(project1,project2));
 		
 		mvc.perform(get("/api/projects")
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$[0].id", is(2)))
+			.andExpect(jsonPath("$[0].id", is("2L")))
 			.andExpect(jsonPath("$[0].name", is("test project")))
-			.andExpect(jsonPath("$[1].id", is(5)))
+			.andExpect(jsonPath("$[1].id", is("5L")))
 			.andExpect(jsonPath("$[1].name", is("another test project")));
 		
 		verify(loadProjects).load(new UserIdDTO("test@email"));

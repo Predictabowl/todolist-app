@@ -28,7 +28,7 @@ public class ChangeTaskStatusWebController {
 
 
 	@PostMapping
-	public String toggleCompletedStatus(Authentication authentication, @PathVariable long projectId, @PathVariable long taskId) {
+	public String toggleCompletedStatus(Authentication authentication, @PathVariable String projectId, @PathVariable long taskId) {
 		TaskIdDTO idDto = new TaskIdDTO(taskId);
 		authorize.check(authentication.getName(), idDto);
 		toggleTaskCompleted.toggle(idDto);

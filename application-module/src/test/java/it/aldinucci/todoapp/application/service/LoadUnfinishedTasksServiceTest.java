@@ -1,7 +1,7 @@
 package it.aldinucci.todoapp.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -36,11 +36,11 @@ class LoadUnfinishedTasksServiceTest {
 	void test_loadUnfinishedTasks_whenNoTasks() {
 		List<Task> tasks = Collections.emptyList();
 		
-		when(driverPort.load(anyLong())).thenReturn(tasks);
+		when(driverPort.load(anyString())).thenReturn(tasks);
 		
-		List<Task> loadedTasks = service.load(new ProjectIdDTO(2));
+		List<Task> loadedTasks = service.load(new ProjectIdDTO("2id"));
 		
-		verify(driverPort).load(2);
+		verify(driverPort).load("2id");
 		assertThat(loadedTasks).isSameAs(tasks);
 	}
 	
@@ -49,11 +49,11 @@ class LoadUnfinishedTasksServiceTest {
 		List<Task> tasks = Arrays.asList(
 				new Task(3L, "task", "descr", true, 4));
 		
-		when(driverPort.load(anyLong())).thenReturn(tasks);
+		when(driverPort.load(anyString())).thenReturn(tasks);
 		
-		List<Task> loadedTasks = service.load(new ProjectIdDTO(2));
+		List<Task> loadedTasks = service.load(new ProjectIdDTO("id2"));
 		
-		verify(driverPort).load(2);
+		verify(driverPort).load("id2");
 		assertThat(loadedTasks).isSameAs(tasks);
 	}
 

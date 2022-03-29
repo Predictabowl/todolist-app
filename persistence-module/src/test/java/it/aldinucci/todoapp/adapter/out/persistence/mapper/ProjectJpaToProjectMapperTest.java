@@ -23,7 +23,7 @@ class ProjectJpaToProjectMapperTest {
 		
 		Project project = mapper.map(projectJPA);
 		
-		assertThat(project.getId()).isEqualTo(5);
+		assertThat(project.getId()).isEqualTo("5");
 		assertThat(project.getName()).isEqualTo("name");
 	}
 

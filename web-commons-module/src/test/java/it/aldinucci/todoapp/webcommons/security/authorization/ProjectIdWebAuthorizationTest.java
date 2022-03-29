@@ -36,7 +36,7 @@ class ProjectIdWebAuthorizationTest {
 	@Test
 	void test_authorizationSuccessful(){
 		User user = new User("email", "username", "password");
-		ProjectIdDTO model = new ProjectIdDTO(3L);
+		ProjectIdDTO model = new ProjectIdDTO("3L");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.of(user));
 		
 		assertThatCode(() -> {
@@ -50,7 +50,7 @@ class ProjectIdWebAuthorizationTest {
 	@Test
 	void test_authorizationFailure_shouldThrow(){
 		User user = new User("email", "username", "password");
-		ProjectIdDTO projectId = new ProjectIdDTO(3L);
+		ProjectIdDTO projectId = new ProjectIdDTO("3L");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.of(user));
 		
 		assertThatThrownBy(() -> authorize.check("different email", projectId))
@@ -62,12 +62,12 @@ class ProjectIdWebAuthorizationTest {
 	
 	@Test
 	void test_authorizationWhenCantFindProject_shouldThrow() {
-		ProjectIdDTO projectId = new ProjectIdDTO(3L);
+		ProjectIdDTO projectId = new ProjectIdDTO("3L");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.empty());
 		
 		assertThatThrownBy(() -> authorize.check("different email", projectId))
 			.isInstanceOf(AppProjectNotFoundException.class)
-			.hasMessage("Could not find Project with id: 3");
+			.hasMessage("Could not find Project with id: 3L");
 		
 		verify(loadUser).load(projectId);
 	}

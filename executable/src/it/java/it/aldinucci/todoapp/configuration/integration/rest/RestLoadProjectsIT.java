@@ -81,8 +81,8 @@ class RestLoadProjectsIT {
 		
 		List<Project> projects = mapper.readValue(body.asString(), new TypeReference<List<Project>>() {});
 		assertThat(projects).containsExactly(
-				new Project(project2.getId(), "test 2"),
-				new Project(project1.getId(), "test project"));
+				new Project(project2.getId().toString(), "test 2"),
+				new Project(project1.getId().toString(), "test project"));
 	}
 	
 	@Test
