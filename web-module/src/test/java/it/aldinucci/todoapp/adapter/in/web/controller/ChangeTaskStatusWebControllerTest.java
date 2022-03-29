@@ -59,9 +59,20 @@ class ChangeTaskStatusWebControllerTest {
 			.andExpect(redirectedUrl("/web/project/5/tasks"));
 		
 		InOrder inOrder = Mockito.inOrder(toggleStatus, authorize);
-		TaskIdDTO idDTO = new TaskIdDTO(2);
+		TaskIdDTO idDTO = new TaskIdDTO("2");
 		inOrder.verify(authorize).check("user@email.it", idDTO);
 		inOrder.verify(toggleStatus).toggle(idDTO);
+	}
+	
+	@Test
+	@WithMockUser("user@email.it")
+	void test_changeStatus_withInvalidId() throws Exception {
+		mvc.perform(post("/web/project/5/task/2L/toggle/completed")
+				.with(csrf()))
+			.andExpect(status().isBadRequest());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(toggleStatus);
 	}
 
 }

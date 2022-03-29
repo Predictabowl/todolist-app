@@ -55,7 +55,7 @@ class UpdateTaskJPATest {
 	
 	@Test
 	void test_updateTask_whenTaskDontExists() {
-		Task task = new Task(1L, "another name", "test", true);
+		Task task = new Task("1", "another name", "test", true);
 		
 		Optional<Task> optionalTask = sut.update(task);
 		
@@ -74,7 +74,7 @@ class UpdateTaskJPATest {
 		Task emptyTask = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(emptyTask);
 		
-		Task task = new Task(taskId, "another name", "test", true, 5);
+		Task task = new Task(taskId.toString(), "another name", "test", true, 5);
 		
 		Optional<Task> updatedTask = sut.update(task);
 

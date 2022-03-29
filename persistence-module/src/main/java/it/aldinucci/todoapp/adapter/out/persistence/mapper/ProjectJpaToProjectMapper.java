@@ -11,7 +11,7 @@ public class ProjectJpaToProjectMapper implements AppGenericMapper<ProjectJPA, P
 
 	@Override
 	public Project map(ProjectJPA model) {
-		return new Project(model.getId(), model.getName());
+		return new Project(model.getId().toString(), model.getName());
 	}
 
 }

@@ -37,7 +37,7 @@ class CreateProjectWebControllerTest {
 	@Test
 	@WithMockUser("user@email.it")
 	void test_createProject_success() throws Exception {
-		when(createProject.create(isA(NewProjectDTOIn.class))).thenReturn(new Project(4L, "Project name"));
+		when(createProject.create(isA(NewProjectDTOIn.class))).thenReturn(new Project("4", "Project name"));
 		NewProjectDTOIn newProjectDTOIn = new NewProjectDTOIn("new project", "user@email.it");
 
 		mvc.perform(post("/web/project/new")

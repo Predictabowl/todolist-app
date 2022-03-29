@@ -1,7 +1,7 @@
 package it.aldinucci.todoapp.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -34,14 +34,14 @@ class LoadProjectsByUserIdServiceTest {
 	void test_serviceOrderProjectsByName() throws AppUserNotFoundException {
 		UserIdDTO userId = new UserIdDTO("test@email.it");
 		List<Project> projects = new LinkedList<Project>();
-		Project project1 = new Project(3L, "Test Project");
-		Project project2 = new Project(5L, "Some Project");
-		Project project3 = new Project(7L, "First Project");
+		Project project1 = new Project("3L", "Test Project");
+		Project project2 = new Project("5L", "Some Project");
+		Project project3 = new Project("7L", "First Project");
 		projects.add(project1);
 		projects.add(project2);
 		projects.add(project3);
 		
-		when(port.load(isA(String.class))).thenReturn(projects);
+		when(port.load(anyString())).thenReturn(projects);
 		
 		List<Project> loadedProjects = service.load(userId);
 		

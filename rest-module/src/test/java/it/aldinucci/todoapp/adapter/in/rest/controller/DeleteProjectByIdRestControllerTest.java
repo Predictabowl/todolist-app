@@ -60,7 +60,7 @@ class DeleteProjectByIdRestControllerTest {
 			.andExpect(status().isOk());
 		
 		InOrder inOrder = Mockito.inOrder(authorize,deleteProject);
-		ProjectIdDTO model = new ProjectIdDTO(5L);
+		ProjectIdDTO model = new ProjectIdDTO("5");
 		inOrder.verify(authorize).check("user@email.org", model);
 		inOrder.verify(deleteProject).delete(model);
 	}
@@ -77,7 +77,7 @@ class DeleteProjectByIdRestControllerTest {
 			.andExpect(status().isNotFound());
 		
 		InOrder inOrder = Mockito.inOrder(authorize,deleteProject);
-		ProjectIdDTO model = new ProjectIdDTO(5L);
+		ProjectIdDTO model = new ProjectIdDTO("5");
 		inOrder.verify(authorize).check("user", model);
 		inOrder.verify(deleteProject).delete(model);
 	}
@@ -116,7 +116,7 @@ class DeleteProjectByIdRestControllerTest {
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		verify(authorize).check("mock@user.it", new ProjectIdDTO(3));
+		verify(authorize).check("mock@user.it", new ProjectIdDTO("3"));
 		verifyNoInteractions(deleteProject);
 	}
 }

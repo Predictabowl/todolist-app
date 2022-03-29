@@ -39,6 +39,21 @@ class CreateTaskWebControllerTest {
 	
 	@Test
 	@WithMockUser("user@email.it")
+	void test_createNewTask_withInvalidId() throws Exception {
+		
+		mvc.perform(post("/web/project/3P/task/new")
+				.with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.param("name", "task name")
+				.param("description", "task descr"))
+			.andExpect(status().isBadRequest());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(createTask);
+	}
+	
+	@Test
+	@WithMockUser("user@email.it")
 	void test_createNewTask() throws Exception {
 		
 		mvc.perform(post("/web/project/3/task/new")
@@ -50,15 +65,15 @@ class CreateTaskWebControllerTest {
 			.andExpect(redirectedUrl("/web/project/3/tasks"));
 		
 		InOrder inOrder = Mockito.inOrder(authorize, createTask);
-		inOrder.verify(authorize).check("user@email.it", new ProjectIdDTO(3));
-		inOrder.verify(createTask).create(new NewTaskDTOIn("task name", "task descr", 3));
+		inOrder.verify(authorize).check("user@email.it", new ProjectIdDTO("3"));
+		inOrder.verify(createTask).create(new NewTaskDTOIn("task name", "task descr", "3"));
 	}
 	
 	@Test
 	@WithMockUser("user@email.it")
 	void test_createNewTask_csrfCheck() throws Exception {
 		
-		mvc.perform(post("/web/project/3/task/new")
+		mvc.perform(post("/web/project/3P/task/new")
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("name", "task name")
 				.param("description", "task descr"))

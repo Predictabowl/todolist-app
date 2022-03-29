@@ -1,10 +1,10 @@
 package it.aldinucci.todoapp.application.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.*;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.Optional;
 
@@ -34,14 +34,14 @@ class LoadUserByTaskIdServiceTest {
 	
 	@Test
 	void test_loadUser_successful() throws AppTaskNotFoundException {
-		TaskIdDTO taskId = new TaskIdDTO(1L);
+		TaskIdDTO taskId = new TaskIdDTO("1");
 		User user = new User("email", "username", "password");
 		Optional<User> optional = Optional.of(user);
-		when(driverPort.load(anyLong())).thenReturn(optional);
+		when(driverPort.load(anyString())).thenReturn(optional);
 		
 		Optional<User> loadedUser = loadService.load(taskId);
 		
-		verify(driverPort).load(1);
+		verify(driverPort).load("1");
 		assertThat(loadedUser).isSameAs(optional);
 	}
 	

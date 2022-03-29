@@ -39,18 +39,17 @@ public class UpdateTaskWebController {
 	@PutMapping
 	public String updateTaskEndPoint(
 				Authentication authentication,
-				@PathVariable long projectId,
-				@PathVariable long taskId,
+				@PathVariable String projectId,
+				@PathVariable TaskIdDTO taskId,
 				@Valid TaskDataWebDto taskData,
 				BindingResult bindingResult) {
 		
 		if (bindingResult.hasErrors())
 			return "redirect:/web/project/"+projectId+"/tasks";
 		
-		TaskIdDTO idDTO = new TaskIdDTO(taskId);
-		authorize.check(authentication.getName(), idDTO);
-		if (updateTask.update(idDTO, mapper.map(taskData)).isEmpty())
-			throw new AppTaskNotFoundException("Could not find Task with id: "+taskId);
+		authorize.check(authentication.getName(), taskId);
+		if (updateTask.update(taskId, mapper.map(taskData)).isEmpty())
+			throw new AppTaskNotFoundException("Could not find Task with id: "+taskId.getTaskId());
 			
 		return "redirect:/web/project/"+projectId+"/tasks";
 	}

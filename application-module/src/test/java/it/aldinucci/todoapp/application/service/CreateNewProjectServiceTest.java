@@ -37,7 +37,7 @@ class CreateNewProjectServiceTest {
 	void test_serviceShouldCallPort() throws AppUserNotFoundException {
 		NewProjectDTOIn newProjectIn = new NewProjectDTOIn("test project","test@email.com");
 		NewProjectData newProjectOut = new NewProjectData("test project", "test@email.com");
-		Project createdProject = new Project(1L, "first project");
+		Project createdProject = new Project("1L", "first project");
 		when(port.create(isA(NewProjectData.class))).thenReturn(createdProject);
 		when(mapper.map(newProjectIn)).thenReturn(newProjectOut);
 		

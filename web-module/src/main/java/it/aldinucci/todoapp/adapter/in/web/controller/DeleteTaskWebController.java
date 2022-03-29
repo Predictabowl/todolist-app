@@ -26,10 +26,9 @@ public class DeleteTaskWebController {
 	}
 
 	@DeleteMapping
-	public String deleteTaskEndPoint(Authentication authentication, @PathVariable long projectId, @PathVariable long taskId) {
-		TaskIdDTO idDTO = new TaskIdDTO(taskId);
-		authorize.check(authentication.getName(), idDTO);
-		deleteTask.delete(idDTO);
+	public String deleteTaskEndPoint(Authentication authentication, @PathVariable String projectId, @PathVariable TaskIdDTO taskId) {
+		authorize.check(authentication.getName(), taskId);
+		deleteTask.delete(taskId);
 		return "redirect:/web/project/"+projectId+"/tasks";
 	}
 }

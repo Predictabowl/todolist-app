@@ -13,16 +13,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.application.port.in.DeleteTaskByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {DeleteTaskWebController.class})
 @ExtendWith(SpringExtension.class)
+@Import(AppWebExceptionHandlers.class)
 class DeleteTaskWebControllerTest {
 
 	private static final String FIXTURE_TEST_URL = "/web/project/1/task/";
@@ -62,18 +65,6 @@ class DeleteTaskWebControllerTest {
 	
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
-	void test_deleteTask_withInvalidId() throws Exception {
-		
-		mvc.perform(delete(FIXTURE_TEST_URL+"2a")
-				.with(csrf()))
-				.andExpect(status().isBadRequest());
-		
-		verifyNoInteractions(authorize);
-		verifyNoInteractions(deleteTask);
-	}
-	
-	@Test
-	@WithMockUser(FIXTURE_EMAIL)
 	void test_deleteTask_success() throws Exception {
 		
 		mvc.perform(delete(FIXTURE_TEST_URL+"7")
@@ -81,9 +72,21 @@ class DeleteTaskWebControllerTest {
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/web/project/1/tasks"));
 		
-		TaskIdDTO idDTO = new TaskIdDTO(7);
+		TaskIdDTO idDTO = new TaskIdDTO("7");
 		verify(authorize).check(FIXTURE_EMAIL, idDTO);
 		verify(deleteTask).delete(idDTO);
+	}
+	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_deleteTask_withInvalidId() throws Exception {
+		
+		mvc.perform(delete(FIXTURE_TEST_URL+"7B")
+				.with(csrf()))
+				.andExpect(status().isBadRequest());
+		
+		verifyNoInteractions(authorize);
+		verifyNoInteractions(deleteTask);
 	}
 
 }

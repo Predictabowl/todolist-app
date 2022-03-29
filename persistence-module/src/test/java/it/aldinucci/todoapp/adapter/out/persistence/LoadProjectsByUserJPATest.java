@@ -60,8 +60,8 @@ class LoadProjectsByUserJPATest {
 		entityManager.persist(projectJpa2);
 		user.getProjects().add(projectJpa1);
 		user.getProjects().add(projectJpa2);
-		Project project1 = new Project(1L,"name 1");
-		Project project2 = new Project(2L,"name 2");
+		Project project1 = new Project("1","name 1");
+		Project project2 = new Project("2","name 2");
 		when(mapper.map(isA(ProjectJPA.class)))
 			.thenReturn(project1)
 			.thenReturn(project2);

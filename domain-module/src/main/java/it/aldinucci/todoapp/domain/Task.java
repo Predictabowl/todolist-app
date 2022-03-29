@@ -3,35 +3,34 @@ package it.aldinucci.todoapp.domain;
 import java.util.Objects;
 
 public class Task {
-	
-	private Long id;
+
+	private String id;
 	private String name;
 	private String description;
 	private boolean completed;
 	private int orderInProject;
-	
+
 	public Task() {
 		this.orderInProject = 0;
 	}
-	
 
-	public Task(Long id, String name, String description) {
+	public Task(String id, String name, String description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.completed = false;
 		this.orderInProject = 0;
 	}
-	
-	public Task(Long id, String name, String description, boolean completed) {
+
+	public Task(String id, String name, String description, boolean completed) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.completed = completed;
 		this.orderInProject = 0;
 	}
-	
-	public Task(Long id, String name, String description, boolean completed, int orderInProject) {
+
+	public Task(String id, String name, String description, boolean completed, int orderInProject) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -39,11 +38,11 @@ public class Task {
 		this.orderInProject = orderInProject;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -79,12 +78,10 @@ public class Task {
 		this.orderInProject = orderInProject;
 	}
 
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(completed, description, id, name, orderInProject);
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -99,7 +96,6 @@ public class Task {
 				&& Objects.equals(id, other.id) && Objects.equals(name, other.name)
 				&& orderInProject == other.orderInProject;
 	}
-
 
 	@Override
 	public String toString() {

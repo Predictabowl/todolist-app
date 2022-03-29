@@ -28,8 +28,8 @@ public class LoadUserByProjectIdJPA implements LoadUserByProjectIdDriverPort{
 
 
 	@Override
-	public Optional<User> load(long projectId) throws AppProjectNotFoundException{
-		Optional<ProjectJPA> project = projectRepo.findById(projectId);
+	public Optional<User> load(String projectId) throws AppProjectNotFoundException{
+		Optional<ProjectJPA> project = projectRepo.findById(Long.valueOf(projectId));
 		if (project.isEmpty())
 			return Optional.empty();
 		return Optional.of(mapper.map(project.get().getUser()));

@@ -15,25 +15,25 @@ class NewTaskDTOInTest {
 	
 	@Test
 	void test_whenCorrect_shouldNotThrow() {
-		assertThatCode(() -> new NewTaskDTOIn("name", "description", 3))
+		assertThatCode(() -> new NewTaskDTOIn("name", "description", "3"))
 			.doesNotThrowAnyException();;
 	}
 	
 	@Test
 	void test_whenDescriptionNull_shouldThrow() {
-		assertThatThrownBy(() -> new NewTaskDTOIn("name", null, 3))
+		assertThatThrownBy(() -> new NewTaskDTOIn("name", null, "3"))
 			.isInstanceOf(ConstraintViolationException.class);
 	}
 	
 	@Test
 	void test_whenNameNull_shouldThrow() {
-		assertThatThrownBy(() -> new NewTaskDTOIn(null, "description", 3))
+		assertThatThrownBy(() -> new NewTaskDTOIn(null, "description", "3"))
 			.isInstanceOf(ConstraintViolationException.class);
 	}
 	
 	@Test
 	void test_whenNameEmpty_shouldThrow() {
-		assertThatThrownBy(() -> new NewTaskDTOIn("", "description", 3))
+		assertThatThrownBy(() -> new NewTaskDTOIn("", "description", "3"))
 			.isInstanceOf(ConstraintViolationException.class);
 	}
 	
@@ -42,7 +42,7 @@ class NewTaskDTOInTest {
 		String longDescription = IntStream.range(0, 1025)
 				.mapToObj(i -> "a").collect(Collectors.joining());
 		
-		assertThatThrownBy(() -> new NewTaskDTOIn("name", longDescription ,3))
+		assertThatThrownBy(() -> new NewTaskDTOIn("name", longDescription ,"3"))
 			.isInstanceOf(ConstraintViolationException.class);
 	}
 	
@@ -51,7 +51,7 @@ class NewTaskDTOInTest {
 		String longName = IntStream.range(0, 256)
 				.mapToObj(i -> "a").collect(Collectors.joining());
 		
-		assertThatThrownBy(() -> new NewTaskDTOIn(longName, "description" ,3))
+		assertThatThrownBy(() -> new NewTaskDTOIn(longName, "description" ,"3"))
 			.isInstanceOf(ConstraintViolationException.class);
 	}
 }

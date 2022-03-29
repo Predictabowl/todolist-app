@@ -41,18 +41,17 @@ public class UpdateProjectWebController {
 
 
 	@PutMapping
-	public String updateProjectWebEndPoint(Authentication authentication, @PathVariable long projectId,
+	public String updateProjectWebEndPoint(Authentication authentication, @PathVariable ProjectIdDTO projectId,
 			@Valid ProjectDataWebDto projectData, BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
-			return "redirect:/web/project/"+projectId+"/tasks";
+			return "redirect:/web/project/"+projectId.getProjectId()+"/tasks";
 		
-		ProjectIdDTO idDTO = new ProjectIdDTO(projectId);
-		authorize.check(authentication.getName(), idDTO);
+		authorize.check(authentication.getName(), projectId);
 		
-		Optional<Project> optional = updateProject.update(idDTO, mapper.map(projectData));
+		Optional<Project> optional = updateProject.update(projectId, mapper.map(projectData));
 		if (optional.isEmpty())
-			throw new AppProjectNotFoundException("Project not found with id: "+projectId);
+			throw new AppProjectNotFoundException("Project not found with id: "+projectId.getProjectId());
 		
-		return "redirect:/web/project/"+projectId+"/tasks";
+		return "redirect:/web/project/"+projectId.getProjectId()+"/tasks";
 	}
 }

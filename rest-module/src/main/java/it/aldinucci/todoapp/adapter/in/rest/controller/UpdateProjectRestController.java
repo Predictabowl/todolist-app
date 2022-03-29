@@ -43,7 +43,7 @@ public class UpdateProjectRestController {
 
 	@PutMapping
 	public ResponseEntity<Optional<Project>> updateProjectEndPoint(Authentication authentication,
-				@PathVariable long projectId, @Valid @RequestBody ProjectDataWebDto projectData) 
+				@PathVariable String projectId, @Valid @RequestBody ProjectDataWebDto projectData) 
 						throws AppProjectNotFoundException{
 		
 		ProjectIdDTO idDTO = new ProjectIdDTO(projectId);

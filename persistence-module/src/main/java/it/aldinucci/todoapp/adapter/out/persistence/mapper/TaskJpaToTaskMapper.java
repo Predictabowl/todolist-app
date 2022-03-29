@@ -11,7 +11,7 @@ public class TaskJpaToTaskMapper implements AppGenericMapper<TaskJPA, Task>{
 
 	@Override
 	public Task map(TaskJPA model) {
-		return new Task(model.getId(),
+		return new Task(model.getId().toString(),
 				model.getName(),
 				model.getDescription(),
 				model.isCompleted(),

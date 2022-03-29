@@ -28,10 +28,11 @@ public class ChangeTaskStatusWebController {
 
 
 	@PostMapping
-	public String toggleCompletedStatus(Authentication authentication, @PathVariable long projectId, @PathVariable long taskId) {
-		TaskIdDTO idDto = new TaskIdDTO(taskId);
-		authorize.check(authentication.getName(), idDto);
-		toggleTaskCompleted.toggle(idDto);
+	public String toggleCompletedStatus(Authentication authentication, @PathVariable String projectId, @PathVariable TaskIdDTO taskId) {
+
+		authorize.check(authentication.getName(), taskId);
+		toggleTaskCompleted.toggle(taskId);
+		
 		return "redirect:/web/project/"+projectId+"/tasks";
 	}
 }

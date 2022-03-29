@@ -23,8 +23,8 @@ public class GetTaskMaxOrderInProjectJPA implements GetTaskMaxOrderInProjectDriv
 	}
 
 	@Override
-	public OptionalInt get(long projectId) throws AppProjectNotFoundException {
-		ProjectJPA project = projectRepo.findById(projectId).orElseThrow(() -> 
+	public OptionalInt get(String projectId) throws AppProjectNotFoundException {
+		ProjectJPA project = projectRepo.findById(Long.valueOf(projectId)).orElseThrow(() -> 
 			new AppProjectNotFoundException("Could not find Project with id: "+projectId));
 		
 		return project.getTasks().stream().mapToInt(TaskJPA::getOrderInProject).max(); 

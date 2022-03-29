@@ -53,7 +53,7 @@ class LoadUserByTaskIdJPATest {
 		User user = new User();
 		when(mapper.map(isA(UserJPA.class))).thenReturn(user);
 		
-		Optional<User> loadedUser = adapter.load(taskJpa.getId());
+		Optional<User> loadedUser = adapter.load(taskJpa.getId().toString());
 		
 		verify(mapper).map(userJpa);
 		assertThat(loadedUser).containsSame(user);
@@ -62,7 +62,7 @@ class LoadUserByTaskIdJPATest {
 	@Test
 	void test_loadUser_whenTaskNotPresent() {
 		
-		Optional<User> loadedUser = adapter.load(1);
+		Optional<User> loadedUser = adapter.load("1");
 		
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);

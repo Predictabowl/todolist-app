@@ -82,7 +82,7 @@ class RestCreateNewTaskIT {
 				.sessionId(sessionId)
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.accept(MediaType.APPLICATION_JSON_VALUE)
-				.body(new NewTaskDTOIn("task name", "description", projectJPA.getId()))
+				.body(new NewTaskDTOIn("task name", "description", projectJPA.getId().toString()))
 			.when()
 				.post(FIXTURE_URI)
 			.then()
@@ -97,7 +97,7 @@ class RestCreateNewTaskIT {
 		
 		TaskJPA taskJPA = tasks.get(0);
 		
-		assertThat(task.getId()).isEqualTo(taskJPA.getId());
+		assertThat(task.getId()).matches(taskJPA.getId().toString());
 		assertThat(task.getName()).isEqualTo(taskJPA.getName()).isEqualTo("task name");
 		assertThat(task.getDescription()).isEqualTo(taskJPA.getDescription()).isEqualTo("description");
 		assertThat(taskJPA.getProject()).isEqualTo(projectJPA);
@@ -113,7 +113,7 @@ class RestCreateNewTaskIT {
 			.sessionId(sessionId)
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.accept(MediaType.APPLICATION_JSON_VALUE)
-			.body(new NewTaskDTOIn("task name", "description", 2))
+			.body(new NewTaskDTOIn("task name", "description", "2"))
 		.when()
 			.post(FIXTURE_URI)
 		.then()

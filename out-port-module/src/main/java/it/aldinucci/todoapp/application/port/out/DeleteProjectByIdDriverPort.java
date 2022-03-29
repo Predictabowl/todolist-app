@@ -4,5 +4,5 @@ import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 public interface DeleteProjectByIdDriverPort {
 
-	public void delete (long id) throws AppProjectNotFoundException;
+	public void delete (String id) throws AppProjectNotFoundException;
 }

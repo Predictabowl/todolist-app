@@ -6,5 +6,5 @@ import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 public interface GetTaskMaxOrderInProjectDriverPort {
 
-	public OptionalInt get(long projectId) throws AppProjectNotFoundException;
+	public OptionalInt get(String projectId) throws AppProjectNotFoundException;
 }

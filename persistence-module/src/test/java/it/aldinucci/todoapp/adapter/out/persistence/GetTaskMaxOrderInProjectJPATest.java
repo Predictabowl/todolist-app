@@ -34,7 +34,7 @@ class GetTaskMaxOrderInProjectJPATest {
 
 	@Test
 	void test_countWhenProjectNotExists_shouldThrow() {
-		assertThatThrownBy(() -> sut.get(12))
+		assertThatThrownBy(() -> sut.get("12"))
 			.isInstanceOf(AppProjectNotFoundException.class)
 			.hasMessage("Could not find Project with id: 12");
 	}
@@ -43,7 +43,7 @@ class GetTaskMaxOrderInProjectJPATest {
 	void test_countWhenThereIsNoTask() {
 		ProjectJPA projectJPA = setUpDB();
 		
-		OptionalInt maxValue = sut.get(projectJPA.getId());
+		OptionalInt maxValue = sut.get(projectJPA.getId().toString());
 		
 		assertThat(maxValue).isEmpty();
 	}
@@ -57,7 +57,7 @@ class GetTaskMaxOrderInProjectJPATest {
 		projectJPA.getTasks().addAll(Arrays.asList(task1, task2, task3));
 		entityManager.flush();
 		
-		OptionalInt maxValue = sut.get(projectJPA.getId());
+		OptionalInt maxValue = sut.get(projectJPA.getId().toString());
 		
 		assertThat(maxValue).hasValue(17);
 	}

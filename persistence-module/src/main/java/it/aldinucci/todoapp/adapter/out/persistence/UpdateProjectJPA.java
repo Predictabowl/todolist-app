@@ -26,7 +26,7 @@ public class UpdateProjectJPA implements UpdateProjectDriverPort{
 
 	@Override
 	public Optional<Project> update(Project project) {
-		Optional<ProjectJPA> optional = projectRepo.findById(project.getId());
+		Optional<ProjectJPA> optional = projectRepo.findById(Long.valueOf(project.getId()));
 		if(optional.isEmpty())
 			return Optional.empty();
 		

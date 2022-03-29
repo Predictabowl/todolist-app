@@ -25,8 +25,8 @@ public class LoadUnfinishedTasksByProjectIdJPA implements LoadUnfinishedTasksDri
 
 
 	@Override
-	public List<Task> load(long projectId) {
-		List<TaskJPA> tasks = repository.findByProjectIdAndCompletedFalse(projectId);
+	public List<Task> load(String projectId) {
+		List<TaskJPA> tasks = repository.findByProjectIdAndCompletedFalse(Long.valueOf(projectId));
 		return tasks.stream().map(t -> mapper.map(t)).toList();
 	}
 

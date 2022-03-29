@@ -4,6 +4,6 @@ public record NewTaskData(
 	String name,
 	String description,
 	boolean complete,
-	long projectId,
+	String projectId,
 	int orderInProject) {
 }

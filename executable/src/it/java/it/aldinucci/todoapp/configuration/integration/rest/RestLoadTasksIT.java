@@ -87,8 +87,8 @@ class RestLoadTasksIT {
 		
 		List<Task> tasks = mapper.readValue(body.asString(), new TypeReference<List<Task>>() {});
 		assertThat(tasks).containsExactly(
-				new Task(task1.getId(), "task 1", "descr 1", false),
-				new Task(task2.getId(), "task 2", "descr 2", true));
+				new Task(task1.getId().toString(), "task 1", "descr 1", false),
+				new Task(task2.getId().toString(), "task 2", "descr 2", true));
 	}
 	
 	private void setSessionData() {

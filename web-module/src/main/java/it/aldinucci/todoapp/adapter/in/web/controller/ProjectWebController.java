@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
@@ -52,21 +51,23 @@ public class ProjectWebController {
 	}
 
 	@GetMapping("/tasks")
-	public String getTasks(Authentication authentication, Model model, @Valid ProjectIdDTO projectId,
+	public String getTasks(Authentication authentication,
+				Model model,
+				@PathVariable ProjectIdDTO projectId,
 				TaskDataWebDto newTaskWebDto) {
 		
 		User user = loadUser.load(projectId).orElseThrow(() -> 
 				new AppUserNotFoundException("Critical Data Integrity error while searching the User of project with id: "
-						+projectId.projectId()));
+						+projectId.getProjectId()));
 		authorize.check(authentication.getName(), user);
 		
 		model.addAttribute("user", userMapper.map(user));
 		List<Project> projects = loadProjects.load(new UserIdDTO(user.getEmail()));
 		model.addAttribute("projects", projects);
 		model.addAttribute("activeProject",	projects.stream()
-				.filter(p -> p.getId().equals(projectId.projectId())).findFirst()
+				.filter(p -> p.getId().equals(projectId.getProjectId())).findFirst()
 					.orElseThrow(() -> new AppProjectNotFoundException(
-							"Critical Data Integrity error while searching project with id: "+projectId.projectId())));
+							"Critical Data Integrity error while searching project with id: "+projectId.getProjectId())));
 		
 		Map<Boolean, List<Task>> tasks = loadTasks.load(projectId).stream()
 				.collect(Collectors.partitioningBy(Task::isCompleted));

@@ -2,7 +2,7 @@ package it.aldinucci.todoapp.adapter.in.web.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -50,6 +50,7 @@ import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.Task;
@@ -113,9 +114,9 @@ class ProjectWebViewTest {
 	void setUp() {
 		user = new User(FIXTURE_EMAIL, "username", "password");
 		projects = Arrays.asList(
-				new Project(2L, "test project"),
-				new Project(5L, "second project"),
-				new Project(7L, "project test"));
+				new Project("2", "test project"),
+				new Project("5", "second project"),
+				new Project("7", "project test"));
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.of(user));
 		when(mapper.map(user)).thenReturn(new UserWebDto("username", FIXTURE_EMAIL));
 		when(loadProjects.load(isA(UserIdDTO.class))).thenReturn(projects);
@@ -125,9 +126,9 @@ class ProjectWebViewTest {
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_projectView_shouldContainsAllTask() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = Arrays.asList(
-				new Task(11L, "first task", "desc 1", false),
-				new Task(13L, "second task", "desc 2", false),
-				new Task(15L, "third task", "desc 3", true));
+				new Task("11", "first task", "desc 1", false),
+				new Task("13", "second task", "desc 2", false),
+				new Task("15", "third task", "desc 3", true));
 		
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
@@ -174,7 +175,7 @@ class ProjectWebViewTest {
 	
 		verify(createTaskController).createNewTask(
 				isA(Authentication.class),
-				eq(new ProjectIdDTO(5)),
+				eq(new ProjectIdDTO("5")),
 				eq(new TaskDataWebDto("test task", "Test description\r\nNewline")),
 				isA(BindingResult.class));
 		
@@ -204,9 +205,9 @@ class ProjectWebViewTest {
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_changeTaskCompletedStatus() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = Arrays.asList(
-				new Task(11L, "first task", "desc 1", false, 1),
-				new Task(13L, "second task", "desc 2", false, 2),
-				new Task(15L, "third task", "desc 3", true, 3));
+				new Task("11", "first task", "desc 1", false, 1),
+				new Task("13", "second task", "desc 2", false, 2),
+				new Task("15", "third task", "desc 3", true, 3));
 		
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
@@ -255,7 +256,7 @@ class ProjectWebViewTest {
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_updateProject() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
-		when(updateProjectController.updateProjectWebEndPoint(any(), anyLong(), any(), any()))
+		when(updateProjectController.updateProjectWebEndPoint(any(), any(), any(), any()))
 			.thenReturn(TEST_VIEW_PAGE);
 		
 		HtmlPage page = webClient.getPage("/web/project/5/tasks");
@@ -279,7 +280,7 @@ class ProjectWebViewTest {
 		
 		verify(updateProjectController).updateProjectWebEndPoint(
 				isA(Authentication.class), 
-				eq(5L), 
+				eq(new ProjectIdDTO("5")), 
 				eq(new ProjectDataWebDto("New project name")), 
 				isA(BindingResult.class));
 	}
@@ -288,7 +289,7 @@ class ProjectWebViewTest {
 	@WithMockUser
 	void test_deleteProject() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
-		when(deleteProjectController.deleteProjectWebEndpoint(any(), anyLong()))
+		when(deleteProjectController.deleteProjectWebEndpoint(any(), any()))
 			.thenReturn(TEST_VIEW_PAGE);
 		
 		HtmlPage page = webClient.getPage("/web/project/5/tasks");
@@ -302,7 +303,7 @@ class ProjectWebViewTest {
 		triggerLink.click();
 		form.getButtonByName("submit-button").click();
 		
-		verify(deleteProjectController).deleteProjectWebEndpoint(isA(Authentication.class), eq(5L));
+		verify(deleteProjectController).deleteProjectWebEndpoint(isA(Authentication.class), eq(new ProjectIdDTO("5")));
 	}
 	
 	@Test
@@ -334,9 +335,9 @@ class ProjectWebViewTest {
 	@WithMockUser
 	void test_deleteTask() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = new LinkedList<>();
-		tasks.add(new Task(4L, "task name", "task description", false, 3));
+		tasks.add(new Task("4", "task name", "task description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
-		when(deleteTaskController.deleteTaskEndPoint(any(), anyLong(), anyLong()))
+		when(deleteTaskController.deleteTaskEndPoint(any(), anyString(), any()))
 			.thenReturn(TEST_VIEW_PAGE);
 		
 		HtmlPage page = webClient.getPage("/web/project/5/tasks");
@@ -349,14 +350,17 @@ class ProjectWebViewTest {
 		assertThat(form.getActionAttribute()).matches("/web/project/5/task/4");
 		form.getButtonByName("submit-button").click();
 
-		verify(deleteTaskController).deleteTaskEndPoint(isA(Authentication.class), eq(5L), eq(4L));
+		verify(deleteTaskController).deleteTaskEndPoint(
+				isA(Authentication.class), 
+				eq("5"), 
+				eq(new TaskIdDTO("4")));
 	}
 	
 	@Test
 	@WithMockUser
 	void test_deleteTask_confirmationBox_visibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = new LinkedList<>();
-		tasks.add(new Task(6L, "task name", "task description", false, 3));
+		tasks.add(new Task("6", "task name", "task description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
 		HtmlPage page = webClient.getPage("/web/project/5/tasks");
@@ -383,7 +387,7 @@ class ProjectWebViewTest {
 	@WithMockUser
 	void test_editTask_formVisibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = new LinkedList<>();
-		tasks.add(new Task(11L, "task name", "task description", false, 3));
+		tasks.add(new Task("11", "task name", "task description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
 		HtmlPage page = webClient.getPage("/web/project/7/tasks");
@@ -409,9 +413,9 @@ class ProjectWebViewTest {
 	@WithMockUser
 	void test_editTask_formFunctionality() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = new LinkedList<>();
-		tasks.add(new Task(11L, "task test name", "task test description", false, 3));
+		tasks.add(new Task("11", "task test name", "task test description", false, 3));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
-		when(updateTaskController.updateTaskEndPoint(any(), anyLong(), anyLong(), any(), any()))
+		when(updateTaskController.updateTaskEndPoint(any(), anyString(), any(), any(), any()))
 			.thenReturn(TEST_VIEW_PAGE);
 		
 		HtmlPage page = webClient.getPage("/web/project/7/tasks");
@@ -433,7 +437,9 @@ class ProjectWebViewTest {
 		form.getButtonByName("submit-button").click();
 		
 		verify(updateTaskController).updateTaskEndPoint(isA(Authentication.class), 
-				eq(7L), eq(11L), eq(new TaskDataWebDto("new task name", "task new description"))
+				eq("7"), 
+				eq(new TaskIdDTO("11")), 
+				eq(new TaskDataWebDto("new task name", "task new description"))
 				, isA(BindingResult.class));
 	}
 }

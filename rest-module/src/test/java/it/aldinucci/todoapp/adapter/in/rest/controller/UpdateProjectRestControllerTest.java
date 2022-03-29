@@ -104,7 +104,7 @@ class UpdateProjectRestControllerTest {
 			.andExpect(status().isBadRequest());
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
-		ProjectIdDTO projectIdDTO = new ProjectIdDTO(3);
+		ProjectIdDTO projectIdDTO = new ProjectIdDTO("3");
 		inOrder.verify(authorize).check("user@email.it", projectIdDTO);
 		inOrder.verify(mapper).map(new ProjectDataWebDto("new name"));
 		inOrder.verify(updateProject).update(projectIdDTO, dtoIn);
@@ -130,7 +130,7 @@ class UpdateProjectRestControllerTest {
 	@Test
 	@WithMockUser("user@email.it")
 	void test_updateProject_success() throws Exception {
-		Project project = new Project(3L, "different name");
+		Project project = new Project("3", "different name");
 		when(updateProject.update(any(), any())).thenReturn(Optional.of(project));
 		ProjectDataDTOIn dtoIn = new ProjectDataDTOIn("different name");
 		when(mapper.map(any())).thenReturn(dtoIn);
@@ -141,11 +141,11 @@ class UpdateProjectRestControllerTest {
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(project)))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id", is(3)))
+			.andExpect(jsonPath("$.id", is("3")))
 			.andExpect(jsonPath("$.name", is("different name")));
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
-		ProjectIdDTO projectIdDTO = new ProjectIdDTO(3);
+		ProjectIdDTO projectIdDTO = new ProjectIdDTO("3");
 		inOrder.verify(authorize).check("user@email.it", projectIdDTO);
 		inOrder.verify(mapper).map(new ProjectDataWebDto("different name"));
 		inOrder.verify(updateProject).update(projectIdDTO, dtoIn);

@@ -42,7 +42,7 @@ class LoadTasksByProjectIdJPATest {
 
 	@Test
 	void test_loadTasks_whenProjectNotPresent_shouldThrow() {
-		assertThatThrownBy(() -> loadTasks.load(3L)).isInstanceOf(AppProjectNotFoundException.class)
+		assertThatThrownBy(() -> loadTasks.load("3")).isInstanceOf(AppProjectNotFoundException.class)
 				.hasMessage("Could not find project with id: 3");
 	}
 
@@ -61,7 +61,7 @@ class LoadTasksByProjectIdJPATest {
 		entityManager.persistAndFlush(task);
 		project2.getTasks().add(task);
 
-		List<Task> tasks = loadTasks.load(project1.getId());
+		List<Task> tasks = loadTasks.load(project1.getId().toString());
 
 		verifyNoInteractions(mapper);
 		assertThat(tasks).isEmpty();
@@ -80,11 +80,11 @@ class LoadTasksByProjectIdJPATest {
 		entityManager.persistAndFlush(taskJpa2);
 		project1.getTasks().add(taskJpa1);
 		project1.getTasks().add(taskJpa2);
-		Task task1 = new Task(2L, "task1", "", false);
-		Task task2 = new Task(4L, "task2", "descr", true);
+		Task task1 = new Task("2L", "task1", "", false);
+		Task task2 = new Task("4L", "task2", "descr", true);
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task1).thenReturn(task2);
 
-		List<Task> tasks = loadTasks.load(project1.getId());
+		List<Task> tasks = loadTasks.load(project1.getId().toString());
 
 		verify(mapper).map(taskJpa1);
 		verify(mapper).map(taskJpa2);

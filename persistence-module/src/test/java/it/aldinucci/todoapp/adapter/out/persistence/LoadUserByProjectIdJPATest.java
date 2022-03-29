@@ -47,7 +47,7 @@ class LoadUserByProjectIdJPATest {
 		User user = new User();
 		when(mapper.map(isA(UserJPA.class))).thenReturn(user);
 		
-		Optional<User> loadedUser = loadUser.load(projectJpa.getId());
+		Optional<User> loadedUser = loadUser.load(projectJpa.getId().toString());
 		
 		verify(mapper).map(userJpa);
 		assertThat(loadedUser).containsSame(user);
@@ -55,7 +55,7 @@ class LoadUserByProjectIdJPATest {
 	
 	@Test
 	void test_loadUser_whenProjectNotPresent() {
-		Optional<User> loadedUser = loadUser.load(3);
+		Optional<User> loadedUser = loadUser.load("3");
 
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);

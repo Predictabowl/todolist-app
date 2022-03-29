@@ -36,7 +36,7 @@ class TaskIdWebAuthorizationTest {
 	@Test
 	void test_authorizationSuccessful() {
 		User user = new User("email", "username", "password");
-		TaskIdDTO model = new TaskIdDTO(3L);
+		TaskIdDTO model = new TaskIdDTO("3");
 		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(Optional.of(user));
 		
 		assertThatCode(() -> {
@@ -50,7 +50,7 @@ class TaskIdWebAuthorizationTest {
 	@Test
 	void test_authorizationFailure_shouldThrow() {
 		User user = new User("email", "username", "password");
-		TaskIdDTO taskId = new TaskIdDTO(3L);
+		TaskIdDTO taskId = new TaskIdDTO("3");
 		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(Optional.of(user));
 		
 		assertThatThrownBy(() -> authorize.check("different email", taskId))
@@ -62,7 +62,7 @@ class TaskIdWebAuthorizationTest {
 	
 	@Test
 	void test_authorizationWhenCannotFindTask_shouldThrow() {
-		TaskIdDTO taskId = new TaskIdDTO(3L);
+		TaskIdDTO taskId = new TaskIdDTO("3");
 		when(loadUser.load(isA(TaskIdDTO.class))).thenReturn(Optional.empty());
 		
 		assertThatThrownBy(() -> authorize.check("different email", taskId))

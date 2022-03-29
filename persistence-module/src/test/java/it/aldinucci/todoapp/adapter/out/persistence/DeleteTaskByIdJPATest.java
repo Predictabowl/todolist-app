@@ -40,7 +40,7 @@ class DeleteTaskByIdJPATest {
 		project.getTasks().add(task1);
 		project.getTasks().add(task2);
 		
-		deleteTask.delete(task1.getId());
+		deleteTask.delete(task1.getId().toString());
 		
 		assertThat(entityManager.find(TaskJPA.class, task1.getId())).isNull();
 		assertThat(project.getTasks()).containsExactly(task2);
@@ -49,7 +49,7 @@ class DeleteTaskByIdJPATest {
 	@Test
 	void test_deleteTask_whenTaskMissing() {
 		
-		assertThatCode(() -> deleteTask.delete(1))
+		assertThatCode(() -> deleteTask.delete("1"))
 			.doesNotThrowAnyException();
 	}
 

@@ -6,5 +6,5 @@ import it.aldinucci.todoapp.domain.User;
 
 public interface LoadUserByProjectIdDriverPort {
 
-	public Optional<User> load(long projectId);
+	public Optional<User> load(String projectId);
 }

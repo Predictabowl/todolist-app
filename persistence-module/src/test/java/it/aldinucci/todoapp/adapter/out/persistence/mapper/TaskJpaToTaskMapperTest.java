@@ -23,7 +23,7 @@ class TaskJpaToTaskMapperTest {
 		Task task = mapper.map(taskJpa);
 		
 		assertThat(task.getDescription()).matches("description");
-		assertThat(task.getId()).isEqualTo(12L);
+		assertThat(task.getId()).matches("12");
 		assertThat(task.getName()).matches("name");
 		assertThat(task.isCompleted()).isTrue();
 		assertThat(task.getOrderInProject()).isEqualTo(17);

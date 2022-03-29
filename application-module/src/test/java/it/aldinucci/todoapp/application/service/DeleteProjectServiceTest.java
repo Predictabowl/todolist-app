@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.application.service;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
@@ -27,20 +27,20 @@ class DeleteProjectServiceTest {
 	
 	@Test
 	void test_deleteSuccessful() throws AppProjectNotFoundException {
-		doNothing().when(deletePort).delete(anyLong());
+		doNothing().when(deletePort).delete(anyString());
 		
-		deleteService.delete(new ProjectIdDTO(2L));
+		deleteService.delete(new ProjectIdDTO("2"));
 		
-		verify(deletePort).delete(2L);
+		verify(deletePort).delete("2");
 	}
 	
 	@Test
 	void test_deleteFailure() throws AppProjectNotFoundException {
-		doNothing().when(deletePort).delete(anyLong());
+		doNothing().when(deletePort).delete(anyString());
 		
-		deleteService.delete(new ProjectIdDTO(4L));
+		deleteService.delete(new ProjectIdDTO("4"));
 		
-		verify(deletePort).delete(4L);
+		verify(deletePort).delete("4");
 	}
 
 }

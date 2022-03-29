@@ -6,5 +6,5 @@ import it.aldinucci.todoapp.domain.User;
 
 public interface LoadUserByTaskIdDriverPort {
 
-	public Optional<User> load(long taskId);
+	public Optional<User> load(String taskId);
 }

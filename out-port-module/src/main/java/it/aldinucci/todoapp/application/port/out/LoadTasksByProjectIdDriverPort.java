@@ -7,5 +7,5 @@ import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 public interface LoadTasksByProjectIdDriverPort {
 
-	public List<Task> load(long projectId) throws AppProjectNotFoundException;
+	public List<Task> load(String projectId) throws AppProjectNotFoundException;
 }

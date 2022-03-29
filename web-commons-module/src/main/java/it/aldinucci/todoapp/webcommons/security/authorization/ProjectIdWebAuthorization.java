@@ -26,7 +26,7 @@ public class ProjectIdWebAuthorization implements InputModelAuthorization<Projec
 			throws UnauthorizedWebAccessException, AppProjectNotFoundException {
 		Optional<User> user = loadUser.load(model);
 		if (user.isEmpty())
-			throw new AppProjectNotFoundException("Could not find Project with id: " + model.projectId());
+			throw new AppProjectNotFoundException("Could not find Project with id: " + model.getProjectId());
 		if (!authenticatedEmail.equals(user.get().getEmail()))
 			throw new UnauthorizedWebAccessException("This operation is not permitted for the authenticated user");
 	}

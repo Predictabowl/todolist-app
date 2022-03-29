@@ -26,7 +26,7 @@ public class TaskIdWebAuthorization implements InputModelAuthorization<TaskIdDTO
 			throws UnauthorizedWebAccessException, AppTaskNotFoundException {
 		Optional<User> user = loadUser.load(model);
 		if(user.isEmpty())
-			throw new AppTaskNotFoundException("Could not find Task with id: "+model.taskId());
+			throw new AppTaskNotFoundException("Could not find Task with id: "+model.getTaskId());
 		if(!authenticatedEmail.equals(user.get().getEmail()))
 			throw new UnauthorizedWebAccessException("This operation is not permitted for the authenticated user");
 	}

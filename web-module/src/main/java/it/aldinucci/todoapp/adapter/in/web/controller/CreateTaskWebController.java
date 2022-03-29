@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -30,15 +31,16 @@ public class CreateTaskWebController {
 	}
 	
 	@PostMapping
-	public String createNewTask(Authentication auth, ProjectIdDTO projectId, @Valid TaskDataWebDto newTaskWebDto,
+	public String createNewTask(Authentication auth,@PathVariable ProjectIdDTO projectId, @Valid TaskDataWebDto newTaskWebDto,
 			BindingResult  bindingResult) {
+		
 		if(!bindingResult.hasErrors()) {
 			authorize.check(auth.getName(), projectId);
 			createTask.create(new NewTaskDTOIn(
 					newTaskWebDto.name(),
 					newTaskWebDto.description(),
-					projectId.projectId()));
+					projectId.getProjectId()));
 		}
-		return "redirect:/web/project/"+projectId.projectId()+"/tasks";
+		return "redirect:/web/project/"+projectId.getProjectId()+"/tasks";
 	}
 }

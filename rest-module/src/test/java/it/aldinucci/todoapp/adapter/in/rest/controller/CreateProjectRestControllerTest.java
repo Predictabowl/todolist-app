@@ -59,7 +59,7 @@ class CreateProjectRestControllerTest {
 	@Test
 	@WithMockUser("user@email.it")
 	void test_createProject_successful() throws JsonProcessingException, Exception {
-		Project project = new Project(2L, "test project");
+		Project project = new Project("2L", "test project");
 		ProjectDataWebDto restDto = new ProjectDataWebDto("another name");
 		when(createPort.create(isA(NewProjectDTOIn.class)))
 			.thenReturn(project);
@@ -70,7 +70,7 @@ class CreateProjectRestControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(restDto)))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id", is(2)))
+			.andExpect(jsonPath("$.id", is("2L")))
 			.andExpect(jsonPath("$.name", is("test project")));
 		
 		verify(createPort).create(new NewProjectDTOIn("another name", "user@email.it"));
@@ -126,7 +126,7 @@ class CreateProjectRestControllerTest {
 		mvc.perform(post(FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", 1))))
+				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", "1"))))
 			.andExpect(status().isForbidden());
 		
 		verifyNoInteractions(createPort);

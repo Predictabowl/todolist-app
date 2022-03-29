@@ -41,7 +41,7 @@ class LoadTaskByIdJPATest {
 
 	@Test
 	void test_loadTask_whenMissing() {
-		Optional<Task> loadedTask = sut.load(1);
+		Optional<Task> loadedTask = sut.load("1");
 		
 		assertThat(loadedTask).isEmpty();
 	}
@@ -57,7 +57,7 @@ class LoadTaskByIdJPATest {
 		Task task = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task);
 		
-		Optional<Task> loadedTask = sut.load(taskJpa.getId());
+		Optional<Task> loadedTask = sut.load(taskJpa.getId().toString());
 		
 		verify(mapper).map(taskJpa);
 		assertThat(loadedTask).containsSame(task);

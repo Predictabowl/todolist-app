@@ -79,7 +79,7 @@ class RestCreateNewProjectIT {
 		assertThat(projects).hasSize(1);
 
 		ProjectJPA projectJpa = projects.get(0);
-		assertThat(project.getId()).isEqualTo(projectJpa.getId());
+		assertThat(project.getId()).matches(projectJpa.getId().toString());
 		assertThat(project.getName()).isEqualTo(projectJpa.getName()).isEqualTo("new project");
 	}
 

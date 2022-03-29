@@ -13,23 +13,23 @@ import java.util.Objects;
 
 public class Project{
 
-	private Long id;
+	private String id;
 	private String name;
 
 	public Project() {
 	}
 
-	public Project(Long id, String name) {
+	public Project(String id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

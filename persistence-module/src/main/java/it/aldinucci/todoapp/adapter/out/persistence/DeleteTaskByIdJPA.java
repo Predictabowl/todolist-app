@@ -21,8 +21,8 @@ public class DeleteTaskByIdJPA implements DeleteTaskByIdDriverPort{
 
 
 	@Override
-	public void delete(long id){
-		Optional<TaskJPA> optional = taskRepository.findById(id);
+	public void delete(String id){
+		Optional<TaskJPA> optional = taskRepository.findById(Long.valueOf(id));
 		if (optional.isPresent()) {		
 			TaskJPA taskJPA = optional.get();
 			taskJPA.getProject().getTasks().remove(taskJPA);

@@ -52,7 +52,7 @@ class ProjectWebControllerTest {
 
 	private static final String BASE_URL = "/web/project/";
 	private static final String FIXTURE_EMAIL = "test@email.it";
-	private static final long FIXTURE_PROJECT_ID = 7;
+	private static final String FIXTURE_PROJECT_ID = "7";
 	private static final ProjectIdDTO FIXTURE_PROJECT_ID_DTO = new ProjectIdDTO(FIXTURE_PROJECT_ID);
 	
 	@Autowired
@@ -84,10 +84,25 @@ class ProjectWebControllerTest {
 		UserIdDTO userIdDTO = new UserIdDTO(FIXTURE_EMAIL);
 		projects = Arrays.asList(
 				new Project(FIXTURE_PROJECT_ID, "first project"),
-				new Project(3L, "second project"));
+				new Project("3", "second project"));
 		when(loadProjects.load(userIdDTO)).thenReturn(projects);
 		when(loadUser.load(FIXTURE_PROJECT_ID_DTO)).thenReturn(Optional.of(fixtureUser));
 		when(userMapper.map(fixtureUser)).thenReturn(new UserWebDto("username", FIXTURE_EMAIL));
+	}
+	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_viewTasksWithInvalidId() throws Exception {
+		
+		mvc.perform(get(BASE_URL+"id7"+"/tasks")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest());
+		
+		verifyNoInteractions(loadUser);
+		verifyNoInteractions(loadProjects);
+		verifyNoInteractions(loadTasks);
+		verifyNoInteractions(userMapper);
+		verifyNoInteractions(authorize);
 	}
 	
 	@Test
@@ -122,8 +137,8 @@ class ProjectWebControllerTest {
 	void test_couldNotFindActiveProject_betweenTheListOfProjects_shouldThrow() throws Exception {
 		when(loadUser.load(any())).thenReturn(Optional.of(fixtureUser));
 		List<Task> tasks = Arrays.asList(
-				new Task(5L, "task 1", "descr 1"),
-				new Task(11L, "task 2", "descr 2"));
+				new Task("5L", "task 1", "descr 1"),
+				new Task("11L", "task 2", "descr 2"));
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
 		
@@ -137,7 +152,7 @@ class ProjectWebControllerTest {
 				.hasMessageEndingWith("Critical Data Integrity error while searching project with id: 21");
 		
 		InOrder inOrder = inOrder(loadUser, loadProjects, userMapper, authorize);
-		inOrder.verify(loadUser).load(new ProjectIdDTO(21));
+		inOrder.verify(loadUser).load(new ProjectIdDTO("21"));
 		inOrder.verify(authorize).check(FIXTURE_EMAIL, fixtureUser);
 		inOrder.verify(userMapper).map(fixtureUser);
 		inOrder.verify(loadProjects).load(new UserIdDTO(FIXTURE_EMAIL));
@@ -147,9 +162,9 @@ class ProjectWebControllerTest {
 	@Test
 	@WithMockUser("another@user.it")
 	void test_viewWithFewTasks_shouldCallAuthorizationCorrectly() throws Exception {
-		Task task1 = new Task(5L, "task 1", "descr 1", false);
-		Task task2 = new Task(11L, "task 2", "descr 2", false);
-		Task task3 = new Task(17L, "task 3", "descr 3", true);
+		Task task1 = new Task("5L", "task 1", "descr 1", false);
+		Task task2 = new Task("11L", "task 2", "descr 2", false);
+		Task task3 = new Task("17L", "task 3", "descr 3", true);
 		List<Task> tasks = Arrays.asList(task1,	task3, task2);
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(tasks);
 		
@@ -185,7 +200,7 @@ class ProjectWebControllerTest {
 				.isInstanceOf(AppUserNotFoundException.class)
 				.hasMessageEndingWith("Critical Data Integrity error while searching the User of project with id: 21");
 		
-		verify(loadUser).load(new ProjectIdDTO(21));
+		verify(loadUser).load(new ProjectIdDTO("21"));
 		verifyNoInteractions(authorize);
 		verifyNoInteractions(userMapper);
 		verifyNoInteractions(loadProjects);

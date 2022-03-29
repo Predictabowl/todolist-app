@@ -25,7 +25,7 @@ public class LoadUnfinishedTasksService implements LoadUnfinishedTasksByProjectI
 
 	@Override
 	public List<Task> load(ProjectIdDTO projectId) {
-		return loadTasks.load(projectId.projectId());
+		return loadTasks.load(projectId.getProjectId());
 	}
 
 }

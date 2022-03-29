@@ -101,9 +101,9 @@ class UpdateProjectWebControllerTest {
 				.hasMessage("Project not found with id: 2");
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
-		inOrder.verify(authorize).check(FIXTURE_EMAIL, new ProjectIdDTO(2));
+		inOrder.verify(authorize).check(FIXTURE_EMAIL, new ProjectIdDTO("2"));
 		inOrder.verify(mapper).map(new ProjectDataWebDto("project name"));
-		inOrder.verify(updateProject).update(new ProjectIdDTO(2), dtoIn);
+		inOrder.verify(updateProject).update(new ProjectIdDTO("2"), dtoIn);
 	}
 	
 	@Test
@@ -115,8 +115,7 @@ class UpdateProjectWebControllerTest {
 			.contentType(MediaType.APPLICATION_JSON)
 			.param("name", ""))
 		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:"+BASE_URL+"/2/tasks"));
-		
+		.andExpect(view().name("redirect:/web/project/2/tasks"));
 		
 		verifyNoInteractions(authorize);
 		verifyNoInteractions(updateProject);
@@ -126,7 +125,7 @@ class UpdateProjectWebControllerTest {
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_updateProject_success() throws Exception {
-		Project project = new Project(2L, "project name");
+		Project project = new Project("2", "project name");
 		when(updateProject.update(any(), any())).thenReturn(Optional.of(project));
 		ProjectDataDTOIn dtoIn = new ProjectDataDTOIn("project name");
 		when(mapper.map(any())).thenReturn(dtoIn);
@@ -140,9 +139,9 @@ class UpdateProjectWebControllerTest {
 		
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
-		inOrder.verify(authorize).check(FIXTURE_EMAIL, new ProjectIdDTO(2));
+		inOrder.verify(authorize).check(FIXTURE_EMAIL, new ProjectIdDTO("2"));
 		inOrder.verify(mapper).map(new ProjectDataWebDto("project name"));
-		inOrder.verify(updateProject).update(new ProjectIdDTO(2), dtoIn);
+		inOrder.verify(updateProject).update(new ProjectIdDTO("2"), dtoIn);
 	}
 
 }

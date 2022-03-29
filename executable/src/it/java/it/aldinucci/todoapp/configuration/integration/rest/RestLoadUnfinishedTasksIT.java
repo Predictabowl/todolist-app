@@ -87,7 +87,7 @@ class RestLoadUnfinishedTasksIT {
 		
 		List<Task> tasks = mapper.readValue(body.asString(), new TypeReference<List<Task>>() {});
 		assertThat(tasks).containsExactly(
-				new Task(task1.getId(), "task 1", "descr 1", false));
+				new Task(task1.getId().toString(), "task 1", "descr 1", false));
 	}
 
 	private void setSessionData() {

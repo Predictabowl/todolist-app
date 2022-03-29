@@ -35,21 +35,21 @@ class UpdateProjectServiceTest {
 	void test_updateWhenProjectDontExists() {
 		when(updateProject.update(isA(Project.class))).thenReturn(Optional.empty());
 		
-		Optional<Project> optionalProject = sut.update(new ProjectIdDTO(3), new ProjectDataDTOIn("new name"));
+		Optional<Project> optionalProject = sut.update(new ProjectIdDTO("3"), new ProjectDataDTOIn("new name"));
 		
 		assertThat(optionalProject).isEmpty();
-		verify(updateProject).update(new Project(3L, "new name"));
+		verify(updateProject).update(new Project("3", "new name"));
 	}
 	
 	@Test
 	void test_updateWhenProject_success() {
-		Project project = new Project(4L, "something");
+		Project project = new Project("4L", "something");
 		when(updateProject.update(isA(Project.class))).thenReturn(Optional.of(project));
 		
-		Optional<Project> optionalProject = sut.update(new ProjectIdDTO(3), new ProjectDataDTOIn("new name"));
+		Optional<Project> optionalProject = sut.update(new ProjectIdDTO("3"), new ProjectDataDTOIn("new name"));
 		
 		assertThat(optionalProject).containsSame(project);
-		verify(updateProject).update(new Project(3L, "new name"));
+		verify(updateProject).update(new Project("3", "new name"));
 	}
 
 }

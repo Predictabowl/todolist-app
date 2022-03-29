@@ -92,7 +92,7 @@ class UpdateTaskRestControllerTest {
 			.andExpect(status().isBadRequest());
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateTask);
-		TaskIdDTO taskIdDTO = new TaskIdDTO(3);
+		TaskIdDTO taskIdDTO = new TaskIdDTO("3");
 		inOrder.verify(authorize).check("user@email.it", taskIdDTO);
 		inOrder.verify(updateTask).update(taskIdDTO, new TaskDataDTOIn("new name", "new descr"));
 	}
@@ -115,7 +115,7 @@ class UpdateTaskRestControllerTest {
 	@Test
 	@WithMockUser("user@email.it")
 	void test_updateTask_success() throws Exception {
-		Task task = new Task(3L, "name", "description", false, 7);
+		Task task = new Task("3", "name", "description", false, 7);
 		when(updateTask.update(any(), any())).thenReturn(Optional.of(task));
 		
 		mvc.perform(put(FIXTURE_TEST_URL)
@@ -124,14 +124,14 @@ class UpdateTaskRestControllerTest {
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(task)))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id", is(3)))
+			.andExpect(jsonPath("$.id", is("3")))
 			.andExpect(jsonPath("$.name", is("name")))
 			.andExpect(jsonPath("$.description", is("description")))
 			.andExpect(jsonPath("$.completed", is(false)))
 			.andExpect(jsonPath("$.orderInProject", is(7)));
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateTask);
-		TaskIdDTO taskIdDTO = new TaskIdDTO(3);
+		TaskIdDTO taskIdDTO = new TaskIdDTO("3");
 		inOrder.verify(authorize).check("user@email.it", taskIdDTO);
 		inOrder.verify(updateTask).update(taskIdDTO, new TaskDataDTOIn("name", "description"));
 	}
