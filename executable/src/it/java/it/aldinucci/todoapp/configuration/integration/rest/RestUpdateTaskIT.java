@@ -92,7 +92,7 @@ class RestUpdateTaskIT {
 			.matches("new descr");
 		assertThat(changedTask.getOrderInProject()).isEqualTo(responseTask.getOrderInProject())
 			.isZero();
-		assertThat(changedTask.getId()).isEqualTo(responseTask.getId());
+		assertThat(changedTask.getId().toString()).matches(responseTask.getId());
 		
 	}
 	

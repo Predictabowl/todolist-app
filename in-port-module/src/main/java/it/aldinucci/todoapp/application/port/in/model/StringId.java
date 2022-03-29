@@ -2,18 +2,18 @@ package it.aldinucci.todoapp.application.port.in.model;
 
 import java.util.Objects;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import it.aldinucci.todoapp.application.port.in.validator.annotation.EntityId;
 import it.aldinucci.todoapp.util.AutoValidatingInputModel;
 
 public class StringId extends AutoValidatingInputModel<StringId>{
 	
+	@EntityId
 	@NotNull
-	@NotEmpty
 	private String id;
 
-	public StringId(@NotNull @NotEmpty String id) {
+	public StringId(String id) {
 		super();
 		this.id = id;
 		validateSelf();

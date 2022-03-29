@@ -10,9 +10,21 @@ import org.junit.jupiter.api.Test;
 class StringIdTest {
 
 	@Test
-	void test_wellFormedStringIg() {
-		assertThatCode(() -> new StringId("something-2"))
+	void test_validStringId() {
+		assertThatCode(() -> new StringId("25862"))
 			.doesNotThrowAnyException();
+	}
+	
+	@Test
+	void test_noLeadingZero() {
+		assertThatThrownBy(() -> new StringId("025862"))
+			.isInstanceOf(ConstraintViolationException.class);
+	}
+	
+	@Test
+	void test_invalidStringId() {
+		assertThatThrownBy(() -> new StringId("something-2"))
+			.isInstanceOf(ConstraintViolationException.class);
 	}
 	
 	@Test

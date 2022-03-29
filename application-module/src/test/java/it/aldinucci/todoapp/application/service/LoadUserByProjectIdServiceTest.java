@@ -30,13 +30,13 @@ class LoadUserByProjectIdServiceTest {
 	
 	@Test
 	void test_loadUser(){
-		ProjectIdDTO projectId = new ProjectIdDTO("4L");
+		ProjectIdDTO projectId = new ProjectIdDTO("4");
 		User user = new User("email", "username", "password");
 		when(userPort.load(anyString())).thenReturn(Optional.of(user));
 		
 		Optional<User> loadedUser = userService.load(projectId);
 		
-		verify(userPort).load("4L");
+		verify(userPort).load("4");
 		assertThat(loadedUser).containsSame(user);
 	}
 

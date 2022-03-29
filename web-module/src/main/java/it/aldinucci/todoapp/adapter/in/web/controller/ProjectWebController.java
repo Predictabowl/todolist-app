@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
@@ -52,7 +53,9 @@ public class ProjectWebController {
 	}
 
 	@GetMapping("/tasks")
-	public String getTasks(Authentication authentication, Model model, @Valid ProjectIdDTO projectId,
+	public String getTasks(Authentication authentication,
+				Model model,
+				@PathVariable ProjectIdDTO projectId,
 				TaskDataWebDto newTaskWebDto) {
 		
 		User user = loadUser.load(projectId).orElseThrow(() -> 

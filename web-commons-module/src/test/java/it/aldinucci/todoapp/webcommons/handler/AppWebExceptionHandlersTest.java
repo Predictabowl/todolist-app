@@ -5,6 +5,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collections;
+
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +81,18 @@ class AppWebExceptionHandlersTest {
 			.andReturn().getResponse();
 		
 		assertThat(response.getContentAsString()).matches("test message");
+	}
+	
+	@Test
+	void test_constraintViolationWebException() throws Exception {
+		ConstraintViolationException exception = new ConstraintViolationException("test message",Collections.emptySet());
+		when(mockController.getToBeStubbed()).thenThrow(exception);
+		
+		MockHttpServletResponse response = mvc.perform(get(TEST_URL))
+			.andExpect(status().isBadRequest())
+			.andReturn().getResponse();
+		
+		assertThat(response.getContentAsString()).isEqualTo(exception.toString());
 	}
 
 }

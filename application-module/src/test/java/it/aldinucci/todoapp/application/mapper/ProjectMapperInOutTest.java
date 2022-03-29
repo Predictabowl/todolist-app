@@ -20,5 +20,4 @@ class ProjectMapperInOutTest {
 		assertThat(dtoOut.name()).isEqualTo(dtoIn.getName());
 		assertThat(dtoOut.userEmail()).isEqualTo(dtoIn.getUserEmail());
 	}
-
 }

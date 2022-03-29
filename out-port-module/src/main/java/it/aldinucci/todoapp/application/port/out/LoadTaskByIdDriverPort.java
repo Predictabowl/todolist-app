@@ -6,5 +6,5 @@ import it.aldinucci.todoapp.domain.Task;
 
 public interface LoadTaskByIdDriverPort {
 
-	public Optional<Task> load(long id);
+	public Optional<Task> load(String id);
 }

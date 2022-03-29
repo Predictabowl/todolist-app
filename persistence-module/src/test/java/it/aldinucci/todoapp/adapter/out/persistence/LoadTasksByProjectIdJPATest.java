@@ -80,8 +80,8 @@ class LoadTasksByProjectIdJPATest {
 		entityManager.persistAndFlush(taskJpa2);
 		project1.getTasks().add(taskJpa1);
 		project1.getTasks().add(taskJpa2);
-		Task task1 = new Task(2L, "task1", "", false);
-		Task task2 = new Task(4L, "task2", "descr", true);
+		Task task1 = new Task("2L", "task1", "", false);
+		Task task2 = new Task("4L", "task2", "descr", true);
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task1).thenReturn(task2);
 
 		List<Task> tasks = loadTasks.load(project1.getId().toString());

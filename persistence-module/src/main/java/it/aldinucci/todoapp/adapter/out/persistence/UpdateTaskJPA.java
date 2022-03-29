@@ -27,7 +27,7 @@ public class UpdateTaskJPA implements UpdateTaskDriverPort{
 
 	@Override
 	public Optional<Task> update(Task task) {
-		Optional<TaskJPA> optionalTaskJPA = taskRepo.findById(task.getId());
+		Optional<TaskJPA> optionalTaskJPA = taskRepo.findById(Long.valueOf(task.getId()));
 		if(optionalTaskJPA.isEmpty())
 			return Optional.empty();
 		

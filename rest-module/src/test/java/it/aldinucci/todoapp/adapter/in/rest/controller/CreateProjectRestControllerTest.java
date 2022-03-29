@@ -126,7 +126,7 @@ class CreateProjectRestControllerTest {
 		mvc.perform(post(FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", "1I"))))
+				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", "1"))))
 			.andExpect(status().isForbidden());
 		
 		verifyNoInteractions(createPort);

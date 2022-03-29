@@ -57,7 +57,7 @@ class DeleteTaskByIdRestControllerTest {
 			.andExpect(status().isOk());
 		
 		InOrder inOrder = Mockito.inOrder(authorize,deleteTask);
-		TaskIdDTO model = new TaskIdDTO(6);
+		TaskIdDTO model = new TaskIdDTO("6");
 		inOrder.verify(authorize).check("user@email.org", model);
 		inOrder.verify(deleteTask).delete(model);
 	}
@@ -96,7 +96,7 @@ class DeleteTaskByIdRestControllerTest {
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		verify(authorize).check("mock@user.it", new TaskIdDTO(3));
+		verify(authorize).check("mock@user.it", new TaskIdDTO("3"));
 		verifyNoInteractions(deleteTask);
 	}
 }

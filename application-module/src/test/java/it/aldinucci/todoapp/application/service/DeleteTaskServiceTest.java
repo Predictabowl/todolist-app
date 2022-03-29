@@ -1,6 +1,6 @@
 package it.aldinucci.todoapp.application.service;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -29,11 +29,11 @@ class DeleteTaskServiceTest {
 	
 	@Test
 	void test_deleteSuccessful() throws AppTaskNotFoundException {
-		doNothing().when(deleteTask).delete(anyLong());
+		doNothing().when(deleteTask).delete(anyString());
 		
-		deleteService.delete(new TaskIdDTO(2L));
+		deleteService.delete(new TaskIdDTO("2"));
 		
-		verify(deleteTask).delete(2L);
+		verify(deleteTask).delete("2");
 	}
 
 }

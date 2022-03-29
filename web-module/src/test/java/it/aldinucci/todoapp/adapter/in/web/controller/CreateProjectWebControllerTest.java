@@ -37,7 +37,7 @@ class CreateProjectWebControllerTest {
 	@Test
 	@WithMockUser("user@email.it")
 	void test_createProject_success() throws Exception {
-		when(createProject.create(isA(NewProjectDTOIn.class))).thenReturn(new Project("4L", "Project name"));
+		when(createProject.create(isA(NewProjectDTOIn.class))).thenReturn(new Project("4", "Project name"));
 		NewProjectDTOIn newProjectDTOIn = new NewProjectDTOIn("new project", "user@email.it");
 
 		mvc.perform(post("/web/project/new")
@@ -45,7 +45,7 @@ class CreateProjectWebControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("name", "new project"))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/web/project/4L/tasks"));
+			.andExpect(view().name("redirect:/web/project/4/tasks"));
 		
 		verify(createProject).create(newProjectDTOIn);
 	}

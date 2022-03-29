@@ -97,7 +97,7 @@ class RestCreateNewTaskIT {
 		
 		TaskJPA taskJPA = tasks.get(0);
 		
-		assertThat(task.getId()).isEqualTo(taskJPA.getId());
+		assertThat(task.getId()).matches(taskJPA.getId().toString());
 		assertThat(task.getName()).isEqualTo(taskJPA.getName()).isEqualTo("task name");
 		assertThat(task.getDescription()).isEqualTo(taskJPA.getDescription()).isEqualTo("description");
 		assertThat(taskJPA.getProject()).isEqualTo(projectJPA);

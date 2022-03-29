@@ -29,18 +29,18 @@ class DeleteProjectServiceTest {
 	void test_deleteSuccessful() throws AppProjectNotFoundException {
 		doNothing().when(deletePort).delete(anyString());
 		
-		deleteService.delete(new ProjectIdDTO("2L"));
+		deleteService.delete(new ProjectIdDTO("2"));
 		
-		verify(deletePort).delete("2L");
+		verify(deletePort).delete("2");
 	}
 	
 	@Test
 	void test_deleteFailure() throws AppProjectNotFoundException {
 		doNothing().when(deletePort).delete(anyString());
 		
-		deleteService.delete(new ProjectIdDTO("4L"));
+		deleteService.delete(new ProjectIdDTO("4"));
 		
-		verify(deletePort).delete("4L");
+		verify(deletePort).delete("4");
 	}
 
 }

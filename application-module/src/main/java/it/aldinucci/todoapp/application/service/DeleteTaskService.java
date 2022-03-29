@@ -22,7 +22,7 @@ public class DeleteTaskService implements DeleteTaskByIdUsePort{
 
 	@Override
 	public void delete(TaskIdDTO task){
-		deletePort.delete(task.taskId());
+		deletePort.delete(task.getTaskId());
 	}
 
 }

@@ -38,22 +38,22 @@ class LoadUnfinishedTasksServiceTest {
 		
 		when(driverPort.load(anyString())).thenReturn(tasks);
 		
-		List<Task> loadedTasks = service.load(new ProjectIdDTO("2id"));
+		List<Task> loadedTasks = service.load(new ProjectIdDTO("2"));
 		
-		verify(driverPort).load("2id");
+		verify(driverPort).load("2");
 		assertThat(loadedTasks).isSameAs(tasks);
 	}
 	
 	@Test
 	void test_loadUnfinishedTasks_successful() {
 		List<Task> tasks = Arrays.asList(
-				new Task(3L, "task", "descr", true, 4));
+				new Task("3L", "task", "descr", true, 4));
 		
 		when(driverPort.load(anyString())).thenReturn(tasks);
 		
-		List<Task> loadedTasks = service.load(new ProjectIdDTO("id2"));
+		List<Task> loadedTasks = service.load(new ProjectIdDTO("2"));
 		
-		verify(driverPort).load("id2");
+		verify(driverPort).load("2");
 		assertThat(loadedTasks).isSameAs(tasks);
 	}
 

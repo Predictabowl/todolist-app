@@ -43,29 +43,29 @@ class CreateNewTaskServiceTest {
 	
 	@Test
 	void test_createTaskWhenProjectHaveOtherTasks() throws AppProjectNotFoundException {
-		Task savedTask = new Task(2L, TASK_NAME, "new description");
+		Task savedTask = new Task("2L", TASK_NAME, "new description");
 		when(newTaskport.create(isA(NewTaskData.class))).thenReturn(savedTask);
 		when(maxOrderTask.get(anyString())).thenReturn(OptionalInt.of(9));
 		
-		Task resultTask = service.create(new NewTaskDTOIn(TASK_NAME, TASK_DESCRIPTION, "1L"));
+		Task resultTask = service.create(new NewTaskDTOIn(TASK_NAME, TASK_DESCRIPTION, "1"));
 		
 		InOrder inOrder = inOrder(newTaskport, maxOrderTask);
-		inOrder.verify(maxOrderTask).get("1L");
-		inOrder.verify(newTaskport).create(new NewTaskData(TASK_NAME, TASK_DESCRIPTION, false, "1L", 10));
+		inOrder.verify(maxOrderTask).get("1");
+		inOrder.verify(newTaskport).create(new NewTaskData(TASK_NAME, TASK_DESCRIPTION, false, "1", 10));
 		assertThat(resultTask).isSameAs(savedTask);
 	}
 	
 	@Test
 	void test_createFirstTaskOfProject() throws AppProjectNotFoundException {
-		Task savedTask = new Task(2L, TASK_NAME, "new description");
+		Task savedTask = new Task("2L", TASK_NAME, "new description");
 		when(newTaskport.create(isA(NewTaskData.class))).thenReturn(savedTask);
 		when(maxOrderTask.get(anyString())).thenReturn(OptionalInt.empty());
 		
-		Task resultTask = service.create(new NewTaskDTOIn(TASK_NAME, TASK_DESCRIPTION, "1L"));
+		Task resultTask = service.create(new NewTaskDTOIn(TASK_NAME, TASK_DESCRIPTION, "1"));
 		
 		InOrder inOrder = inOrder(newTaskport, maxOrderTask);
-		inOrder.verify(maxOrderTask).get("1L");
-		inOrder.verify(newTaskport).create(new NewTaskData(TASK_NAME, TASK_DESCRIPTION, false, "1L", 0));
+		inOrder.verify(maxOrderTask).get("1");
+		inOrder.verify(newTaskport).create(new NewTaskData(TASK_NAME, TASK_DESCRIPTION, false, "1", 0));
 		assertThat(resultTask).isSameAs(savedTask);
 	}
 

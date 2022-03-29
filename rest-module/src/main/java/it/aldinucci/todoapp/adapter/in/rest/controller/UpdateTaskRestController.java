@@ -39,12 +39,11 @@ public class UpdateTaskRestController {
 
 	@PutMapping
 	public ResponseEntity<Optional<Task>> updateTaskEndPoint(Authentication authentication,
-				@PathVariable long taskId, @Valid @RequestBody TaskDataWebDto taskData) 
+				@PathVariable TaskIdDTO taskId, @Valid @RequestBody TaskDataWebDto taskData) 
 						throws AppTaskNotFoundException{
 		
-		TaskIdDTO idDTO = new TaskIdDTO(taskId);
-		authorize.check(authentication.getName(), idDTO);
-		Optional<Task> optional = updateTask.update(idDTO, new TaskDataDTOIn(
+		authorize.check(authentication.getName(), taskId);
+		Optional<Task> optional = updateTask.update(taskId, new TaskDataDTOIn(
 				taskData.name(), taskData.description()));
 		if (optional.isEmpty())
 			return new ResponseEntity<>(optional, HttpStatus.BAD_REQUEST);

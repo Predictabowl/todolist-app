@@ -103,21 +103,6 @@ class UpdateTaskWebControllerTest {
 	
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)
-	void test_upateTask_withInvalidTaskId() throws Exception {
-		mvc.perform(put("/web/project/1/task/3s")
-			.with(csrf())
-			.contentType(MediaType.APPLICATION_JSON)
-			.param("name", "new name")
-			.param("description", "new descr"))
-		.andExpect(status().isBadRequest());
-		
-		verifyNoInteractions(authorize);
-		verifyNoInteractions(updateTask);
-		verifyNoInteractions(mapper);
-	}
-	
-	@Test
-	@WithMockUser(FIXTURE_EMAIL)
 	void test_upateTask_whenTaskIdNotFound_afterSucessfulAuthorize_shouldThrow() throws Exception {
 		TaskDataDTOIn dataDTOIn = new TaskDataDTOIn("test name", "test descr");
 		when(mapper.map(any())).thenReturn(dataDTOIn);
@@ -135,9 +120,9 @@ class UpdateTaskWebControllerTest {
 				.isInstanceOf(AppTaskNotFoundException.class)
 				.hasMessage("Could not find Task with id: 3");
 		
-		verify(authorize).check(FIXTURE_EMAIL, new TaskIdDTO(3));
+		verify(authorize).check(FIXTURE_EMAIL, new TaskIdDTO("3"));
 		verify(mapper).map(new TaskDataWebDto("new name", "new descr"));
-		verify(updateTask).update(new TaskIdDTO(3), dataDTOIn);
+		verify(updateTask).update(new TaskIdDTO("3"), dataDTOIn);
 	}
 	
 	@Test
@@ -156,7 +141,7 @@ class UpdateTaskWebControllerTest {
 		.andExpect(view().name("redirect:/web/project/1/tasks"));
 		
 		InOrder inOrder = Mockito.inOrder(authorize, mapper, updateTask);
-		TaskIdDTO idDTO = new TaskIdDTO(3);
+		TaskIdDTO idDTO = new TaskIdDTO("3");
 		inOrder.verify(authorize).check(FIXTURE_EMAIL, idDTO);
 		inOrder.verify(mapper).map(new TaskDataWebDto("new name", "new descr"));
 		inOrder.verify(updateTask).update(idDTO, dataDTOIn);

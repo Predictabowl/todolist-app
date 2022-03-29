@@ -26,7 +26,7 @@ public class LoadUserByTaskIdService implements LoadUserByTaskIdUsePort{
 
 	@Override
 	public Optional<User> load(TaskIdDTO taskId) throws AppTaskNotFoundException {
-		return loadUser.load(taskId.taskId()); 
+		return loadUser.load(taskId.getTaskId()); 
 	}
 
 }

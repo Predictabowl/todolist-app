@@ -79,7 +79,7 @@ class ToggleTaskCompleteStatusRestControllerTest {
 			.andExpect(status().isOk());
 		
 		InOrder inOrder = Mockito.inOrder(authorize, togglePort);
-		TaskIdDTO idDTO = new TaskIdDTO(3);
+		TaskIdDTO idDTO = new TaskIdDTO("3");
 		inOrder.verify(authorize).check("user@email.it", idDTO);
 		inOrder.verify(togglePort).toggle(idDTO);
 	}
@@ -95,20 +95,9 @@ class ToggleTaskCompleteStatusRestControllerTest {
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		verify(authorize).check("user@email.it", new TaskIdDTO(5));
+		verify(authorize).check("user@email.it", new TaskIdDTO("5"));
 		verifyNoInteractions(togglePort);
 	}
 	
-	@Test
-	@WithMockUser("user@email.it")
-	void test_toggleStatus_whenTaskIdNotValid_shouldReturnBadRequest() throws Exception {
-		mvc.perform(put("/api/task/5a/completed/toggle")
-				.with(csrf())
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isBadRequest());
-
-		verifyNoInteractions(authorize);
-		verifyNoInteractions(togglePort);
-	}
 
 }

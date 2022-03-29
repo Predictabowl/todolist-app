@@ -1,7 +1,7 @@
 package it.aldinucci.todoapp.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -39,25 +39,25 @@ class UpdateTaskServiceTest {
 	
 	@Test
 	void test_updateTask_WhenTaskDontExists() {
-		when(loadTask.load(anyLong())).thenReturn(Optional.empty());
+		when(loadTask.load(anyString())).thenReturn(Optional.empty());
 		
-		Optional<Task> updatedTask = sut.update(new TaskIdDTO(4), new TaskDataDTOIn("name", "test desc"));
+		Optional<Task> updatedTask = sut.update(new TaskIdDTO("4"), new TaskDataDTOIn("name", "test desc"));
 		
 		assertThat(updatedTask).isEmpty();
-		verify(loadTask).load(4);
+		verify(loadTask).load("4");
 		verifyNoInteractions(updateTask);
 	}
 
 	@Test
 	void test_updateTask_success() {
-		when(loadTask.load(anyLong())).thenReturn(Optional.of(new Task(3L, "test", "descr", true, 2)));
+		when(loadTask.load(anyString())).thenReturn(Optional.of(new Task("3L", "test", "descr", true, 2)));
 		Task returnedTask = new Task();
 		when(updateTask.update(isA(Task.class))).thenReturn(Optional.of(returnedTask));
 		
-		Optional<Task> updatedTask = sut.update(new TaskIdDTO(4), new TaskDataDTOIn("name", "test desc"));
+		Optional<Task> updatedTask = sut.update(new TaskIdDTO("4"), new TaskDataDTOIn("name", "test desc"));
 		
 		assertThat(updatedTask).contains(returnedTask);
-		verify(loadTask).load(4);
-		verify(updateTask).update(new Task(3L, "name", "test desc", true, 2));
+		verify(loadTask).load("4");
+		verify(updateTask).update(new Task("3L", "name", "test desc", true, 2));
 	}
 }

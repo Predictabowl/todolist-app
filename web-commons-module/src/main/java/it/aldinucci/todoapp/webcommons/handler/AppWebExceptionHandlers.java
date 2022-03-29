@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.webcommons.handler;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class AppWebExceptionHandlers extends ResponseEntityExceptionHandler{
 	@ExceptionHandler({AppUserNotFoundException.class, AppProjectNotFoundException.class, AppTaskNotFoundException.class})
 	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<String> constraintViolationHandler(HttpServletRequest request, ConstraintViolationException ex) {
+		return new ResponseEntity<>(ex.toString(), HttpStatus.BAD_REQUEST);
 	}
 
 }

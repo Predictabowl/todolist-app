@@ -28,7 +28,7 @@ public class UpdateTaskService implements UpdateTaskUsePort{
 
 	@Override
 	public Optional<Task> update(TaskIdDTO taskId, TaskDataDTOIn taskData) {
-		Optional<Task> optional = loadTask.load(taskId.taskId());
+		Optional<Task> optional = loadTask.load(taskId.getTaskId());
 		if (optional.isEmpty())
 			return Optional.empty();
 		

@@ -1,5 +1,7 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -26,10 +28,9 @@ public class DeleteTaskWebController {
 	}
 
 	@DeleteMapping
-	public String deleteTaskEndPoint(Authentication authentication, @PathVariable String projectId, @PathVariable long taskId) {
-		TaskIdDTO idDTO = new TaskIdDTO(taskId);
-		authorize.check(authentication.getName(), idDTO);
-		deleteTask.delete(idDTO);
+	public String deleteTaskEndPoint(Authentication authentication, @PathVariable String projectId, @PathVariable TaskIdDTO taskId) {
+		authorize.check(authentication.getName(), taskId);
+		deleteTask.delete(taskId);
 		return "redirect:/web/project/"+projectId+"/tasks";
 	}
 }

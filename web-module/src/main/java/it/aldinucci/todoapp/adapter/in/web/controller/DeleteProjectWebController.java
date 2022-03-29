@@ -29,10 +29,9 @@ public class DeleteProjectWebController {
 
 
 	@DeleteMapping
-	public String deleteProjectWebEndpoint(Authentication authentication, @PathVariable String projectId) {
-		ProjectIdDTO idDTO = new ProjectIdDTO(projectId);
-		authorize.check(authentication.getName(), idDTO);
-		deleteProject.delete(idDTO);
+	public String deleteProjectWebEndpoint(Authentication authentication, @PathVariable ProjectIdDTO projectId) {
+		authorize.check(authentication.getName(), projectId);
+		deleteProject.delete(projectId);
 		return "redirect:/web";
 	}
 }

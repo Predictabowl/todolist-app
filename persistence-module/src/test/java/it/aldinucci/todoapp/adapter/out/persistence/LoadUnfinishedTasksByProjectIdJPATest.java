@@ -41,8 +41,8 @@ class LoadUnfinishedTasksByProjectIdJPATest {
 		TaskJPA taskJpa1 = new TaskJPA(2L,"task1", "descr1", false, null);
 		TaskJPA taskJpa2 = new TaskJPA(7L,"task2", "descr2", false, null);
 		List<TaskJPA> tasksJpa = Arrays.asList(taskJpa1,taskJpa2);
-		Task task1 = new Task(2L, "task1", "descr1", false);
-		Task task2 = new Task(7L, "task2", "descr2", false);
+		Task task1 = new Task("2L", "task1", "descr1", false);
+		Task task2 = new Task("7L", "task2", "descr2", false);
 		when(repository.findByProjectIdAndCompletedFalse(anyLong()))
 			.thenReturn(tasksJpa);
 		when(mapper.map(isA(TaskJPA.class)))
