@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,14 @@ public class DeleteVerificationTokenJPA implements DeleteVerificationTokenDriver
 
 	@Override
 	public void delete(String tokenCode){
-		Optional<VerificationTokenJPA> optionalToken  = tokenRepo.findByToken(tokenCode);
+		UUID uuid;
+		try {
+			uuid = UUID.fromString(tokenCode);
+		} catch (IllegalArgumentException e) {
+			return;
+		}
+		
+		Optional<VerificationTokenJPA> optionalToken  = tokenRepo.findByToken(uuid);
 		if(optionalToken.isPresent()) {
 			tokenRepo.delete(optionalToken.get());
 		}

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,17 +18,17 @@ class ResetPasswordTokenJpaToDomainMapperTest {
 	void test() {
 		ResetPasswordTokenJpaToDomainMapper mapper = new ResetPasswordTokenJpaToDomainMapper();
 		Date date = Calendar.getInstance().getTime();
+		UUID uuid = UUID.randomUUID();
 		ResetPasswordTokenJPA tokenJpa = new ResetPasswordTokenJPA(
-				3L, 
-				"random",
+				uuid,
 				new UserJPA(2L, "email", "username", "password"),
 				date);
 		
 		 ResetPasswordToken token = mapper.map(tokenJpa);
 		
-		assertThat(token.getToken()).isEqualTo("random");
+		assertThat(token.getToken()).matches(uuid.toString());
 		assertThat(token.getExpiryDate()).isEqualTo(date);
-		assertThat(token.getUserEmail()).isEqualTo("email");
+		assertThat(token.getUserEmail()).matches("email");
 	}
 
 }

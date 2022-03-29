@@ -34,6 +34,14 @@ class DeleteProjectByIdJPATest {
 	}
 	
 	@Test
+	void test_deleteProject_WhenInvalidId() {
+		assertThatThrownBy(() -> deleteProject.delete("something"))
+			.isInstanceOf(AppProjectNotFoundException.class)
+			.hasMessage("Could not find Project")
+			.hasCauseInstanceOf(NumberFormatException.class);
+	}
+	
+	@Test
 	void test_deleteProject_Successful() throws AppProjectNotFoundException {
 		UserJPA user = new UserJPA("email", "username", "password");
 		entityManager.persist(user);

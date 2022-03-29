@@ -11,7 +11,7 @@ public class ResetPasswordTokenJpaToDomainMapper implements AppGenericMapper<Res
 
 	@Override
 	public ResetPasswordToken map(ResetPasswordTokenJPA model) {
-		return new ResetPasswordToken(model.getToken(), model.getExpiryDate(),model.getUser().getEmail());
+		return new ResetPasswordToken(model.getToken().toString(), model.getExpiryDate(),model.getUser().getEmail());
 	}
 
 }

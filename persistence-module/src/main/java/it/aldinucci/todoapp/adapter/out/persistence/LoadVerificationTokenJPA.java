@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,14 @@ public class LoadVerificationTokenJPA implements LoadVerificationTokenDriverPort
 
 	@Override
 	public Optional<VerificationToken> load(String tokenString) {
-		Optional<VerificationTokenJPA> tokenJPA = tokenRepo.findByToken(tokenString);
+		UUID token;
+		try {
+			token = UUID.fromString(tokenString);
+		} catch (IllegalArgumentException e) {
+			return Optional.empty();
+		}
+		
+		Optional<VerificationTokenJPA> tokenJPA = tokenRepo.findByToken(token);
 		if (tokenJPA.isEmpty())
 			return Optional.empty();
 		return Optional.of(mapper.map(tokenJPA.get()));

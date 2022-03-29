@@ -26,7 +26,14 @@ public class LoadTaskByIdJPA implements LoadTaskByIdDriverPort{
 
 	@Override
 	public Optional<Task> load(String id) {
-		Optional<TaskJPA> loadedTask = taskRepo.findById(Long.valueOf(id));
+		Long longId;
+		try {
+			longId = Long.valueOf(id);
+		}catch (NumberFormatException e) {
+			return Optional.empty();
+		}
+		
+		Optional<TaskJPA> loadedTask = taskRepo.findById(longId);
 		if(loadedTask.isEmpty())
 			return Optional.empty();
 		return Optional.of(mapper.map(loadedTask.get()));

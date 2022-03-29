@@ -60,5 +60,13 @@ class LoadUserByProjectIdJPATest {
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);
 	}
+	
+	@Test
+	void test_loadUser_whenInvalidId() {
+		Optional<User> loadedUser = loadUser.load("test");
+
+		assertThat(loadedUser).isEmpty();
+		verifyNoInteractions(mapper);
+	}
 
 }

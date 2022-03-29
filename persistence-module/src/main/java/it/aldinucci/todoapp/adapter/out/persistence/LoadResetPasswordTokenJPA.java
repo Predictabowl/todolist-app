@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,13 @@ public class LoadResetPasswordTokenJPA implements LoadResetPasswordTokenDriverPo
 
 	@Override
 	public Optional<ResetPasswordToken> load(String tokenString) {
-		Optional<ResetPasswordTokenJPA> token = tokenRepo.findByToken(tokenString);
+		UUID uuid;
+		try {
+			uuid = UUID.fromString(tokenString);
+		} catch (IllegalArgumentException e) {
+			return Optional.empty();
+		}
+		Optional<ResetPasswordTokenJPA> token = tokenRepo.findByToken(uuid);
 		if(token.isEmpty())
 			return Optional.empty();
 		

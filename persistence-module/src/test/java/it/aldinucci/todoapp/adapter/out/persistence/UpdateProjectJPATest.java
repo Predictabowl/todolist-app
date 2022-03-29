@@ -49,6 +49,17 @@ class UpdateProjectJPATest {
 	}
 	
 	@Test
+	void test_update_whenInvalidId() {
+		Optional<Project> optional = sut.update(new Project("test", "name"));
+		
+		assertThat(optional).isEmpty();
+		assertThat(entityManager.getEntityManager().createQuery("from ProjectJPA", ProjectJPA.class).getResultList())
+			.isEmpty();
+		
+		verifyNoInteractions(mapper);
+	}
+	
+	@Test
 	void test_update_success() {
 		UserJPA  user = entityManager.persist(new UserJPA("email", "name", "pass"));
 		ProjectJPA projectJpa = entityManager.persist(new ProjectJPA("test", user));

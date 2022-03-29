@@ -30,9 +30,6 @@ class CreateVerificationTokenImplTest {
 	@Mock
 	private CreateUserVerificationTokenDriverPort createTokenPort;
 	
-	@Mock
-	private UniqueVerificationTokenGenerator stringGenerator;
-	
 	@Mock 
 	private TokenExpiryDateGenerator dateGenerator;
 	
@@ -49,8 +46,7 @@ class CreateVerificationTokenImplTest {
 	
 	@Test
 	void test_createToken_success() {
-		VerificationTokenData tokenDto = new VerificationTokenData("not so random string", date, FIXTURE_USER_EMAIL);
-		when(stringGenerator.generate()).thenReturn("not so random string");
+		VerificationTokenData tokenDto = new VerificationTokenData(date, FIXTURE_USER_EMAIL);
 		when(dateGenerator.generate(anyString(), anyInt())).thenReturn(date);
 		VerificationToken token = new VerificationToken("not so random string", date, "user@test.it");
 		when(createTokenPort.create(isA(VerificationTokenData.class)))
@@ -58,8 +54,7 @@ class CreateVerificationTokenImplTest {
 		
 		VerificationToken createdToken = tokenService.create(FIXTURE_USER_EMAIL);
 		
-		InOrder inOrder = Mockito.inOrder(stringGenerator, dateGenerator, createTokenPort);
-		inOrder.verify(stringGenerator).generate();
+		InOrder inOrder = Mockito.inOrder(dateGenerator, createTokenPort);
 		inOrder.verify(dateGenerator).generate(VERIFICATION_TOKEN_DURATION, 1440);
 		inOrder.verify(createTokenPort).create(tokenDto);
 		assertThat(createdToken).isSameAs(token);

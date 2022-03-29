@@ -64,6 +64,16 @@ class UpdateTaskJPATest {
 	}
 	
 	@Test
+	void test_updateTask_whenInvalidId() {
+		Task task = new Task("test", "another name", "test", true);
+		
+		Optional<Task> optionalTask = sut.update(task);
+		
+		assertThat(optionalTask).isEmpty();
+		verifyNoInteractions(mapper);
+	}
+	
+	@Test
 	void test_updateTask_success() {
 		TaskJPA taskJpa = new TaskJPA(null, "task name", "description", false, project, 3);
 		entityManager.persist(taskJpa);

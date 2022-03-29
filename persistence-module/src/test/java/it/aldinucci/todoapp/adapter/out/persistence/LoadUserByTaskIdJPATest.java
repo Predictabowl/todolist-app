@@ -67,5 +67,14 @@ class LoadUserByTaskIdJPATest {
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);
 	}
+	
+	@Test
+	void test_loadUser_whenIncalidId() {
+		
+		Optional<User> loadedUser = adapter.load("test");
+		
+		assertThat(loadedUser).isEmpty();
+		verifyNoInteractions(mapper);
+	}
 
 }

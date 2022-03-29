@@ -82,7 +82,7 @@ class PasswordResetIT {
 		List<ResetPasswordTokenJPA> tokens = tokenRepo.findAll();
 		assertThat(tokens).hasSize(1);
 		ResetPasswordTokenJPA token = tokenRepo.findByUserEmail("test@email.it").get();
-		assertThat(token.getToken()).matches(tokens.get(0).getToken());
+		assertThat(token.getToken()).isEqualTo(tokens.get(0).getToken());
 		
 		MimeMessage[] receivedMessages = mailServer.getReceivedMessages();
 		assertThat(receivedMessages).hasSize(1);

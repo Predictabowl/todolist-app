@@ -49,6 +49,13 @@ class GetTaskMaxOrderInProjectJPATest {
 	}
 	
 	@Test
+	void test_getWhenInvalidId() {
+		OptionalInt maxValue = sut.get("test");
+		
+		assertThat(maxValue).isEmpty();
+	}
+	
+	@Test
 	void test_countSuccess() {
 		ProjectJPA projectJPA = setUpDB();
 		TaskJPA task1 = entityManager.persist(new TaskJPA(null,"task 1", "descr 1", false, projectJPA, 10));

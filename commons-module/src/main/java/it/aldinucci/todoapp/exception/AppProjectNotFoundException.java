@@ -10,4 +10,8 @@ public class AppProjectNotFoundException extends RuntimeException{
 	public AppProjectNotFoundException(String message) {
 		super(message);
 	}
+	
+	public AppProjectNotFoundException(String message, Throwable ex) {
+		super(message, ex);
+	}
 }

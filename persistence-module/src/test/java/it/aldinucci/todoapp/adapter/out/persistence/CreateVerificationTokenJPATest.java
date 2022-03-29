@@ -54,7 +54,7 @@ class CreateVerificationTokenJPATest {
 	void test_createToken_whenDoesNotExists() {
 		UserJPA user = new UserJPA("user@email.it", "username", "pass");
 		entityManager.persistAndFlush(user);
-		VerificationTokenData dto = new VerificationTokenData("token", date, "user@email.it");
+		VerificationTokenData dto = new VerificationTokenData(date, "user@email.it");
 		VerificationToken token = new VerificationToken();
 		when(mapper.map(isA(VerificationTokenJPA.class))).thenReturn(token);
 
@@ -66,7 +66,7 @@ class CreateVerificationTokenJPATest {
 		assertThat(tokens).hasSize(1);
 		VerificationTokenJPA tokenJPA = tokens.get(0);
 		assertThat(tokenJPA.getExpiryDate()).isEqualTo(date);
-		assertThat(tokenJPA.getToken()).isEqualTo("token");
+		assertThat(tokenJPA.getToken()).isNotNull();
 		assertThat(tokenJPA.getUser()).isEqualTo(user);
 		assertThat(createdToken).isSameAs(token);
 	}
@@ -75,9 +75,9 @@ class CreateVerificationTokenJPATest {
 	void test_createToken_whenUserAlreadyHaveAToken_shouldThrow() {
 		UserJPA user = new UserJPA("user@email.it", "username", "pass");
 		entityManager.persistAndFlush(user);
-		VerificationTokenJPA tokenJpa = new VerificationTokenJPA("token", user, date);
+		VerificationTokenJPA tokenJpa = new VerificationTokenJPA(user, date);
 		entityManager.persistAndFlush(tokenJpa);
-		VerificationTokenData dto = new VerificationTokenData("another token", date, "user@email.it");
+		VerificationTokenData dto = new VerificationTokenData(date, "user@email.it");
 		
 		assertThatThrownBy(() -> createToken.create(dto))
 			.isInstanceOf(AppUserAlreadyHaveVerificationTokenException.class);
@@ -91,7 +91,7 @@ class CreateVerificationTokenJPATest {
 	
 	@Test
 	void test_createToken_whenUserNotExists_shouldThrow() {
-		VerificationTokenData dto = new VerificationTokenData("another token", date, "user@email.it");
+		VerificationTokenData dto = new VerificationTokenData(date, "user@email.it");
 		
 		assertThatThrownBy(() -> createToken.create(dto))
 			.isInstanceOf(AppUserNotFoundException.class)

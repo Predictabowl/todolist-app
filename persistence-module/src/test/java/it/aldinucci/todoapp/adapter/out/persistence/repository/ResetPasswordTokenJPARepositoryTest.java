@@ -42,10 +42,10 @@ class ResetPasswordTokenJPARepositoryTest {
 	@Test
 	void test_findByToken_successful() {
 		Calendar calendar = Calendar.getInstance();
-		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA("code", user, calendar.getTime());
+		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA(user, calendar.getTime());
 		entityManager.persist(token);
 		
-		ResetPasswordTokenJPA loadedToken = repository.findByToken("code").get();
+		ResetPasswordTokenJPA loadedToken = repository.findByToken(token.getToken()).get();
 		
 		assertThat(loadedToken).usingRecursiveComparison().isEqualTo(token);
 	}
@@ -54,26 +54,12 @@ class ResetPasswordTokenJPARepositoryTest {
 	@Test
 	void test_findByUserEmail_successful() {
 		Calendar calendar = Calendar.getInstance();
-		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA("code", user, calendar.getTime());
+		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA(user, calendar.getTime());
 		entityManager.persistAndFlush(token);
 
 		ResetPasswordTokenJPA loadedToken = repository.findByUserEmail("email@test.it").get();
 		
 		assertThat(loadedToken).usingRecursiveComparison().isEqualTo(token);
-	}
-	
-
-	@Test
-	void test_mapping_oneToOne() {
-		Calendar calendar = Calendar.getInstance();
-		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA("code", user, calendar.getTime());
-		entityManager.persist(token);
-		ResetPasswordTokenJPA token2 = new ResetPasswordTokenJPA("code2", user, calendar.getTime());
-
-		assertThatThrownBy(() -> repository.save(token2))
-			.isInstanceOf(DataIntegrityViolationException.class)
-			.hasCauseInstanceOf(EntityExistsException.class);
-		
 	}
 	
 }

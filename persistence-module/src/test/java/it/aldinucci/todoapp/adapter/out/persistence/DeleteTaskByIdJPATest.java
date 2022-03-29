@@ -52,5 +52,12 @@ class DeleteTaskByIdJPATest {
 		assertThatCode(() -> deleteTask.delete("1"))
 			.doesNotThrowAnyException();
 	}
+	
+	@Test
+	void test_deleteTask_whenInvalidId() {
+		
+		assertThatCode(() -> deleteTask.delete("test"))
+			.doesNotThrowAnyException();
+	}
 
 }

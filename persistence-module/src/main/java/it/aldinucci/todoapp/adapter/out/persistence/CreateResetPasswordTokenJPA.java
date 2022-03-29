@@ -10,7 +10,6 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository
 import it.aldinucci.todoapp.application.port.out.CreateResetPasswordTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.ResetPasswordTokenData;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
-import it.aldinucci.todoapp.exception.AppResetPasswordTokenAlreadyExistsException;
 import it.aldinucci.todoapp.exception.AppUserAlreadyHaveResetPasswordTokenException;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -36,7 +35,7 @@ public class CreateResetPasswordTokenJPA implements CreateResetPasswordTokenDriv
 
 	@Override
 	public ResetPasswordToken create(ResetPasswordTokenData tokenData)
-			throws AppResetPasswordTokenAlreadyExistsException, AppUserNotFoundException {
+			throws AppUserNotFoundException {
 		
 		UserJPA user = userRepo.findByEmail(tokenData.userEmail()).orElseThrow(()
 				->	new AppUserNotFoundException("User not found with email: "+tokenData.userEmail()));
@@ -44,7 +43,7 @@ public class CreateResetPasswordTokenJPA implements CreateResetPasswordTokenDriv
 		if(tokenRepo.findByUserEmail(tokenData.userEmail()).isPresent())
 			throw new AppUserAlreadyHaveResetPasswordTokenException();
 		
-		ResetPasswordTokenJPA resetPasswordTokenJPA = new ResetPasswordTokenJPA(tokenData.token(), user, tokenData.expiryDate());
+		ResetPasswordTokenJPA resetPasswordTokenJPA = new ResetPasswordTokenJPA(user, tokenData.expiryDate());
 		resetPasswordTokenJPA = tokenRepo.save(resetPasswordTokenJPA);
 		return mapper.map(resetPasswordTokenJPA);
 	}

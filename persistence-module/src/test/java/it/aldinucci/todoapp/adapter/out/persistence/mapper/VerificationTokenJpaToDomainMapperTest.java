@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,19 +16,19 @@ class VerificationTokenJpaToDomainMapperTest {
 
 	@Test
 	void test() {
+		UUID uuid = UUID.randomUUID();
 		VerificationTokenJpaToDomainMapper mapper = new VerificationTokenJpaToDomainMapper();
 		Date date = Calendar.getInstance().getTime();
 		VerificationTokenJPA tokenJpa = new VerificationTokenJPA(
-				3L, 
-				"random",
+				uuid,
 				new UserJPA(2L, "email", "username", "password"),
 				date);
 		
 		VerificationToken token = mapper.map(tokenJpa);
 		
-		assertThat(token.getToken()).isEqualTo("random");
+		assertThat(token.getToken()).matches(uuid.toString());
 		assertThat(token.getExpiryDate()).isEqualTo(date);
-		assertThat(token.getUserEmail()).isEqualTo("email");
+		assertThat(token.getUserEmail()).matches("email");
 	}
 
 }

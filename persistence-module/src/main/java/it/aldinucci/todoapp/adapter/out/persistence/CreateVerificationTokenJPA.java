@@ -41,7 +41,7 @@ public class CreateVerificationTokenJPA implements CreateUserVerificationTokenDr
 		if (optional.isPresent())
 			throw new AppUserAlreadyHaveVerificationTokenException();
 		
-		VerificationTokenJPA tokenJpa = tokenRepo.save(new VerificationTokenJPA(token.token(), user, token.expiryDate()));
+		VerificationTokenJPA tokenJpa = tokenRepo.save(new VerificationTokenJPA(user, token.expiryDate()));
 		return mapper.map(tokenJpa);
 	}
 

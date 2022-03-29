@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,14 @@ public class DeleteResetPasswordTokenJPA implements DeleteRestPasswordTokenDrive
 
 	@Override
 	public void delete(String token) {
-		Optional<ResetPasswordTokenJPA> optional = tokenRepo.findByToken(token);
+		UUID uuid;
+		try {
+			uuid = UUID.fromString(token);
+		} catch (IllegalArgumentException e) {
+			return;
+		}
+		
+		Optional<ResetPasswordTokenJPA> optional = tokenRepo.findByToken(uuid);
 		if(optional.isPresent())
 			tokenRepo.delete(optional.get());
 	}

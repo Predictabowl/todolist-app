@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,8 +40,13 @@ class LoadResetPasswordTokenJPATest {
 	TestEntityManager entityManager;
 	
 	@Test
-	void test_loadToken_whenMissing() {
+	void test_loadToken_whenInvalidToken() {
 		assertThat(loadToken.load("token")).isEmpty();
+	}
+	
+	@Test
+	void test_loadToken_whenMissing() {
+		assertThat(loadToken.load(UUID.randomUUID().toString())).isEmpty();
 	}
 	
 	@Test
@@ -48,12 +54,12 @@ class LoadResetPasswordTokenJPATest {
 		UserJPA user = new UserJPA("email", "name", "pass");
 		entityManager.persistAndFlush(user);
 		Date date = Calendar.getInstance().getTime();
-		ResetPasswordTokenJPA tokenJpa = new ResetPasswordTokenJPA("token", user, date);
+		ResetPasswordTokenJPA tokenJpa = new ResetPasswordTokenJPA(user, date);
 		entityManager.persistAndFlush(tokenJpa);
 		ResetPasswordToken token = new ResetPasswordToken("token", date, "email");
 		when(mapper.map(isA(ResetPasswordTokenJPA.class))).thenReturn(token);
 		
-		Optional<ResetPasswordToken> loadedToken = loadToken.load("token");
+		Optional<ResetPasswordToken> loadedToken = loadToken.load(tokenJpa.getToken().toString());
 		
 		assertThat(loadedToken).contains(token);
 	}

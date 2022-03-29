@@ -48,7 +48,7 @@ class LoadResetPasswordTokenByEmailJPATest {
 		UserJPA user = new UserJPA(FIXTURE_EMAIL, "name", "pass");
 		entityManager.persistAndFlush(user);
 		Date date = Calendar.getInstance().getTime();
-		ResetPasswordTokenJPA tokenJpa = new ResetPasswordTokenJPA("token-code", user, date);
+		ResetPasswordTokenJPA tokenJpa = new ResetPasswordTokenJPA(user, date);
 		entityManager.persistAndFlush(tokenJpa);
 		ResetPasswordToken token = new ResetPasswordToken("token-code", date, "email");
 		when(mapper.map(isA(ResetPasswordTokenJPA.class))).thenReturn(token);

@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import java.util.Calendar;
 import java.util.List;
@@ -31,10 +32,10 @@ class DeleteResetPasswordTokenJPATest {
 	void test_deleteToken_successful() {
 		UserJPA user = new UserJPA("email", "username", "pass");
 		entityManager.persist(user);
-		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA("code", user, Calendar.getInstance().getTime());
+		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA(user, Calendar.getInstance().getTime());
 		entityManager.persistAndFlush(token);
 
-		deleteToken.delete("code");
+		deleteToken.delete(token.getToken().toString());
 
 		List<ResetPasswordTokenJPA> tokens = entityManager.getEntityManager()
 				.createQuery("from ResetPasswordTokenJPA", ResetPasswordTokenJPA.class).getResultList();
@@ -45,6 +46,17 @@ class DeleteResetPasswordTokenJPATest {
 	@Test
 	void test_deleteToken_whenNoToken() {
 		deleteToken.delete("code");
+
+		List<ResetPasswordTokenJPA> tokens = entityManager.getEntityManager()
+				.createQuery("from ResetPasswordTokenJPA", ResetPasswordTokenJPA.class).getResultList();
+
+		assertThat(tokens).isEmpty();
+	}
+	
+	@Test
+	void test_deleteToken_whenInvalidToken() {
+		assertThatCode(() -> deleteToken.delete("code"))
+			.doesNotThrowAnyException();
 
 		List<ResetPasswordTokenJPA> tokens = entityManager.getEntityManager()
 				.createQuery("from ResetPasswordTokenJPA", ResetPasswordTokenJPA.class).getResultList();

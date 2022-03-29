@@ -46,6 +46,13 @@ class LoadTaskByIdJPATest {
 		assertThat(loadedTask).isEmpty();
 	}
 	
+	@Test
+	void test_loadTask_whenInvalidId() {
+		Optional<Task> loadedTask = sut.load("test");
+		
+		assertThat(loadedTask).isEmpty();
+	}
+	
 	
 	@Test
 	void test_loadTask_success() {

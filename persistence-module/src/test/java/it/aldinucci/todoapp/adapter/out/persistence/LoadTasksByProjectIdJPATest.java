@@ -45,6 +45,12 @@ class LoadTasksByProjectIdJPATest {
 		assertThatThrownBy(() -> loadTasks.load("3")).isInstanceOf(AppProjectNotFoundException.class)
 				.hasMessage("Could not find project with id: 3");
 	}
+	
+	@Test
+	void test_loadTasks_whenInvalidId_shouldThrow() {
+		assertThatThrownBy(() -> loadTasks.load("test")).isInstanceOf(AppProjectNotFoundException.class)
+				.hasMessage("Could not find project with id: test");
+	}
 
 	@Test
 	void test_loadTasks_whenNoTasksPresent() throws AppProjectNotFoundException {

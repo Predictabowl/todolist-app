@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
@@ -18,6 +19,7 @@ import org.mockito.Mock;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.TaskJPARepository;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 class LoadUnfinishedTasksByProjectIdJPATest {
@@ -53,6 +55,14 @@ class LoadUnfinishedTasksByProjectIdJPATest {
 		
 		verify(repository).findByProjectIdAndCompletedFalse(2);
 		assertThat(tasks).containsExactly(task1,task2);
+	}
+	
+	@Test
+	void test_loadWhenInvalidId() {
+		assertThatThrownBy(() -> adapter.load("test"))
+			.isInstanceOf(AppProjectNotFoundException.class)
+			.hasMessage("Could not find project with id: test")
+			.hasCauseInstanceOf(NumberFormatException.class);
 	}
 
 }

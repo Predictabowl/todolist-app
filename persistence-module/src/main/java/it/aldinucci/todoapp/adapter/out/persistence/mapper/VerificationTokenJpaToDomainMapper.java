@@ -11,7 +11,7 @@ public class VerificationTokenJpaToDomainMapper implements AppGenericMapper<Veri
 
 	@Override
 	public VerificationToken map(VerificationTokenJPA model) {
-		return new VerificationToken(model.getToken(), model.getExpiryDate(),model.getUser().getEmail());
+		return new VerificationToken(model.getToken().toString(), model.getExpiryDate(),model.getUser().getEmail());
 	}
 
 }
