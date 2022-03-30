@@ -6,6 +6,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +39,12 @@ class DeleteProjectByIdJPATest {
 	
 	@Test
 	void test_deleteProject_WhenNotPresent() {
+		when(validator.isValid(anyString())).thenReturn(true);
+		when(validator.getId()).thenReturn(3L);
 		boolean deleted = deleteProject.delete("3");
 		
 		assertThat(deleted).isFalse();
+		verify(validator).isValid("3");
 	}
 	
 	@Test

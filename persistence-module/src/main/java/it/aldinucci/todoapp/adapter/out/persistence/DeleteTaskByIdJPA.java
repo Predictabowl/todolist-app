@@ -30,12 +30,12 @@ public class DeleteTaskByIdJPA implements DeleteTaskByIdDriverPort{
 
 		long longId = validator.getId();
 		Optional<TaskJPA> optional = taskRepository.findById(longId);
-		if (optional.isPresent()) {		
-			TaskJPA taskJPA = optional.get();
-			taskJPA.getProject().getTasks().remove(taskJPA);
-			taskRepository.delete(taskJPA);
-			return true;
-		}
-		return false;
+		if (optional.isEmpty())
+			return false;
+		
+		TaskJPA taskJPA = optional.get();
+		taskJPA.getProject().getTasks().remove(taskJPA);
+		taskRepository.delete(taskJPA);
+		return true;
 	}
 }
