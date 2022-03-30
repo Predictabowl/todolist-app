@@ -29,5 +29,10 @@ class ValidationUtilsTest {
 		
 		assertThat(ValidationUtils.isValidUUID(notUuid)).isTrue();
 	}
+	
+	@Test
+	void test_nullArgument() {
+		assertThat(ValidationUtils.isValidUUID(null)).isFalse();
+	}
 
 }
