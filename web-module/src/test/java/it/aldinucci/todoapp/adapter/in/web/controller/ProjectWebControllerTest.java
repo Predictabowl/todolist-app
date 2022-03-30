@@ -90,20 +90,6 @@ class ProjectWebControllerTest {
 		when(userMapper.map(fixtureUser)).thenReturn(new UserWebDto("username", FIXTURE_EMAIL));
 	}
 	
-	@Test
-	@WithMockUser(FIXTURE_EMAIL)
-	void test_viewTasksWithInvalidId() throws Exception {
-		
-		mvc.perform(get(BASE_URL+"id7"+"/tasks")
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isBadRequest());
-		
-		verifyNoInteractions(loadUser);
-		verifyNoInteractions(loadProjects);
-		verifyNoInteractions(loadTasks);
-		verifyNoInteractions(userMapper);
-		verifyNoInteractions(authorize);
-	}
 	
 	@Test
 	@WithMockUser(FIXTURE_EMAIL)

@@ -2,7 +2,9 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -19,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
+import it.aldinucci.todoapp.adapter.out.persistence.util.ValidateId;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskData;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
@@ -34,6 +37,9 @@ class CreateTaskJPATest {
 	@MockBean
 	private AppGenericMapper<TaskJPA, Task> mapper;
 	
+	@MockBean
+	private ValidateId<Long> validator;
+	
 	@Autowired
 	private CreateTaskJPA createTask;
 	
@@ -42,8 +48,10 @@ class CreateTaskJPATest {
 	
 	@Test
 	void test_createNewTask_successful() throws AppProjectNotFoundException {
+		when(validator.isValid(anyString())).thenReturn(true);
 		ProjectJPA projectJPA = getFixtureProject();
 		entityManager.flush();
+		when(validator.getId()).thenReturn(projectJPA.getId());
 		
 		NewTaskData newTask = new NewTaskData("task name", "task description", false, projectJPA.getId().toString(), 3);
 		Task task = new Task();
@@ -55,6 +63,7 @@ class CreateTaskJPATest {
 				.createQuery("from TaskJPA",TaskJPA.class).getSingleResult();
 
 		verify(mapper).map(createdTask);
+		verify(validator).isValid(projectJPA.getId().toString());
 		assertThat(returnedTask).isSameAs(task);
 		assertThat(createdTask.getProject()).usingRecursiveComparison().isEqualTo(projectJPA);
 		assertThat(createdTask.getOrderInProject()).isEqualTo(3);
@@ -74,6 +83,8 @@ class CreateTaskJPATest {
 	
 	@Test
 	void test_createNewTask_whenProjectNotPresent() {
+		when(validator.isValid(anyString())).thenReturn(true);
+		when(validator.getId()).thenReturn(1L);
 		NewTaskData newTask = new NewTaskData("task name", "task description", false, "1", 5);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
@@ -81,10 +92,12 @@ class CreateTaskJPATest {
 			.hasMessage("Project not found with id: 1");
 		
 		verifyNoInteractions(mapper);
+		verify(validator).isValid("1");
 	}
 	
 	@Test
 	void test_createNewTask_whenProjectIdIsInvalid() {
+		when(validator.isValid(anyString())).thenReturn(false);
 		NewTaskData newTask = new NewTaskData("task name", "task description", false, "invalid", 5);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
@@ -92,6 +105,8 @@ class CreateTaskJPATest {
 			.hasMessage("Project not found with id: invalid");
 		
 		verifyNoInteractions(mapper);
+		verify(validator).isValid("invalid");
+		verify(validator, times(0)).getId();
 	}
 
 }

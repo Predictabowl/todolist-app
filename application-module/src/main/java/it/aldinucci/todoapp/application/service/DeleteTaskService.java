@@ -21,8 +21,8 @@ public class DeleteTaskService implements DeleteTaskByIdUsePort{
 	}
 
 	@Override
-	public void delete(TaskIdDTO task){
-		deletePort.delete(task.getTaskId());
+	public boolean delete(TaskIdDTO task){
+		return deletePort.delete(task.getTaskId());
 	}
 
 }

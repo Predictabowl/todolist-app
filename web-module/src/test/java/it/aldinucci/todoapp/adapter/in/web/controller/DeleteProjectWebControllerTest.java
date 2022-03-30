@@ -75,15 +75,4 @@ class DeleteProjectWebControllerTest {
 		verify(deleteProject).delete(idDTO);
 	}
 	
-	@Test
-	@WithMockUser(FIXTURE_USER_EMAIL)
-	void test_deleteProject_withInvalidId() throws Exception {
-		
-		mvc.perform(delete(FIXTURE_TEST_URL+"7D")
-				.with(csrf()))
-				.andExpect(status().isBadRequest());;
-		
-		verifyNoInteractions(authorize);
-		verifyNoInteractions(deleteProject);
-	}
 }

@@ -1,8 +1,9 @@
 package it.aldinucci.todoapp.application.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,6 @@ import org.mockito.Mock;
 
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteTaskByIdDriverPort;
-import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 
 class DeleteTaskServiceTest {
 
@@ -28,11 +28,22 @@ class DeleteTaskServiceTest {
 	}
 	
 	@Test
-	void test_deleteSuccessful() throws AppTaskNotFoundException {
-		doNothing().when(deleteTask).delete(anyString());
+	void test_deleteSuccessful() {
+		when(deleteTask.delete(anyString())).thenReturn(true);
 		
-		deleteService.delete(new TaskIdDTO("2"));
+		boolean deleted = deleteService.delete(new TaskIdDTO("2"));
 		
+		assertThat(deleted).isTrue();
+		verify(deleteTask).delete("2");
+	}
+	
+	@Test
+	void test_deleteFail() {
+		when(deleteTask.delete(anyString())).thenReturn(false);
+		
+		boolean deleted = deleteService.delete(new TaskIdDTO("2"));
+		
+		assertThat(deleted).isFalse();
 		verify(deleteTask).delete("2");
 	}
 

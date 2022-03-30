@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import it.aldinucci.todoapp.application.port.in.DeleteProjectByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteProjectByIdDriverPort;
-import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 @Service
 @Transactional
@@ -22,8 +21,8 @@ public class DeleteProjectService implements DeleteProjectByIdUsePort{
 	}
 
 	@Override
-	public void delete(ProjectIdDTO id) throws AppProjectNotFoundException {
-		deleteProjectPort.delete(id.getProjectId());
+	public boolean delete(ProjectIdDTO id) {
+		return deleteProjectPort.delete(id.getProjectId());
 	}
 
 }

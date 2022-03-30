@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,11 +51,12 @@ class DeleteTaskByIdRestControllerTest {
 	@Test
 	@WithMockUser("user@email.org")
 	void test_deleteTask_successful() throws Exception {
+		when(deleteTask.delete(any())).thenReturn(true);
 		
 		mvc.perform(delete("/api/task/6")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk());
+			.andExpect(status().isNoContent());
 		
 		InOrder inOrder = Mockito.inOrder(authorize,deleteTask);
 		TaskIdDTO model = new TaskIdDTO("6");
@@ -98,5 +100,19 @@ class DeleteTaskByIdRestControllerTest {
 		
 		verify(authorize).check("mock@user.it", new TaskIdDTO("3"));
 		verifyNoInteractions(deleteTask);
+	}
+	
+	@Test
+	@WithMockUser("mock@user.it")
+	void test_deleteTask_whenCannotDelete_shouldReturnNotFound() throws JsonProcessingException, Exception {
+		when(deleteTask.delete(any())).thenReturn(false);
+		
+		mvc.perform(delete("/api/task/3")
+				.with(csrf())
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
+		
+		verify(authorize).check("mock@user.it", new TaskIdDTO("3"));
+		verify(deleteTask).delete(new TaskIdDTO("3"));
 	}
 }

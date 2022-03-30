@@ -12,7 +12,7 @@ public interface GetOrCreateVerificationTokenUsePort {
 	 * Get an existing valid verification token for the user,
 	 * otherwise creates a new one.
 	 * 
-	 * Returns an empy optional if the user is not found.
+	 * Returns an empty optional if the user is not found.
 	 * 
 	 * @param userId
 	 * @return A valid token or and empty optional if the user is not found
