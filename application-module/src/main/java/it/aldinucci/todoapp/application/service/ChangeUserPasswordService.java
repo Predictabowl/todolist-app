@@ -60,7 +60,7 @@ public class ChangeUserPasswordService implements ChangeUserPasswordUsePort {
 			return false;
 		
 		User user = loadUser.load(token.getUserEmail()).orElseThrow(() 
-				-> new AppUserNotFoundException("Critical data error. Could not find user with email: "+token.getUserEmail()));
+				-> new AppUserNotFoundException("Could not find user with email: "+token.getUserEmail()));
 		
 		user.setPassword(encoder.encode(newPassword.getPassword()));
 		updateUser.update(mapper.map(user));

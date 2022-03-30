@@ -116,7 +116,7 @@ class ChangeUserPasswordServiceTest {
 		
 		assertThatThrownBy(() -> sut.change(tokenDto, passwordDto))
 			.isInstanceOf(AppUserNotFoundException.class)
-			.hasMessage("Critical data error. Could not find user with email: "+FIXTURE_EMAIL);
+			.hasMessage("Could not find user with email: "+FIXTURE_EMAIL);
 
 		verify(loadToken).load(FIXTURE_TOKEN);
 		verify(deleteToken).delete(FIXTURE_TOKEN);
