@@ -49,3 +49,7 @@ docker-compose -f docker-compose-full.yml up
 ### Running integration tests from the IDE
 
 The integration tests are all inside the `configuration-module`, but they need a running database to work. The docker-compose inside the module folder can be used to run the database and then launch the tests from the IDE itself.
+
+## Quick user guide
+### Rest endpoints
+

@@ -77,16 +77,4 @@ class DeleteTaskWebControllerTest {
 		verify(deleteTask).delete(idDTO);
 	}
 	
-	@Test
-	@WithMockUser(FIXTURE_EMAIL)
-	void test_deleteTask_withInvalidId() throws Exception {
-		
-		mvc.perform(delete(FIXTURE_TEST_URL+"7B")
-				.with(csrf()))
-				.andExpect(status().isBadRequest());
-		
-		verifyNoInteractions(authorize);
-		verifyNoInteractions(deleteTask);
-	}
-
 }

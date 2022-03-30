@@ -1,8 +1,9 @@
 package it.aldinucci.todoapp.application.service;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doNothing;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,19 +28,21 @@ class DeleteProjectServiceTest {
 	
 	@Test
 	void test_deleteSuccessful() throws AppProjectNotFoundException {
-		doNothing().when(deletePort).delete(anyString());
+		when(deletePort.delete(anyString())).thenReturn(true);
 		
-		deleteService.delete(new ProjectIdDTO("2"));
+		boolean deleted = deleteService.delete(new ProjectIdDTO("2"));
 		
+		assertThat(deleted).isTrue();
 		verify(deletePort).delete("2");
 	}
 	
 	@Test
 	void test_deleteFailure() throws AppProjectNotFoundException {
-		doNothing().when(deletePort).delete(anyString());
+		when(deletePort.delete(anyString())).thenReturn(false);
 		
-		deleteService.delete(new ProjectIdDTO("4"));
+		boolean deleted = deleteService.delete(new ProjectIdDTO("4"));
 		
+		assertThat(deleted).isFalse();
 		verify(deletePort).delete("4");
 	}
 

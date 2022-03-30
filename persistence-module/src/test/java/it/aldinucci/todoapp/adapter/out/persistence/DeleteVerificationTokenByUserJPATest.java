@@ -41,7 +41,7 @@ class DeleteVerificationTokenByUserJPATest {
 	void test_delete_whenTokenpresent() {
 		UserJPA user = new UserJPA("email", "username", "pass");
 		entityManager.persistAndFlush(user);
-		VerificationTokenJPA token = new VerificationTokenJPA("token", user, Calendar.getInstance().getTime());
+		VerificationTokenJPA token = new VerificationTokenJPA(user, Calendar.getInstance().getTime());
 		entityManager.persistAndFlush(token);
 
 		deleteToken.delete("email");

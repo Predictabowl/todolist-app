@@ -2,30 +2,25 @@ package it.aldinucci.todoapp.adapter.out.persistence.entity;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.NaturalId;
 
 @Entity
 public class VerificationTokenJPA {
 
 	@Id
-	private Long id;
-
-	@Column(nullable = false)
-	@NaturalId
-	private String token;
+	@GeneratedValue
+	private UUID token;
 
 	@OneToOne (fetch = FetchType.LAZY, optional = false)
-	@MapsId
 	private UserJPA user;
 
 	@Column(nullable = false)
@@ -35,33 +30,23 @@ public class VerificationTokenJPA {
 	public VerificationTokenJPA() {
 	}
 
-	public VerificationTokenJPA(Long id, String token, UserJPA user, Date expiryDate) {
-		this.id = id;
+	public VerificationTokenJPA(UUID token, UserJPA user, Date expiryDate) {
 		this.token = token;
 		this.user = user;
 		this.expiryDate = expiryDate;
 	}
 	
-	public VerificationTokenJPA(String token, UserJPA user, Date expiryDate) {
-		this.id = null;
-		this.token = token;
+	public VerificationTokenJPA(UserJPA user, Date expiryDate) {
+		this.token = null;
 		this.user = user;
 		this.expiryDate = expiryDate;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getToken() {
+	public UUID getToken() {
 		return token;
 	}
 
-	public void setToken(String token) {
+	public void setToken(UUID token) {
 		this.token = token;
 	}
 
@@ -83,7 +68,7 @@ public class VerificationTokenJPA {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(expiryDate, id, token, user);
+		return Objects.hash(expiryDate, token, user);
 	}
 
 	@Override
@@ -95,15 +80,13 @@ public class VerificationTokenJPA {
 		if (getClass() != obj.getClass())
 			return false;
 		VerificationTokenJPA other = (VerificationTokenJPA) obj;
-		return Objects.equals(expiryDate, other.expiryDate) && Objects.equals(id, other.id)
-				&& Objects.equals(token, other.token) && Objects.equals(user, other.user);
+		return Objects.equals(expiryDate, other.expiryDate) && Objects.equals(token, other.token)
+				&& Objects.equals(user, other.user);
 	}
 
 	@Override
 	public String toString() {
-		return "VerificationTokenJPA [id=" + id + ", token=" + token + ", user=" + user + ", expiryDate=" + expiryDate
-				+ "]";
+		return "VerificationTokenJPA [token=" + token + ", user=" + user + ", expiryDate=" + expiryDate + "]";
 	}
-
 
 }

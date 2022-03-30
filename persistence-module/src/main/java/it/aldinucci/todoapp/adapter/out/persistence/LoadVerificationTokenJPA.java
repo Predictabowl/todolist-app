@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.repository.VerificationToken
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
+import it.aldinucci.todoapp.util.ValidationUtils;
 
 @Component
 public class LoadVerificationTokenJPA implements LoadVerificationTokenDriverPort{
@@ -27,7 +29,10 @@ public class LoadVerificationTokenJPA implements LoadVerificationTokenDriverPort
 
 	@Override
 	public Optional<VerificationToken> load(String tokenString) {
-		Optional<VerificationTokenJPA> tokenJPA = tokenRepo.findByToken(tokenString);
+		if (!ValidationUtils.isValidUUID(tokenString))
+			return Optional.empty();
+		
+		Optional<VerificationTokenJPA> tokenJPA = tokenRepo.findByToken(UUID.fromString(tokenString));
 		if (tokenJPA.isEmpty())
 			return Optional.empty();
 		return Optional.of(mapper.map(tokenJPA.get()));

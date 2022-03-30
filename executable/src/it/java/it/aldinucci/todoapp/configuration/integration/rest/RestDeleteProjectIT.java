@@ -68,7 +68,7 @@ class RestDeleteProjectIT {
 		.when()
 			.delete("/api/project/"+project.getId())
 		.then()
-			.statusCode(200);
+			.statusCode(204);
 		
 		assertThat(projectRepo.findAll()).isEmpty();
 	}

@@ -33,16 +33,16 @@ class DeleteUserByEmailJPATest {
 		UserJPA user = new UserJPA("email", "name", "pass");
 		entityManager.persist(user);
 		VerificationTokenJPA vToken = entityManager.persist(
-				new VerificationTokenJPA("code", user, Calendar.getInstance().getTime()));
+				new VerificationTokenJPA(user, Calendar.getInstance().getTime()));
 		ResetPasswordTokenJPA rpToken = entityManager.persist(
-				new ResetPasswordTokenJPA("code", user, Calendar.getInstance().getTime()));
+				new ResetPasswordTokenJPA(user, Calendar.getInstance().getTime()));
 		entityManager.flush();
 
 		deleteUser.delete("email");
 
 		assertThat(entityManager.find(UserJPA.class, user.getId())).isNull();
-		assertThat(entityManager.find(VerificationTokenJPA.class, vToken.getId())).isNull();
-		assertThat(entityManager.find(ResetPasswordTokenJPA.class, rpToken.getId())).isNull();
+		assertThat(entityManager.find(VerificationTokenJPA.class, vToken.getToken())).isNull();
+		assertThat(entityManager.find(ResetPasswordTokenJPA.class, rpToken.getToken())).isNull();
 	}
 
 	@Test

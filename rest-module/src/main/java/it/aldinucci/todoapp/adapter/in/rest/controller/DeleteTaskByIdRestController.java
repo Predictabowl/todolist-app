@@ -2,6 +2,8 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +29,11 @@ public class DeleteTaskByIdRestController {
 	}
 
 	@DeleteMapping("/task/{taskId}")
-	public void deleteTaskEndPoint(Authentication authentication, TaskIdDTO taskId) throws AppTaskNotFoundException {
+	public ResponseEntity<Void> deleteTaskEndPoint(Authentication authentication, TaskIdDTO taskId) throws AppTaskNotFoundException {
 		authorize.check(authentication.getName(), taskId);
-		deleteTask.delete(taskId);
+		if (deleteTask.delete(taskId))
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 }

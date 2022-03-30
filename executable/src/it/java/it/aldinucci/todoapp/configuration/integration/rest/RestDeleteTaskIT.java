@@ -73,7 +73,7 @@ class RestDeleteTaskIT {
 		.when()
 			.delete("/api/task/"+task.getId())
 		.then()
-			.statusCode(200);
+			.statusCode(204);
 		
 		assertThat(taskRepo.findAll()).isEmpty();
 	}

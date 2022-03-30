@@ -95,7 +95,7 @@ class UserRegistrationIT {
 		assertThat(receivedMessages).hasSize(1);
 		
 		String messageBody = receivedMessages[0].getContent().toString();
-		assertThat(messageBody).contains(optionalToken.get().getToken());
+		assertThat(messageBody).contains(optionalToken.get().getToken().toString());
 		
 		String verificationUrl = messageBody.substring(
 				messageBody.indexOf("href='")+6,

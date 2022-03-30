@@ -54,7 +54,7 @@ class CreateResetPasswordTokenJPATest {
 	void test_createToken_whenDoesNotExists() {
 		UserJPA user = new UserJPA("user@email.it", "username", "pass");
 		entityManager.persistAndFlush(user);
-		ResetPasswordTokenData dto = new ResetPasswordTokenData("token", date, "user@email.it");
+		ResetPasswordTokenData dto = new ResetPasswordTokenData(date, "user@email.it");
 		ResetPasswordToken token = new ResetPasswordToken();
 		when(mapper.map(isA(ResetPasswordTokenJPA.class))).thenReturn(token);
 
@@ -66,7 +66,7 @@ class CreateResetPasswordTokenJPATest {
 		assertThat(tokens).hasSize(1);
 		ResetPasswordTokenJPA tokenJPA = tokens.get(0);
 		assertThat(tokenJPA.getExpiryDate()).isEqualTo(date);
-		assertThat(tokenJPA.getToken()).isEqualTo("token");
+		assertThat(tokenJPA.getToken().toString()).isNotNull();
 		assertThat(tokenJPA.getUser()).isEqualTo(user);
 		assertThat(createdToken).isSameAs(token);
 	}
@@ -75,9 +75,9 @@ class CreateResetPasswordTokenJPATest {
 	void test_createToken_whenUserAlreadyHaveAToken_shouldThrow() {
 		UserJPA user = new UserJPA("user@email.it", "username", "pass");
 		entityManager.persistAndFlush(user);
-		ResetPasswordTokenJPA tokenJpa = new ResetPasswordTokenJPA("token", user, date);
+		ResetPasswordTokenJPA tokenJpa = new ResetPasswordTokenJPA(user, date);
 		entityManager.persistAndFlush(tokenJpa);
-		ResetPasswordTokenData dto = new ResetPasswordTokenData("another token", date, "user@email.it");
+		ResetPasswordTokenData dto = new ResetPasswordTokenData(date, "user@email.it");
 		
 		assertThatThrownBy(() -> sut.create(dto))
 			.isInstanceOf(AppUserAlreadyHaveResetPasswordTokenException.class);
@@ -91,7 +91,7 @@ class CreateResetPasswordTokenJPATest {
 	
 	@Test
 	void test_createToken_whenUserNotExists_shouldThrow() {
-		ResetPasswordTokenData dto = new ResetPasswordTokenData("another token", date, "user@email.it");
+		ResetPasswordTokenData dto = new ResetPasswordTokenData(date, "user@email.it");
 		
 		assertThatThrownBy(() -> sut.create(dto))
 			.isInstanceOf(AppUserNotFoundException.class)

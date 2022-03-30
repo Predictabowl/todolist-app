@@ -1,9 +1,11 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,10 +33,10 @@ class DeleteVerificationTokenJPATest {
 	void test_deleteToken_successful() {
 		UserJPA user = new UserJPA("email", "username", "pass");
 		entityManager.persist(user);
-		VerificationTokenJPA token = new VerificationTokenJPA("code", user, Calendar.getInstance().getTime());
+		VerificationTokenJPA token = new VerificationTokenJPA(user, Calendar.getInstance().getTime());
 		entityManager.persistAndFlush(token);
 
-		deleteToken.delete("code");
+		deleteToken.delete(token.getToken().toString());
 
 		List<VerificationTokenJPA> tokens = entityManager.getEntityManager()
 				.createQuery("from VerificationTokenJPA", VerificationTokenJPA.class).getResultList();
@@ -44,7 +46,18 @@ class DeleteVerificationTokenJPATest {
 	
 	@Test
 	void test_deleteToken_whenNoToken() {
-		deleteToken.delete("code");
+		deleteToken.delete(UUID.randomUUID().toString());
+
+		List<VerificationTokenJPA> tokens = entityManager.getEntityManager()
+				.createQuery("from VerificationTokenJPA", VerificationTokenJPA.class).getResultList();
+
+		assertThat(tokens).isEmpty();
+	}
+	
+	@Test
+	void test_deleteToken_whenInvalidToken() {
+		assertThatCode(() -> deleteToken.delete("code"))
+			.doesNotThrowAnyException();
 
 		List<VerificationTokenJPA> tokens = entityManager.getEntityManager()
 				.createQuery("from VerificationTokenJPA", VerificationTokenJPA.class).getResultList();

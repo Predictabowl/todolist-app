@@ -39,21 +39,6 @@ class CreateTaskWebControllerTest {
 	
 	@Test
 	@WithMockUser("user@email.it")
-	void test_createNewTask_withInvalidId() throws Exception {
-		
-		mvc.perform(post("/web/project/3P/task/new")
-				.with(csrf())
-				.contentType(MediaType.APPLICATION_JSON)
-				.param("name", "task name")
-				.param("description", "task descr"))
-			.andExpect(status().isBadRequest());
-		
-		verifyNoInteractions(authorize);
-		verifyNoInteractions(createTask);
-	}
-	
-	@Test
-	@WithMockUser("user@email.it")
 	void test_createNewTask() throws Exception {
 		
 		mvc.perform(post("/web/project/3/task/new")

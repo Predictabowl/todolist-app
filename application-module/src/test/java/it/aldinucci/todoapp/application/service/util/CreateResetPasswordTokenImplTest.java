@@ -28,8 +28,8 @@ class CreateResetPasswordTokenImplTest {
 	@Mock
 	private CreateResetPasswordTokenDriverPort createResetToken;
 	
-	@Mock
-	private UniqueResetPasswordTokenGenerator tokenStringGenerator;
+//	@Mock
+//	private UniqueResetPasswordTokenGenerator tokenStringGenerator;
 	
 	@Mock
 	private TokenExpiryDateGenerator dateGenerator;
@@ -39,14 +39,13 @@ class CreateResetPasswordTokenImplTest {
 	@BeforeEach
 	void setUp() {
 		openMocks(this);
-		sut = new CreateResetPasswordTokenImpl(createResetToken, tokenStringGenerator, dateGenerator);
+		sut = new CreateResetPasswordTokenImpl(createResetToken, dateGenerator);
 	}
 
 	
 	@Test
 	void test_createToken() {		
 		ResetPasswordToken token = new ResetPasswordToken("code", Calendar.getInstance().getTime(), FIXTURE_EMAIL);
-		when(tokenStringGenerator.generate()).thenReturn("token code");
 		when(createResetToken.create(any())).thenReturn(token);
 		Date date = Calendar.getInstance().getTime();
 		when(dateGenerator.generate(anyString(),anyInt())).thenReturn(date);
@@ -54,10 +53,9 @@ class CreateResetPasswordTokenImplTest {
 		ResetPasswordToken passwordToken = sut.create(FIXTURE_EMAIL);
 		
 		assertThat(passwordToken).isSameAs(token);
-		InOrder inOrder = Mockito.inOrder(tokenStringGenerator, createResetToken, dateGenerator);
-		inOrder.verify(tokenStringGenerator).generate();
+		InOrder inOrder = Mockito.inOrder(createResetToken, dateGenerator);
 		inOrder.verify(dateGenerator).generate(RESET_PASSWORD_TOKEN_DURATION, 60);
-		inOrder.verify(createResetToken).create(new ResetPasswordTokenData(	"token code", date, FIXTURE_EMAIL));
+		inOrder.verify(createResetToken).create(new ResetPasswordTokenData(date, FIXTURE_EMAIL));
 	}
 
 }

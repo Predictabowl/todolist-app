@@ -3,11 +3,13 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +41,7 @@ class LoadVerificationTokenJPATest {
 	
 	@Test
 	void test_loadToken_whenMissing() {
-		assertThat(loadToken.load("token")).isEmpty();
+		assertThat(loadToken.load(UUID.randomUUID().toString())).isEmpty();
 	}
 	
 	@Test
@@ -47,14 +49,23 @@ class LoadVerificationTokenJPATest {
 		UserJPA user = new UserJPA("email", "name", "pass");
 		entityManager.persistAndFlush(user);
 		Date date = Calendar.getInstance().getTime();
-		VerificationTokenJPA tokenJpa = new VerificationTokenJPA("token", user, date);
+		VerificationTokenJPA tokenJpa = new VerificationTokenJPA(user, date);
 		entityManager.persistAndFlush(tokenJpa);
 		VerificationToken token = new VerificationToken("token", date, "email");
 		when(mapper.map(isA(VerificationTokenJPA.class))).thenReturn(token);
 		
-		Optional<VerificationToken> loadedToken = loadToken.load("token");
+		Optional<VerificationToken> loadedToken = loadToken.load(tokenJpa.getToken().toString());
 		
 		assertThat(loadedToken).contains(token);
+	}
+	
+	@Test
+	void test_loadToken_invalidString() {
+		Optional<VerificationToken> loadedToken = loadToken.load("random string");
+		
+		assertThat(loadedToken).isEmpty();
+		
+		verifyNoInteractions(mapper);
 	}
 
 }

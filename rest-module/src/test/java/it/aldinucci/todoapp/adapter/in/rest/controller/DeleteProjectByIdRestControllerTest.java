@@ -1,16 +1,13 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -31,7 +28,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.DeleteProjectByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
-import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -53,11 +49,12 @@ class DeleteProjectByIdRestControllerTest {
 	@Test
 	@WithMockUser("user@email.org")
 	void test_deleteProject_successful() throws Exception {
+		when(deleteProject.delete(any())).thenReturn(true);
 		
 		mvc.perform(delete("/api/project/5")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk());
+			.andExpect(status().isNoContent());
 		
 		InOrder inOrder = Mockito.inOrder(authorize,deleteProject);
 		ProjectIdDTO model = new ProjectIdDTO("5");
@@ -65,23 +62,6 @@ class DeleteProjectByIdRestControllerTest {
 		inOrder.verify(deleteProject).delete(model);
 	}
 
-	@Test
-	@WithMockUser("user")
-	void test_deleteProject_whenProjectNotPresent_shouldReturnNotFound() throws Exception {
-		AppProjectNotFoundException exception = new AppProjectNotFoundException("no project");
-		doThrow(exception).when(deleteProject).delete(isA(ProjectIdDTO.class));
-		
-		mvc.perform(delete("/api/project/5")
-				.with(csrf())
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound());
-		
-		InOrder inOrder = Mockito.inOrder(authorize,deleteProject);
-		ProjectIdDTO model = new ProjectIdDTO("5");
-		inOrder.verify(authorize).check("user", model);
-		inOrder.verify(deleteProject).delete(model);
-	}
-	
 	@Test
 	void test_deleteProject_withoutAuthentication_shouldReturnUnathorized() throws Exception {
 		
@@ -108,15 +88,14 @@ class DeleteProjectByIdRestControllerTest {
 	@Test
 	@WithMockUser("mock@user.it")
 	void test_deleteProject_whenProjectIsMissing_shouldReturnNotFound() throws JsonProcessingException, Exception {
-		doThrow(new AppProjectNotFoundException("test message")).when(authorize).check(any(), any());
+		when(deleteProject.delete(any())).thenReturn(false);
 		
 		mvc.perform(delete("/api/project/3")
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$", is("test message")));
+			.andExpect(status().isNotFound());
 		
 		verify(authorize).check("mock@user.it", new ProjectIdDTO("3"));
-		verifyNoInteractions(deleteProject);
+		verify(deleteProject).delete(new ProjectIdDTO("3"));
 	}
 }

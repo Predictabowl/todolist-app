@@ -7,27 +7,35 @@ import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.TaskJPARepository;
+import it.aldinucci.todoapp.adapter.out.persistence.util.ValidateId;
 import it.aldinucci.todoapp.application.port.out.LoadTaskByIdDriverPort;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @Component
-public class LoadTaskByIdJPA implements LoadTaskByIdDriverPort{
+public class LoadTaskByIdJPA implements LoadTaskByIdDriverPort {
 
 	private TaskJPARepository taskRepo;
 	private AppGenericMapper<TaskJPA, Task> mapper;
-	
+	private ValidateId<Long> validator;
+
 	@Autowired
-	public LoadTaskByIdJPA(TaskJPARepository taskRepo, AppGenericMapper<TaskJPA, Task> mapper) {
+	public LoadTaskByIdJPA(TaskJPARepository taskRepo, AppGenericMapper<TaskJPA, Task> mapper,
+			ValidateId<Long> validator) {
 		super();
 		this.taskRepo = taskRepo;
 		this.mapper = mapper;
+		this.validator = validator;
 	}
 
 	@Override
 	public Optional<Task> load(String id) {
-		Optional<TaskJPA> loadedTask = taskRepo.findById(Long.valueOf(id));
-		if(loadedTask.isEmpty())
+		if (!validator.isValid(id))
+			return Optional.empty();
+
+		long longId = validator.getId();
+		Optional<TaskJPA> loadedTask = taskRepo.findById(longId);
+		if (loadedTask.isEmpty())
 			return Optional.empty();
 		return Optional.of(mapper.map(loadedTask.get()));
 	}

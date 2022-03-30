@@ -49,7 +49,7 @@ class LoadVerificationTokenByEmailJPATest {
 		UserJPA user = new UserJPA(FIXTURE_EMAIL, "name", "pass");
 		entityManager.persistAndFlush(user);
 		Date date = Calendar.getInstance().getTime();
-		VerificationTokenJPA tokenJpa = new VerificationTokenJPA("token-code", user, date);
+		VerificationTokenJPA tokenJpa = new VerificationTokenJPA(user, date);
 		entityManager.persistAndFlush(tokenJpa);
 		VerificationToken token = new VerificationToken("token-code", date, "email");
 		when(mapper.map(isA(VerificationTokenJPA.class))).thenReturn(token);
