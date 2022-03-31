@@ -11,6 +11,7 @@ import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_
 
 import java.util.Properties;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+
+import it.aldinucci.todoapp.application.handler.MimeMessageHelperExceptionHandler;
+import it.aldinucci.todoapp.exception.handler.ExceptionHandler;
 
 @Configuration
 public class ApplicationBeansProvider {
@@ -66,12 +70,17 @@ public class ApplicationBeansProvider {
 	}
 	
 	@Bean
-	public MimeMessage getMimeMessage(@Autowired JavaMailSender javaMailSender) {
-		return javaMailSender.createMimeMessage();
+	public MimeMessage getMimeMessage() {
+		return getJavaMailSender().createMimeMessage();
 	}
 	
 	@Bean
-	public MimeMessageHelper getMimeMessageHelper(@Autowired MimeMessage mimeMessage) {
-		return new MimeMessageHelper(mimeMessage);
+	public MimeMessageHelper getMimeMessageHelper() {
+		return new MimeMessageHelper(getMimeMessage());
+	}
+	
+	@Bean
+	public ExceptionHandler<MimeMessageHelper, MimeMessage, MessagingException> getMimeExceptionHandler(){
+		return new MimeMessageHelperExceptionHandler(getMimeMessageHelper());
 	}
 }

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,8 +45,8 @@ class DeleteResetPasswordTokenJPATest {
 	}
 	
 	@Test
-	void test_deleteToken_whenNoToken() {
-		deleteToken.delete("code");
+	void test_deleteToken_whenNoTokenPresent() {
+		deleteToken.delete(UUID.randomUUID().toString());
 
 		List<ResetPasswordTokenJPA> tokens = entityManager.getEntityManager()
 				.createQuery("from ResetPasswordTokenJPA", ResetPasswordTokenJPA.class).getResultList();

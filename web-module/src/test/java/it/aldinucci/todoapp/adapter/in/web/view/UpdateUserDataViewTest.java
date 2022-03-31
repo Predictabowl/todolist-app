@@ -98,8 +98,6 @@ class UpdateUserDataViewTest {
 	@WithMockUser(FIXTURE_EMAIL)
 	void test_pageElements() throws IOException {
 		assertThat(page.getTitleText()).matches(env.getProperty("user.settings"));
-		assertThatCode(() -> page.getAnchorByText(env.getProperty("user.settings")))
-			.doesNotThrowAnyException();;
 		
 		assertThat(page.getAnchorByHref("/web").getTextContent())
 			.matches(env.getProperty("back.to.home"));
