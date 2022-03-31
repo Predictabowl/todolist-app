@@ -2,15 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head th:replace="fragments/layouts :: app-common-header(~{::title})">
-	<title>User Settings</title>
+	<title th:text="#{user.settings}"></title>
 </head>
 <body>
-	<section th:replace="fragments/layouts :: registration-layout(#{login}, ~{::#content})">
+	<section th:replace="fragments/layouts :: registration-layout(#{user.settings}, ~{::#content})">
 		<div id="content">
 			<form th:action="@{/web/user/data}" name="user-data-form" method="post" th:object="${userDataWebDto}">
-				<div class="field" th:insert="fragments/commons :: inputWithField('username',${userDataWebDto.username},'text')"></div>
+				<div class="field">
+					<label th:text="#{username}"></label>
+					<div th:replace="fragments/commons :: inputWithField('username',${userDataWebDto.username},'text')">
+					</div>
+				</div>
 				<button th:replace="fragments/commons :: genericFormSubmitButton(#{confirm})"></button>
 			</form>
+			<div class="mt-4">
+				<a class="link" th:href="@{/web}" th:text="#{back.to.home}"></a>
+			</div>
 		</div>
 	</section>
 </body>

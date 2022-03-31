@@ -20,9 +20,7 @@ import it.aldinucci.todoapp.application.port.in.dto.UserDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
-import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.UserDataWebDto;
-import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 
 @Controller
 @RequestMapping("/web/user/data")

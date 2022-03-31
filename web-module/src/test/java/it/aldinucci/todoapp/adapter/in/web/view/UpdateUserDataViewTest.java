@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.in.web.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
@@ -35,7 +36,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import it.aldinucci.todoapp.adapter.in.web.controller.UpdateUserDataWebController;
 import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.UpdateUserDataUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.webcommons.dto.UserDataWebDto;
 
@@ -94,5 +94,16 @@ class UpdateUserDataViewTest {
 				eq(new UserDataWebDto("new name")), isA(BindingResult.class));
 	}
 	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_pageElements() throws IOException {
+		assertThat(page.getTitleText()).matches(env.getProperty("user.settings"));
+		assertThatCode(() -> page.getAnchorByText(env.getProperty("user.settings")))
+			.doesNotThrowAnyException();;
+		
+		assertThat(page.getAnchorByHref("/web").getTextContent())
+			.matches(env.getProperty("back.to.home"));
+		
+	}
 	
 }
