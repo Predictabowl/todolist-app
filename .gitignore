@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Manually Added ###
-.attach_pid*
+**/attach_pid*
