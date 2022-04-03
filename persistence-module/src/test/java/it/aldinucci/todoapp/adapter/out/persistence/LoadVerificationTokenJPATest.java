@@ -2,7 +2,10 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
@@ -22,6 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
+import it.aldinucci.todoapp.adapter.out.persistence.util.ValidateId;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
@@ -39,13 +43,23 @@ class LoadVerificationTokenJPATest {
 	@Autowired
 	TestEntityManager entityManager;
 	
+	@MockBean
+	private ValidateId<UUID> validator;
+	
 	@Test
 	void test_loadToken_whenMissing() {
-		assertThat(loadToken.load(UUID.randomUUID().toString())).isEmpty();
+		when(validator.isValid(anyString())).thenReturn(true);
+		when(validator.getId()).thenReturn(UUID.randomUUID());
+		
+		assertThat(loadToken.load("random id")).isEmpty();
+	
+		verify(validator).isValid("random id");
+		verify(validator).getId();
 	}
 	
 	@Test
 	void test_loadToken_success() {
+		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA user = new UserJPA("email", "name", "pass");
 		entityManager.persistAndFlush(user);
 		Date date = Calendar.getInstance().getTime();
@@ -53,19 +67,24 @@ class LoadVerificationTokenJPATest {
 		entityManager.persistAndFlush(tokenJpa);
 		VerificationToken token = new VerificationToken("token", date, "email");
 		when(mapper.map(isA(VerificationTokenJPA.class))).thenReturn(token);
+		when(validator.getId()).thenReturn(tokenJpa.getToken());
 		
 		Optional<VerificationToken> loadedToken = loadToken.load(tokenJpa.getToken().toString());
 		
 		assertThat(loadedToken).contains(token);
+		verify(validator).isValid(tokenJpa.getToken().toString());
 	}
 	
 	@Test
 	void test_loadToken_invalidString() {
+		when(validator.isValid(anyString())).thenReturn(false);
 		Optional<VerificationToken> loadedToken = loadToken.load("random string");
 		
 		assertThat(loadedToken).isEmpty();
 		
 		verifyNoInteractions(mapper);
+		verify(validator).isValid("random string");
+		verify(validator, times(0)).getId();
 	}
 
 }

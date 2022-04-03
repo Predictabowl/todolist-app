@@ -25,6 +25,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -38,6 +39,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import it.aldinucci.todoapp.adapter.in.web.controller.CreateProjectWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.IndexWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
+import it.aldinucci.todoapp.adapter.in.web.controller.UpdateUserDataWebController;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
 import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
@@ -73,6 +75,9 @@ class IndexWebViewTest {
 	
 	@MockBean
 	private LoginWebController loginWebController;
+	
+	@MockBean
+	private UpdateUserDataWebController updateUserController;
 	
 	@Autowired
 	private Environment env;
@@ -164,10 +169,26 @@ class IndexWebViewTest {
 		verify(loginWebController).login();
 	}
 	
+	@Test
+	@WithMockUser(FIXTURE_EMAIL)
+	void test_updateUserData() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		when(updateUserController.getUserDataPage(any(), any())).thenReturn("test-view-page");
+		
+		HtmlPage page = webClient.getPage(BASE_URL);
+		
+		DomElement updateUserLink = page.getAnchorByHref("/web/user/data");
+		assertThat(updateUserLink.getTextContent()).matches(env.getProperty("user.settings"));
+		assertThat(updateUserLink.isDisplayed()).isFalse();
+		page.getHtmlElementById("user-menu").mouseOver();
+		updateUserLink.click();
+		
+		verify(updateUserController).getUserDataPage(isA(Authentication.class), isA(Model.class));
+	}
+	
 	
 	/*
-	 * Testing animation visbility doesn't work with jquery toggle("slow")
-	 * it work with "fast" and with instant.
+	 * Testing animation visibility doesn't work with jquery toggle("slow")
+	 * it works with "fast" and with instant.
 	 * It can be tested with Selenium though, so will be tested in E2E
 	 */
 }

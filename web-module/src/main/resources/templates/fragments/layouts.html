@@ -22,7 +22,7 @@
 	<section class="hero is-medium"	th:fragment="registration-layout(title, content)">
 		<div class="hero-body has-text-centered" style="margin: auto;">
 			<div class="box">
-				<h1 class="title" th:if="${title != ''}"
+				<h1 class="title" th:if="${title != ''}" id="displayed-main-title"
 					th:text="${title}">
 					Title
 				</h1>

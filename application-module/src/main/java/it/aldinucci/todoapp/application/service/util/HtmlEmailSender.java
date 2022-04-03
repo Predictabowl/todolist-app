@@ -3,13 +3,15 @@ package it.aldinucci.todoapp.application.service.util;
 import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_EMAIL_ADDRESS;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+
+import it.aldinucci.todoapp.exception.handler.ExceptionHandler;
 
 @Component
 public class HtmlEmailSender implements EmailSender {
@@ -18,27 +20,26 @@ public class HtmlEmailSender implements EmailSender {
 	private String emailAddress;
 
 	private JavaMailSender emailSender;
-	private MimeMessageHelper mimeMessageHelper;
+	private ExceptionHandler<MimeMessageHelper, MimeMessage, MessagingException> helperHandler;
 
 	@Autowired
-	public HtmlEmailSender(JavaMailSender emailSender, MimeMessageHelper mimeMessageHelper) {
+	public HtmlEmailSender(JavaMailSender emailSender,
+			ExceptionHandler<MimeMessageHelper, MimeMessage, MessagingException> helperHandler) {
 		super();
 		this.emailSender = emailSender;
-		this.mimeMessageHelper = mimeMessageHelper;
+		this.helperHandler = helperHandler;
 	}
 
 	@Override
 	public void send(String to, String subject, String content) {
-		try {
-			mimeMessageHelper.setSubject(subject);
-			mimeMessageHelper.setFrom(emailAddress);
-			mimeMessageHelper.setTo(to);
-			mimeMessageHelper.setText(content, true);
-			emailSender.send(mimeMessageHelper.getMimeMessage());
-		} catch (MessagingException e) {
-			LoggerFactory.getLogger(HtmlEmailSender.class)
-				.error("Error while creating email message", e);
-		}
+		MimeMessage mimeMessage = helperHandler.doItWithHandler(t -> {
+			t.setSubject(subject);
+			t.setFrom(emailAddress);
+			t.setTo(to);
+			t.setText(content, true);
+			return t.getMimeMessage();
+		});
+		emailSender.send(mimeMessage);
 	}
 
 }
