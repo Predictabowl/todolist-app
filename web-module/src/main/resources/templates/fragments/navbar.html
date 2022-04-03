@@ -41,7 +41,10 @@
 					<div class="navbar-item">
 						<div class="navbar-item has-dropdown is-hoverable" id="user-menu">
 							<a class="navbar-link has-text-primary" th:text="${username}"></a>
-							<div class="navbar-dropdown">
+							<div class="navbar-dropdown is-right">
+								<a class="navbar-item" th:href="@{/web/user/data}" th:text="#{user.settings}" id="user-settings-link">
+								</a>
+								<hr class="dropdown-divider">
 								<a class="navbar-item" id="logout-link">
 									<em class="fa-solid fa-arrow-right-from-bracket"></em>
 									<span class="ml-1" th:text="#{logout}"></span>								

@@ -98,6 +98,9 @@ class UpdateUserDataViewTest {
 	void test_pageElements() throws IOException {
 		assertThat(page.getTitleText()).matches(env.getProperty("user.settings"));
 		
+		assertThat(page.getElementById("displayed-main-title").getTextContent())
+			.matches(env.getProperty("user.settings"));
+		
 		assertThat(page.getAnchorByHref("/web").getTextContent())
 			.matches(env.getProperty("back.to.home"));
 		
