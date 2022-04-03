@@ -38,5 +38,14 @@ class ValidateLongIdTest {
 		assertThat(valid).isFalse();
 		assertThat(id).isNull();
 	}
+	
+	@Test
+	void test_nullId() {
+		boolean valid = validateId.isValid(null);
+		Long id = validateId.getId();
+		
+		assertThat(valid).isFalse();
+		assertThat(id).isNull();
+	}
 
 }

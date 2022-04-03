@@ -8,26 +8,27 @@ import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ResetPasswordTokenJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ResetPasswordTokenJPARepository;
+import it.aldinucci.todoapp.adapter.out.persistence.util.ValidateId;
 import it.aldinucci.todoapp.application.port.out.DeleteRestPasswordTokenDriverPort;
-import it.aldinucci.todoapp.util.ValidationUtils;
 
 @Component
-public class DeleteResetPasswordTokenJPA implements DeleteRestPasswordTokenDriverPort{
+public class DeleteResetPasswordTokenJPA implements DeleteRestPasswordTokenDriverPort {
 
 	private ResetPasswordTokenJPARepository tokenRepo;
-	
+	private ValidateId<UUID> validator;
+
 	@Autowired
-	public DeleteResetPasswordTokenJPA(ResetPasswordTokenJPARepository tokenRepo) {
+	public DeleteResetPasswordTokenJPA(ResetPasswordTokenJPARepository tokenRepo, ValidateId<UUID> validator) {
 		super();
 		this.tokenRepo = tokenRepo;
+		this.validator = validator;
 	}
-
 
 	@Override
 	public void delete(String token) {
-		if (ValidationUtils.isValidUUID(token)) {
-			Optional<ResetPasswordTokenJPA> optional = tokenRepo.findByToken(UUID.fromString(token));
-			if(optional.isPresent())
+		if (validator.isValid(token)) {
+			Optional<ResetPasswordTokenJPA> optional = tokenRepo.findByToken(validator.getId());
+			if (optional.isPresent())
 				tokenRepo.delete(optional.get());
 		}
 	}

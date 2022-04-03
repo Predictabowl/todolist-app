@@ -42,5 +42,14 @@ class ValidateUUIDIdTest {
 		assertThat(valid).isFalse();
 		assertThat(id).isNull();
 	}
+	
+	@Test
+	void test_nullId() {
+		boolean valid = validator.isValid(null);
+		UUID id = validator.getId();
+		
+		assertThat(valid).isFalse();
+		assertThat(id).isNull();
+	}
 
 }
