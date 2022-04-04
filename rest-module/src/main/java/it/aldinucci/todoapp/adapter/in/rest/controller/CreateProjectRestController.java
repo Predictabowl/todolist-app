@@ -17,7 +17,7 @@ import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/project")
 public class CreateProjectRestController {
 
 	private CreateProjectUsePort createProject;
@@ -27,9 +27,10 @@ public class CreateProjectRestController {
 		this.createProject = createProject;
 	}
 
-	@PostMapping("/project/create")
+	@PostMapping
 	public Project createProjectEndPoint(Authentication authentication,
 			@Valid @RequestBody ProjectDataWebDto newProject) throws AppUserNotFoundException {
+		
 		NewProjectDTOIn projectDto = new NewProjectDTOIn(newProject.name(), authentication.getName());
 		return createProject.create(projectDto);
 	}

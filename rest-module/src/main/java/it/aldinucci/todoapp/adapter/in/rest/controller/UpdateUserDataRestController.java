@@ -17,7 +17,7 @@ import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.dto.UserDataWebDto;
 
 @RestController
-@RequestMapping("/api/user/data/update")
+@RequestMapping("/api/user")
 public class UpdateUserDataRestController {
 
 	private UpdateUserDataUsePort updateUser;

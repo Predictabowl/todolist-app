@@ -57,7 +57,7 @@ public class ProjectWebController {
 				TaskDataWebDto newTaskWebDto) {
 		
 		User user = loadUser.load(projectId).orElseThrow(() -> 
-				new AppUserNotFoundException("Critical Data Integrity error while searching the User of project with id: "
+				new AppUserNotFoundException("Could not find User owner of project with id: "
 						+projectId.getProjectId()));
 		authorize.check(authentication.getName(), user);
 		
@@ -67,7 +67,7 @@ public class ProjectWebController {
 		model.addAttribute("activeProject",	projects.stream()
 				.filter(p -> p.getId().equals(projectId.getProjectId())).findFirst()
 					.orElseThrow(() -> new AppProjectNotFoundException(
-							"Critical Data Integrity error while searching project with id: "+projectId.getProjectId())));
+							"Could not find project with id: "+projectId.getProjectId())));
 		
 		Map<Boolean, List<Task>> tasks = loadTasks.load(projectId).stream()
 				.collect(Collectors.partitioningBy(Task::isCompleted));

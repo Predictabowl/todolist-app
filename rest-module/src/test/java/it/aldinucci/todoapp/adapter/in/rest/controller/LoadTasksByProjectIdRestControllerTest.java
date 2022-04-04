@@ -35,10 +35,10 @@ import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
-@WebMvcTest(controllers = { LoadTaskByProjectIdRestController.class })
+@WebMvcTest(controllers = { LoadTasksByProjectIdRestController.class })
 @ExtendWith(SpringExtension.class)
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
-class LoadTaskByProjectIdRestControllerTest {
+class LoadTasksByProjectIdRestControllerTest {
 
 	@Autowired
 	private MockMvc mvc;

@@ -34,10 +34,10 @@ import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
-@WebMvcTest(controllers = { LoadUnfinishedTaskByProjectIdRestController.class })
+@WebMvcTest(controllers = { LoadUnfinishedTasksByProjectIdRestController.class })
 @ExtendWith(SpringExtension.class)
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
-class LoadUnfinishedTaskByProjectIdRestControllerTest {
+class LoadUnfinishedTasksByProjectIdRestControllerTest {
 
 	private final static String FIXTURE_URL = "/tasks/unfinished";
 	

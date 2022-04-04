@@ -40,7 +40,7 @@ import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class CreateProjectRestControllerTest {
 
-	private static final String FIXTURE_URL = "/api/project/create";
+	private static final String FIXTURE_URL = "/api/project";
 	
 	@Autowired
 	private MockMvc mvc;

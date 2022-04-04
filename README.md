@@ -50,6 +50,36 @@ docker-compose -f docker-compose-full.yml up
 
 The integration tests are all inside the `configuration-module`, but they need a running database to work. The docker-compose inside the module folder can be used to run the database and then launch the tests from the IDE itself.
 
+____
+
 ## Quick user guide
+
 ### Rest endpoints
 
+To access the REST endpoints is necessary to add a Basic Authentication header to the request, with both Session and Csrf cookies.
+
+#### Resource: users
+
+| Method | URI         |                                                                           |
+| ------ | ----------- | ------------------------------------------------------------------------- |
+| PUT    | `/api/user` | Right now can only update the `username` field of the authenticated user. |
+
+#### Resource: projects
+
+| Method | URI                        |                                                                                                |
+| ------ | -------------------------- | ---------------------------------------------------------------------------------------------- |
+| GET    | `/api/projects`            | Get the list of projects of the authenticate users.                                            |
+| DELETE | `/api/project/{projectId}` | Delete the selected project, will return status 204 only if a project was effectively deleted. |
+| POST   | `/api/project`             | Create new Project with `name` attribute.                                                      |
+| PUT    | `/api/project/{projectId}` | Update the `name` field of the project.                                                        |
+
+#### Resource: tasks
+
+| Method | URI                                         |                                                                                         |
+| ------ | ------------------------------------------- | --------------------------------------------------------------------------------------- |
+| GET    | `/api/project/{projectId}/tasks`            | Return the complete task list of the specified project.                                 |
+| GET    | `/api/project/{projectId}/tasks/unfinished` | Return only the unfinished tasks.                                                       |
+| DELETE | `/api/task/{taskId}`                        | Delete the specified task. Returns  state 204 only if the task was effectively deleted. |
+| POST   | `/api/project/{projectId}/task`             | Create new task with `name` and `description`.                                          |
+| PUT    | `/app/task/{taskId}`                        | Update task's field `name` and `description`                                            |
+| PUT    | `/api/task/{taskId}/completed/toggle`       | Toggle the compelted status of the specified task.                                      |

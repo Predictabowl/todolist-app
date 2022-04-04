@@ -24,8 +24,8 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ProjectJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.TaskJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
-import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
@@ -33,7 +33,7 @@ class RestCreateNewTaskIT {
 
 	private static final String FIXTURE_EMAIL = "user@email.com";
 	private static final String FIXTURE_PASSWORD = "somePassword";
-	private static final String FIXTURE_URI = "/api/task/create";
+	private static final String BASE_URI = "/api/project/";
 	
 	@Autowired
 	private ProjectJPARepository projectRepo;
@@ -82,9 +82,9 @@ class RestCreateNewTaskIT {
 				.sessionId(sessionId)
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.accept(MediaType.APPLICATION_JSON_VALUE)
-				.body(new NewTaskDTOIn("task name", "description", projectJPA.getId().toString()))
+				.body(new TaskDataWebDto("task name", "description"))
 			.when()
-				.post(FIXTURE_URI)
+				.post(BASE_URI+projectJPA.getId()+"/task")
 			.then()
 				.statusCode(200)
 				.extract().response();
@@ -113,9 +113,9 @@ class RestCreateNewTaskIT {
 			.sessionId(sessionId)
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.accept(MediaType.APPLICATION_JSON_VALUE)
-			.body(new NewTaskDTOIn("task name", "description", "2"))
+			.body(new TaskDataWebDto("task name", "description"))
 		.when()
-			.post(FIXTURE_URI)
+			.post(BASE_URI+"2/task")
 		.then()
 			.statusCode(404);
 		
@@ -131,7 +131,7 @@ class RestCreateNewTaskIT {
 				.auth().preemptive().basic(FIXTURE_EMAIL, FIXTURE_PASSWORD)
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 			.when()
-				.get(FIXTURE_URI);
+				.get("/api/project");
 
 		sessionId = response.getSessionId();
 		csrfToken = response.cookie("XSRF-TOKEN");

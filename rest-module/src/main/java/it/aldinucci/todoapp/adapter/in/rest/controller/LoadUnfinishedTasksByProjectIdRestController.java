@@ -18,20 +18,20 @@ import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @RestController
-@RequestMapping("/api")
-public class LoadUnfinishedTaskByProjectIdRestController {
+@RequestMapping("/api/project/{projectId}/tasks/unfinished")
+public class LoadUnfinishedTasksByProjectIdRestController {
 
 	private LoadUnfinishedTasksByProjectIdUsePort loadProjectTasks;
 	private InputModelAuthorization<ProjectIdDTO> authorize;
 	
 	@Autowired
-	public LoadUnfinishedTaskByProjectIdRestController(LoadUnfinishedTasksByProjectIdUsePort loadProjects,
+	public LoadUnfinishedTasksByProjectIdRestController(LoadUnfinishedTasksByProjectIdUsePort loadProjects,
 			InputModelAuthorization<ProjectIdDTO> authorize) {
 		this.loadProjectTasks = loadProjects;
 		this.authorize = authorize;
 	}
 
-	@GetMapping("/project/{projectId}/tasks/unfinished")
+	@GetMapping
 	public List<Task> getTasksByProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId)
 				throws AppProjectNotFoundException{
 		authorize.check(authentication.getName(), projectId);

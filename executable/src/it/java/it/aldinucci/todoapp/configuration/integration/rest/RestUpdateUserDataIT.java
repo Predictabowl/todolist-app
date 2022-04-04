@@ -35,7 +35,7 @@ class RestUpdateUserDataIT {
 
 	private static final String FIXTURE_EMAIL = "user@email.com";
 	private static final String FIXTURE_PASSWORD = "somePassword";
-	private static final String FIXTURE_URI = "/api/user/data/update";
+	private static final String FIXTURE_URI = "/api/user";
 
 	private String sessionId;
 	private String csrfToken;

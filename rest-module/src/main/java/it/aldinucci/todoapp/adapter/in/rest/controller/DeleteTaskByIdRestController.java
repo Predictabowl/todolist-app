@@ -1,6 +1,8 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,7 @@ import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/task/{taskId}")
 public class DeleteTaskByIdRestController {
 
 	private DeleteTaskByIdUsePort deleteTask;
@@ -28,8 +30,8 @@ public class DeleteTaskByIdRestController {
 		this.authorize = authorize;
 	}
 
-	@DeleteMapping("/task/{taskId}")
-	public ResponseEntity<Void> deleteTaskEndPoint(Authentication authentication, TaskIdDTO taskId) throws AppTaskNotFoundException {
+	@DeleteMapping
+	public ResponseEntity<Void> deleteTaskEndPoint(Authentication authentication, @Valid TaskIdDTO taskId) throws AppTaskNotFoundException {
 		authorize.check(authentication.getName(), taskId);
 		if (deleteTask.delete(taskId))
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

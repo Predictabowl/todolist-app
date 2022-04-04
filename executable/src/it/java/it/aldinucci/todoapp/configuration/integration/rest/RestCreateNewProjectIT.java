@@ -43,7 +43,7 @@ class RestCreateNewProjectIT {
 
 	private static final String FIXTURE_EMAIL = "user@email.com";
 	private static final String FIXTURE_PASSWORD = "somePassword";
-	private static final String FIXTURE_URI = "/api/project/create";
+	private static final String FIXTURE_URI = "/api/project";
 
 	private String sessionId;
 	private String csrfToken;

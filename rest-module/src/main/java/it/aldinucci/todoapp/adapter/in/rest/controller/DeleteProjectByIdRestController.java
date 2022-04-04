@@ -16,7 +16,7 @@ import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/project/{projectId}")
 public class DeleteProjectByIdRestController {
 
 	private DeleteProjectByIdUsePort deleteProject;
@@ -29,7 +29,7 @@ public class DeleteProjectByIdRestController {
 		this.authorize = authorize;
 	}
 
-	@DeleteMapping("/project/{projectId}")
+	@DeleteMapping
 	public ResponseEntity<Void> deleteProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId) {
 		authorize.check(authentication.getName(), projectId);
 		if (deleteProject.delete(projectId))

@@ -135,7 +135,7 @@ class ProjectWebControllerTest {
 			.isInstanceOf(NestedServletException.class)
 			.getCause()
 				.isInstanceOf(AppProjectNotFoundException.class)
-				.hasMessageEndingWith("Critical Data Integrity error while searching project with id: 21");
+				.hasMessageEndingWith("Could not find project with id: 21");
 		
 		InOrder inOrder = inOrder(loadUser, loadProjects, userMapper, authorize);
 		inOrder.verify(loadUser).load(new ProjectIdDTO("21"));
@@ -184,7 +184,7 @@ class ProjectWebControllerTest {
 			.isInstanceOf(NestedServletException.class)
 			.getCause()
 				.isInstanceOf(AppUserNotFoundException.class)
-				.hasMessageEndingWith("Critical Data Integrity error while searching the User of project with id: 21");
+				.hasMessageEndingWith("Could not find User owner of project with id: 21");
 		
 		verify(loadUser).load(new ProjectIdDTO("21"));
 		verifyNoInteractions(authorize);

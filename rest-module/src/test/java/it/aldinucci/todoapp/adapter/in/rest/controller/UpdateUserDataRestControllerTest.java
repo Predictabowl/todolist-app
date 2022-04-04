@@ -37,7 +37,7 @@ import it.aldinucci.todoapp.webcommons.dto.UserDataWebDto;
 @Import({AppRestSecurityConfig.class})
 class UpdateUserDataRestControllerTest {
 
-	private static final String FIXTURE_URL = "/api/user/data/update";
+	private static final String FIXTURE_URL = "/api/user";
 	private static final String FIXTURE_EMAIL = "test@email.it";
 	
 	@MockBean

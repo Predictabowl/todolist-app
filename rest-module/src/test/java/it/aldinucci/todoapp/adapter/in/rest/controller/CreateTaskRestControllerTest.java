@@ -36,6 +36,7 @@ import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
+import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -44,7 +45,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class CreateTaskRestControllerTest {
 	
-	private static final String FIXTURE_URL = "/api/task/create";
+	private static final String FIXTURE_PROJECT_ID = "7";
+	private static final String FIXTURE_URL = "/api/project/"+FIXTURE_PROJECT_ID+"/task";
 	
 	@Autowired
 	private MockMvc mvc;
@@ -67,7 +69,7 @@ class CreateTaskRestControllerTest {
 	@WithMockUser("user email")
 	void test_createTask_successful() throws JsonProcessingException, Exception {
 		Task task = new Task("1", "new task", "task description");
-		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "test description", "2");
+		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "test description", FIXTURE_PROJECT_ID);
 		when(createTask.create(isA(NewTaskDTOIn.class)))
 			.thenReturn(task);
 		
@@ -78,8 +80,7 @@ class CreateTaskRestControllerTest {
 				.content(objectMapper.writeValueAsString(taskDto)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.name", is("new task")))
-			.andExpect(jsonPath("$.description", is("task description")))
-			.andExpect(jsonPath("$.id", is("1")));
+			.andExpect(jsonPath("$.description", is("task description")));
 		
 		InOrder inOrder = Mockito.inOrder(createTask,authorize);
 		inOrder.verify(authorize).check("user email", taskDto);
@@ -90,13 +91,13 @@ class CreateTaskRestControllerTest {
 	@Test
 	@WithMockUser
 	void test_createTask_withEmptyName_shouldSendBadRequest() throws JsonProcessingException, Exception {
-		String jsonTask = "{\"name\":\"\", \"description\":\"description\",\"projectId\":7}";
+		TaskDataWebDto taskData = new TaskDataWebDto("", "description");
 		
 		mvc.perform(post(FIXTURE_URL)
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(jsonTask))
+				.content(objectMapper.writeValueAsString(taskData)))
 			.andExpect(status().isBadRequest());
 		
 		verifyNoInteractions(createTask);
@@ -107,17 +108,17 @@ class CreateTaskRestControllerTest {
 	@WithMockUser("email")
 	void test_createTask_whenProjectNotFound_shouldReturnNotFound() throws JsonProcessingException, Exception {
 		doThrow(new AppProjectNotFoundException("test message")).when(authorize).check(anyString(), any());
-		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "description","11");
+		TaskDataWebDto taskData = new TaskDataWebDto("test name", "description");
 		
 		mvc.perform(post(FIXTURE_URL)
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(taskDto)))
+				.content(objectMapper.writeValueAsString(taskData)))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$",is("test message")));
 		
-		verify(authorize).check("email", taskDto);
+		verify(authorize).check("email", new NewTaskDTOIn("test name", "description", FIXTURE_PROJECT_ID));
 		verifyNoInteractions(createTask);
 	}
 	
@@ -127,7 +128,7 @@ class CreateTaskRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", "1"))))
+				.content(objectMapper.writeValueAsString(new TaskDataWebDto("task name", "description"))))
 			.andExpect(status().isUnauthorized());
 		
 		verifyNoInteractions(authorize);
@@ -140,7 +141,7 @@ class CreateTaskRestControllerTest {
 		mvc.perform(post(FIXTURE_URL)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", "1"))))
+				.content(objectMapper.writeValueAsString(new TaskDataWebDto("task name", "description"))))
 			.andExpect(status().isForbidden());
 		
 		verifyNoInteractions(authorize);
@@ -156,11 +157,11 @@ class CreateTaskRestControllerTest {
 				.with(csrf())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new NewTaskDTOIn("task name", "description", "1"))))
+				.content(objectMapper.writeValueAsString(new TaskDataWebDto("task name", "description"))))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		verify(authorize).check("mock@user.it", new NewTaskDTOIn("task name", "description", "1"));
+		verify(authorize).check("mock@user.it", new NewTaskDTOIn("task name", "description", FIXTURE_PROJECT_ID));
 		verifyNoInteractions(createTask);
 	}
 }
