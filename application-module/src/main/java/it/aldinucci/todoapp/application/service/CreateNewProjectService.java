@@ -18,8 +18,7 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 class CreateNewProjectService implements CreateProjectUsePort {
 
 	private final CreateProjectDriverPort newProjectDriverPort;
-
-	private AppGenericMapper<NewProjectDTOIn, NewProjectData> mapper;
+	private final AppGenericMapper<NewProjectDTOIn, NewProjectData> mapper;
 
 	@Autowired
 	public CreateNewProjectService(CreateProjectDriverPort newProjectDriverPort,

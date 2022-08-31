@@ -8,6 +8,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import it.aldinucci.todoapp.application.port.in.dto.NewProjectDTOIn;
@@ -25,12 +26,12 @@ class CreateNewProjectServiceTest {
 	@Mock
 	private AppGenericMapper<NewProjectDTOIn, NewProjectData> mapper;
 	
+	@InjectMocks
 	private CreateNewProjectService service;
 	
 	@BeforeEach
 	void setUp() {
 		openMocks(this);
-		service = new CreateNewProjectService(port, mapper);
 	}
 	
 	@Test
