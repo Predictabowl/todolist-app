@@ -1,9 +1,12 @@
 package it.aldinucci.todoapp.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -20,6 +23,7 @@ import it.aldinucci.todoapp.application.port.out.CreateTaskDriverPort;
 import it.aldinucci.todoapp.application.port.out.GetTaskMaxOrderInProjectDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskData;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exception.AppInvalidIdException;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 class CreateNewTaskServiceTest {
@@ -42,7 +46,21 @@ class CreateNewTaskServiceTest {
 	}
 	
 	@Test
-	void test_createTaskWhenProjectHaveOtherTasks() throws AppProjectNotFoundException {
+	void test_createTask_whenInvalidId_shouldThrow() throws AppProjectNotFoundException, AppInvalidIdException {
+		when(maxOrderTask.get(anyString())).thenThrow(AppInvalidIdException.class);
+		NewTaskDTOIn newTaskDTOIn = new NewTaskDTOIn(TASK_NAME, TASK_DESCRIPTION, "1");
+		
+		assertThatThrownBy(() -> service.create(newTaskDTOIn))
+			.isInstanceOf(AppProjectNotFoundException.class)
+			.hasMessage("Project not found with id: 1")
+			.hasCauseInstanceOf(AppInvalidIdException.class);
+		
+		verify(maxOrderTask).get("1");
+		verifyNoInteractions(newTaskport);
+	}
+	
+	@Test
+	void test_createTaskWhenProjectHaveOtherTasks() throws AppProjectNotFoundException, AppInvalidIdException {
 		Task savedTask = new Task("2L", TASK_NAME, "new description");
 		when(newTaskport.create(isA(NewTaskData.class))).thenReturn(savedTask);
 		when(maxOrderTask.get(anyString())).thenReturn(OptionalInt.of(9));
@@ -56,7 +74,7 @@ class CreateNewTaskServiceTest {
 	}
 	
 	@Test
-	void test_createFirstTaskOfProject() throws AppProjectNotFoundException {
+	void test_createFirstTaskOfProject() throws AppProjectNotFoundException, AppInvalidIdException {
 		Task savedTask = new Task("2L", TASK_NAME, "new description");
 		when(newTaskport.create(isA(NewTaskData.class))).thenReturn(savedTask);
 		when(maxOrderTask.get(anyString())).thenReturn(OptionalInt.empty());

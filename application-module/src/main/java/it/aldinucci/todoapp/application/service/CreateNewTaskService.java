@@ -11,6 +11,7 @@ import it.aldinucci.todoapp.application.port.out.GetTaskMaxOrderInProjectDriverP
 import it.aldinucci.todoapp.application.port.out.CreateTaskDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewTaskData;
 import it.aldinucci.todoapp.domain.Task;
+import it.aldinucci.todoapp.exception.AppInvalidIdException;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 @Service
@@ -29,13 +30,20 @@ class CreateNewTaskService implements CreateTaskUsePort{
 
 
 	@Override
-	public Task create(NewTaskDTOIn task) throws AppProjectNotFoundException {
+	public Task create(NewTaskDTOIn task) throws AppProjectNotFoundException  {
+		int order = 0;
+		try {
+			order = getMaxOrderTask.get(task.getProjectId()).orElse(-1)+1;
+		} catch (AppInvalidIdException e) {
+			throw new AppProjectNotFoundException("Project not found with id: " + task.getProjectId(), e);
+		}
+		
 		return newTaskPort.create(new NewTaskData(
 				task.getName(), 
 				task.getDescription(),
 				false,
 				task.getProjectId(),
-				getMaxOrderTask.get(task.getProjectId()).orElse(-1)+1));
+				order));
 	}
 
 }

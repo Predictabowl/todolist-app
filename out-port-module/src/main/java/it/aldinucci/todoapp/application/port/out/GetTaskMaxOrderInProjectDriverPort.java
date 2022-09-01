@@ -2,9 +2,10 @@ package it.aldinucci.todoapp.application.port.out;
 
 import java.util.OptionalInt;
 
+import it.aldinucci.todoapp.exception.AppInvalidIdException;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 public interface GetTaskMaxOrderInProjectDriverPort {
 
-	public OptionalInt get(String projectId) throws AppProjectNotFoundException;
+	public OptionalInt get(String projectId) throws AppProjectNotFoundException, AppInvalidIdException;
 }

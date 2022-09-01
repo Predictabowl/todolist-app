@@ -23,6 +23,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.util.ValidateId;
+import it.aldinucci.todoapp.exception.AppInvalidIdException;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 @DataJpaTest
@@ -54,7 +55,7 @@ class GetTaskMaxOrderInProjectJPATest {
 	}
 	
 	@Test
-	void test_countWhenThereIsNoTask() {
+	void test_countWhenThereIsNoTask() throws AppProjectNotFoundException, AppInvalidIdException {
 		when(validator.isValid(anyString())).thenReturn(true);
 		ProjectJPA projectJPA = setUpDB();
 		when(validator.getId()).thenReturn(projectJPA.getId());
@@ -68,15 +69,17 @@ class GetTaskMaxOrderInProjectJPATest {
 	@Test
 	void test_getWhenInvalidId() {
 		when(validator.isValid(anyString())).thenReturn(false);
-		OptionalInt maxValue = sut.get("test");
 		
-		assertThat(maxValue).isEmpty();
+		assertThatThrownBy(() -> sut.get("test"))
+			.isInstanceOf(AppInvalidIdException.class)
+			.hasMessage("Invalid Project id: test");
+		
 		verify(validator).isValid("test");
 		verify(validator, times(0)).getId();
 	}
 	
 	@Test
-	void test_countSuccess() {
+	void test_countSuccess() throws AppProjectNotFoundException, AppInvalidIdException {
 		when(validator.isValid(anyString())).thenReturn(true);
 		ProjectJPA projectJPA = setUpDB();
 		when(validator.getId()).thenReturn(projectJPA.getId());

@@ -41,7 +41,18 @@ class CreateProjectJPATest {
 	private TestEntityManager entityManager;
 	
 	@Test
-	void test_createNewProject_successful() throws AppUserNotFoundException {
+	void test_createNewProject_whenUserNotPresent() {
+		NewProjectData newProject = new NewProjectData("test name", TEST_EMAIL);
+		
+		assertThatThrownBy(() -> createProject.create(newProject))
+			.isInstanceOf(AppUserNotFoundException.class)
+			.hasMessage("User not found with email: "+TEST_EMAIL);
+		
+		verifyNoInteractions(mapper);
+	}
+	
+	@Test
+	void test_createNewProject_successful(){
 		UserJPA userJPA = new UserJPA(null, TEST_EMAIL, "username", "password");
 		entityManager.persist(userJPA);
 		NewProjectData newProject = new NewProjectData("test name", TEST_EMAIL);
@@ -57,17 +68,6 @@ class CreateProjectJPATest {
 		assertThat(returnedProject).isSameAs(project);
 		assertThat(createdProject.getUser()).usingRecursiveComparison().isEqualTo(userJPA);
 		assertThat(createdProject.getTasks()).isEmpty();
-	}
-	
-	@Test
-	void test_createNewProject_whenUserNotPresent() {
-		NewProjectData newProject = new NewProjectData("test name", TEST_EMAIL);
-		
-		assertThatThrownBy(() -> createProject.create(newProject))
-			.isInstanceOf(AppUserNotFoundException.class)
-			.hasMessage("User not found with email: "+TEST_EMAIL);
-		
-		verifyNoInteractions(mapper);
 	}
 
 }

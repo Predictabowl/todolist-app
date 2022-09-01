@@ -1,6 +1,7 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,6 +20,7 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.util.ValidateId;
+import it.aldinucci.todoapp.exception.AppInvalidIdException;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 @DataJpaTest
@@ -48,6 +50,7 @@ class DeleteProjectByIdJPATest {
 	@Test
 	void test_deleteProject_WhenInvalidId() {
 		when(validator.isValid(anyString())).thenReturn(false);
+		
 		boolean deleted = deleteProject.delete("invalid");
 		
 		assertThat(deleted).isFalse();
