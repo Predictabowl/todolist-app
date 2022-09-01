@@ -7,8 +7,6 @@ import java.util.Objects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import it.aldinucci.todoapp.domain.User;
-
 public class UserDetailsImpl implements UserDetails{
 
 	/**
@@ -16,11 +14,15 @@ public class UserDetailsImpl implements UserDetails{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private transient User user;
+	private String email;
+	private String password;
+	private boolean enabled;
 	
-	
-	public UserDetailsImpl(User user) {
-		this.user = user;
+	public UserDetailsImpl(String email, String password, boolean enabled) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.enabled = enabled;
 	}
 
 	@Override
@@ -31,12 +33,12 @@ public class UserDetailsImpl implements UserDetails{
 
 	@Override
 	public String getPassword() {
-		return user.getPassword();
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		return user.getEmail();
+		return email;
 	}
 
 	@Override
@@ -56,12 +58,12 @@ public class UserDetailsImpl implements UserDetails{
 
 	@Override
 	public boolean isEnabled() {
-		return user.isEnabled();
+		return enabled;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(user);
+		return Objects.hash(email, enabled, password);
 	}
 
 	@Override
@@ -73,12 +75,13 @@ public class UserDetailsImpl implements UserDetails{
 		if (getClass() != obj.getClass())
 			return false;
 		UserDetailsImpl other = (UserDetailsImpl) obj;
-		return Objects.equals(user, other.user);
+		return Objects.equals(email, other.email) && enabled == other.enabled
+				&& Objects.equals(password, other.password);
 	}
 
 	@Override
 	public String toString() {
-		return "UserDetailsImpl [user=" + user + "]";
+		return "UserDetailsImpl [email=" + email + ", password=" + password + ", enabled=" + enabled + "]";
 	}
 
 }

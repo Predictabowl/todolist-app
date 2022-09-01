@@ -17,7 +17,7 @@ import org.mockito.Mock;
 
 import it.aldinucci.todoapp.application.port.in.dto.UserDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.application.port.out.UpdateUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.UserData;
 import it.aldinucci.todoapp.domain.User;
@@ -28,7 +28,7 @@ class UpdateUserDataServiceTest {
 	private static final String FIXTURE_EMAIL = "email@test.it";
 	
 	@Mock
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	
 	@Mock
 	private UpdateUserDriverPort updateUser;

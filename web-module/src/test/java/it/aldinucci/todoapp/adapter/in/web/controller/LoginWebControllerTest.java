@@ -51,8 +51,7 @@ class LoginWebControllerTest {
 	@Test
 	void test_loginSuccessful_shouldRedirect() throws Exception {
 		when(detailService.loadUserByUsername(anyString()))
-			.thenReturn(new UserDetailsImpl(
-					new User(USER_EMAIL, "username", encoder.encode(USER_PASSWORD), true)));
+			.thenReturn(new UserDetailsImpl(USER_EMAIL, encoder.encode(USER_PASSWORD), true));
 		
 		mvc.perform(formLogin("/login")
 				.user(USER_EMAIL)

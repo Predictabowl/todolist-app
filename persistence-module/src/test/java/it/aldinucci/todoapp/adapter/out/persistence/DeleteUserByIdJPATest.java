@@ -19,11 +19,11 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
-@Import({ DeleteUserByEmailJPA.class })
-class DeleteUserByEmailJPATest {
+@Import({ DeleteUserByIdJPA.class })
+class DeleteUserByIdJPATest {
 
 	@Autowired
-	private DeleteUserByEmailJPA deleteUser;
+	private DeleteUserByIdJPA deleteUser;
 
 	@Autowired
 	private TestEntityManager entityManager;

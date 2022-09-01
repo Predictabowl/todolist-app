@@ -7,20 +7,20 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.domain.User;
 
 @Service
 @Transactional
-public class LoadUserByEmailService implements LoadUserByEmailUsePort{
+public class LoadUserByIdService implements LoadUserByIdUsePort{
 
-	private LoadUserByEmailDriverPort loadUserPort;
+	private LoadUserByIdDriverPort loadUserPort;
 	
 	
 	@Autowired
-	public LoadUserByEmailService(LoadUserByEmailDriverPort loadUserPort) {
+	public LoadUserByIdService(LoadUserByIdDriverPort loadUserPort) {
 		super();
 		this.loadUserPort = loadUserPort;
 	}
@@ -28,7 +28,7 @@ public class LoadUserByEmailService implements LoadUserByEmailUsePort{
 
 	@Override
 	public Optional<User> load(UserIdDTO id){
-		return loadUserPort.load(id.getEmail());
+		return loadUserPort.load(id.getId());
 	}
 
 }

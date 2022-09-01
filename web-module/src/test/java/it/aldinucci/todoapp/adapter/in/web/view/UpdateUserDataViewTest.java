@@ -33,7 +33,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import it.aldinucci.todoapp.adapter.in.web.controller.UpdateUserDataWebController;
-import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.UpdateUserDataUsePort;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.webcommons.dto.UserDataWebDto;
@@ -51,7 +51,7 @@ class UpdateUserDataViewTest {
 	private WebClient webClient;
 	
 	@MockBean
-	private LoadUserByEmailUsePort loadUser;
+	private LoadUserByIdUsePort loadUser;
 	
 	@MockBean
 	private UpdateUserDataUsePort updateUser;

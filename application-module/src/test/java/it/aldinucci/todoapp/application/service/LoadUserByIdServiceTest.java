@@ -13,19 +13,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
-class LoadUserByEmailServiceTest {
+class LoadUserByIdServiceTest {
 
 	private static final String FIXTURE_EMAIL = "test@email.it";
 
 	@Mock
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	
 	@InjectMocks
-	private LoadUserByEmailService sut;
+	private LoadUserByIdService sut;
 
 	
 	@BeforeEach

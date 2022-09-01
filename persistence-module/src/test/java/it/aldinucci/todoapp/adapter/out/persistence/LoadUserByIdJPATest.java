@@ -23,14 +23,14 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
-@Import({LoadUserByEmailJPA.class})
-class LoadUserByEmailJPATest {
+@Import({LoadUserByIdJPA.class})
+class LoadUserByIdJPATest {
 	
 	@MockBean
 	private AppGenericMapper<UserJPA, User> mapper;
 	
 	@Autowired
-	private LoadUserByEmailJPA loadAdapter;
+	private LoadUserByIdJPA loadAdapter;
 	
 	@Autowired
 	private TestEntityManager entityManager;

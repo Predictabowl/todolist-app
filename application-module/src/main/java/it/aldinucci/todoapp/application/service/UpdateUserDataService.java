@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import it.aldinucci.todoapp.application.port.in.UpdateUserDataUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.application.port.out.UpdateUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.UserData;
 import it.aldinucci.todoapp.domain.User;
@@ -20,12 +20,12 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 @Transactional
 public class UpdateUserDataService implements UpdateUserDataUsePort {
 
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	private UpdateUserDriverPort updateUser;
 	private AppGenericMapper<User, UserData> mapper;
 
 	@Autowired
-	public UpdateUserDataService(LoadUserByEmailDriverPort loadUser, UpdateUserDriverPort updateUser,
+	public UpdateUserDataService(LoadUserByIdDriverPort loadUser, UpdateUserDriverPort updateUser,
 			AppGenericMapper<User, UserData> mapper) {
 		super();
 		this.loadUser = loadUser;
@@ -36,7 +36,7 @@ public class UpdateUserDataService implements UpdateUserDataUsePort {
 
 	@Override
 	public Optional<User> update(UserIdDTO userId, UserDataDTOIn userData) {
-		Optional<User> optional = loadUser.load(userId.getEmail());
+		Optional<User> optional = loadUser.load(userId.getId());
 		if(optional.isEmpty())
 			return Optional.empty();
 		

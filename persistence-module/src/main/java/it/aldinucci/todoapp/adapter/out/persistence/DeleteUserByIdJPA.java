@@ -11,17 +11,17 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ResetPasswordTokenJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.UserJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.VerificationTokenJPARepository;
-import it.aldinucci.todoapp.application.port.out.DeleteUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.DeleteUserByIdDriverPort;
 
 @Component
-public class DeleteUserByEmailJPA implements DeleteUserByEmailDriverPort {
+public class DeleteUserByIdJPA implements DeleteUserByIdDriverPort {
 
 	private UserJPARepository userRepo;
 	private VerificationTokenJPARepository verificationTokenRepo;
 	private ResetPasswordTokenJPARepository passwordTokenRepo;
 
 	@Autowired
-	public DeleteUserByEmailJPA(UserJPARepository userRepo, VerificationTokenJPARepository verificationTokenRepo,
+	public DeleteUserByIdJPA(UserJPARepository userRepo, VerificationTokenJPARepository verificationTokenRepo,
 			ResetPasswordTokenJPARepository passwordTokenRepo) {
 		super();
 		this.userRepo = userRepo;

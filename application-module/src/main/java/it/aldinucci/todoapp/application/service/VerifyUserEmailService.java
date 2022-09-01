@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import it.aldinucci.todoapp.application.port.in.VerifyUserEmailUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.UpdateUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.UserData;
@@ -25,13 +25,13 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 public class VerifyUserEmailService implements VerifyUserEmailUsePort {
 
 	private LoadVerificationTokenDriverPort loadToken;
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	private UpdateUserDriverPort updateUser;
 	private DeleteVerificationTokenDriverPort deleteToken;
 	private AppGenericMapper<User, UserData> mapper; 
 
 	@Autowired
-	public VerifyUserEmailService(LoadVerificationTokenDriverPort loadToken, LoadUserByEmailDriverPort loadUser,
+	public VerifyUserEmailService(LoadVerificationTokenDriverPort loadToken, LoadUserByIdDriverPort loadUser,
 			UpdateUserDriverPort updateUser, DeleteVerificationTokenDriverPort deleteToken,
 			AppGenericMapper<User, UserData> mapper) {
 		super();

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import it.aldinucci.todoapp.application.port.in.GetOrCreateVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificatinTokenByUserDriverPort;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenByEmailDriverPort;
 import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
@@ -22,14 +22,14 @@ import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
 @Transactional
 public class GetOrCreateVerificationTokenService implements GetOrCreateVerificationTokenUsePort {
 	
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	private LoadVerificationTokenByEmailDriverPort loadToken;
 	private DeleteVerificatinTokenByUserDriverPort deleteToken;
 	private CreateVerificationToken createToken;
 
 
 	@Autowired
-	public GetOrCreateVerificationTokenService(LoadUserByEmailDriverPort loadUser,
+	public GetOrCreateVerificationTokenService(LoadUserByIdDriverPort loadUser,
 			LoadVerificationTokenByEmailDriverPort loadToken, DeleteVerificatinTokenByUserDriverPort deleteToken,
 			CreateVerificationToken createToken) {
 		super();
@@ -42,21 +42,21 @@ public class GetOrCreateVerificationTokenService implements GetOrCreateVerificat
 
 	@Override
 	public Optional<VerificationToken> get(UserIdDTO userId) throws AppUserEmailAlreadyVerifiedException{
-		Optional<User> optionalUser = loadUser.load(userId.getEmail());
+		Optional<User> optionalUser = loadUser.load(userId.getId());
 		if(optionalUser.isEmpty())
 			return Optional.empty();
 		
 		if (optionalUser.get().isEnabled())
-			throw new AppUserEmailAlreadyVerifiedException("Email "+userId.getEmail()+" is already verified.");
+			throw new AppUserEmailAlreadyVerifiedException("Email "+userId.getId()+" is already verified.");
 		
-		Optional<VerificationToken> token = loadToken.load(userId.getEmail());
+		Optional<VerificationToken> token = loadToken.load(userId.getId());
 		if (token.isPresent()) {
 			if(!token.get().isExpired(Calendar.getInstance().getTime()))
 				return token;
-			deleteToken.delete(userId.getEmail());
+			deleteToken.delete(userId.getId());
 		}
 		
-		return Optional.of(createToken.create(userId.getEmail()));
+		return Optional.of(createToken.create(userId.getId()));
 	}
 
 }

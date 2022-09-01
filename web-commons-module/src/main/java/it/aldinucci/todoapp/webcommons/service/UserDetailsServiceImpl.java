@@ -6,24 +6,26 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
+import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.webcommons.model.UserDetailsImpl;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService{
+public class UserDetailsServiceImpl implements UserDetailsService {
 
-	private LoadUserByEmailUsePort loadUserPort;
-	
+	private LoadUserByIdUsePort loadUserPort;
+
 	@Autowired
-	public UserDetailsServiceImpl(LoadUserByEmailUsePort loadUserPort) {
+	public UserDetailsServiceImpl(LoadUserByIdUsePort loadUserPort) {
 		this.loadUserPort = loadUserPort;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return new UserDetailsImpl(loadUserPort.load(new UserIdDTO(username))
-				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username)));
+		User user = loadUserPort.load(new UserIdDTO(username))
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+		return new UserDetailsImpl(user.getEmail(), user.getPassword(), user.isEnabled());
 	}
 
 }

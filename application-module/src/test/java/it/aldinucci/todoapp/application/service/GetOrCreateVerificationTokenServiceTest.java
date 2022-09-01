@@ -22,7 +22,7 @@ import org.mockito.Mockito;
 
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificatinTokenByUserDriverPort;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenByEmailDriverPort;
 import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
@@ -34,7 +34,7 @@ class GetOrCreateVerificationTokenServiceTest {
 	private static final String FIXTURE_USER_EMAIL = "test@email.it";
 
 	@Mock 
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	
 	@Mock
 	private LoadVerificationTokenByEmailDriverPort loadToken;

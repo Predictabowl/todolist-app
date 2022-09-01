@@ -23,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
 import it.aldinucci.todoapp.application.port.out.CreateUserDriverPort;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewUserData;
 import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
@@ -43,7 +43,7 @@ class CreateNewUserServiceTest {
 	private AppPasswordEncoder encoder;
 	
 	@Mock 
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	
 	@Mock
 	private CreateVerificationToken createToken;

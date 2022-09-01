@@ -32,7 +32,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.web.util.NestedServletException;
 
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
-import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.User;
@@ -52,7 +52,7 @@ class IndexWebControllerTest {
 	private LoadProjectsByUserUsePort loadProjects;
 
 	@MockBean
-	private LoadUserByEmailUsePort loadUser;
+	private LoadUserByIdUsePort loadUser;
 
 	@MockBean
 	private AppGenericMapper<User, UserWebDto> mapper;

@@ -39,17 +39,17 @@ public class GetOrCreateResetPasswordTokenService implements GetOrCreatePassword
 
 	@Override
 	public Optional<ResetPasswordToken> get(UserIdDTO userId) {
-		if(!userExists.exists(userId.getEmail()))
+		if(!userExists.exists(userId.getId()))
 			return Optional.empty();
 		
-		Optional<ResetPasswordToken> optional = loadToken.load(userId.getEmail());
+		Optional<ResetPasswordToken> optional = loadToken.load(userId.getId());
 		if(optional.isPresent()) {
 			if(!optional.get().isExpired(Calendar.getInstance().getTime()))
 				return optional;
 			deleteToken.delete(optional.get().getToken());
 		}
 		
-		return Optional.of(createToken.create(userId.getEmail()));
+		return Optional.of(createToken.create(userId.getId()));
 	}
 
 }

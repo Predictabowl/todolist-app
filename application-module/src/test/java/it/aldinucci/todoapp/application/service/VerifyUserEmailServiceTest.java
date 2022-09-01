@@ -18,7 +18,7 @@ import org.mockito.Mock;
 
 import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 import it.aldinucci.todoapp.application.port.out.DeleteVerificationTokenDriverPort;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadVerificationTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.UpdateUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.UserData;
@@ -34,7 +34,7 @@ class VerifyUserEmailServiceTest {
 	private static final String FIXTURE_TOKEN_STRING = "token string";
 
 	@Mock
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	
 	@Mock
 	private LoadVerificationTokenDriverPort loadToken;

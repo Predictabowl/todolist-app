@@ -9,7 +9,7 @@ import it.aldinucci.todoapp.application.port.in.CreateUserUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.NewUserDtoOut;
 import it.aldinucci.todoapp.application.port.out.CreateUserDriverPort;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.NewUserData;
 import it.aldinucci.todoapp.application.service.util.CreateVerificationToken;
 import it.aldinucci.todoapp.domain.User;
@@ -23,12 +23,12 @@ public class CreateNewUserService implements CreateUserUsePort {
 
 	private CreateUserDriverPort createUser;
 	private AppPasswordEncoder encoder;
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	private CreateVerificationToken createToken;
 
 	@Autowired
 	public CreateNewUserService(CreateUserDriverPort createUser, AppPasswordEncoder encoder,
-			LoadUserByEmailDriverPort loadUser, CreateVerificationToken createToken) {
+			LoadUserByIdDriverPort loadUser, CreateVerificationToken createToken) {
 		super();
 		this.createUser = createUser;
 		this.encoder = encoder;

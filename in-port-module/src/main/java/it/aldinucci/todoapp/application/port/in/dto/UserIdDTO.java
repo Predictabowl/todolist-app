@@ -6,19 +6,19 @@ import it.aldinucci.todoapp.application.port.in.model.AppEmail;
 
 public class UserIdDTO{
 
-	private final AppEmail email;
+	private final AppEmail id;
 	
-	public UserIdDTO(String email) {
-		this.email = new AppEmail(email);
+	public UserIdDTO(String id) {
+		this.id = new AppEmail(id);
 	}
 
-	public String getEmail() {
-		return email.getEmail();
+	public String getId() {
+		return id.getEmail();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -30,13 +30,12 @@ public class UserIdDTO{
 		if (getClass() != obj.getClass())
 			return false;
 		UserIdDTO other = (UserIdDTO) obj;
-		return Objects.equals(email, other.email);
+		return Objects.equals(id, other.id);
 	}
 
 	@Override
 	public String toString() {
-		return "UserIdDTOIn [email=" + email + "]";
-	}
-	
+		return "UserIdDTO [id=" + id + "]";
+	}	
 	
 }

@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.webcommons.model.UserDetailsImpl;
@@ -24,7 +24,7 @@ import it.aldinucci.todoapp.webcommons.model.UserDetailsImpl;
 class UserDetailsServiceImplTest {
 
 	@Mock
-	private LoadUserByEmailUsePort loadUser;
+	private LoadUserByIdUsePort loadUser;
 	
 	@InjectMocks
 	private UserDetailsServiceImpl service;
@@ -37,7 +37,7 @@ class UserDetailsServiceImplTest {
 	@Test
 	void test_userDetails_success(){
 		User user = new User("email", "username", "password");
-		UserDetailsImpl userDetails = new UserDetailsImpl(user);
+		UserDetailsImpl userDetails = new UserDetailsImpl("email","password",false);
 		when(loadUser.load(isA(UserIdDTO.class))).thenReturn(Optional.of(user));
 		
 		UserDetails loadedDetails = service.loadUserByUsername("another@mail");

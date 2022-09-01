@@ -13,7 +13,7 @@ import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 import it.aldinucci.todoapp.application.port.in.model.AppPassword;
 import it.aldinucci.todoapp.application.port.out.DeleteRestPasswordTokenDriverPort;
 import it.aldinucci.todoapp.application.port.out.LoadResetPasswordTokenDriverPort;
-import it.aldinucci.todoapp.application.port.out.LoadUserByEmailDriverPort;
+import it.aldinucci.todoapp.application.port.out.LoadUserByIdDriverPort;
 import it.aldinucci.todoapp.application.port.out.UpdateUserDriverPort;
 import it.aldinucci.todoapp.application.port.out.dto.UserData;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
@@ -27,7 +27,7 @@ import it.aldinucci.todoapp.util.AppPasswordEncoder;
 public class ChangeUserPasswordService implements ChangeUserPasswordUsePort {
 
 	private LoadResetPasswordTokenDriverPort loadToken;
-	private LoadUserByEmailDriverPort loadUser;
+	private LoadUserByIdDriverPort loadUser;
 	private UpdateUserDriverPort updateUser;
 	private DeleteRestPasswordTokenDriverPort deleteToken;
 	private AppPasswordEncoder encoder;
@@ -35,7 +35,7 @@ public class ChangeUserPasswordService implements ChangeUserPasswordUsePort {
 
 
 	@Autowired
-	public ChangeUserPasswordService(LoadResetPasswordTokenDriverPort loadToken, LoadUserByEmailDriverPort loadUser,
+	public ChangeUserPasswordService(LoadResetPasswordTokenDriverPort loadToken, LoadUserByIdDriverPort loadUser,
 			UpdateUserDriverPort updateUser, DeleteRestPasswordTokenDriverPort deleteToken, AppPasswordEncoder encoder,
 			AppGenericMapper<User, UserData> mapper) {
 		super();

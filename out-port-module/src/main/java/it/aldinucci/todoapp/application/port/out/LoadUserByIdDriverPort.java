@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import it.aldinucci.todoapp.domain.User;
 
-public interface LoadUserByEmailDriverPort {
+public interface LoadUserByIdDriverPort {
 
 	public Optional<User> load(String email);
 }
