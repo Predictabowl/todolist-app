@@ -286,7 +286,7 @@ class ProjectWebViewTest {
 	}
 	
 	@Test
-	@WithMockUser
+	@WithMockUser(FIXTURE_EMAIL)
 	void test_deleteProject() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		when(deleteProjectController.deleteProjectWebEndpoint(any(), any()))
@@ -307,7 +307,7 @@ class ProjectWebViewTest {
 	}
 	
 	@Test
-	@WithMockUser
+	@WithMockUser(FIXTURE_EMAIL)
 	void test_deleteProject_confirmationBox_visibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		when(loadTasks.load(isA(ProjectIdDTO.class))).thenReturn(Collections.emptyList());
 		
@@ -332,7 +332,7 @@ class ProjectWebViewTest {
 	}
 	
 	@Test
-	@WithMockUser
+	@WithMockUser(FIXTURE_EMAIL)
 	void test_deleteTask() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = new LinkedList<>();
 		tasks.add(new Task("4", "task name", "task description", false, 3));
@@ -357,7 +357,7 @@ class ProjectWebViewTest {
 	}
 	
 	@Test
-	@WithMockUser
+	@WithMockUser(FIXTURE_EMAIL)
 	void test_deleteTask_confirmationBox_visibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = new LinkedList<>();
 		tasks.add(new Task("6", "task name", "task description", false, 3));
@@ -384,7 +384,7 @@ class ProjectWebViewTest {
 	}
 	
 	@Test
-	@WithMockUser
+	@WithMockUser(FIXTURE_EMAIL)
 	void test_editTask_formVisibility() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = new LinkedList<>();
 		tasks.add(new Task("11", "task name", "task description", false, 3));
@@ -410,7 +410,7 @@ class ProjectWebViewTest {
 	}
 	
 	@Test
-	@WithMockUser
+	@WithMockUser(FIXTURE_EMAIL)
 	void test_editTask_formFunctionality() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		List<Task> tasks = new LinkedList<>();
 		tasks.add(new Task("11", "task test name", "task test description", false, 3));

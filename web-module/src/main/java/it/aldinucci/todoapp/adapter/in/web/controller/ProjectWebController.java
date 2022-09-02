@@ -59,7 +59,7 @@ public class ProjectWebController {
 		User user = loadUser.load(projectId).orElseThrow(() -> 
 				new AppUserNotFoundException("Could not find User owner of project with id: "
 						+projectId.getProjectId()));
-		authorize.check(authentication.getName(), user);
+		authorize.check(new UserIdDTO(authentication.getName()), user);
 		
 		model.addAttribute("user", userMapper.map(user));
 		List<Project> projects = loadProjects.load(new UserIdDTO(user.getEmail()));

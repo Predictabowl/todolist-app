@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.application.port.in.DeleteProjectByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {DeleteProjectWebController.class})
@@ -71,7 +72,7 @@ class DeleteProjectWebControllerTest {
 				.andExpect(view().name("redirect:/web"));
 		
 		ProjectIdDTO idDTO = new ProjectIdDTO("7");
-		verify(authorize).check(FIXTURE_USER_EMAIL, idDTO);
+		verify(authorize).check(new UserIdDTO(FIXTURE_USER_EMAIL), idDTO);
 		verify(deleteProject).delete(idDTO);
 	}
 	

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.aldinucci.todoapp.application.port.in.UpdateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -46,7 +47,7 @@ public class UpdateProjectWebController {
 		if(bindingResult.hasErrors())
 			return "redirect:/web/project/"+projectId.getProjectId()+"/tasks";
 		
-		authorize.check(authentication.getName(), projectId);
+		authorize.check(new UserIdDTO(authentication.getName()), projectId);
 		
 		Optional<Project> optional = updateProject.update(projectId, mapper.map(projectData));
 		if (optional.isEmpty())

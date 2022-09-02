@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
@@ -34,7 +35,7 @@ public class LoadTasksByProjectIdRestController {
 	@GetMapping
 	public List<Task> getTasksByProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId) 
 				throws AppProjectNotFoundException{
-		authorize.check(authentication.getName(), projectId);
+		authorize.check(new UserIdDTO(authentication.getName()), projectId);
 		return loadProjectTasks.load(projectId);
 	}
 	

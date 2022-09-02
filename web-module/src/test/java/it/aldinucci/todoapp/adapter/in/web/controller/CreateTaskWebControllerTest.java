@@ -22,11 +22,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {CreateTaskWebController.class})
 @ExtendWith(SpringExtension.class)
 class CreateTaskWebControllerTest {
+
+	private static final String USER_EMAIL_FIXTURE = "user@email.it";
 
 	@Autowired
 	private MockMvc mvc;
@@ -38,7 +41,7 @@ class CreateTaskWebControllerTest {
 	private CreateTaskUsePort createTask;
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_createNewTask() throws Exception {
 		
 		mvc.perform(post("/web/project/3/task/new")
@@ -50,12 +53,12 @@ class CreateTaskWebControllerTest {
 			.andExpect(redirectedUrl("/web/project/3/tasks"));
 		
 		InOrder inOrder = Mockito.inOrder(authorize, createTask);
-		inOrder.verify(authorize).check("user@email.it", new ProjectIdDTO("3"));
+		inOrder.verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), new ProjectIdDTO("3"));
 		inOrder.verify(createTask).create(new NewTaskDTOIn("task name", "task descr", "3"));
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_createNewTask_csrfCheck() throws Exception {
 		
 		mvc.perform(post("/web/project/3P/task/new")
@@ -69,7 +72,7 @@ class CreateTaskWebControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_createNewTask_whenInputValidationFail_shouldRedirect() throws Exception {
 		
 		mvc.perform(post("/web/project/3/task/new")

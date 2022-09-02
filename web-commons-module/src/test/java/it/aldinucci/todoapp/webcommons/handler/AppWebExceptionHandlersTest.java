@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
-import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
 
 @WebMvcTest(controllers = MockController.class)
 @ExtendWith(SpringExtension.class)
@@ -70,10 +70,10 @@ class AppWebExceptionHandlersTest {
 	
 	@Test
 	void test_unauthorizedWebException() throws Exception {
-		when(mockController.getToBeStubbed()).thenThrow(new UnauthorizedWebAccessException("test message"));
+		when(mockController.getToBeStubbed()).thenThrow(new ForbiddenWebAccessException("test message"));
 		
 		MockHttpServletResponse response = mvc.perform(get(TEST_URL))
-			.andExpect(status().isUnauthorized())
+			.andExpect(status().isForbidden())
 			.andReturn().getResponse();
 		
 		assertThat(response.getContentAsString()).matches("test message");

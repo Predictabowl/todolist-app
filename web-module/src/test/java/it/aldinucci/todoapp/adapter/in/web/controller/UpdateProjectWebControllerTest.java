@@ -30,6 +30,7 @@ import org.springframework.web.util.NestedServletException;
 import it.aldinucci.todoapp.application.port.in.UpdateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -101,7 +102,7 @@ class UpdateProjectWebControllerTest {
 				.hasMessage("Project not found with id: 2");
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
-		inOrder.verify(authorize).check(FIXTURE_EMAIL, new ProjectIdDTO("2"));
+		inOrder.verify(authorize).check(new UserIdDTO(FIXTURE_EMAIL), new ProjectIdDTO("2"));
 		inOrder.verify(mapper).map(new ProjectDataWebDto("project name"));
 		inOrder.verify(updateProject).update(new ProjectIdDTO("2"), dtoIn);
 	}
@@ -139,7 +140,7 @@ class UpdateProjectWebControllerTest {
 		
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
-		inOrder.verify(authorize).check(FIXTURE_EMAIL, new ProjectIdDTO("2"));
+		inOrder.verify(authorize).check(new UserIdDTO(FIXTURE_EMAIL), new ProjectIdDTO("2"));
 		inOrder.verify(mapper).map(new ProjectDataWebDto("project name"));
 		inOrder.verify(updateProject).update(new ProjectIdDTO("2"), dtoIn);
 	}

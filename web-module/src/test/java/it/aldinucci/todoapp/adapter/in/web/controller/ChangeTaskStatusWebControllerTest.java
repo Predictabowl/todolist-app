@@ -20,11 +20,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.application.port.in.ToggleTaskCompleteStatusUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {ChangeTaskStatusWebController.class})
 @ExtendWith(SpringExtension.class)
 class ChangeTaskStatusWebControllerTest {
+
+	private static final String USER_EMAIL_FIXTURE = "user@email.it";
 
 	@MockBean
 	private ToggleTaskCompleteStatusUsePort toggleStatus;
@@ -51,7 +54,7 @@ class ChangeTaskStatusWebControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_changeStatus_success() throws Exception {
 		mvc.perform(post("/web/project/5/task/2/toggle/completed")
 				.with(csrf()))
@@ -60,7 +63,7 @@ class ChangeTaskStatusWebControllerTest {
 		
 		InOrder inOrder = Mockito.inOrder(toggleStatus, authorize);
 		TaskIdDTO idDTO = new TaskIdDTO("2");
-		inOrder.verify(authorize).check("user@email.it", idDTO);
+		inOrder.verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), idDTO);
 		inOrder.verify(toggleStatus).toggle(idDTO);
 	}
 	

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.aldinucci.todoapp.application.port.in.ToggleTaskCompleteStatusUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -29,7 +30,7 @@ public class ToggleTaskCompleteStatusRestController {
 	@PutMapping
 	public void toggleTaskCompleted(Authentication authentication, TaskIdDTO taskId)
 				throws AppTaskNotFoundException{
-		authorize.check(authentication.getName(), taskId);
+		authorize.check(new UserIdDTO(authentication.getName()), taskId);
 		toggleTaskStatus.toggle(taskId);
 	}
 	

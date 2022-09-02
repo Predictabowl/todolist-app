@@ -2,7 +2,7 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.ToggleTaskCompleteStatusUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
@@ -35,6 +36,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @ExtendWith(SpringExtension.class)
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class ToggleTaskCompleteStatusRestControllerTest {
+
+	private static final String USER_EMAIL_FIXTURE = "user@email.it";
 
 	@Autowired
 	private MockMvc mvc;
@@ -58,7 +61,7 @@ class ToggleTaskCompleteStatusRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_toggleTask_withoutCSRF_shouldReturnForbidden() throws Exception {
 		
 		mvc.perform(put("/api/task/1/completed/toggle")
@@ -70,7 +73,7 @@ class ToggleTaskCompleteStatusRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_toggleStatus_success() throws Exception {
 
 		mvc.perform(put("/api/task/3/completed/toggle")
@@ -80,14 +83,15 @@ class ToggleTaskCompleteStatusRestControllerTest {
 		
 		InOrder inOrder = Mockito.inOrder(authorize, togglePort);
 		TaskIdDTO idDTO = new TaskIdDTO("3");
-		inOrder.verify(authorize).check("user@email.it", idDTO);
+		inOrder.verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), idDTO);
 		inOrder.verify(togglePort).toggle(idDTO);
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_toggleStatus_whenTaskNotFound_shouldReturnNotFound() throws Exception {
-		doThrow(new AppTaskNotFoundException("test message")).when(authorize).check(anyString(), any());
+		doThrow(new AppTaskNotFoundException("test message")).when(authorize)
+			.check(isA(UserIdDTO.class), any());
 		
 		mvc.perform(put("/api/task/5/completed/toggle")
 				.with(csrf())
@@ -95,7 +99,7 @@ class ToggleTaskCompleteStatusRestControllerTest {
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		verify(authorize).check("user@email.it", new TaskIdDTO("5"));
+		verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), new TaskIdDTO("5"));
 		verifyNoInteractions(togglePort);
 	}
 	

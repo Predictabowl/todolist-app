@@ -11,18 +11,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
-import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
 
 @ControllerAdvice
 public class AppWebExceptionHandlers extends ResponseEntityExceptionHandler{
 	
-	@ExceptionHandler(UnauthorizedWebAccessException.class)
-	public ResponseEntity<String> unauthorizedAccessHandler(HttpServletRequest request, Throwable ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+	@ExceptionHandler(ForbiddenWebAccessException.class)
+	public ResponseEntity<String> forbiddenAccessHandler(HttpServletRequest request, Throwable ex) {
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
 	}
 	
 	@ExceptionHandler({AppUserNotFoundException.class, AppProjectNotFoundException.class, AppTaskNotFoundException.class})
-	public ResponseEntity<String> userNotFoundHandler(HttpServletRequest request, Throwable ex) {
+	public ResponseEntity<String> entityNotFoundHandler(HttpServletRequest request, Throwable ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
 }

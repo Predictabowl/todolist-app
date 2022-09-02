@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.LoadUnfinishedTasksByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
@@ -38,6 +39,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @ExtendWith(SpringExtension.class)
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class LoadUnfinishedTasksByProjectIdRestControllerTest {
+
+	private static final String TEST_EMAIL_FIXTURE = "test@email.org";
 
 	private final static String FIXTURE_URL = "/tasks/unfinished";
 	
@@ -51,7 +54,7 @@ class LoadUnfinishedTasksByProjectIdRestControllerTest {
 	private InputModelAuthorization<ProjectIdDTO> authorize;
 
 	@Test
-	@WithMockUser("test@email.org")
+	@WithMockUser(TEST_EMAIL_FIXTURE)
 	void test_loadTasks_successful() throws Exception {
 		Task task1 = new Task("2", "project 1", "description 1");
 		Task task2 = new Task("7", "project 2", "description 2");
@@ -68,12 +71,12 @@ class LoadUnfinishedTasksByProjectIdRestControllerTest {
 			.andExpect(jsonPath("$[1].description", is("description 2")));
 		
 		InOrder inOrder = Mockito.inOrder(usePort,authorize);
-		inOrder.verify(authorize).check("test@email.org", new ProjectIdDTO("3"));
+		inOrder.verify(authorize).check(new UserIdDTO(TEST_EMAIL_FIXTURE), new ProjectIdDTO("3"));
 		inOrder.verify(usePort).load(new ProjectIdDTO("3"));
 	}
 	
 	@Test
-	@WithMockUser("testmail")
+	@WithMockUser(TEST_EMAIL_FIXTURE)
 	void test_loadTasks_whenProjectNotFound_shouldReturnNotFound() throws Exception {
 		doThrow(new AppProjectNotFoundException("message")).when(authorize).check(any(), any());
 		
@@ -82,7 +85,7 @@ class LoadUnfinishedTasksByProjectIdRestControllerTest {
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("message")));
 		
-		verify(authorize).check("testmail", new ProjectIdDTO("1"));
+		verify(authorize).check(new UserIdDTO(TEST_EMAIL_FIXTURE), new ProjectIdDTO("1"));
 	}
 	
 	@Test

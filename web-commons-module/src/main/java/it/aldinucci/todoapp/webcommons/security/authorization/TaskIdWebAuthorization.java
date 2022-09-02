@@ -7,9 +7,10 @@ import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
-import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
 
 @Component
 public class TaskIdWebAuthorization implements InputModelAuthorization<TaskIdDTO> {
@@ -22,13 +23,13 @@ public class TaskIdWebAuthorization implements InputModelAuthorization<TaskIdDTO
 	}
 
 	@Override
-	public void check(String authenticatedEmail, TaskIdDTO model) 
-			throws UnauthorizedWebAccessException, AppTaskNotFoundException {
+	public void check(UserIdDTO userId, TaskIdDTO model) 
+			throws ForbiddenWebAccessException, AppTaskNotFoundException {
 		Optional<User> user = loadUser.load(model);
 		if(user.isEmpty())
 			throw new AppTaskNotFoundException("Could not find Task with id: "+model.getTaskId());
-		if(!authenticatedEmail.equals(user.get().getEmail()))
-			throw new UnauthorizedWebAccessException("This operation is not permitted for the authenticated user");
+		if(!userId.getId().equals(user.get().getEmail()))
+			throw new ForbiddenWebAccessException("This operation is not permitted for the authenticated user");
 	}
 
 }

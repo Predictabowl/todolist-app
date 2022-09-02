@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
@@ -45,6 +46,7 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class CreateTaskRestControllerTest {
 	
+	private static final String USER_EMAIL_FIXTURE = "user@email.com";
 	private static final String FIXTURE_PROJECT_ID = "7";
 	private static final String FIXTURE_URL = "/api/project/"+FIXTURE_PROJECT_ID+"/task";
 	
@@ -66,7 +68,7 @@ class CreateTaskRestControllerTest {
 	
 
 	@Test
-	@WithMockUser("user email")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_createTask_successful() throws JsonProcessingException, Exception {
 		Task task = new Task("1", "new task", "task description");
 		NewTaskDTOIn taskDto = new NewTaskDTOIn("test name", "test description", FIXTURE_PROJECT_ID);
@@ -83,7 +85,7 @@ class CreateTaskRestControllerTest {
 			.andExpect(jsonPath("$.description", is("task description")));
 		
 		InOrder inOrder = Mockito.inOrder(createTask,authorize);
-		inOrder.verify(authorize).check("user email", taskDto);
+		inOrder.verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), taskDto);
 		inOrder.verify(createTask).create(taskDto);
 	}
 	
@@ -105,9 +107,10 @@ class CreateTaskRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("email")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_createTask_whenProjectNotFound_shouldReturnNotFound() throws JsonProcessingException, Exception {
-		doThrow(new AppProjectNotFoundException("test message")).when(authorize).check(anyString(), any());
+		doThrow(new AppProjectNotFoundException("test message")).when(authorize)
+			.check(isA(UserIdDTO.class), any());
 		TaskDataWebDto taskData = new TaskDataWebDto("test name", "description");
 		
 		mvc.perform(post(FIXTURE_URL)
@@ -118,7 +121,8 @@ class CreateTaskRestControllerTest {
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$",is("test message")));
 		
-		verify(authorize).check("email", new NewTaskDTOIn("test name", "description", FIXTURE_PROJECT_ID));
+		verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), 
+				new NewTaskDTOIn("test name", "description", FIXTURE_PROJECT_ID));
 		verifyNoInteractions(createTask);
 	}
 	
@@ -149,7 +153,7 @@ class CreateTaskRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("mock@user.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_createTask_whenProjectIsMissing_shouldReturnNotFound() throws JsonProcessingException, Exception {
 		doThrow(new AppProjectNotFoundException("test message")).when(authorize).check(any(), any());
 		
@@ -161,7 +165,8 @@ class CreateTaskRestControllerTest {
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		verify(authorize).check("mock@user.it", new NewTaskDTOIn("task name", "description", FIXTURE_PROJECT_ID));
+		verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE),
+				new NewTaskDTOIn("task name", "description", FIXTURE_PROJECT_ID));
 		verifyNoInteractions(createTask);
 	}
 }

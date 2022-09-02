@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.aldinucci.todoapp.application.port.in.UpdateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
@@ -47,7 +48,7 @@ public class UpdateTaskWebController {
 		if (bindingResult.hasErrors())
 			return "redirect:/web/project/"+projectId+"/tasks";
 		
-		authorize.check(authentication.getName(), taskId);
+		authorize.check(new UserIdDTO(authentication.getName()), taskId);
 		if (updateTask.update(taskId, mapper.map(taskData)).isEmpty())
 			throw new AppTaskNotFoundException("Could not find Task with id: "+taskId.getTaskId());
 			

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.aldinucci.todoapp.application.port.in.UpdateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
@@ -42,7 +43,7 @@ public class UpdateTaskRestController {
 				@PathVariable TaskIdDTO taskId, @Valid @RequestBody TaskDataWebDto taskData) 
 						throws AppTaskNotFoundException{
 		
-		authorize.check(authentication.getName(), taskId);
+		authorize.check(new UserIdDTO(authentication.getName()), taskId);
 		Optional<Task> optional = updateTask.update(taskId, new TaskDataDTOIn(
 				taskData.name(), taskData.description()));
 		if (optional.isEmpty())

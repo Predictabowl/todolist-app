@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.DeleteTaskByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
@@ -37,6 +38,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @ExtendWith(SpringExtension.class)
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class DeleteTaskByIdRestControllerTest {
+
+	private static final String USER_EMAIL_FIXTURE = "user@email.org";
 
 	@Autowired
 	private MockMvc mvc;
@@ -49,7 +52,7 @@ class DeleteTaskByIdRestControllerTest {
 	
 	
 	@Test
-	@WithMockUser("user@email.org")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_deleteTask_successful() throws Exception {
 		when(deleteTask.delete(any())).thenReturn(true);
 		
@@ -60,7 +63,7 @@ class DeleteTaskByIdRestControllerTest {
 		
 		InOrder inOrder = Mockito.inOrder(authorize,deleteTask);
 		TaskIdDTO model = new TaskIdDTO("6");
-		inOrder.verify(authorize).check("user@email.org", model);
+		inOrder.verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), model);
 		inOrder.verify(deleteTask).delete(model);
 	}
 	
@@ -88,7 +91,7 @@ class DeleteTaskByIdRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("mock@user.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_deleteTask_whenTaskIsMissing_shouldReturnNotFound() throws JsonProcessingException, Exception {
 		doThrow(new AppTaskNotFoundException("test message")).when(authorize).check(any(), any());
 		
@@ -98,12 +101,12 @@ class DeleteTaskByIdRestControllerTest {
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$", is("test message")));
 		
-		verify(authorize).check("mock@user.it", new TaskIdDTO("3"));
+		verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), new TaskIdDTO("3"));
 		verifyNoInteractions(deleteTask);
 	}
 	
 	@Test
-	@WithMockUser("mock@user.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_deleteTask_whenCannotDelete_shouldReturnNotFound() throws JsonProcessingException, Exception {
 		when(deleteTask.delete(any())).thenReturn(false);
 		
@@ -112,7 +115,7 @@ class DeleteTaskByIdRestControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
 		
-		verify(authorize).check("mock@user.it", new TaskIdDTO("3"));
+		verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), new TaskIdDTO("3"));
 		verify(deleteTask).delete(new TaskIdDTO("3"));
 	}
 }

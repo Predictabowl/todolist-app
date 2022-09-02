@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.aldinucci.todoapp.application.port.in.DeleteProjectByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @RestController
@@ -31,7 +32,7 @@ public class DeleteProjectByIdRestController {
 
 	@DeleteMapping
 	public ResponseEntity<Void> deleteProjectEndPoint(Authentication authentication, @Valid ProjectIdDTO projectId) {
-		authorize.check(authentication.getName(), projectId);
+		authorize.check(new UserIdDTO(authentication.getName()), projectId);
 		if (deleteProject.delete(projectId))
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		

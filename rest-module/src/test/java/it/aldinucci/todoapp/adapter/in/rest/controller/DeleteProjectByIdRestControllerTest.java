@@ -28,6 +28,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
 import it.aldinucci.todoapp.application.port.in.DeleteProjectByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -35,6 +36,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @ExtendWith(SpringExtension.class)
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class DeleteProjectByIdRestControllerTest {
+
+	private static final String EMAIL_FIXTURE = "mock@user.it";
 
 	@Autowired
 	private MockMvc mvc;
@@ -47,7 +50,7 @@ class DeleteProjectByIdRestControllerTest {
 	
 	
 	@Test
-	@WithMockUser("user@email.org")
+	@WithMockUser(EMAIL_FIXTURE)
 	void test_deleteProject_successful() throws Exception {
 		when(deleteProject.delete(any())).thenReturn(true);
 		
@@ -58,7 +61,7 @@ class DeleteProjectByIdRestControllerTest {
 		
 		InOrder inOrder = Mockito.inOrder(authorize,deleteProject);
 		ProjectIdDTO model = new ProjectIdDTO("5");
-		inOrder.verify(authorize).check("user@email.org", model);
+		inOrder.verify(authorize).check(new UserIdDTO(EMAIL_FIXTURE), model);
 		inOrder.verify(deleteProject).delete(model);
 	}
 
@@ -86,7 +89,7 @@ class DeleteProjectByIdRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("mock@user.it")
+	@WithMockUser(EMAIL_FIXTURE)
 	void test_deleteProject_whenProjectIsMissing_shouldReturnNotFound() throws JsonProcessingException, Exception {
 		when(deleteProject.delete(any())).thenReturn(false);
 		
@@ -95,7 +98,7 @@ class DeleteProjectByIdRestControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
 		
-		verify(authorize).check("mock@user.it", new ProjectIdDTO("3"));
+		verify(authorize).check(new UserIdDTO(EMAIL_FIXTURE), new ProjectIdDTO("3"));
 		verify(deleteProject).delete(new ProjectIdDTO("3"));
 	}
 }

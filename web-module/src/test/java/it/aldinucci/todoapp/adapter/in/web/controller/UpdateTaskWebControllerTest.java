@@ -31,6 +31,7 @@ import org.springframework.web.util.NestedServletException;
 import it.aldinucci.todoapp.application.port.in.UpdateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -120,7 +121,7 @@ class UpdateTaskWebControllerTest {
 				.isInstanceOf(AppTaskNotFoundException.class)
 				.hasMessage("Could not find Task with id: 3");
 		
-		verify(authorize).check(FIXTURE_EMAIL, new TaskIdDTO("3"));
+		verify(authorize).check(new UserIdDTO(FIXTURE_EMAIL), new TaskIdDTO("3"));
 		verify(mapper).map(new TaskDataWebDto("new name", "new descr"));
 		verify(updateTask).update(new TaskIdDTO("3"), dataDTOIn);
 	}
@@ -142,7 +143,7 @@ class UpdateTaskWebControllerTest {
 		
 		InOrder inOrder = Mockito.inOrder(authorize, mapper, updateTask);
 		TaskIdDTO idDTO = new TaskIdDTO("3");
-		inOrder.verify(authorize).check(FIXTURE_EMAIL, idDTO);
+		inOrder.verify(authorize).check(new UserIdDTO(FIXTURE_EMAIL), idDTO);
 		inOrder.verify(mapper).map(new TaskDataWebDto("new name", "new descr"));
 		inOrder.verify(updateTask).update(idDTO, dataDTOIn);
 	}

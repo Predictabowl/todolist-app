@@ -6,8 +6,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.User;
-import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
 
 class AuthenticatedUserWebAuthorizationTest {
 	
@@ -20,17 +21,20 @@ class AuthenticatedUserWebAuthorizationTest {
 	
 	@Test
 	void test_authorizeUserMatch() {
-		User user = new User("auth@email.it", "username", "password"); 
-		assertThatCode(() -> authorize.check("auth@email.it", user))
+		User user = new User("auth@email.it", "username", "password");
+		UserIdDTO userId = new UserIdDTO("auth@email.it");
+		
+		assertThatCode(() -> authorize.check(userId, user))
 			.doesNotThrowAnyException();
 	}
 	
 	@Test
 	void test_authorizationFailure_shouldThrow() {
 		User user = new User("user@email.it", "username", "password");
+		UserIdDTO userId = new UserIdDTO("auth@email.it");
 		
-		assertThatThrownBy(() -> authorize.check("auth@email.it", user))
-			.isInstanceOf(UnauthorizedWebAccessException.class)
+		assertThatThrownBy(() -> authorize.check(userId, user))
+			.isInstanceOf(ForbiddenWebAccessException.class)
 			.hasMessage("This operation is not permitted for the authenticated user");
 	}
 }

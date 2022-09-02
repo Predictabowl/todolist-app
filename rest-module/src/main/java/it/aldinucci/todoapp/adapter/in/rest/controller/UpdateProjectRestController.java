@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.aldinucci.todoapp.application.port.in.UpdateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
@@ -47,7 +48,7 @@ public class UpdateProjectRestController {
 						throws AppProjectNotFoundException{
 		
 		ProjectIdDTO idDTO = new ProjectIdDTO(projectId);
-		authorize.check(authentication.getName(), idDTO);
+		authorize.check(new UserIdDTO(authentication.getName()), idDTO);
 		Optional<Project> optional = updateProject.update(idDTO, mapper.map(projectData));
 		if (optional.isEmpty())
 			return new ResponseEntity<>(optional, HttpStatus.BAD_REQUEST);

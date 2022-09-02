@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -35,7 +36,7 @@ public class CreateTaskWebController {
 			BindingResult  bindingResult) {
 		
 		if(!bindingResult.hasErrors()) {
-			authorize.check(auth.getName(), projectId);
+			authorize.check(new UserIdDTO(auth.getName()), projectId);
 			createTask.create(new NewTaskDTOIn(
 					newTaskWebDto.name(),
 					newTaskWebDto.description(),

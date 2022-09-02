@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.application.port.in.DeleteTaskByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -73,7 +74,7 @@ class DeleteTaskWebControllerTest {
 				.andExpect(view().name("redirect:/web/project/1/tasks"));
 		
 		TaskIdDTO idDTO = new TaskIdDTO("7");
-		verify(authorize).check(FIXTURE_EMAIL, idDTO);
+		verify(authorize).check(new UserIdDTO(FIXTURE_EMAIL), idDTO);
 		verify(deleteTask).delete(idDTO);
 	}
 	

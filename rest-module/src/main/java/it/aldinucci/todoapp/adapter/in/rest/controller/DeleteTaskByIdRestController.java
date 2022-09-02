@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.aldinucci.todoapp.application.port.in.DeleteTaskByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
@@ -32,7 +33,7 @@ public class DeleteTaskByIdRestController {
 
 	@DeleteMapping
 	public ResponseEntity<Void> deleteTaskEndPoint(Authentication authentication, @Valid TaskIdDTO taskId) throws AppTaskNotFoundException {
-		authorize.check(authentication.getName(), taskId);
+		authorize.check(new UserIdDTO(authentication.getName()), taskId);
 		if (deleteTask.delete(taskId))
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

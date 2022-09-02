@@ -31,6 +31,7 @@ import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfi
 import it.aldinucci.todoapp.application.port.in.UpdateProjectUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
@@ -40,6 +41,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @ExtendWith(SpringExtension.class)
 @Import(AppRestSecurityConfig.class)
 class UpdateProjectRestControllerTest {
+
+	private static final String USER_EMAIL_FIXTURE = "user@email.it";
 
 	@Autowired
 	private MockMvc mvc;
@@ -70,7 +73,7 @@ class UpdateProjectRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_updateProject_withoutCSRF_shouldReturnForbidden() throws Exception {
 		
 		mvc.perform(put("/api/project/3")
@@ -90,7 +93,7 @@ class UpdateProjectRestControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_updateProject_whenProjectNotFound_shouldReturnBadRequest() throws Exception {
 		when(updateProject.update(any(), any())).thenReturn(Optional.empty());
 		ProjectDataDTOIn dtoIn = new ProjectDataDTOIn("new name");
@@ -105,13 +108,13 @@ class UpdateProjectRestControllerTest {
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
 		ProjectIdDTO projectIdDTO = new ProjectIdDTO("3");
-		inOrder.verify(authorize).check("user@email.it", projectIdDTO);
+		inOrder.verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), projectIdDTO);
 		inOrder.verify(mapper).map(new ProjectDataWebDto("new name"));
 		inOrder.verify(updateProject).update(projectIdDTO, dtoIn);
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_updateProject_whenDataIsNotValid_shouldReturnBadRequest() throws Exception {
 		when(updateProject.update(any(), any())).thenReturn(Optional.empty());
 		
@@ -128,7 +131,7 @@ class UpdateProjectRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_updateProject_success() throws Exception {
 		Project project = new Project("3", "different name");
 		when(updateProject.update(any(), any())).thenReturn(Optional.of(project));
@@ -146,7 +149,7 @@ class UpdateProjectRestControllerTest {
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateProject, mapper);
 		ProjectIdDTO projectIdDTO = new ProjectIdDTO("3");
-		inOrder.verify(authorize).check("user@email.it", projectIdDTO);
+		inOrder.verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), projectIdDTO);
 		inOrder.verify(mapper).map(new ProjectDataWebDto("different name"));
 		inOrder.verify(updateProject).update(projectIdDTO, dtoIn);
 	}

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.aldinucci.todoapp.application.port.in.DeleteProjectByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @Controller
@@ -30,7 +31,7 @@ public class DeleteProjectWebController {
 
 	@DeleteMapping
 	public String deleteProjectWebEndpoint(Authentication authentication, @PathVariable ProjectIdDTO projectId) {
-		authorize.check(authentication.getName(), projectId);
+		authorize.check(new UserIdDTO(authentication.getName()), projectId);
 		deleteProject.delete(projectId);
 		return "redirect:/web";
 	}

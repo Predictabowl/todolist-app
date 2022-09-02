@@ -16,12 +16,15 @@ import org.mockito.Mock;
 
 import it.aldinucci.todoapp.application.port.in.LoadUserByProjectIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
-import it.aldinucci.todoapp.webcommons.exception.UnauthorizedWebAccessException;
+import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
 
 class ProjectIdWebAuthorizationTest {
 
+	private static final String EMAIL_FIXTURE = "email@test.it";
+	
 	@Mock
 	private LoadUserByProjectIdUsePort loadUser;
 	
@@ -35,12 +38,13 @@ class ProjectIdWebAuthorizationTest {
 	
 	@Test
 	void test_authorizationSuccessful(){
-		User user = new User("email", "username", "password");
+		User user = new User(EMAIL_FIXTURE, "username", "password");
 		ProjectIdDTO model = new ProjectIdDTO("3");
+		UserIdDTO userId = new UserIdDTO(EMAIL_FIXTURE);
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.of(user));
 		
 		assertThatCode(() -> {
-			authorize.check("email", model);
+			authorize.check(userId, model);
 		})
 			.doesNotThrowAnyException();
 		
@@ -49,12 +53,13 @@ class ProjectIdWebAuthorizationTest {
 	
 	@Test
 	void test_authorizationFailure_shouldThrow(){
-		User user = new User("email", "username", "password");
+		User user = new User(EMAIL_FIXTURE, "username", "password");
 		ProjectIdDTO projectId = new ProjectIdDTO("3");
+		UserIdDTO userId = new UserIdDTO("different@email.com");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.of(user));
 		
-		assertThatThrownBy(() -> authorize.check("different email", projectId))
-			.isInstanceOf(UnauthorizedWebAccessException.class)
+		assertThatThrownBy(() -> authorize.check(userId, projectId))
+			.isInstanceOf(ForbiddenWebAccessException.class)
 			.hasMessage("This operation is not permitted for the authenticated user");
 		
 		verify(loadUser).load(projectId);
@@ -63,9 +68,10 @@ class ProjectIdWebAuthorizationTest {
 	@Test
 	void test_authorizationWhenCantFindProject_shouldThrow() {
 		ProjectIdDTO projectId = new ProjectIdDTO("3");
+		UserIdDTO userId = new UserIdDTO("different@email.com");
 		when(loadUser.load(isA(ProjectIdDTO.class))).thenReturn(Optional.empty());
 		
-		assertThatThrownBy(() -> authorize.check("different email", projectId))
+		assertThatThrownBy(() -> authorize.check(userId, projectId))
 			.isInstanceOf(AppProjectNotFoundException.class)
 			.hasMessage("Could not find Project with id: 3");
 		

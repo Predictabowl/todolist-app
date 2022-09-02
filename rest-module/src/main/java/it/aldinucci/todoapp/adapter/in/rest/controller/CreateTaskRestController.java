@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
@@ -36,7 +37,7 @@ public class CreateTaskRestController {
 				@Valid @RequestBody TaskDataWebDto taskData)	throws AppProjectNotFoundException {
 		
 		NewTaskDTOIn newTask = new NewTaskDTOIn(taskData.name(), taskData.description(), projectId);
-		authorize.check(authentication.getName(), newTask);
+		authorize.check(new UserIdDTO(authentication.getName()), newTask);
 		return createTask.create(newTask);
 	}
 }

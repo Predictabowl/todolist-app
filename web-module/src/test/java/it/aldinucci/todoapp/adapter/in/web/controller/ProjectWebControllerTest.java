@@ -110,7 +110,7 @@ class ProjectWebControllerTest {
 		verify(loadProjects).load(userIdDTO);
 		verify(loadTasks).load(FIXTURE_PROJECT_ID_DTO);
 		verify(userMapper).map(fixtureUser);
-		verify(authorize).check(FIXTURE_EMAIL, fixtureUser);
+		verify(authorize).check(new UserIdDTO(FIXTURE_EMAIL), fixtureUser);
 	}
 	
 	/**
@@ -139,7 +139,7 @@ class ProjectWebControllerTest {
 		
 		InOrder inOrder = inOrder(loadUser, loadProjects, userMapper, authorize);
 		inOrder.verify(loadUser).load(new ProjectIdDTO("21"));
-		inOrder.verify(authorize).check(FIXTURE_EMAIL, fixtureUser);
+		inOrder.verify(authorize).check(new UserIdDTO(FIXTURE_EMAIL), fixtureUser);
 		inOrder.verify(userMapper).map(fixtureUser);
 		inOrder.verify(loadProjects).load(new UserIdDTO(FIXTURE_EMAIL));
 		verifyNoInteractions(loadTasks);
@@ -166,7 +166,7 @@ class ProjectWebControllerTest {
 		
 		InOrder inOrder = inOrder(loadUser, loadProjects, loadTasks, userMapper, authorize);
 		inOrder.verify(loadUser).load(FIXTURE_PROJECT_ID_DTO);
-		inOrder.verify(authorize).check("another@user.it", fixtureUser);
+		inOrder.verify(authorize).check(new UserIdDTO("another@user.it"), fixtureUser);
 		inOrder.verify(userMapper).map(fixtureUser);
 		inOrder.verify(loadProjects).load(new UserIdDTO(FIXTURE_EMAIL));
 		inOrder.verify(loadTasks).load(FIXTURE_PROJECT_ID_DTO);

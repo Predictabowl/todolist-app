@@ -31,6 +31,7 @@ import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfi
 import it.aldinucci.todoapp.application.port.in.UpdateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Task;
 import it.aldinucci.todoapp.webcommons.dto.TaskDataWebDto;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
@@ -39,6 +40,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @ExtendWith(SpringExtension.class)
 @Import(AppRestSecurityConfig.class)
 class UpdateTaskRestControllerTest {
+
+	private static final String USER_EMAIL_FIXTURE = "user@email.it";
 
 	private static final String FIXTURE_TEST_URL = "/api/task/3";
 
@@ -67,7 +70,7 @@ class UpdateTaskRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_updateTask_withoutCSRF_shouldReturnForbidden() throws Exception {
 		
 		mvc.perform(put(FIXTURE_TEST_URL)
@@ -80,7 +83,7 @@ class UpdateTaskRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_updateTask_whenTaskNotFound_shouldReturnBadRequest() throws Exception {
 		when(updateTask.update(any(), any())).thenReturn(Optional.empty());
 		
@@ -93,12 +96,12 @@ class UpdateTaskRestControllerTest {
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateTask);
 		TaskIdDTO taskIdDTO = new TaskIdDTO("3");
-		inOrder.verify(authorize).check("user@email.it", taskIdDTO);
+		inOrder.verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), taskIdDTO);
 		inOrder.verify(updateTask).update(taskIdDTO, new TaskDataDTOIn("new name", "new descr"));
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_updateTask_whenDataIsNotValid_shouldReturnBadRequest() throws Exception {
 		when(updateTask.update(any(), any())).thenReturn(Optional.empty());
 		mvc.perform(put(FIXTURE_TEST_URL)
@@ -113,7 +116,7 @@ class UpdateTaskRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser("user@email.it")
+	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_updateTask_success() throws Exception {
 		Task task = new Task("3", "name", "description", false, 7);
 		when(updateTask.update(any(), any())).thenReturn(Optional.of(task));
@@ -132,7 +135,7 @@ class UpdateTaskRestControllerTest {
 		
 		InOrder inOrder = Mockito.inOrder(authorize, updateTask);
 		TaskIdDTO taskIdDTO = new TaskIdDTO("3");
-		inOrder.verify(authorize).check("user@email.it", taskIdDTO);
+		inOrder.verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), taskIdDTO);
 		inOrder.verify(updateTask).update(taskIdDTO, new TaskDataDTOIn("name", "description"));
 	}
 

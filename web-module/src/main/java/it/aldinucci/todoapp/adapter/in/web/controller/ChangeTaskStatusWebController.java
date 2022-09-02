@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.aldinucci.todoapp.application.port.in.ToggleTaskCompleteStatusUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.TaskIdDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @Controller
@@ -30,7 +31,7 @@ public class ChangeTaskStatusWebController {
 	@PostMapping
 	public String toggleCompletedStatus(Authentication authentication, @PathVariable String projectId, @PathVariable TaskIdDTO taskId) {
 
-		authorize.check(authentication.getName(), taskId);
+		authorize.check(new UserIdDTO(authentication.getName()), taskId);
 		toggleTaskCompleted.toggle(taskId);
 		
 		return "redirect:/web/project/"+projectId+"/tasks";
