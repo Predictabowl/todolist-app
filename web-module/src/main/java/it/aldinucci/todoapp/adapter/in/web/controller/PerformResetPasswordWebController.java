@@ -25,8 +25,8 @@ public class PerformResetPasswordWebController {
 	private static final String REQUEST_PASSWORD_VIEW = "login/password.request";
 	private static final String BASE_URL = "/user/register/password/reset/perform";
 	
-	private VerifyResetPasswordTokenUsePort verifyToken;
-	private ChangeUserPasswordUsePort changePassword;
+	private final VerifyResetPasswordTokenUsePort verifyToken;
+	private final ChangeUserPasswordUsePort changePassword;
 
 	
 	@Autowired

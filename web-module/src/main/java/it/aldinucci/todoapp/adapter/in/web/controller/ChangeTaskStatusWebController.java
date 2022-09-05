@@ -16,8 +16,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @RequestMapping("/web/project/{projectId}/task/{taskId}/toggle/completed")
 public class ChangeTaskStatusWebController {
 	
-	private InputModelAuthorization<TaskIdDTO> authorize;
-	private ToggleTaskCompleteStatusUsePort toggleTaskCompleted;
+	private final InputModelAuthorization<TaskIdDTO> authorize;
+	private final ToggleTaskCompleteStatusUsePort toggleTaskCompleted;
 	
 	@Autowired
 	public ChangeTaskStatusWebController(InputModelAuthorization<TaskIdDTO> authorize,

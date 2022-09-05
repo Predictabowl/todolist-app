@@ -20,9 +20,9 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 @Transactional
 public class UpdateUserDataService implements UpdateUserDataUsePort {
 
-	private LoadUserByIdDriverPort loadUser;
-	private UpdateUserDriverPort updateUser;
-	private AppGenericMapper<User, UserData> mapper;
+	private final LoadUserByIdDriverPort loadUser;
+	private final UpdateUserDriverPort updateUser;
+	private final AppGenericMapper<User, UserData> mapper;
 
 	@Autowired
 	public UpdateUserDataService(LoadUserByIdDriverPort loadUser, UpdateUserDriverPort updateUser,

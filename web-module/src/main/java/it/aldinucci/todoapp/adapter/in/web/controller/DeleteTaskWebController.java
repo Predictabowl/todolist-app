@@ -16,8 +16,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @RequestMapping("/web/project/{projectId}/task/{taskId}")
 public class DeleteTaskWebController {
 
-	private InputModelAuthorization<TaskIdDTO> authorize;
-	private DeleteTaskByIdUsePort deleteTask;
+	private final InputModelAuthorization<TaskIdDTO> authorize;
+	private final DeleteTaskByIdUsePort deleteTask;
 	
 	@Autowired
 	public DeleteTaskWebController(InputModelAuthorization<TaskIdDTO> authorize, DeleteTaskByIdUsePort deleteTask) {

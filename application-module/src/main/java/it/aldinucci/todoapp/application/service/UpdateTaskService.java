@@ -15,8 +15,8 @@ import it.aldinucci.todoapp.domain.Task;
 @Service
 public class UpdateTaskService implements UpdateTaskUsePort{
 
-	private LoadTaskByIdDriverPort loadTask;
-	private UpdateTaskDriverPort updateTask;
+	private final LoadTaskByIdDriverPort loadTask;
+	private final UpdateTaskDriverPort updateTask;
 	
 	@Autowired
 	public UpdateTaskService(LoadTaskByIdDriverPort loadTask, UpdateTaskDriverPort updateTask) {

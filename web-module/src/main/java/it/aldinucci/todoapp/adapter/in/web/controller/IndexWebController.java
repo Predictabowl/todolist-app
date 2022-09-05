@@ -19,9 +19,9 @@ import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 @RequestMapping
 public class IndexWebController {
 
-	private LoadProjectsByUserUsePort loadProjects;
-	private LoadUserByIdUsePort loadUser;
-	private AppGenericMapper<User, UserWebDto> mapper;
+	private final LoadProjectsByUserUsePort loadProjects;
+	private final LoadUserByIdUsePort loadUser;
+	private final AppGenericMapper<User, UserWebDto> mapper;
 
 	@Autowired
 	public IndexWebController(LoadProjectsByUserUsePort loadProjects, LoadUserByIdUsePort loadUser,

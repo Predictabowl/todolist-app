@@ -16,7 +16,7 @@ import it.aldinucci.todoapp.domain.User;
 @Transactional
 public class LoadUserByIdService implements LoadUserByIdUsePort{
 
-	private LoadUserByIdDriverPort loadUserPort;
+	private final LoadUserByIdDriverPort loadUserPort;
 	
 	
 	@Autowired

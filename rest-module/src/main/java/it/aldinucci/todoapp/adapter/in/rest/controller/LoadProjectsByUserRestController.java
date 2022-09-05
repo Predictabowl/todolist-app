@@ -18,7 +18,7 @@ import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 @RequestMapping("/api/projects")
 public class LoadProjectsByUserRestController {
 
-	private LoadProjectsByUserUsePort loadProjects;
+	private final LoadProjectsByUserUsePort loadProjects;
 
 	@Autowired
 	public LoadProjectsByUserRestController(LoadProjectsByUserUsePort loadProjects) {

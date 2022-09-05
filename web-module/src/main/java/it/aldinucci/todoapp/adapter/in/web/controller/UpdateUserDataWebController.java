@@ -26,8 +26,8 @@ import it.aldinucci.todoapp.webcommons.dto.UserDataWebDto;
 @RequestMapping("/web/user/data")
 public class UpdateUserDataWebController {
 
-	private LoadUserByIdUsePort loadUser;
-	private UpdateUserDataUsePort updateUser;
+	private final LoadUserByIdUsePort loadUser;
+	private final UpdateUserDataUsePort updateUser;
 	
 	@Autowired
 	public UpdateUserDataWebController(LoadUserByIdUsePort loadUser, UpdateUserDataUsePort updateUser) {

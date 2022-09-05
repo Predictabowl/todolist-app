@@ -26,12 +26,12 @@ import it.aldinucci.todoapp.util.AppPasswordEncoder;
 @Transactional
 public class ChangeUserPasswordService implements ChangeUserPasswordUsePort {
 
-	private LoadResetPasswordTokenDriverPort loadToken;
-	private LoadUserByIdDriverPort loadUser;
-	private UpdateUserDriverPort updateUser;
-	private DeleteRestPasswordTokenDriverPort deleteToken;
-	private AppPasswordEncoder encoder;
-	private AppGenericMapper<User, UserData> mapper;
+	private final LoadResetPasswordTokenDriverPort loadToken;
+	private final LoadUserByIdDriverPort loadUser;
+	private final UpdateUserDriverPort updateUser;
+	private final DeleteRestPasswordTokenDriverPort deleteToken;
+	private final AppPasswordEncoder encoder;
+	private final AppGenericMapper<User, UserData> mapper;
 
 
 	@Autowired

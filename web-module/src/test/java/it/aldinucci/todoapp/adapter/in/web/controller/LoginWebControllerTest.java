@@ -19,7 +19,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.config.CommonsBeansProvider;
-import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.util.AppPasswordEncoder;
 import it.aldinucci.todoapp.webcommons.model.UserDetailsImpl;
 

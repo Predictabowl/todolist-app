@@ -31,11 +31,11 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @RequestMapping("/web/project/{projectId}")
 public class ProjectWebController {
 	
-	private LoadTasksByProjectUsePort loadTasks;
-	private LoadUserByProjectIdUsePort loadUser;
-	private LoadProjectsByUserUsePort loadProjects;
-	private AppGenericMapper<User, UserWebDto> userMapper;
-	private InputModelAuthorization<User> authorize;
+	private final LoadTasksByProjectUsePort loadTasks;
+	private final LoadUserByProjectIdUsePort loadUser;
+	private final LoadProjectsByUserUsePort loadProjects;
+	private final AppGenericMapper<User, UserWebDto> userMapper;
+	private final InputModelAuthorization<User> authorize;
 
 
 	@Autowired

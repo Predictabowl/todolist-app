@@ -18,8 +18,8 @@ import it.aldinucci.todoapp.domain.ResetPasswordToken;
 @Transactional
 public class VerifyResetPasswordTokenService implements VerifyResetPasswordTokenUsePort {
 
-	private LoadResetPasswordTokenDriverPort loadToken;
-	private DeleteRestPasswordTokenDriverPort deleteToken;
+	private final LoadResetPasswordTokenDriverPort loadToken;
+	private final DeleteRestPasswordTokenDriverPort deleteToken;
 
 	@Autowired
 	public VerifyResetPasswordTokenService(LoadResetPasswordTokenDriverPort loadToken,

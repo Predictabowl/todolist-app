@@ -20,10 +20,10 @@ import it.aldinucci.todoapp.domain.ResetPasswordToken;
 @Transactional
 public class GetOrCreateResetPasswordTokenService implements GetOrCreatePasswordResetTokenUsePort{
 
-	private UserExistsDriverPort userExists;
-	private LoadResetPasswordTokenByEmailDriverPort loadToken;
-	private DeleteRestPasswordTokenDriverPort deleteToken;
-	private CreateResetPasswordToken createToken;
+	private final UserExistsDriverPort userExists;
+	private final LoadResetPasswordTokenByEmailDriverPort loadToken;
+	private final DeleteRestPasswordTokenDriverPort deleteToken;
+	private final CreateResetPasswordToken createToken;
 	
 	@Autowired
 	public GetOrCreateResetPasswordTokenService(UserExistsDriverPort userExists,

@@ -10,7 +10,7 @@ import it.aldinucci.todoapp.application.service.util.EmailSender;
 @Service
 public class SendVerificationEmailService implements SendVerificationEmailUsePort {
 
-	private EmailSender emailSender;
+	private final EmailSender emailSender;
 
 	@Autowired
 	public SendVerificationEmailService(EmailSender emailSender) {

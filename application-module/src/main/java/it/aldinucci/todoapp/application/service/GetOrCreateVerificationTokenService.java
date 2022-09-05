@@ -22,10 +22,10 @@ import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
 @Transactional
 public class GetOrCreateVerificationTokenService implements GetOrCreateVerificationTokenUsePort {
 	
-	private LoadUserByIdDriverPort loadUser;
-	private LoadVerificationTokenByEmailDriverPort loadToken;
-	private DeleteVerificatinTokenByUserDriverPort deleteToken;
-	private CreateVerificationToken createToken;
+	private final LoadUserByIdDriverPort loadUser;
+	private final LoadVerificationTokenByEmailDriverPort loadToken;
+	private final DeleteVerificatinTokenByUserDriverPort deleteToken;
+	private final CreateVerificationToken createToken;
 
 
 	@Autowired

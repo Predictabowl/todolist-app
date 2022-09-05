@@ -18,7 +18,7 @@ import it.aldinucci.todoapp.webcommons.dto.ProjectDataWebDto;
 @RequestMapping("web/project/new")
 public class CreateProjectWebController {
 
-	private CreateProjectUsePort createProject;
+	private final CreateProjectUsePort createProject;
 	
 	@Autowired
 	public CreateProjectWebController(CreateProjectUsePort createProject) {

@@ -20,7 +20,7 @@ import it.aldinucci.todoapp.webcommons.dto.UserDataWebDto;
 @RequestMapping("/api/user")
 public class UpdateUserDataRestController {
 
-	private UpdateUserDataUsePort updateUser;
+	private final UpdateUserDataUsePort updateUser;
 	
 	@Autowired
 	public UpdateUserDataRestController(UpdateUserDataUsePort updateUser) {

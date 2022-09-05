@@ -29,9 +29,9 @@ public class RegisterUserWebController {
 
 	private static final String EMAIL_EXISTS = "emailExists";
 	
-	private CreateUserUsePort createUser;
-	private AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper;
-	private SendVerificationEmailUsePort sendVerificationEmail;
+	private final CreateUserUsePort createUser;
+	private final AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper;
+	private final SendVerificationEmailUsePort sendVerificationEmail;
 	
 	@Autowired
 	public RegisterUserWebController(CreateUserUsePort createUser,

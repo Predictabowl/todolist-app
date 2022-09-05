@@ -28,9 +28,9 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @RequestMapping("/api/project/{projectId}")
 public class UpdateProjectRestController {
 	
-	private InputModelAuthorization<ProjectIdDTO> authorize;
-	private UpdateProjectUsePort updateProject;
-	private AppGenericMapper<ProjectDataWebDto, ProjectDataDTOIn> mapper;
+	private final InputModelAuthorization<ProjectIdDTO> authorize;
+	private final UpdateProjectUsePort updateProject;
+	private final AppGenericMapper<ProjectDataWebDto, ProjectDataDTOIn> mapper;
 	
 	@Autowired
 	public UpdateProjectRestController(InputModelAuthorization<ProjectIdDTO> authorize,

@@ -20,8 +20,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @RequestMapping("/api/project/{projectId}")
 public class DeleteProjectByIdRestController {
 
-	private DeleteProjectByIdUsePort deleteProject;
-	private InputModelAuthorization<ProjectIdDTO> authorize;
+	private final DeleteProjectByIdUsePort deleteProject;
+	private final InputModelAuthorization<ProjectIdDTO> authorize;
 
 	@Autowired
 	public DeleteProjectByIdRestController(DeleteProjectByIdUsePort deleteProject,

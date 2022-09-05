@@ -17,8 +17,8 @@ import it.aldinucci.todoapp.domain.Task;
 @Transactional
 public class ToggleTaskCompleteStatusService implements ToggleTaskCompleteStatusUsePort{
 
-	private LoadTaskByIdDriverPort loadTask;
-	private UpdateTaskDriverPort updateTask;
+	private final LoadTaskByIdDriverPort loadTask;
+	private final UpdateTaskDriverPort updateTask;
 	
 	@Autowired
 	public ToggleTaskCompleteStatusService(LoadTaskByIdDriverPort loadTask, UpdateTaskDriverPort updateTask) {

@@ -16,7 +16,7 @@ import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 @RequestMapping("/user/register/verification")
 public class UserRegisterVerificationController {
 
-	private VerifyUserEmailUsePort verifyUser;
+	private final VerifyUserEmailUsePort verifyUser;
 
 	@Autowired
 	public UserRegisterVerificationController(VerifyUserEmailUsePort verifyUser) {

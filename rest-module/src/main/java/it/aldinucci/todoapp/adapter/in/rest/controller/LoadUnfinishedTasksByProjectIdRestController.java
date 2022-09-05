@@ -22,8 +22,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @RequestMapping("/api/project/{projectId}/tasks/unfinished")
 public class LoadUnfinishedTasksByProjectIdRestController {
 
-	private LoadUnfinishedTasksByProjectIdUsePort loadProjectTasks;
-	private InputModelAuthorization<ProjectIdDTO> authorize;
+	private final LoadUnfinishedTasksByProjectIdUsePort loadProjectTasks;
+	private final InputModelAuthorization<ProjectIdDTO> authorize;
 	
 	@Autowired
 	public LoadUnfinishedTasksByProjectIdRestController(LoadUnfinishedTasksByProjectIdUsePort loadProjects,

@@ -29,8 +29,8 @@ public class ResendVerificationTokenController {
 	
 	private static final String EMAIL_REQUEST_VIEW = "login/email.request";
 	
-	private GetOrCreateVerificationTokenUsePort retrieveToken;
-	private SendVerificationEmailUsePort sendMail;
+	private final GetOrCreateVerificationTokenUsePort retrieveToken;
+	private final SendVerificationEmailUsePort sendMail;
 	
 	@Autowired
 	public ResendVerificationTokenController(GetOrCreateVerificationTokenUsePort retrieveToken,

@@ -23,9 +23,9 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @RequestMapping("/web/project/{projectId}/task/{taskId}")
 public class UpdateTaskWebController {
 
-	private InputModelAuthorization<TaskIdDTO> authorize;
-	private UpdateTaskUsePort updateTask;
-	private AppGenericMapper<TaskDataWebDto, TaskDataDTOIn> mapper;
+	private final InputModelAuthorization<TaskIdDTO> authorize;
+	private final UpdateTaskUsePort updateTask;
+	private final AppGenericMapper<TaskDataWebDto, TaskDataDTOIn> mapper;
 	
 	@Autowired
 	public UpdateTaskWebController(InputModelAuthorization<TaskIdDTO> authorize, UpdateTaskUsePort updateTask,

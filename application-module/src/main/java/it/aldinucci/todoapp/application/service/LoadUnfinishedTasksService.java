@@ -16,7 +16,7 @@ import it.aldinucci.todoapp.domain.Task;
 @Transactional
 public class LoadUnfinishedTasksService implements LoadUnfinishedTasksByProjectIdUsePort{
 
-	private LoadUnfinishedTasksDriverPort loadTasks;
+	private final LoadUnfinishedTasksDriverPort loadTasks;
 	
 	@Autowired
 	public LoadUnfinishedTasksService(LoadUnfinishedTasksDriverPort loadTasks) {

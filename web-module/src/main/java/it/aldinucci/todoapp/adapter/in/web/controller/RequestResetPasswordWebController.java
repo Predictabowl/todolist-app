@@ -29,8 +29,8 @@ public class RequestResetPasswordWebController {
 	private static final String BASE_URL = "/user/register/password/reset";
 	private static final String EMAIL_REQUEST_VIEW = "login/email.request";
 	
-	private GetOrCreatePasswordResetTokenUsePort retrieveToken;
-	private SendResetPasswordEmailUsePort sendEmail;
+	private final GetOrCreatePasswordResetTokenUsePort retrieveToken;
+	private final SendResetPasswordEmailUsePort sendEmail;
 	
 
 	@Autowired

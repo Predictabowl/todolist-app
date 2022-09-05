@@ -17,7 +17,7 @@ import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 @Transactional
 public class LoadTasksByProjectIdService implements LoadTasksByProjectUsePort{
 
-	private LoadTasksByProjectIdDriverPort loadTasks;
+	private final LoadTasksByProjectIdDriverPort loadTasks;
 	
 	@Autowired
 	public LoadTasksByProjectIdService(LoadTasksByProjectIdDriverPort loadTasks) {

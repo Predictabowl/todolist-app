@@ -17,7 +17,7 @@ import it.aldinucci.todoapp.exception.AppTaskNotFoundException;
 @Transactional
 public class LoadUserByTaskIdService implements LoadUserByTaskIdUsePort{
 
-	private LoadUserByTaskIdDriverPort loadUser;
+	private final LoadUserByTaskIdDriverPort loadUser;
 	
 	@Autowired
 	public LoadUserByTaskIdService(LoadUserByTaskIdDriverPort loadUser) {

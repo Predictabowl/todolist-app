@@ -23,8 +23,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @RequestMapping("/api/project/{projectId}/task")
 public class CreateTaskRestController {
 
-	private CreateTaskUsePort createTask;
-	private InputModelAuthorization<NewTaskDTOIn> authorize;
+	private final CreateTaskUsePort createTask;
+	private final InputModelAuthorization<NewTaskDTOIn> authorize;
 
 	@Autowired
 	public CreateTaskRestController(CreateTaskUsePort createTask, InputModelAuthorization<NewTaskDTOIn> authorize) {

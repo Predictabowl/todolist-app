@@ -21,10 +21,10 @@ import it.aldinucci.todoapp.util.AppPasswordEncoder;
 @Transactional
 public class CreateNewUserService implements CreateUserUsePort {
 
-	private CreateUserDriverPort createUser;
-	private AppPasswordEncoder encoder;
-	private LoadUserByIdDriverPort loadUser;
-	private CreateVerificationToken createToken;
+	private final CreateUserDriverPort createUser;
+	private final AppPasswordEncoder encoder;
+	private final LoadUserByIdDriverPort loadUser;
+	private final CreateVerificationToken createToken;
 
 	@Autowired
 	public CreateNewUserService(CreateUserDriverPort createUser, AppPasswordEncoder encoder,

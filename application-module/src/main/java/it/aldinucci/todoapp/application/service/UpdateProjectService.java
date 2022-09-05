@@ -17,7 +17,7 @@ import it.aldinucci.todoapp.domain.Project;
 @Transactional
 public class UpdateProjectService implements UpdateProjectUsePort{
 
-	private UpdateProjectDriverPort updateProject;
+	private final UpdateProjectDriverPort updateProject;
 	
 	@Autowired
 	public UpdateProjectService(UpdateProjectDriverPort updateProject) {

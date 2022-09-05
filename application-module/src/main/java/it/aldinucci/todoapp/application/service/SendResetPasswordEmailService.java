@@ -10,7 +10,7 @@ import it.aldinucci.todoapp.application.service.util.EmailSender;
 @Service
 public class SendResetPasswordEmailService implements SendResetPasswordEmailUsePort {
 
-	private EmailSender emailSender;
+	private final EmailSender emailSender;
 
 	@Autowired
 	public SendResetPasswordEmailService(EmailSender emailSender) {

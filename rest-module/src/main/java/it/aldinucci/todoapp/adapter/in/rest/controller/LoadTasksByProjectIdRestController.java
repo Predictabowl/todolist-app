@@ -22,8 +22,8 @@ import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthoriz
 @RequestMapping("/api/project/{projectId}/tasks")
 public class LoadTasksByProjectIdRestController {
 
-	private LoadTasksByProjectUsePort loadProjectTasks;
-	private InputModelAuthorization<ProjectIdDTO> authorize;
+	private final LoadTasksByProjectUsePort loadProjectTasks;
+	private final InputModelAuthorization<ProjectIdDTO> authorize;
 	
 	@Autowired
 	public LoadTasksByProjectIdRestController(LoadTasksByProjectUsePort loadProjects,

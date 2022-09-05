@@ -24,11 +24,11 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 @Transactional
 public class VerifyUserEmailService implements VerifyUserEmailUsePort {
 
-	private LoadVerificationTokenDriverPort loadToken;
-	private LoadUserByIdDriverPort loadUser;
-	private UpdateUserDriverPort updateUser;
-	private DeleteVerificationTokenDriverPort deleteToken;
-	private AppGenericMapper<User, UserData> mapper; 
+	private final LoadVerificationTokenDriverPort loadToken;
+	private final LoadUserByIdDriverPort loadUser;
+	private final UpdateUserDriverPort updateUser;
+	private final DeleteVerificationTokenDriverPort deleteToken;
+	private final AppGenericMapper<User, UserData> mapper; 
 
 	@Autowired
 	public VerifyUserEmailService(LoadVerificationTokenDriverPort loadToken, LoadUserByIdDriverPort loadUser,

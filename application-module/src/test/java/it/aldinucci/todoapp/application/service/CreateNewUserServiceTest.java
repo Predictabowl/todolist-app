@@ -15,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -48,22 +47,22 @@ class CreateNewUserServiceTest {
 	@Mock
 	private CreateVerificationToken createToken;
 	
-	@InjectMocks
 	private CreateNewUserService service;
 	
 	@BeforeEach
 	void setUp() {
 		openMocks(this);
+		service = new CreateNewUserService(createUser, encoder, loadUser, createToken);
 	}
 	
 	@Test
 	void test_createUserSuccess_shouldCallPort() throws AppEmailAlreadyRegisteredException {
 		NewUserDTOIn newUserIn = new NewUserDTOIn("name", FIXTURE_EMAIL, "password");
-		User createdUser = new User("email", "user", "pass");
+		User createdUser = new User(FIXTURE_EMAIL, "user", "pass");
 		VerificationToken token = new VerificationToken();
 		when(createUser.create(isA(NewUserData.class))).thenReturn(createdUser);
 		when(encoder.encode(anyString())).thenReturn("encoded password");
-		when(loadUser.load(isA(String.class))).thenReturn(Optional.empty());
+		when(loadUser.load(anyString())).thenReturn(Optional.empty());
 		when(createToken.create(anyString())).thenReturn(token);
 		
 		NewUserDtoOut newUserDtoOut = service.create(newUserIn);
@@ -80,8 +79,8 @@ class CreateNewUserServiceTest {
 	@Test
 	void test_createUserWhenEmailAlreadyPresent_shouldThrow() {
 		NewUserDTOIn newUserIn = new NewUserDTOIn("name", FIXTURE_EMAIL, "password");
-		User oldUser = new User("email", "user", "pass");
-		when(loadUser.load(isA(String.class))).thenReturn(Optional.of(oldUser));
+		User oldUser = new User("test@email.it", "user", "pass");
+		when(loadUser.load(anyString())).thenReturn(Optional.of(oldUser));
 		
 		assertThatThrownBy(() -> service.create(newUserIn))
 			.isInstanceOf(AppEmailAlreadyRegisteredException.class)
