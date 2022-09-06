@@ -55,6 +55,7 @@ class CreateProjectJPATest {
 	void test_createNewProject_successful(){
 		UserJPA userJPA = new UserJPA(null, TEST_EMAIL, "username", "password");
 		entityManager.persist(userJPA);
+		entityManager.flush();
 		NewProjectData newProject = new NewProjectData("test name", TEST_EMAIL);
 		Project project = new Project();
 		when(mapper.map(isA(ProjectJPA.class))).thenReturn(project);
@@ -68,6 +69,7 @@ class CreateProjectJPATest {
 		assertThat(returnedProject).isSameAs(project);
 		assertThat(createdProject.getUser()).usingRecursiveComparison().isEqualTo(userJPA);
 		assertThat(createdProject.getTasks()).isEmpty();
+		assertThat(userJPA.getProjects()).containsExactly(createdProject);
 	}
 
 }
