@@ -149,7 +149,7 @@ class TodolistApplicationE2E {
 		editProjectForm.findElement(By.name("submit-button")).click();
 		
 		assertThat(webDriver.findElement(By.id("project-list")).getText())
-		.contains("First Project");
+			.contains("First Project");
 	}
 
 	@Test

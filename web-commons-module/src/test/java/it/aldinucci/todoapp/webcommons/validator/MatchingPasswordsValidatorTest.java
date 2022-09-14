@@ -6,6 +6,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 import javax.validation.ConstraintValidatorContext;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,11 +19,18 @@ class MatchingPasswordsValidatorTest {
 	
 	@Mock
 	private ConstraintValidatorContext context;
+
+	private AutoCloseable closeable;
 	
 	@BeforeEach
 	void setUp() {
-		openMocks(this);
+		closeable = openMocks(this);
 		matchingValidator = new MatchingPasswordsValidator();
+	}
+	
+	@AfterEach
+	void tearDown() throws Exception {
+		closeable.close();
 	}
 	
 	@Test

@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -38,10 +39,17 @@ class UpdateUserDataServiceTest {
 	
 	private UpdateUserDataService sut;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		openMocks(this);
+		closeable = openMocks(this);
 		sut = new UpdateUserDataService(loadUser, updateUser, mapper);
+	}
+	
+	@AfterEach
+	void tearDown() throws Exception {
+		closeable.close();
 	}
 	
 	@Test

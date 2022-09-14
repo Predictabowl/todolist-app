@@ -13,6 +13,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import java.util.Calendar;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -49,11 +50,18 @@ class GetOrCreateVerificationTokenServiceTest {
 	private GetOrCreateVerificationTokenService sut;
 	
 	private Calendar calendar;
+
+	private AutoCloseable closeable;
 	
 	@BeforeEach
 	void setUp() {
-		openMocks(this);
+		closeable = openMocks(this);
 		calendar = Calendar.getInstance();
+	}
+	
+	@AfterEach
+	void tearDown() throws Exception {
+		closeable.close();
 	}
 	
 	@Test

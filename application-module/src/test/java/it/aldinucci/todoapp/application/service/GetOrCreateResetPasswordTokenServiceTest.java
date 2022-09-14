@@ -10,6 +10,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import java.util.Calendar;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -40,6 +41,8 @@ class GetOrCreateResetPasswordTokenServiceTest {
 	private GetOrCreateResetPasswordTokenService sut;
 	
 	private Calendar calendar;
+
+	private AutoCloseable closeable;
 	
 	/*
 	 * Note:
@@ -50,9 +53,14 @@ class GetOrCreateResetPasswordTokenServiceTest {
 	 */
 	@BeforeEach
 	void setUp() {
-		openMocks(this); 
+		closeable = openMocks(this); 
 		sut = new GetOrCreateResetPasswordTokenService(userExists, loadToken, deleteToken, createToken);
 		calendar = Calendar.getInstance();
+	}
+	
+	@AfterEach
+	void tearDown() throws Exception {
+		closeable.close();
 	}
 	
 	@Test

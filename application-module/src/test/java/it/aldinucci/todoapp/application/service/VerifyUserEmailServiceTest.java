@@ -12,6 +12,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import java.util.Calendar;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -51,12 +52,19 @@ class VerifyUserEmailServiceTest {
 	private VerifyUserEmailService service;
 
 	private Calendar calendar;
+
+	private AutoCloseable closeable;
 	
 	@BeforeEach
 	void setUp() {
-		openMocks(this);
+		closeable = openMocks(this);
 		calendar = Calendar.getInstance();
 		service = new VerifyUserEmailService(loadToken, loadUser, updateUser, deleteToken, mapper);
+	}
+	
+	@AfterEach
+	void tearDown() throws Exception {
+		closeable.close();
 	}
 
 	@Test

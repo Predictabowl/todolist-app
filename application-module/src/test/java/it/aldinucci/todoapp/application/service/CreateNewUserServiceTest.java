@@ -11,6 +11,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,11 +49,18 @@ class CreateNewUserServiceTest {
 	private CreateVerificationToken createToken;
 	
 	private CreateNewUserService service;
+
+	private AutoCloseable closeable;
 	
 	@BeforeEach
 	void setUp() {
-		openMocks(this);
+		closeable = openMocks(this);
 		service = new CreateNewUserService(createUser, encoder, loadUser, createToken);
+	}
+	
+	@AfterEach
+	void tearDown() throws Exception {
+		closeable.close();
 	}
 	
 	@Test

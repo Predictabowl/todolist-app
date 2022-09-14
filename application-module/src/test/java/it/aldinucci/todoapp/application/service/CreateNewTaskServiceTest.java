@@ -12,6 +12,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.OptionalInt;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -39,10 +40,16 @@ class CreateNewTaskServiceTest {
 	
 	@InjectMocks
 	private CreateNewTaskService service;
+	private AutoCloseable closeable;
 	
 	@BeforeEach
 	void setUp() {
-		openMocks(this);
+		closeable = openMocks(this);
+	}
+	
+	@AfterEach
+	void tearDown() throws Exception {
+		closeable.close();
 	}
 	
 	@Test
