@@ -26,7 +26,6 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 @DataJpaTest
 @Import({CreateProjectJPA.class})
 @ExtendWith(SpringExtension.class)
-//@AutoConfigureTestDatabase(replace = Replace.NONE)
 class CreateProjectJPATest {
 
 	private static final String TEST_EMAIL = "test@email.it";
