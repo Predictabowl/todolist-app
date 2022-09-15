@@ -41,7 +41,7 @@ import it.aldinucci.todoapp.adapter.in.web.controller.IndexWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.LoginWebController;
 import it.aldinucci.todoapp.adapter.in.web.controller.UpdateUserDataWebController;
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
-import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.domain.User;
@@ -65,7 +65,7 @@ class IndexWebViewTest {
 	private LoadProjectsByUserUsePort loadProjects;
 	
 	@MockBean
-	private LoadUserByEmailUsePort loadUserByEmail;
+	private LoadUserByIdUsePort loadUserByEmail;
 	
 	@MockBean
 	private AppGenericMapper<User, UserWebDto> mapper;

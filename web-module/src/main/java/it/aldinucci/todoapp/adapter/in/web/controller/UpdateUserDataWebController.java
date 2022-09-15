@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.UpdateUserDataUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
@@ -26,11 +26,11 @@ import it.aldinucci.todoapp.webcommons.dto.UserDataWebDto;
 @RequestMapping("/web/user/data")
 public class UpdateUserDataWebController {
 
-	private LoadUserByEmailUsePort loadUser;
+	private LoadUserByIdUsePort loadUser;
 	private UpdateUserDataUsePort updateUser;
 	
 	@Autowired
-	public UpdateUserDataWebController(LoadUserByEmailUsePort loadUser, UpdateUserDataUsePort updateUser) {
+	public UpdateUserDataWebController(LoadUserByIdUsePort loadUser, UpdateUserDataUsePort updateUser) {
 		super();
 		this.loadUser = loadUser;
 		this.updateUser = updateUser;

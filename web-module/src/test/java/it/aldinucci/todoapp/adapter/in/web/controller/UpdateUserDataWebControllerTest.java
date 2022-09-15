@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.util.NestedServletException;
 
-import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.UpdateUserDataUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserDataDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
@@ -46,7 +46,7 @@ class UpdateUserDataWebControllerTest {
 	private static final String FIXTURE_EMAIL = "email@test.it";
 
 	@MockBean
-	private LoadUserByEmailUsePort loadUser;
+	private LoadUserByIdUsePort loadUser;
 	
 	@MockBean
 	private UpdateUserDataUsePort updateUser;

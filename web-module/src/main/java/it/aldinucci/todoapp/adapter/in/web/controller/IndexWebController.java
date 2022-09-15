@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.aldinucci.todoapp.application.port.in.LoadProjectsByUserUsePort;
-import it.aldinucci.todoapp.application.port.in.LoadUserByEmailUsePort;
+import it.aldinucci.todoapp.application.port.in.LoadUserByIdUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
@@ -20,11 +20,11 @@ import it.aldinucci.todoapp.webcommons.dto.UserWebDto;
 public class IndexWebController {
 
 	private LoadProjectsByUserUsePort loadProjects;
-	private LoadUserByEmailUsePort loadUser;
+	private LoadUserByIdUsePort loadUser;
 	private AppGenericMapper<User, UserWebDto> mapper;
 
 	@Autowired
-	public IndexWebController(LoadProjectsByUserUsePort loadProjects, LoadUserByEmailUsePort loadUser,
+	public IndexWebController(LoadProjectsByUserUsePort loadProjects, LoadUserByIdUsePort loadUser,
 			AppGenericMapper<User, UserWebDto> mapper) {
 		this.loadProjects = loadProjects;
 		this.loadUser = loadUser;
