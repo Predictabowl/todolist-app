@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -46,7 +45,6 @@ class LoadUserByTaskIdJPATest {
 	
 	@Test
 	void test_loadUser_successful() throws AppTaskNotFoundException {
-		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA userJpa = new UserJPA("email", "username", "passwod");
 		entityManager.persist(userJpa);
 		ProjectJPA project = new ProjectJPA("project", userJpa);
@@ -56,7 +54,8 @@ class LoadUserByTaskIdJPATest {
 		entityManager.persist(taskJpa);
 		project.getTasks().add(taskJpa);
 		entityManager.flush();
-		when(validator.getId()).thenReturn(taskJpa.getId());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(taskJpa.getId()));
 		
 		User user = new User();
 		when(mapper.map(isA(UserJPA.class))).thenReturn(user);
@@ -70,8 +69,7 @@ class LoadUserByTaskIdJPATest {
 	
 	@Test
 	void test_loadUser_whenTaskNotPresent() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(1L);
+		when(validator.isValid(anyString())).thenReturn(Optional.of(1L));
 		
 		Optional<User> loadedUser = adapter.load("1");
 		
@@ -82,13 +80,12 @@ class LoadUserByTaskIdJPATest {
 	
 	@Test
 	void test_loadUser_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString())).thenReturn(Optional.empty());
 		Optional<User> loadedUser = adapter.load("test");
 		
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);
 		verify(validator).isValid("test");
-		verify(validator, times(0)).getId();
 	}
 
 }

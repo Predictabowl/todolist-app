@@ -31,10 +31,9 @@ public class LoadUnfinishedTasksByProjectIdJPA implements LoadUnfinishedTasksDri
 
 	@Override
 	public List<Task> load(String projectId) {
-		if(!validator.isValid(projectId))
-			throw new AppProjectNotFoundException("Could not find project with id: " + projectId);
+		long longId = validator.isValid(projectId).orElseThrow(() ->
+			new AppProjectNotFoundException("Could not find project with id: " + projectId));
 
-		long longId = validator.getId();
 		List<TaskJPA> tasks = repository.findByProjectIdAndCompletedFalse(longId);
 		return tasks.stream().map(t -> mapper.map(t)).toList();
 	}

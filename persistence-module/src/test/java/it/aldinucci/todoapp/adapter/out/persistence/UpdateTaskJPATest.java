@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -61,8 +60,7 @@ class UpdateTaskJPATest {
 	
 	@Test
 	void test_updateTask_whenTaskDontExists() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(1L);
+		when(validator.isValid(anyString())).thenReturn(Optional.of(1L));
 		Task task = new Task("1", "another name", "test", true);
 		
 		Optional<Task> optionalTask = sut.update(task);
@@ -74,7 +72,7 @@ class UpdateTaskJPATest {
 	
 	@Test
 	void test_updateTask_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString())).thenReturn(Optional.empty());
 		Task task = new Task("test", "another name", "test", true);
 		
 		Optional<Task> optionalTask = sut.update(task);
@@ -82,12 +80,10 @@ class UpdateTaskJPATest {
 		assertThat(optionalTask).isEmpty();
 		verifyNoInteractions(mapper);
 		verify(validator).isValid("test");
-		verify(validator, times(0)).getId();
 	}
 	
 	@Test
 	void test_updateTask_success() {
-		when(validator.isValid(anyString())).thenReturn(true);
 		TaskJPA taskJpa = new TaskJPA(null, "task name", "description", false, project, 3);
 		entityManager.persist(taskJpa);
 		project.getTasks().add(taskJpa);
@@ -96,7 +92,7 @@ class UpdateTaskJPATest {
 		Long taskId = taskJpa.getId();
 		Task emptyTask = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(emptyTask);
-		when(validator.getId()).thenReturn(taskId);
+		when(validator.isValid(anyString())).thenReturn(Optional.of(taskId));
 		
 		Task task = new Task(taskId.toString(), "another name", "test", true, 5);
 		

@@ -1,8 +1,8 @@
 package it.aldinucci.todoapp.adapter.out.persistence.util;
 
+import java.util.Optional;
+
 public interface ValidateId<T> {
 
-	public boolean isValid(String id);
-	
-	public T getId();
+	public Optional<T> isValid(String id);
 }

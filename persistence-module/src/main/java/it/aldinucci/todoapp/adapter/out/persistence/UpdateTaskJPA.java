@@ -31,11 +31,11 @@ public class UpdateTaskJPA implements UpdateTaskDriverPort{
 
 	@Override
 	public Optional<Task> update(Task task) {
-		if(!validator.isValid(task.getId()))
+		Optional<Long> valid = validator.isValid(task.getId());
+		if(valid.isEmpty())
 			return Optional.empty();
 		
-		long longId = validator.getId();
-		Optional<TaskJPA> optionalTaskJPA = taskRepo.findById(longId);
+		Optional<TaskJPA> optionalTaskJPA = taskRepo.findById(valid.get());
 		if(optionalTaskJPA.isEmpty())
 			return Optional.empty();
 		

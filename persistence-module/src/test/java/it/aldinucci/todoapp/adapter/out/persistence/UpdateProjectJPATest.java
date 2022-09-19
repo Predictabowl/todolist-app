@@ -4,7 +4,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -45,8 +44,7 @@ class UpdateProjectJPATest {
 	
 	@Test
 	void test_update_whenProjectIsMissing() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(2L);
+		when(validator.isValid(anyString())).thenReturn(Optional.of(2L));
 		
 		Optional<Project> optional = sut.update(new Project("2", "name"));
 		
@@ -60,7 +58,7 @@ class UpdateProjectJPATest {
 	
 	@Test
 	void test_update_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString())).thenReturn(Optional.empty());
 		
 		Optional<Project> optional = sut.update(new Project("test", "name"));
 		
@@ -70,12 +68,10 @@ class UpdateProjectJPATest {
 		
 		verifyNoInteractions(mapper);
 		verify(validator).isValid("test");
-		verify(validator, times(0)).getId();
 	}
 	
 	@Test
 	void test_update_success() {
-		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA  user = entityManager.persist(new UserJPA("email", "name", "pass"));
 		ProjectJPA projectJpa = entityManager.persist(new ProjectJPA("test", user));
 		user.getProjects().add(projectJpa);
@@ -83,7 +79,7 @@ class UpdateProjectJPATest {
 		entityManager.detach(projectJpa);
 		Project testProject = new Project("11", "different");
 		when(mapper.map(isA(ProjectJPA.class))).thenReturn(testProject);
-		when(validator.getId()).thenReturn(projectJpa.getId());
+		when(validator.isValid(anyString())).thenReturn(Optional.of(projectJpa.getId()));
 		
 		Project newProject = new Project(projectJpa.getId().toString(), "new name");
 		

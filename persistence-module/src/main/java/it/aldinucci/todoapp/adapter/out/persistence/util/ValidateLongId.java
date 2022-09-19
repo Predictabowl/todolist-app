@@ -1,31 +1,19 @@
 package it.aldinucci.todoapp.adapter.out.persistence.util;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class ValidateLongId implements ValidateId<Long> {
 
-	private Long id;
-
-	public ValidateLongId() {
-		this.id = null;
-	}
-	
-	
 	@Override
-	public boolean isValid(String id) {
+	public Optional<Long> isValid(String id) {
 		try {
-			this.id = Long.parseLong(id);
-			return true;
+			return  Optional.of(Long.parseLong(id));
 		} catch (Exception e) {
-			this.id = null;
+			return Optional.empty();
 		}
-		return false;
-	}
-
-	@Override
-	public Long getId() {
-		return id;
 	}
 
 }

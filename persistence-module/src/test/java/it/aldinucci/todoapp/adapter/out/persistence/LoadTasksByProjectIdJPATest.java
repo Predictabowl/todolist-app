@@ -4,13 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,8 +48,7 @@ class LoadTasksByProjectIdJPATest {
 
 	@Test
 	void test_loadTasks_whenProjectNotPresent_shouldThrow() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(3L);
+		when(validator.isValid(anyString())).thenReturn(Optional.of(3L));
 		
 		assertThatThrownBy(() -> loadTasks.load("3")).isInstanceOf(AppProjectNotFoundException.class)
 				.hasMessage("Could not find project with id: 3");
@@ -59,17 +58,15 @@ class LoadTasksByProjectIdJPATest {
 	
 	@Test
 	void test_loadTasks_whenInvalidId_shouldThrow() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString())).thenReturn(Optional.empty());
 		assertThatThrownBy(() -> loadTasks.load("test")).isInstanceOf(AppProjectNotFoundException.class)
 				.hasMessage("Could not find project with id: test");
 		
 		verify(validator).isValid("test");
-		verify(validator, times(0)).getId();
 	}
 
 	@Test
 	void test_loadTasks_whenNoTasksPresent() throws AppProjectNotFoundException {
-		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA user = new UserJPA("email", "username", "password");
 		ProjectJPA project1 = new ProjectJPA("project 1", user);
 		ProjectJPA project2 = new ProjectJPA("project 2", user);
@@ -78,7 +75,8 @@ class LoadTasksByProjectIdJPATest {
 		entityManager.persist(project2);
 		user.getProjects().add(project1);
 		user.getProjects().add(project2);
-		when(validator.getId()).thenReturn(project1.getId());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(project1.getId()));
 
 		TaskJPA task = new TaskJPA("task name", "task description", false, project2);
 		entityManager.persistAndFlush(task);
@@ -93,7 +91,6 @@ class LoadTasksByProjectIdJPATest {
 
 	@Test
 	void test_loadTasks_successful() throws AppProjectNotFoundException {
-		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA user = new UserJPA("email", "username", "password");
 		ProjectJPA project1 = new ProjectJPA("project 1", user);
 		entityManager.persist(user);
@@ -108,7 +105,8 @@ class LoadTasksByProjectIdJPATest {
 		Task task1 = new Task("2L", "task1", "", false);
 		Task task2 = new Task("4L", "task2", "descr", true);
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task1).thenReturn(task2);
-		when(validator.getId()).thenReturn(project1.getId());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(project1.getId()));
 
 		List<Task> tasks = loadTasks.load(project1.getId().toString());
 

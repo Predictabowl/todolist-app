@@ -3,12 +3,12 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -40,12 +40,12 @@ class DeleteVerificationTokenJPATest {
 
 	@Test
 	void test_deleteToken_successful() {
-		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA user = new UserJPA("email", "username", "pass");
 		entityManager.persist(user);
 		VerificationTokenJPA token = new VerificationTokenJPA(user, Calendar.getInstance().getTime());
 		entityManager.persistAndFlush(token);
-		when(validator.getId()).thenReturn(token.getToken());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(token.getToken()));
 
 		deleteToken.delete("some id");
 
@@ -58,8 +58,8 @@ class DeleteVerificationTokenJPATest {
 	
 	@Test
 	void test_deleteToken_whenNoToken() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(UUID.randomUUID());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(UUID.randomUUID()));
 		
 		deleteToken.delete("some id");
 
@@ -68,12 +68,12 @@ class DeleteVerificationTokenJPATest {
 
 		assertThat(tokens).isEmpty();
 		verify(validator).isValid("some id");
-		verify(validator).getId();
 	}
 	
 	@Test
 	void test_deleteToken_whenInvalidToken() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.empty());
 		
 		assertThatCode(() -> deleteToken.delete("invalid code"))
 			.doesNotThrowAnyException();
@@ -83,7 +83,6 @@ class DeleteVerificationTokenJPATest {
 
 		assertThat(tokens).isEmpty();
 		verify(validator).isValid("invalid code");
-		verify(validator, times(0)).getId();
 	}
 	
 }

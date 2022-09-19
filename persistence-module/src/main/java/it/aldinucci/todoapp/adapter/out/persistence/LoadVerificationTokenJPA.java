@@ -34,10 +34,11 @@ public class LoadVerificationTokenJPA implements LoadVerificationTokenDriverPort
 
 	@Override
 	public Optional<VerificationToken> load(String tokenString) {
-		if (!validator.isValid(tokenString))
+		Optional<UUID> valid = validator.isValid(tokenString);
+		if (valid.isEmpty())
 			return Optional.empty();
 		
-		Optional<VerificationTokenJPA> tokenJPA = tokenRepo.findByToken(validator.getId());
+		Optional<VerificationTokenJPA> tokenJPA = tokenRepo.findByToken(valid.get());
 		if (tokenJPA.isEmpty())
 			return Optional.empty();
 		return Optional.of(mapper.map(tokenJPA.get()));

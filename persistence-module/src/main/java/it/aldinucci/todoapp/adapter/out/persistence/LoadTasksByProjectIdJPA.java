@@ -35,10 +35,9 @@ public class LoadTasksByProjectIdJPA implements LoadTasksByProjectIdDriverPort{
 
 	@Override
 	public List<Task> load(String projectId) throws AppProjectNotFoundException{
-		if(!validator.isValid(projectId))
-			throw new AppProjectNotFoundException("Could not find project with id: "+projectId);
+		long longId = validator.isValid(projectId).orElseThrow(() -> 
+			new AppProjectNotFoundException("Could not find project with id: "+projectId));
 		
-		long longId = validator.getId();
 		ProjectJPA project = projectRepository.findById(longId).orElseThrow(()
 				-> new AppProjectNotFoundException("Could not find project with id: "+projectId));
 		return project.getTasks().stream().map(t -> mapper.map(t))

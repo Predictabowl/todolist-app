@@ -27,10 +27,11 @@ public class DeleteProjectByIdJPA implements DeleteProjectByIdDriverPort{
 
 	@Override
 	public boolean delete(String id) throws AppProjectNotFoundException{
-		if(!validator.isValid(id))
+		Optional<Long> valid = validator.isValid(id);
+		if(valid.isEmpty())
 			return false;
 
-		long longId = validator.getId();
+		long longId = valid.get();
 		Optional<ProjectJPA> optionalProject = projectRepository.findById(longId);
 		if(optionalProject.isEmpty())
 			return false;

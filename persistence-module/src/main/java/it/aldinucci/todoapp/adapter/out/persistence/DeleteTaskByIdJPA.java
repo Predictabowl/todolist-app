@@ -25,10 +25,11 @@ public class DeleteTaskByIdJPA implements DeleteTaskByIdDriverPort{
 
 	@Override
 	public boolean delete(String id){
-		if (!validator.isValid(id))
+		Optional<Long> valid = validator.isValid(id);
+		if (valid.isEmpty())
 			return false;
 
-		long longId = validator.getId();
+		long longId = valid.get();
 		Optional<TaskJPA> optional = taskRepository.findById(longId);
 		if (optional.isEmpty())
 			return false;

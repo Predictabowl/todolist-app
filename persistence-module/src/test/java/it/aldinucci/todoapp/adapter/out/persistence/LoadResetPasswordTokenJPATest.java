@@ -4,7 +4,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -48,28 +47,26 @@ class LoadResetPasswordTokenJPATest {
 	
 	@Test
 	void test_loadToken_whenInvalidToken() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.empty());
 		
 		assertThat(loadToken.load("token")).isEmpty();
 		
 		verify(validator).isValid("token");
-		verify(validator, times(0)).getId();
 	}
 	
 	@Test
 	void test_loadToken_whenMissing() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(UUID.randomUUID());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(UUID.randomUUID()));
 		
 		assertThat(loadToken.load("some id")).isEmpty();
 		
 		verify(validator).isValid("some id");
-		verify(validator).getId();
 	}
 	
 	@Test
 	void test_loadToken_success() {
-		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA user = new UserJPA("email", "name", "pass");
 		entityManager.persistAndFlush(user);
 		Date date = Calendar.getInstance().getTime();
@@ -77,7 +74,8 @@ class LoadResetPasswordTokenJPATest {
 		entityManager.persistAndFlush(tokenJpa);
 		ResetPasswordToken token = new ResetPasswordToken("token", date, "email");
 		when(mapper.map(isA(ResetPasswordTokenJPA.class))).thenReturn(token);
-		when(validator.getId()).thenReturn(tokenJpa.getToken());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(tokenJpa.getToken()));
 		
 		Optional<ResetPasswordToken> loadedToken = loadToken.load("some id");
 		

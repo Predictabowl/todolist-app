@@ -4,10 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,10 +49,9 @@ class CreateTaskJPATest {
 	
 	@Test
 	void test_createNewTask_successful() throws AppProjectNotFoundException {
-		when(validator.isValid(anyString())).thenReturn(true);
 		ProjectJPA projectJPA = getFixtureProject();
 		entityManager.flush();
-		when(validator.getId()).thenReturn(projectJPA.getId());
+		when(validator.isValid(anyString())).thenReturn(Optional.of(projectJPA.getId()));
 		
 		NewTaskData newTask = new NewTaskData("task name", "task description", false, projectJPA.getId().toString(), 3);
 		Task task = new Task();
@@ -83,8 +83,7 @@ class CreateTaskJPATest {
 	
 	@Test
 	void test_createNewTask_whenProjectNotPresent() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(1L);
+		when(validator.isValid(anyString())).thenReturn(Optional.of(1L));
 		NewTaskData newTask = new NewTaskData("task name", "task description", false, "1", 5);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
@@ -97,7 +96,7 @@ class CreateTaskJPATest {
 	
 	@Test
 	void test_createNewTask_whenProjectIdIsInvalid() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString())).thenReturn(Optional.empty());
 		NewTaskData newTask = new NewTaskData("task name", "task description", false, "invalid", 5);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
@@ -106,7 +105,6 @@ class CreateTaskJPATest {
 		
 		verifyNoInteractions(mapper);
 		verify(validator).isValid("invalid");
-		verify(validator, times(0)).getId();
 	}
 
 }

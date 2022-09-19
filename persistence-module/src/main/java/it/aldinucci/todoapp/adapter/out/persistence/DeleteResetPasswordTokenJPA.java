@@ -26,8 +26,9 @@ public class DeleteResetPasswordTokenJPA implements DeleteRestPasswordTokenDrive
 
 	@Override
 	public void delete(String token) {
-		if (validator.isValid(token)) {
-			Optional<ResetPasswordTokenJPA> optional = tokenRepo.findByToken(validator.getId());
+		Optional<UUID> valid = validator.isValid(token);
+		if (valid.isPresent()) {
+			Optional<ResetPasswordTokenJPA> optional = tokenRepo.findByToken(valid.get());
 			if (optional.isPresent())
 				tokenRepo.delete(optional.get());
 		}

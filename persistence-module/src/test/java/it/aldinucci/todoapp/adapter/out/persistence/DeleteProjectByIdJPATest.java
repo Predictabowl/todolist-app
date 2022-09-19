@@ -2,9 +2,10 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,8 +38,7 @@ class DeleteProjectByIdJPATest {
 	
 	@Test
 	void test_deleteProject_WhenNotPresent() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(3L);
+		when(validator.isValid(anyString())).thenReturn(Optional.of(3L));
 		boolean deleted = deleteProject.delete("3");
 		
 		assertThat(deleted).isFalse();
@@ -47,17 +47,16 @@ class DeleteProjectByIdJPATest {
 	
 	@Test
 	void test_deleteProject_WhenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString())).thenReturn(Optional.empty());
 		
 		boolean deleted = deleteProject.delete("invalid");
 		
 		assertThat(deleted).isFalse();
-		verify(validator,times(0)).getId();
+		verify(validator).isValid("invalid");
 	}
 	
 	@Test
 	void test_deleteProject_Successful() throws AppProjectNotFoundException {
-		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA user = new UserJPA("email", "username", "password");
 		entityManager.persist(user);
 		ProjectJPA project = new ProjectJPA("project name", user);
@@ -66,7 +65,7 @@ class DeleteProjectByIdJPATest {
 		TaskJPA task = new TaskJPA("task name", "desc", false, project);
 		entityManager.persistAndFlush(task);
 		project.getTasks().add(task);
-		when(validator.getId()).thenReturn(project.getId());
+		when(validator.isValid(anyString())).thenReturn(Optional.of(project.getId()));
 		
 		boolean deleted = deleteProject.delete(project.getId().toString());
 		

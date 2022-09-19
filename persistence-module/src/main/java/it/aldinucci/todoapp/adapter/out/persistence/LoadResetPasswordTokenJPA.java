@@ -31,10 +31,11 @@ public class LoadResetPasswordTokenJPA implements LoadResetPasswordTokenDriverPo
 
 	@Override
 	public Optional<ResetPasswordToken> load(String tokenString) {
-		if (!validator.isValid(tokenString))
+		Optional<UUID> valid = validator.isValid(tokenString);
+		if (valid.isEmpty())
 			return Optional.empty();
 
-		Optional<ResetPasswordTokenJPA> token = tokenRepo.findByToken(validator.getId());
+		Optional<ResetPasswordTokenJPA> token = tokenRepo.findByToken(valid.get());
 		if (token.isEmpty())
 			return Optional.empty();
 

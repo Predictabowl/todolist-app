@@ -26,8 +26,9 @@ public class DeleteVerificationTokenJPA implements DeleteVerificationTokenDriver
 
 	@Override
 	public void delete(String tokenCode) {
-		if (validator.isValid(tokenCode)) {
-			Optional<VerificationTokenJPA> optionalToken = tokenRepo.findByToken(validator.getId());
+		Optional<UUID> valid = validator.isValid(tokenCode);
+		if (valid.isPresent()) {
+			Optional<VerificationTokenJPA> optionalToken = tokenRepo.findByToken(valid.get());
 			if (optionalToken.isPresent()) {
 				tokenRepo.delete(optionalToken.get());
 			}

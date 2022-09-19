@@ -3,11 +3,11 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 import org.junit.jupiter.api.Test;
@@ -44,8 +44,8 @@ class GetTaskMaxOrderInProjectJPATest {
 
 	@Test
 	void test_countWhenProjectNotExists_shouldThrow() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(12L);
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(12L));
 		
 		assertThatThrownBy(() -> sut.get("12"))
 			.isInstanceOf(AppProjectNotFoundException.class)
@@ -56,9 +56,9 @@ class GetTaskMaxOrderInProjectJPATest {
 	
 	@Test
 	void test_countWhenThereIsNoTask() throws AppProjectNotFoundException, AppInvalidIdException {
-		when(validator.isValid(anyString())).thenReturn(true);
 		ProjectJPA projectJPA = setUpDB();
-		when(validator.getId()).thenReturn(projectJPA.getId());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(projectJPA.getId()));
 		
 		OptionalInt maxValue = sut.get(projectJPA.getId().toString());
 		
@@ -68,21 +68,19 @@ class GetTaskMaxOrderInProjectJPATest {
 	
 	@Test
 	void test_getWhenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString())).thenReturn(Optional.empty());
 		
 		assertThatThrownBy(() -> sut.get("test"))
 			.isInstanceOf(AppInvalidIdException.class)
 			.hasMessage("Invalid Project id: test");
 		
 		verify(validator).isValid("test");
-		verify(validator, times(0)).getId();
 	}
 	
 	@Test
 	void test_countSuccess() throws AppProjectNotFoundException, AppInvalidIdException {
-		when(validator.isValid(anyString())).thenReturn(true);
 		ProjectJPA projectJPA = setUpDB();
-		when(validator.getId()).thenReturn(projectJPA.getId());
+		when(validator.isValid(anyString())).thenReturn(Optional.of(projectJPA.getId()));
 		TaskJPA task1 = entityManager.persist(new TaskJPA(null,"task 1", "descr 1", false, projectJPA, 10));
 		TaskJPA task2 = entityManager.persist(new TaskJPA(null, "task 2", "descr 2", true, projectJPA, 4));
 		TaskJPA task3 = entityManager.persist(new TaskJPA(null, "task 3", "descr 3", false, projectJPA, 17));

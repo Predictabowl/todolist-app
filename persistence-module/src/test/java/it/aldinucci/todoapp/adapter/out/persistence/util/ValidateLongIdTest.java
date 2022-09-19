@@ -3,6 +3,8 @@ package it.aldinucci.todoapp.adapter.out.persistence.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,35 +19,23 @@ class ValidateLongIdTest {
 	
 	@Test
 	void test_success() {
-		boolean valid = validateId.isValid("065");
-		Long id = validateId.getId();
-		
-		assertThat(valid).isTrue();
-		assertThat(id).isEqualTo(65L);
-		
-		valid = validateId.isValid("06a5");
-		id = validateId.getId();
-		
-		assertThat(valid).isFalse();
-		assertThat(id).isNull();
+		Optional<Long> id = validateId.isValid("065");
+
+		assertThat(id).contains(65L);
 	}
 	
 	@Test
 	void test_failure() {
-		boolean valid = validateId.isValid("06a5");
-		Long id = validateId.getId();
+		Optional<Long> id = validateId.isValid("06a5");
 		
-		assertThat(valid).isFalse();
-		assertThat(id).isNull();
+		assertThat(id).isEmpty();
 	}
 	
 	@Test
 	void test_nullId() {
-		boolean valid = validateId.isValid(null);
-		Long id = validateId.getId();
+		Optional<Long> id = validateId.isValid(null);
 		
-		assertThat(valid).isFalse();
-		assertThat(id).isNull();
+		assertThat(id).isEmpty();
 	}
 
 }

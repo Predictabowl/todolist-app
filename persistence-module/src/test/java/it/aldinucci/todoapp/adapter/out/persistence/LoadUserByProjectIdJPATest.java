@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -45,7 +44,6 @@ class LoadUserByProjectIdJPATest {
 	
 	@Test
 	void test_loadUser_Successful() throws AppProjectNotFoundException {
-		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA userJpa = new UserJPA("email", "username", "password");
 		entityManager.persist(userJpa);
 		ProjectJPA projectJpa = new ProjectJPA("project name", userJpa);
@@ -53,7 +51,8 @@ class LoadUserByProjectIdJPATest {
 		userJpa.getProjects().add(projectJpa);
 		User user = new User();
 		when(mapper.map(isA(UserJPA.class))).thenReturn(user);
-		when(validator.getId()).thenReturn(projectJpa.getId());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(projectJpa.getId()));
 		
 		Optional<User> loadedUser = loadUser.load(projectJpa.getId().toString());
 		
@@ -64,8 +63,7 @@ class LoadUserByProjectIdJPATest {
 	
 	@Test
 	void test_loadUser_whenProjectNotPresent() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(3L);
+		when(validator.isValid(anyString())).thenReturn(Optional.of(3L));
 		Optional<User> loadedUser = loadUser.load("3");
 
 		assertThat(loadedUser).isEmpty();
@@ -75,13 +73,12 @@ class LoadUserByProjectIdJPATest {
 	
 	@Test
 	void test_loadUser_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString())).thenReturn(Optional.empty());
 		Optional<User> loadedUser = loadUser.load("test");
 
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);
 		verify(validator).isValid("test");
-		verify(validator, times(0)).getId();
 	}
 
 }

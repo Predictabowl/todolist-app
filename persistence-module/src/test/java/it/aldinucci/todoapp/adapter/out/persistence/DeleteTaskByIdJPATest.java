@@ -2,9 +2,10 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +37,6 @@ class DeleteTaskByIdJPATest {
 	
 	@Test
 	void test_deleteTask_successful() {
-		when(validator.isValid(anyString())).thenReturn(true);
 		UserJPA user = new UserJPA("email", "username", "password");
 		entityManager.persist(user);
 		ProjectJPA project = new ProjectJPA("project name", user);
@@ -48,7 +48,8 @@ class DeleteTaskByIdJPATest {
 		entityManager.persistAndFlush(task2);
 		project.getTasks().add(task1);
 		project.getTasks().add(task2);
-		when(validator.getId()).thenReturn(task1.getId());
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(task1.getId()));
 		
 		boolean deleted = deleteTask.delete(task1.getId().toString());
 		
@@ -60,8 +61,8 @@ class DeleteTaskByIdJPATest {
 	
 	@Test
 	void test_deleteTask_whenTaskMissing() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(1L);
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.of(1L));
 		
 		boolean deleted = deleteTask.delete("1");
 		
@@ -71,12 +72,13 @@ class DeleteTaskByIdJPATest {
 	
 	@Test
 	void test_deleteTask_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString()))
+			.thenReturn(Optional.empty());
 		
 		boolean deleted = deleteTask.delete("test");
 		
 		assertThat(deleted).isFalse();
-		verify(validator, times(0)).getId();
+		verify(validator).isValid("test");
 	}
 
 }

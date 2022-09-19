@@ -4,7 +4,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,8 +46,7 @@ class LoadTaskByIdJPATest {
 
 	@Test
 	void test_loadTask_whenMissing() {
-		when(validator.isValid(anyString())).thenReturn(true);
-		when(validator.getId()).thenReturn(1L);
+		when(validator.isValid(anyString())).thenReturn(Optional.of(1L));
 		Optional<Task> loadedTask = sut.load("1");
 		
 		assertThat(loadedTask).isEmpty();
@@ -57,19 +55,17 @@ class LoadTaskByIdJPATest {
 	
 	@Test
 	void test_loadTask_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(false);
+		when(validator.isValid(anyString())).thenReturn(Optional.empty());
 		Optional<Task> loadedTask = sut.load("test");
 		
 		assertThat(loadedTask).isEmpty();
 		
 		verify(validator).isValid("test");
-		verify(validator, times(0)).getId();
 	}
 	
 	
 	@Test
 	void test_loadTask_success() {
-		when(validator.isValid(anyString())).thenReturn(true);
 		setUpDb();
 		TaskJPA taskJpa = new TaskJPA("name", "test", false, project);
 		entityManager.persist(taskJpa);
@@ -77,7 +73,7 @@ class LoadTaskByIdJPATest {
 		entityManager.flush();
 		Task task = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task);
-		when(validator.getId()).thenReturn(taskJpa.getId());
+		when(validator.isValid(anyString())).thenReturn(Optional.of(taskJpa.getId()));
 		
 		Optional<Task> loadedTask = sut.load(taskJpa.getId().toString());
 		
