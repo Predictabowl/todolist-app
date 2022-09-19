@@ -56,24 +56,24 @@ class LoadUnfinishedTasksByProjectIdJPATest {
 		when(mapper.map(isA(TaskJPA.class)))
 			.thenReturn(task1)
 			.thenReturn(task2);
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(2L));
 		
 		List<Task> tasks = adapter.load("2");
 		
 		verify(repository).findByProjectIdAndCompletedFalse(2);
-		verify(validator).isValid("2");
+		verify(validator).getValidId("2");
 		assertThat(tasks).containsExactly(task1,task2);
 	}
 	
 	@Test
 	void test_loadWhenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		assertThatThrownBy(() -> adapter.load("test"))
 			.isInstanceOf(AppProjectNotFoundException.class)
 			.hasMessage("Could not find project with id: test");
 		
-		verify(validator).isValid("test");
+		verify(validator).getValidId("test");
 	}
 
 }

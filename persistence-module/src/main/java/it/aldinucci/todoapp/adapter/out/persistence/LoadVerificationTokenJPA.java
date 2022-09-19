@@ -34,7 +34,7 @@ public class LoadVerificationTokenJPA implements LoadVerificationTokenDriverPort
 
 	@Override
 	public Optional<VerificationToken> load(String tokenString) {
-		Optional<UUID> valid = validator.isValid(tokenString);
+		Optional<UUID> valid = validator.getValidId(tokenString);
 		if (valid.isEmpty())
 			return Optional.empty();
 		

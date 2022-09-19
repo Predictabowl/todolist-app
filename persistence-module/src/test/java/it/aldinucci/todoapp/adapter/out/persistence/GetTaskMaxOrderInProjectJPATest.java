@@ -44,43 +44,43 @@ class GetTaskMaxOrderInProjectJPATest {
 
 	@Test
 	void test_countWhenProjectNotExists_shouldThrow() {
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(12L));
 		
 		assertThatThrownBy(() -> sut.get("12"))
 			.isInstanceOf(AppProjectNotFoundException.class)
 			.hasMessage("Could not find Project with id: 12");
 		
-		verify(validator).isValid("12");
+		verify(validator).getValidId("12");
 	}
 	
 	@Test
 	void test_countWhenThereIsNoTask() throws AppProjectNotFoundException, AppInvalidIdException {
 		ProjectJPA projectJPA = setUpDB();
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(projectJPA.getId()));
 		
 		OptionalInt maxValue = sut.get(projectJPA.getId().toString());
 		
 		assertThat(maxValue).isEmpty();
-		verify(validator).isValid(projectJPA.getId().toString());
+		verify(validator).getValidId(projectJPA.getId().toString());
 	}
 	
 	@Test
 	void test_getWhenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		
 		assertThatThrownBy(() -> sut.get("test"))
 			.isInstanceOf(AppInvalidIdException.class)
 			.hasMessage("Invalid Project id: test");
 		
-		verify(validator).isValid("test");
+		verify(validator).getValidId("test");
 	}
 	
 	@Test
 	void test_countSuccess() throws AppProjectNotFoundException, AppInvalidIdException {
 		ProjectJPA projectJPA = setUpDB();
-		when(validator.isValid(anyString())).thenReturn(Optional.of(projectJPA.getId()));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(projectJPA.getId()));
 		TaskJPA task1 = entityManager.persist(new TaskJPA(null,"task 1", "descr 1", false, projectJPA, 10));
 		TaskJPA task2 = entityManager.persist(new TaskJPA(null, "task 2", "descr 2", true, projectJPA, 4));
 		TaskJPA task3 = entityManager.persist(new TaskJPA(null, "task 3", "descr 3", false, projectJPA, 17));
@@ -90,7 +90,7 @@ class GetTaskMaxOrderInProjectJPATest {
 		OptionalInt maxValue = sut.get(projectJPA.getId().toString());
 		
 		assertThat(maxValue).hasValue(17);
-		verify(validator).isValid(projectJPA.getId().toString());
+		verify(validator).getValidId(projectJPA.getId().toString());
 	}
 
 	private ProjectJPA setUpDB() {

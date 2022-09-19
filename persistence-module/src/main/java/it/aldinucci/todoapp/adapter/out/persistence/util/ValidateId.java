@@ -4,5 +4,5 @@ import java.util.Optional;
 
 public interface ValidateId<T> {
 
-	public Optional<T> isValid(String id);
+	public Optional<T> getValidId(String id);
 }

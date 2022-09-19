@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ValidateLongId implements ValidateId<Long> {
 
 	@Override
-	public Optional<Long> isValid(String id) {
+	public Optional<Long> getValidId(String id) {
 		try {
 			return  Optional.of(Long.parseLong(id));
 		} catch (Exception e) {

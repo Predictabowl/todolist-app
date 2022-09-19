@@ -46,21 +46,21 @@ class LoadTaskByIdJPATest {
 
 	@Test
 	void test_loadTask_whenMissing() {
-		when(validator.isValid(anyString())).thenReturn(Optional.of(1L));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(1L));
 		Optional<Task> loadedTask = sut.load("1");
 		
 		assertThat(loadedTask).isEmpty();
-		verify(validator).isValid("1");
+		verify(validator).getValidId("1");
 	}
 	
 	@Test
 	void test_loadTask_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		Optional<Task> loadedTask = sut.load("test");
 		
 		assertThat(loadedTask).isEmpty();
 		
-		verify(validator).isValid("test");
+		verify(validator).getValidId("test");
 	}
 	
 	
@@ -73,12 +73,12 @@ class LoadTaskByIdJPATest {
 		entityManager.flush();
 		Task task = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task);
-		when(validator.isValid(anyString())).thenReturn(Optional.of(taskJpa.getId()));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(taskJpa.getId()));
 		
 		Optional<Task> loadedTask = sut.load(taskJpa.getId().toString());
 		
 		verify(mapper).map(taskJpa);
-		verify(validator).isValid(taskJpa.getId().toString());
+		verify(validator).getValidId(taskJpa.getId().toString());
 		assertThat(loadedTask).containsSame(task);
 	}
 	

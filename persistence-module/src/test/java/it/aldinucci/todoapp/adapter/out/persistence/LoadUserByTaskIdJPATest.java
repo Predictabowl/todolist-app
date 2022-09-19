@@ -54,7 +54,7 @@ class LoadUserByTaskIdJPATest {
 		entityManager.persist(taskJpa);
 		project.getTasks().add(taskJpa);
 		entityManager.flush();
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(taskJpa.getId()));
 		
 		User user = new User();
@@ -63,29 +63,29 @@ class LoadUserByTaskIdJPATest {
 		Optional<User> loadedUser = adapter.load(taskJpa.getId().toString());
 		
 		verify(mapper).map(userJpa);
-		verify(validator).isValid(taskJpa.getId().toString());
+		verify(validator).getValidId(taskJpa.getId().toString());
 		assertThat(loadedUser).containsSame(user);
 	}
 	
 	@Test
 	void test_loadUser_whenTaskNotPresent() {
-		when(validator.isValid(anyString())).thenReturn(Optional.of(1L));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(1L));
 		
 		Optional<User> loadedUser = adapter.load("1");
 		
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("1");
+		verify(validator).getValidId("1");
 	}
 	
 	@Test
 	void test_loadUser_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		Optional<User> loadedUser = adapter.load("test");
 		
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("test");
+		verify(validator).getValidId("test");
 	}
 
 }

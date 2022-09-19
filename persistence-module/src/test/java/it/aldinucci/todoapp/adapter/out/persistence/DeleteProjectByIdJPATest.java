@@ -38,21 +38,21 @@ class DeleteProjectByIdJPATest {
 	
 	@Test
 	void test_deleteProject_WhenNotPresent() {
-		when(validator.isValid(anyString())).thenReturn(Optional.of(3L));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(3L));
 		boolean deleted = deleteProject.delete("3");
 		
 		assertThat(deleted).isFalse();
-		verify(validator).isValid("3");
+		verify(validator).getValidId("3");
 	}
 	
 	@Test
 	void test_deleteProject_WhenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		
 		boolean deleted = deleteProject.delete("invalid");
 		
 		assertThat(deleted).isFalse();
-		verify(validator).isValid("invalid");
+		verify(validator).getValidId("invalid");
 	}
 	
 	@Test
@@ -65,7 +65,7 @@ class DeleteProjectByIdJPATest {
 		TaskJPA task = new TaskJPA("task name", "desc", false, project);
 		entityManager.persistAndFlush(task);
 		project.getTasks().add(task);
-		when(validator.isValid(anyString())).thenReturn(Optional.of(project.getId()));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(project.getId()));
 		
 		boolean deleted = deleteProject.delete(project.getId().toString());
 		
@@ -73,7 +73,7 @@ class DeleteProjectByIdJPATest {
 		assertThat(entityManager.find(ProjectJPA.class,project.getId())).isNull();
 		assertThat(entityManager.find(TaskJPA.class, task.getId())).isNull();
 		assertThat(user.getProjects()).isEmpty();
-		verify(validator).isValid(project.getId().toString());
+		verify(validator).getValidId(project.getId().toString());
 	}
 
 }

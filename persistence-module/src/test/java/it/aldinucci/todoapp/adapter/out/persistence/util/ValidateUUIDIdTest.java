@@ -22,21 +22,21 @@ class ValidateUUIDIdTest {
 	void test_success() {
 		UUID uuid = UUID.randomUUID();
 		
-		Optional<UUID> id = validator.isValid(uuid.toString());
+		Optional<UUID> id = validator.getValidId(uuid.toString());
 		
 		assertThat(id).contains(uuid);
 	}
 	
 	@Test
 	void test_fail() {
-		Optional<UUID> id = validator.isValid("random 23");
+		Optional<UUID> id = validator.getValidId("random 23");
 
 		assertThat(id).isEmpty();
 	}
 	
 	@Test
 	void test_nullId() {
-		Optional<UUID> id = validator.isValid(null);
+		Optional<UUID> id = validator.getValidId(null);
 		
 		assertThat(id).isEmpty();
 	}

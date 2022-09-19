@@ -51,7 +51,7 @@ class CreateTaskJPATest {
 	void test_createNewTask_successful() throws AppProjectNotFoundException {
 		ProjectJPA projectJPA = getFixtureProject();
 		entityManager.flush();
-		when(validator.isValid(anyString())).thenReturn(Optional.of(projectJPA.getId()));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(projectJPA.getId()));
 		
 		NewTaskData newTask = new NewTaskData("task name", "task description", false, projectJPA.getId().toString(), 3);
 		Task task = new Task();
@@ -63,7 +63,7 @@ class CreateTaskJPATest {
 				.createQuery("from TaskJPA",TaskJPA.class).getSingleResult();
 
 		verify(mapper).map(createdTask);
-		verify(validator).isValid(projectJPA.getId().toString());
+		verify(validator).getValidId(projectJPA.getId().toString());
 		assertThat(returnedTask).isSameAs(task);
 		assertThat(createdTask.getProject()).usingRecursiveComparison().isEqualTo(projectJPA);
 		assertThat(createdTask.getOrderInProject()).isEqualTo(3);
@@ -83,7 +83,7 @@ class CreateTaskJPATest {
 	
 	@Test
 	void test_createNewTask_whenProjectNotPresent() {
-		when(validator.isValid(anyString())).thenReturn(Optional.of(1L));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(1L));
 		NewTaskData newTask = new NewTaskData("task name", "task description", false, "1", 5);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
@@ -91,12 +91,12 @@ class CreateTaskJPATest {
 			.hasMessage("Project not found with id: 1");
 		
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("1");
+		verify(validator).getValidId("1");
 	}
 	
 	@Test
 	void test_createNewTask_whenProjectIdIsInvalid() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		NewTaskData newTask = new NewTaskData("task name", "task description", false, "invalid", 5);
 		
 		assertThatThrownBy(() -> createTask.create(newTask))
@@ -104,7 +104,7 @@ class CreateTaskJPATest {
 			.hasMessage("Project not found with id: invalid");
 		
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("invalid");
+		verify(validator).getValidId("invalid");
 	}
 
 }

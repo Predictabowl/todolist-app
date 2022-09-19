@@ -60,26 +60,26 @@ class UpdateTaskJPATest {
 	
 	@Test
 	void test_updateTask_whenTaskDontExists() {
-		when(validator.isValid(anyString())).thenReturn(Optional.of(1L));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(1L));
 		Task task = new Task("1", "another name", "test", true);
 		
 		Optional<Task> optionalTask = sut.update(task);
 		
 		assertThat(optionalTask).isEmpty();
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("1");
+		verify(validator).getValidId("1");
 	}
 	
 	@Test
 	void test_updateTask_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		Task task = new Task("test", "another name", "test", true);
 		
 		Optional<Task> optionalTask = sut.update(task);
 		
 		assertThat(optionalTask).isEmpty();
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("test");
+		verify(validator).getValidId("test");
 	}
 	
 	@Test
@@ -92,7 +92,7 @@ class UpdateTaskJPATest {
 		Long taskId = taskJpa.getId();
 		Task emptyTask = new Task();
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(emptyTask);
-		when(validator.isValid(anyString())).thenReturn(Optional.of(taskId));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(taskId));
 		
 		Task task = new Task(taskId.toString(), "another name", "test", true, 5);
 		
@@ -109,7 +109,7 @@ class UpdateTaskJPATest {
 		verify(mapper).map(taskJpaCaptor.capture());
 		assertThat(taskJpaCaptor.getValue()).usingRecursiveComparison().isEqualTo(updatedTaskJpa);
 		assertThat(updatedTask).containsSame(emptyTask);
-		verify(validator).isValid(taskId.toString());
+		verify(validator).getValidId(taskId.toString());
 	}
 
 

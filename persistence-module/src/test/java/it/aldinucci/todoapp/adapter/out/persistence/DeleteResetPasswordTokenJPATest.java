@@ -44,7 +44,7 @@ class DeleteResetPasswordTokenJPATest {
 		entityManager.persist(user);
 		ResetPasswordTokenJPA token = new ResetPasswordTokenJPA(user, Calendar.getInstance().getTime());
 		entityManager.persistAndFlush(token);
-		when(validator.isValid(anyString())).thenReturn(Optional.of(token.getToken()));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(token.getToken()));
 
 		deleteToken.delete("some id");
 
@@ -52,12 +52,12 @@ class DeleteResetPasswordTokenJPATest {
 				.createQuery("from ResetPasswordTokenJPA", ResetPasswordTokenJPA.class).getResultList();
 
 		assertThat(tokens).isEmpty();
-		verify(validator).isValid("some id");
+		verify(validator).getValidId("some id");
 	}
 	
 	@Test
 	void test_deleteToken_whenNoTokenPresent() {
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(UUID.randomUUID()));
 		
 		deleteToken.delete("some id");
@@ -66,12 +66,12 @@ class DeleteResetPasswordTokenJPATest {
 				.createQuery("from ResetPasswordTokenJPA", ResetPasswordTokenJPA.class).getResultList();
 
 		assertThat(tokens).isEmpty();
-		verify(validator).isValid("some id");
+		verify(validator).getValidId("some id");
 	}
 	
 	@Test
 	void test_deleteToken_whenInvalidToken() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		
 		assertThatCode(() -> deleteToken.delete("invalid id"))
 			.doesNotThrowAnyException();
@@ -80,7 +80,7 @@ class DeleteResetPasswordTokenJPATest {
 				.createQuery("from ResetPasswordTokenJPA", ResetPasswordTokenJPA.class).getResultList();
 
 		assertThat(tokens).isEmpty();
-		verify(validator).isValid("invalid id");
+		verify(validator).getValidId("invalid id");
 	}
 
 }

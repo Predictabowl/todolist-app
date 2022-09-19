@@ -19,21 +19,21 @@ class ValidateLongIdTest {
 	
 	@Test
 	void test_success() {
-		Optional<Long> id = validateId.isValid("065");
+		Optional<Long> id = validateId.getValidId("065");
 
 		assertThat(id).contains(65L);
 	}
 	
 	@Test
 	void test_failure() {
-		Optional<Long> id = validateId.isValid("06a5");
+		Optional<Long> id = validateId.getValidId("06a5");
 		
 		assertThat(id).isEmpty();
 	}
 	
 	@Test
 	void test_nullId() {
-		Optional<Long> id = validateId.isValid(null);
+		Optional<Long> id = validateId.getValidId(null);
 		
 		assertThat(id).isEmpty();
 	}

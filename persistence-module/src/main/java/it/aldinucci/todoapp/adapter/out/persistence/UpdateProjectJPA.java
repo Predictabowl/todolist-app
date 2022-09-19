@@ -30,7 +30,7 @@ public class UpdateProjectJPA implements UpdateProjectDriverPort {
 
 	@Override
 	public Optional<Project> update(Project project) {
-		Optional<Long> valid = validator.isValid(project.getId());
+		Optional<Long> valid = validator.getValidId(project.getId());
 		if(valid.isEmpty())
 			return Optional.empty();
 

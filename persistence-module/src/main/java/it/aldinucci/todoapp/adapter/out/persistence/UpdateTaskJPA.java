@@ -31,7 +31,7 @@ public class UpdateTaskJPA implements UpdateTaskDriverPort{
 
 	@Override
 	public Optional<Task> update(Task task) {
-		Optional<Long> valid = validator.isValid(task.getId());
+		Optional<Long> valid = validator.getValidId(task.getId());
 		if(valid.isEmpty())
 			return Optional.empty();
 		

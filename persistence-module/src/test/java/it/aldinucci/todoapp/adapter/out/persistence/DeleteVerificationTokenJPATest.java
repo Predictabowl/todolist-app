@@ -44,7 +44,7 @@ class DeleteVerificationTokenJPATest {
 		entityManager.persist(user);
 		VerificationTokenJPA token = new VerificationTokenJPA(user, Calendar.getInstance().getTime());
 		entityManager.persistAndFlush(token);
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(token.getToken()));
 
 		deleteToken.delete("some id");
@@ -53,12 +53,12 @@ class DeleteVerificationTokenJPATest {
 				.createQuery("from VerificationTokenJPA", VerificationTokenJPA.class).getResultList();
 
 		assertThat(tokens).isEmpty();
-		verify(validator).isValid("some id");
+		verify(validator).getValidId("some id");
 	}
 	
 	@Test
 	void test_deleteToken_whenNoToken() {
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(UUID.randomUUID()));
 		
 		deleteToken.delete("some id");
@@ -67,12 +67,12 @@ class DeleteVerificationTokenJPATest {
 				.createQuery("from VerificationTokenJPA", VerificationTokenJPA.class).getResultList();
 
 		assertThat(tokens).isEmpty();
-		verify(validator).isValid("some id");
+		verify(validator).getValidId("some id");
 	}
 	
 	@Test
 	void test_deleteToken_whenInvalidToken() {
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.empty());
 		
 		assertThatCode(() -> deleteToken.delete("invalid code"))
@@ -82,7 +82,7 @@ class DeleteVerificationTokenJPATest {
 				.createQuery("from VerificationTokenJPA", VerificationTokenJPA.class).getResultList();
 
 		assertThat(tokens).isEmpty();
-		verify(validator).isValid("invalid code");
+		verify(validator).getValidId("invalid code");
 	}
 	
 }

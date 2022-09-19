@@ -47,12 +47,12 @@ class LoadVerificationTokenJPATest {
 	
 	@Test
 	void test_loadToken_whenMissing() {
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(UUID.randomUUID()));
 		
 		assertThat(loadToken.load("random id")).isEmpty();
 	
-		verify(validator).isValid("random id");
+		verify(validator).getValidId("random id");
 	}
 	
 	@Test
@@ -64,23 +64,23 @@ class LoadVerificationTokenJPATest {
 		entityManager.persistAndFlush(tokenJpa);
 		VerificationToken token = new VerificationToken("token", date, "email");
 		when(mapper.map(isA(VerificationTokenJPA.class))).thenReturn(token);
-		when(validator.isValid(anyString())).thenReturn(Optional.of(tokenJpa.getToken()));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(tokenJpa.getToken()));
 		
 		Optional<VerificationToken> loadedToken = loadToken.load(tokenJpa.getToken().toString());
 		
 		assertThat(loadedToken).contains(token);
-		verify(validator).isValid(tokenJpa.getToken().toString());
+		verify(validator).getValidId(tokenJpa.getToken().toString());
 	}
 	
 	@Test
 	void test_loadToken_invalidString() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		Optional<VerificationToken> loadedToken = loadToken.load("random string");
 		
 		assertThat(loadedToken).isEmpty();
 		
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("random string");
+		verify(validator).getValidId("random string");
 	}
 
 }

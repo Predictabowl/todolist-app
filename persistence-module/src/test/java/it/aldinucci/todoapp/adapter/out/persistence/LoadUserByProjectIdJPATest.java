@@ -51,34 +51,34 @@ class LoadUserByProjectIdJPATest {
 		userJpa.getProjects().add(projectJpa);
 		User user = new User();
 		when(mapper.map(isA(UserJPA.class))).thenReturn(user);
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(projectJpa.getId()));
 		
 		Optional<User> loadedUser = loadUser.load(projectJpa.getId().toString());
 		
 		verify(mapper).map(userJpa);
-		verify(validator).isValid(projectJpa.getId().toString());
+		verify(validator).getValidId(projectJpa.getId().toString());
 		assertThat(loadedUser).containsSame(user);
 	}
 	
 	@Test
 	void test_loadUser_whenProjectNotPresent() {
-		when(validator.isValid(anyString())).thenReturn(Optional.of(3L));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(3L));
 		Optional<User> loadedUser = loadUser.load("3");
 
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("3");
+		verify(validator).getValidId("3");
 	}
 	
 	@Test
 	void test_loadUser_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		Optional<User> loadedUser = loadUser.load("test");
 
 		assertThat(loadedUser).isEmpty();
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("test");
+		verify(validator).getValidId("test");
 	}
 
 }

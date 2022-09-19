@@ -11,7 +11,7 @@ import it.aldinucci.todoapp.util.ValidationUtils;
 public class ValidateUUIDId implements ValidateId<UUID> {
 
 	@Override
-	public Optional<UUID> isValid(String id) {
+	public Optional<UUID> getValidId(String id) {
 		if(ValidationUtils.isValidUUID(id)) {
 			return Optional.of(UUID.fromString(id));
 		}

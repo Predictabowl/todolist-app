@@ -44,7 +44,7 @@ class UpdateProjectJPATest {
 	
 	@Test
 	void test_update_whenProjectIsMissing() {
-		when(validator.isValid(anyString())).thenReturn(Optional.of(2L));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(2L));
 		
 		Optional<Project> optional = sut.update(new Project("2", "name"));
 		
@@ -53,12 +53,12 @@ class UpdateProjectJPATest {
 			.isEmpty();
 		
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("2");
+		verify(validator).getValidId("2");
 	}
 	
 	@Test
 	void test_update_whenInvalidId() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		
 		Optional<Project> optional = sut.update(new Project("test", "name"));
 		
@@ -67,7 +67,7 @@ class UpdateProjectJPATest {
 			.isEmpty();
 		
 		verifyNoInteractions(mapper);
-		verify(validator).isValid("test");
+		verify(validator).getValidId("test");
 	}
 	
 	@Test
@@ -79,7 +79,7 @@ class UpdateProjectJPATest {
 		entityManager.detach(projectJpa);
 		Project testProject = new Project("11", "different");
 		when(mapper.map(isA(ProjectJPA.class))).thenReturn(testProject);
-		when(validator.isValid(anyString())).thenReturn(Optional.of(projectJpa.getId()));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(projectJpa.getId()));
 		
 		Project newProject = new Project(projectJpa.getId().toString(), "new name");
 		
@@ -92,7 +92,7 @@ class UpdateProjectJPATest {
 		projectJpa.setName("new name");
 		assertThat(loadedProjectJpa).usingRecursiveComparison().isEqualTo(projectJpa);
 		verify(mapper).map(projectJpa);
-		verify(validator).isValid(projectJpa.getId().toString());
+		verify(validator).getValidId(projectJpa.getId().toString());
 	}
 
 }

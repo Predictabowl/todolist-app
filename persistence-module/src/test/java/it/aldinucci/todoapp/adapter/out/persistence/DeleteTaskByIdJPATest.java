@@ -48,7 +48,7 @@ class DeleteTaskByIdJPATest {
 		entityManager.persistAndFlush(task2);
 		project.getTasks().add(task1);
 		project.getTasks().add(task2);
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(task1.getId()));
 		
 		boolean deleted = deleteTask.delete(task1.getId().toString());
@@ -56,29 +56,29 @@ class DeleteTaskByIdJPATest {
 		assertThat(deleted).isTrue();
 		assertThat(entityManager.find(TaskJPA.class, task1.getId())).isNull();
 		assertThat(project.getTasks()).containsExactly(task2);
-		verify(validator).isValid(task1.getId().toString());
+		verify(validator).getValidId(task1.getId().toString());
 	}
 	
 	@Test
 	void test_deleteTask_whenTaskMissing() {
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(1L));
 		
 		boolean deleted = deleteTask.delete("1");
 		
 		assertThat(deleted).isFalse();
-		verify(validator).isValid("1");
+		verify(validator).getValidId("1");
 	}
 	
 	@Test
 	void test_deleteTask_whenInvalidId() {
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.empty());
 		
 		boolean deleted = deleteTask.delete("test");
 		
 		assertThat(deleted).isFalse();
-		verify(validator).isValid("test");
+		verify(validator).getValidId("test");
 	}
 
 }

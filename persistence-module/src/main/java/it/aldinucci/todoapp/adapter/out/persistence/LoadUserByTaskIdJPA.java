@@ -32,7 +32,7 @@ public class LoadUserByTaskIdJPA implements LoadUserByTaskIdDriverPort {
 
 	@Override
 	public Optional<User> load(String taskId) throws AppTaskNotFoundException {
-		Optional<Long> valid = validator.isValid(taskId);
+		Optional<Long> valid = validator.getValidId(taskId);
 		if(valid.isEmpty())
 			return Optional.empty();
 

@@ -30,7 +30,7 @@ public class LoadTaskByIdJPA implements LoadTaskByIdDriverPort {
 
 	@Override
 	public Optional<Task> load(String id) {
-		Optional<Long> valid = validator.isValid(id);
+		Optional<Long> valid = validator.getValidId(id);
 		if (valid.isEmpty())
 			return Optional.empty();
 

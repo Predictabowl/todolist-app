@@ -29,7 +29,7 @@ public class GetTaskMaxOrderInProjectJPA implements GetTaskMaxOrderInProjectDriv
 
 	@Override
 	public OptionalInt get(String projectId) throws AppProjectNotFoundException, AppInvalidIdException {
-		long longId = validator.isValid(projectId).orElseThrow(() -> 
+		long longId = validator.getValidId(projectId).orElseThrow(() -> 
 				new AppInvalidIdException("Invalid Project id: " + projectId));
 
 		ProjectJPA project = projectRepo.findById(longId).orElseThrow(() -> 

@@ -47,22 +47,22 @@ class LoadResetPasswordTokenJPATest {
 	
 	@Test
 	void test_loadToken_whenInvalidToken() {
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.empty());
 		
 		assertThat(loadToken.load("token")).isEmpty();
 		
-		verify(validator).isValid("token");
+		verify(validator).getValidId("token");
 	}
 	
 	@Test
 	void test_loadToken_whenMissing() {
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(UUID.randomUUID()));
 		
 		assertThat(loadToken.load("some id")).isEmpty();
 		
-		verify(validator).isValid("some id");
+		verify(validator).getValidId("some id");
 	}
 	
 	@Test
@@ -74,12 +74,12 @@ class LoadResetPasswordTokenJPATest {
 		entityManager.persistAndFlush(tokenJpa);
 		ResetPasswordToken token = new ResetPasswordToken("token", date, "email");
 		when(mapper.map(isA(ResetPasswordTokenJPA.class))).thenReturn(token);
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(tokenJpa.getToken()));
 		
 		Optional<ResetPasswordToken> loadedToken = loadToken.load("some id");
 		
 		assertThat(loadedToken).contains(token);
-		verify(validator).isValid("some id");
+		verify(validator).getValidId("some id");
 	}
 }

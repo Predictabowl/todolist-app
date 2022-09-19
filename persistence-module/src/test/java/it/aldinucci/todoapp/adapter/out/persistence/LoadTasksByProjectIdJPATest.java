@@ -48,21 +48,21 @@ class LoadTasksByProjectIdJPATest {
 
 	@Test
 	void test_loadTasks_whenProjectNotPresent_shouldThrow() {
-		when(validator.isValid(anyString())).thenReturn(Optional.of(3L));
+		when(validator.getValidId(anyString())).thenReturn(Optional.of(3L));
 		
 		assertThatThrownBy(() -> loadTasks.load("3")).isInstanceOf(AppProjectNotFoundException.class)
 				.hasMessage("Could not find project with id: 3");
 		
-		verify(validator).isValid("3");
+		verify(validator).getValidId("3");
 	}
 	
 	@Test
 	void test_loadTasks_whenInvalidId_shouldThrow() {
-		when(validator.isValid(anyString())).thenReturn(Optional.empty());
+		when(validator.getValidId(anyString())).thenReturn(Optional.empty());
 		assertThatThrownBy(() -> loadTasks.load("test")).isInstanceOf(AppProjectNotFoundException.class)
 				.hasMessage("Could not find project with id: test");
 		
-		verify(validator).isValid("test");
+		verify(validator).getValidId("test");
 	}
 
 	@Test
@@ -75,7 +75,7 @@ class LoadTasksByProjectIdJPATest {
 		entityManager.persist(project2);
 		user.getProjects().add(project1);
 		user.getProjects().add(project2);
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(project1.getId()));
 
 		TaskJPA task = new TaskJPA("task name", "task description", false, project2);
@@ -85,7 +85,7 @@ class LoadTasksByProjectIdJPATest {
 		List<Task> tasks = loadTasks.load(project1.getId().toString());
 
 		verifyNoInteractions(mapper);
-		verify(validator).isValid(project1.getId().toString());
+		verify(validator).getValidId(project1.getId().toString());
 		assertThat(tasks).isEmpty();
 	}
 
@@ -105,7 +105,7 @@ class LoadTasksByProjectIdJPATest {
 		Task task1 = new Task("2L", "task1", "", false);
 		Task task2 = new Task("4L", "task2", "descr", true);
 		when(mapper.map(isA(TaskJPA.class))).thenReturn(task1).thenReturn(task2);
-		when(validator.isValid(anyString()))
+		when(validator.getValidId(anyString()))
 			.thenReturn(Optional.of(project1.getId()));
 
 		List<Task> tasks = loadTasks.load(project1.getId().toString());
@@ -113,7 +113,7 @@ class LoadTasksByProjectIdJPATest {
 		verify(mapper).map(taskJpa1);
 		verify(mapper).map(taskJpa2);
 		verifyNoMoreInteractions(mapper);
-		verify(validator).isValid(project1.getId().toString());
+		verify(validator).getValidId(project1.getId().toString());
 		assertThat(tasks).containsExactly(task1, task2);
 	}
 

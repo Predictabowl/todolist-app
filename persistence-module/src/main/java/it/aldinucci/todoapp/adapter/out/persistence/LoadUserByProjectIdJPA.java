@@ -32,7 +32,7 @@ public class LoadUserByProjectIdJPA implements LoadUserByProjectIdDriverPort {
 
 	@Override
 	public Optional<User> load(String projectId) throws AppProjectNotFoundException {
-		Optional<Long> valid = validator.isValid(projectId);
+		Optional<Long> valid = validator.getValidId(projectId);
 		if(valid.isEmpty())
 			return Optional.empty();
 
