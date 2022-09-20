@@ -9,7 +9,6 @@ import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.repository.ProjectJPARepository;
 import it.aldinucci.todoapp.adapter.out.persistence.util.ValidateId;
 import it.aldinucci.todoapp.application.port.out.DeleteProjectByIdDriverPort;
-import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 @Component
 public class DeleteProjectByIdJPA implements DeleteProjectByIdDriverPort{
@@ -26,13 +25,12 @@ public class DeleteProjectByIdJPA implements DeleteProjectByIdDriverPort{
 
 
 	@Override
-	public boolean delete(String id) throws AppProjectNotFoundException{
+	public boolean delete(String id){
 		Optional<Long> valid = validator.getValidId(id);
 		if(valid.isEmpty())
 			return false;
 
-		long longId = valid.get();
-		Optional<ProjectJPA> optionalProject = projectRepository.findById(longId);
+		Optional<ProjectJPA> optionalProject = projectRepository.findById(valid.get());
 		if(optionalProject.isEmpty())
 			return false;
 		

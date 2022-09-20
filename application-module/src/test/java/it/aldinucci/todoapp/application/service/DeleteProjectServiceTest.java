@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.out.DeleteProjectByIdDriverPort;
-import it.aldinucci.todoapp.exception.AppProjectNotFoundException;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DeleteProjectService.class})
@@ -27,7 +26,7 @@ class DeleteProjectServiceTest {
 	private DeleteProjectService deleteService;
 	
 	@Test
-	void test_deleteSuccessful() throws AppProjectNotFoundException {
+	void test_deleteSuccessful(){
 		when(deletePort.delete(anyString())).thenReturn(true);
 		
 		boolean deleted = deleteService.delete(new ProjectIdDTO("2"));
@@ -37,7 +36,7 @@ class DeleteProjectServiceTest {
 	}
 	
 	@Test
-	void test_deleteFailure() throws AppProjectNotFoundException {
+	void test_deleteFailure(){
 		when(deletePort.delete(anyString())).thenReturn(false);
 		
 		boolean deleted = deleteService.delete(new ProjectIdDTO("4"));
