@@ -23,7 +23,6 @@ public class DeleteProjectByIdJPA implements DeleteProjectByIdDriverPort{
 		this.validator = validator;
 	}
 
-
 	@Override
 	public boolean delete(String id){
 		Optional<Long> valid = validator.getValidId(id);
