@@ -45,10 +45,10 @@ public class UpdateTaskWebController {
 				@Valid TaskDataWebDto taskData,
 				BindingResult bindingResult) {
 		
+		authorize.check(new UserIdDTO(authentication.getName()), taskId);
+
 		if (bindingResult.hasErrors())
 			return "redirect:/web/project/"+projectId+"/tasks";
-		
-		authorize.check(new UserIdDTO(authentication.getName()), taskId);
 		if (updateTask.update(taskId, mapper.map(taskData)).isEmpty())
 			throw new AppTaskNotFoundException("Could not find Task with id: "+taskId.getTaskId());
 			

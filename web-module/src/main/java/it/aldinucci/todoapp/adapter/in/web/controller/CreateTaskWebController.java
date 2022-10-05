@@ -35,8 +35,8 @@ public class CreateTaskWebController {
 	public String createNewTask(Authentication auth,@PathVariable ProjectIdDTO projectId, @Valid TaskDataWebDto newTaskWebDto,
 			BindingResult  bindingResult) {
 		
+		authorize.check(new UserIdDTO(auth.getName()), projectId);
 		if(!bindingResult.hasErrors()) {
-			authorize.check(new UserIdDTO(auth.getName()), projectId);
 			createTask.create(new NewTaskDTOIn(
 					newTaskWebDto.name(),
 					newTaskWebDto.description(),

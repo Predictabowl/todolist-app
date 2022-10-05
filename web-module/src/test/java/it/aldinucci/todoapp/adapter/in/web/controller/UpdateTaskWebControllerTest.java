@@ -97,7 +97,7 @@ class UpdateTaskWebControllerTest {
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/web/project/1/tasks"));
 		
-		verifyNoInteractions(authorize);
+		verify(authorize).check(new UserIdDTO(FIXTURE_EMAIL), new TaskIdDTO("3"));
 		verifyNoInteractions(updateTask);
 		verifyNoInteractions(mapper);
 	}

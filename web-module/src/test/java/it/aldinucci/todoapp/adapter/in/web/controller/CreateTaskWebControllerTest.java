@@ -1,6 +1,9 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
 
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -14,6 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -23,10 +27,13 @@ import it.aldinucci.todoapp.application.port.in.CreateTaskUsePort;
 import it.aldinucci.todoapp.application.port.in.dto.NewTaskDTOIn;
 import it.aldinucci.todoapp.application.port.in.dto.ProjectIdDTO;
 import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
+import it.aldinucci.todoapp.webcommons.exception.ForbiddenWebAccessException;
+import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 import it.aldinucci.todoapp.webcommons.security.authorization.InputModelAuthorization;
 
 @WebMvcTest(controllers = {CreateTaskWebController.class})
 @ExtendWith(SpringExtension.class)
+@Import(AppWebExceptionHandlers.class)
 class CreateTaskWebControllerTest {
 
 	private static final String USER_EMAIL_FIXTURE = "user@email.it";
@@ -74,16 +81,17 @@ class CreateTaskWebControllerTest {
 	@Test
 	@WithMockUser(USER_EMAIL_FIXTURE)
 	void test_createNewTask_whenInputValidationFail_shouldRedirect() throws Exception {
+		doThrow(ForbiddenWebAccessException.class)
+			.when(authorize).check(isA(UserIdDTO.class), isA(ProjectIdDTO.class));
 		
 		mvc.perform(post("/web/project/3/task/new")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("name", "")
 				.param("description", "task descr"))
-			.andExpect(status().is3xxRedirection())
-			.andExpect(redirectedUrl("/web/project/3/tasks"));
+			.andExpect(status().is4xxClientError());
 
-		verifyNoInteractions(authorize);
+		verify(authorize).check(new UserIdDTO(USER_EMAIL_FIXTURE), new ProjectIdDTO("3"));
 		verifyNoInteractions(createTask);
 	}
 	
