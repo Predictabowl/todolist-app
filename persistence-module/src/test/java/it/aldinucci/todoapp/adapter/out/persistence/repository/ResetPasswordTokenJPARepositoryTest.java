@@ -7,18 +7,15 @@ import java.util.LinkedList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ResetPasswordTokenJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 
 @DataJpaTest
-@ExtendWith(SpringExtension.class)
 class ResetPasswordTokenJPARepositoryTest {
 
 	@Autowired

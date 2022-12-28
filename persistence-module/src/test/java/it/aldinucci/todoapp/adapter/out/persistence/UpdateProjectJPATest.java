@@ -11,13 +11,11 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
@@ -26,7 +24,6 @@ import it.aldinucci.todoapp.domain.Project;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @DataJpaTest
-@ExtendWith(SpringExtension.class)
 @Import(UpdateProjectJPA.class)
 class UpdateProjectJPATest {
 

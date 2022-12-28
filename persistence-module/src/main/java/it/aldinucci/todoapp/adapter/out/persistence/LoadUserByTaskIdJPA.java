@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
@@ -21,7 +20,6 @@ public class LoadUserByTaskIdJPA implements LoadUserByTaskIdDriverPort {
 	private TaskJPARepository repository;
 	private ValidateId<Long> validator;
 
-	@Autowired
 	public LoadUserByTaskIdJPA(AppGenericMapper<UserJPA, User> mapper, TaskJPARepository repository,
 			ValidateId<Long> validator) {
 		super();

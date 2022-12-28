@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ public class UpdateUserDataRestController {
 
 	private final UpdateUserDataUsePort updateUser;
 	
-	@Autowired
 	public UpdateUserDataRestController(UpdateUserDataUsePort updateUser) {
 		super();
 		this.updateUser = updateUser;

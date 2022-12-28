@@ -4,7 +4,6 @@ import static it.aldinucci.todoapp.adapter.in.web.util.AppLinksBuilder.buildVeri
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +32,6 @@ public class RegisterUserWebController {
 	private final AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper;
 	private final SendVerificationEmailUsePort sendVerificationEmail;
 	
-	@Autowired
 	public RegisterUserWebController(CreateUserUsePort createUser,
 			AppGenericMapper<RegisterUserDto, NewUserDTOIn> mapper,
 			SendVerificationEmailUsePort sendVerificationEmail) {

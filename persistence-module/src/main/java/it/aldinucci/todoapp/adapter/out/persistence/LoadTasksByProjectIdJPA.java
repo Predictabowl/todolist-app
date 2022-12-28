@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
@@ -23,7 +22,6 @@ public class LoadTasksByProjectIdJPA implements LoadTasksByProjectIdDriverPort{
 	
 	private ValidateId<Long> validator;
 	
-	@Autowired
 	public LoadTasksByProjectIdJPA(ProjectJPARepository projectRepository, AppGenericMapper<TaskJPA, Task> mapper,
 			ValidateId<Long> validator) {
 		super();

@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ResetPasswordTokenJPA;
@@ -20,7 +19,6 @@ public class DeleteUserByIdJPA implements DeleteUserByIdDriverPort {
 	private VerificationTokenJPARepository verificationTokenRepo;
 	private ResetPasswordTokenJPARepository passwordTokenRepo;
 
-	@Autowired
 	public DeleteUserByIdJPA(UserJPARepository userRepo, VerificationTokenJPARepository verificationTokenRepo,
 			ResetPasswordTokenJPARepository passwordTokenRepo) {
 		super();

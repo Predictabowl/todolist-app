@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.application.service.util;
 
 import static it.aldinucci.todoapp.config.ApplicationPropertyNames.RESET_PASSWORD_TOKEN_DURATION;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.application.port.out.CreateResetPasswordTokenDriverPort;
@@ -18,7 +17,6 @@ public class CreateResetPasswordTokenImpl implements CreateResetPasswordToken {
 	private TokenExpiryDateGenerator dateGenerator;
 	
 	
-	@Autowired
 	public CreateResetPasswordTokenImpl(CreateResetPasswordTokenDriverPort createResetToken,
 			TokenExpiryDateGenerator dateGenerator) {
 		super();

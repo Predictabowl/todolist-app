@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.webcommons.security.authorization;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.application.port.in.LoadUserByTaskIdUsePort;
@@ -17,7 +16,6 @@ public class TaskIdWebAuthorization implements InputModelAuthorization<TaskIdDTO
 
 	private LoadUserByTaskIdUsePort loadUser;
 	
-	@Autowired
 	public TaskIdWebAuthorization(LoadUserByTaskIdUsePort loadUser) {
 		this.loadUser = loadUser;
 	}

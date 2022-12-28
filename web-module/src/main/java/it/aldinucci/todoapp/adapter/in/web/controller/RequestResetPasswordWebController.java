@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,7 +32,6 @@ public class RequestResetPasswordWebController {
 	private final SendResetPasswordEmailUsePort sendEmail;
 	
 
-	@Autowired
 	public RequestResetPasswordWebController(GetOrCreatePasswordResetTokenUsePort retrieveToken,
 			SendResetPasswordEmailUsePort sendEmail) {
 		super();

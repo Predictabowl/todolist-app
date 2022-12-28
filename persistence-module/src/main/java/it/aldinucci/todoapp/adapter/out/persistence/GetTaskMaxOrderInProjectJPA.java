@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.OptionalInt;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
@@ -19,7 +18,6 @@ public class GetTaskMaxOrderInProjectJPA implements GetTaskMaxOrderInProjectDriv
 	private ProjectJPARepository projectRepo;
 	private ValidateId<Long> validator;
 	
-	@Autowired
 	public GetTaskMaxOrderInProjectJPA(ProjectJPARepository projectRepo, ValidateId<Long> validator) {
 		super();
 		this.projectRepo = projectRepo;

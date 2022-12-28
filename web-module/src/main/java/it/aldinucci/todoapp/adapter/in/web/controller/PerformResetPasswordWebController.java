@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.in.web.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,7 +28,6 @@ public class PerformResetPasswordWebController {
 	private final ChangeUserPasswordUsePort changePassword;
 
 	
-	@Autowired
 	public PerformResetPasswordWebController(VerifyResetPasswordTokenUsePort verifyToken,
 			ChangeUserPasswordUsePort changePassword) {
 		super();

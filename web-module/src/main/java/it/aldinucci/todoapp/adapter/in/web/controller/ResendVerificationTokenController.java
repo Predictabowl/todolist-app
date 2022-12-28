@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,7 +31,6 @@ public class ResendVerificationTokenController {
 	private final GetOrCreateVerificationTokenUsePort retrieveToken;
 	private final SendVerificationEmailUsePort sendMail;
 	
-	@Autowired
 	public ResendVerificationTokenController(GetOrCreateVerificationTokenUsePort retrieveToken,
 			SendVerificationEmailUsePort sendMail) {
 		super();

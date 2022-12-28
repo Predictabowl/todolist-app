@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +28,6 @@ public class UpdateUserDataWebController {
 	private final LoadUserByIdUsePort loadUser;
 	private final UpdateUserDataUsePort updateUser;
 	
-	@Autowired
 	public UpdateUserDataWebController(LoadUserByIdUsePort loadUser, UpdateUserDataUsePort updateUser) {
 		super();
 		this.loadUser = loadUser;

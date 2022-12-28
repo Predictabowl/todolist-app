@@ -12,14 +12,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.adapter.in.rest.security.config.AppRestSecurityConfig;
@@ -30,7 +28,6 @@ import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.webcommons.handler.AppWebExceptionHandlers;
 
 @WebMvcTest(controllers = {LoadProjectsByUserRestController.class})
-@ExtendWith(SpringExtension.class)
 @Import({AppRestSecurityConfig.class, AppWebExceptionHandlers.class})
 class LoadProjectsByUserRestControllerTest {
 	

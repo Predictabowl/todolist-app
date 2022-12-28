@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
@@ -16,7 +15,6 @@ public class DeleteProjectByIdJPA implements DeleteProjectByIdDriverPort{
 	private ProjectJPARepository projectRepository;
 	private ValidateId<Long> validator;
 	
-	@Autowired
 	public DeleteProjectByIdJPA(ProjectJPARepository projectRepository, ValidateId<Long> validator) {
 		super();
 		this.projectRepository = projectRepository;

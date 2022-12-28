@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.LoadUnfinishedTasksByProjectIdUsePort;
@@ -18,7 +17,6 @@ public class LoadUnfinishedTasksService implements LoadUnfinishedTasksByProjectI
 
 	private final LoadUnfinishedTasksDriverPort loadTasks;
 	
-	@Autowired
 	public LoadUnfinishedTasksService(LoadUnfinishedTasksDriverPort loadTasks) {
 		this.loadTasks = loadTasks;
 	}

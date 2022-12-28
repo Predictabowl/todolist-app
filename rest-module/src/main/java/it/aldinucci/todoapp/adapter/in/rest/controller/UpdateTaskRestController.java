@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,7 +29,6 @@ public class UpdateTaskRestController {
 	private final InputModelAuthorization<TaskIdDTO> authorize;
 	private final UpdateTaskUsePort updateTask;
 	
-	@Autowired
 	public UpdateTaskRestController(InputModelAuthorization<TaskIdDTO> authorize, UpdateTaskUsePort updateTask) {
 		super();
 		this.authorize = authorize;

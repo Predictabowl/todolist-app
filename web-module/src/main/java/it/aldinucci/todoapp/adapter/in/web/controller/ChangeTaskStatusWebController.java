@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,6 @@ public class ChangeTaskStatusWebController {
 	private final InputModelAuthorization<TaskIdDTO> authorize;
 	private final ToggleTaskCompleteStatusUsePort toggleTaskCompleted;
 	
-	@Autowired
 	public ChangeTaskStatusWebController(InputModelAuthorization<TaskIdDTO> authorize,
 			ToggleTaskCompleteStatusUsePort toggleTaskCompleted) {
 		super();

@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
@@ -18,7 +17,6 @@ public class LoadVerificationTokenByEmailJPA implements LoadVerificationTokenByE
 	private AppGenericMapper<VerificationTokenJPA, VerificationToken> mapper;
 	
 	
-	@Autowired
 	public LoadVerificationTokenByEmailJPA(VerificationTokenJPARepository tokenRepo,
 			AppGenericMapper<VerificationTokenJPA, VerificationToken> mapper) {
 		super();

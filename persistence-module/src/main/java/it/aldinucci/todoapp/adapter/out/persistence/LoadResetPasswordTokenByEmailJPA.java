@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ResetPasswordTokenJPA;
@@ -17,7 +16,6 @@ public class LoadResetPasswordTokenByEmailJPA implements LoadResetPasswordTokenB
 	private ResetPasswordTokenJPARepository tokenRepo;
 	private AppGenericMapper<ResetPasswordTokenJPA, ResetPasswordToken> mapper;
 
-	@Autowired
 	public LoadResetPasswordTokenByEmailJPA(ResetPasswordTokenJPARepository tokenRepo,
 			AppGenericMapper<ResetPasswordTokenJPA, ResetPasswordToken> mapper) {
 		super();

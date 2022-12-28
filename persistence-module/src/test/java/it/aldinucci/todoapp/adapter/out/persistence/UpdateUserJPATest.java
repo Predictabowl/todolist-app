@@ -10,13 +10,11 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
 import it.aldinucci.todoapp.application.port.out.dto.UserData;
@@ -25,7 +23,6 @@ import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.mapper.AppGenericMapper;
 
 @DataJpaTest
-@ExtendWith(SpringExtension.class)
 @Import(UpdateUserJPA.class)
 class UpdateUserJPATest {
 

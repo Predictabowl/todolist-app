@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +18,6 @@ public class DeleteTaskWebController {
 	private final InputModelAuthorization<TaskIdDTO> authorize;
 	private final DeleteTaskByIdUsePort deleteTask;
 	
-	@Autowired
 	public DeleteTaskWebController(InputModelAuthorization<TaskIdDTO> authorize, DeleteTaskByIdUsePort deleteTask) {
 		super();
 		this.authorize = authorize;

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
@@ -20,7 +19,6 @@ public class LoadUserByIdJPA implements LoadUserByIdDriverPort{
 	private AppGenericMapper<UserJPA, User> mapper;
 	private UserJPARepository userRepo;
 	
-	@Autowired
 	public LoadUserByIdJPA(AppGenericMapper<UserJPA, User> mapper, UserJPARepository userRepo) {
 		super();
 		this.mapper = mapper;

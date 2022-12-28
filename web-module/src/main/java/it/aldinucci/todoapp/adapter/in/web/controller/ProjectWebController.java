@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +37,6 @@ public class ProjectWebController {
 	private final InputModelAuthorization<User> authorize;
 
 
-	@Autowired
 	public ProjectWebController(LoadTasksByProjectUsePort loadTasks, LoadUserByProjectIdUsePort loadUser,
 			LoadProjectsByUserUsePort loadProjects, AppGenericMapper<User, UserWebDto> userMapper,
 			InputModelAuthorization<User> authorize) {

@@ -14,13 +14,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Calendar;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,7 +35,6 @@ import it.aldinucci.todoapp.mapper.AppGenericMapper;
 import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
 
 @WebMvcTest (controllers = {RegisterUserWebController.class})
-@ExtendWith(SpringExtension.class)
 class RegisterUserWebControllerTest {
 
 	private static final String FIXTURE_REGISTER_VIEW = "login/register";

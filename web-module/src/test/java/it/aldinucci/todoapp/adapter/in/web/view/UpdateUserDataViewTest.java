@@ -13,7 +13,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,7 +21,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.BindingResult;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -38,7 +36,6 @@ import it.aldinucci.todoapp.application.port.in.UpdateUserDataUsePort;
 import it.aldinucci.todoapp.domain.User;
 import it.aldinucci.todoapp.webcommons.dto.UserDataWebDto;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {UpdateUserDataWebController.class})
 @PropertySource("classpath:messages.properties")
 class UpdateUserDataViewTest {

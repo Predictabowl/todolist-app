@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.in.web.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,7 +23,6 @@ public class CreateTaskWebController {
 	private final InputModelAuthorization<ProjectIdDTO> authorize;
 	private final CreateTaskUsePort createTask;
 	
-	@Autowired
 	public CreateTaskWebController(InputModelAuthorization<ProjectIdDTO> authorize, CreateTaskUsePort createTask) {
 		super();
 		this.authorize = authorize;

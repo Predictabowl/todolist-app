@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,7 +22,6 @@ public class DeleteProjectByIdRestController {
 	private final DeleteProjectByIdUsePort deleteProject;
 	private final InputModelAuthorization<ProjectIdDTO> authorize;
 
-	@Autowired
 	public DeleteProjectByIdRestController(DeleteProjectByIdUsePort deleteProject,
 			InputModelAuthorization<ProjectIdDTO> authorize) {
 		this.deleteProject = deleteProject;

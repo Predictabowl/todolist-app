@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.application.service;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.CreateProjectUsePort;
@@ -20,7 +19,6 @@ class CreateNewProjectService implements CreateProjectUsePort {
 	private final CreateProjectDriverPort newProjectDriverPort;
 	private final AppGenericMapper<NewProjectDTOIn, NewProjectData> mapper;
 
-	@Autowired
 	public CreateNewProjectService(CreateProjectDriverPort newProjectDriverPort,
 			AppGenericMapper<NewProjectDTOIn, NewProjectData> mapper) {
 		this.newProjectDriverPort = newProjectDriverPort;

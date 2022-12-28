@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,6 @@ public class CreateProjectRestController {
 
 	private final CreateProjectUsePort createProject;
 
-	@Autowired
 	public CreateProjectRestController(CreateProjectUsePort createProject) {
 		this.createProject = createProject;
 	}

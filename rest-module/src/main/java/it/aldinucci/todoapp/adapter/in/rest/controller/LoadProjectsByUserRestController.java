@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,6 @@ public class LoadProjectsByUserRestController {
 
 	private final LoadProjectsByUserUsePort loadProjects;
 
-	@Autowired
 	public LoadProjectsByUserRestController(LoadProjectsByUserUsePort loadProjects) {
 		this.loadProjects = loadProjects;
 	}

@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.in.web.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,6 @@ public class UserRegisterVerificationController {
 
 	private final VerifyUserEmailUsePort verifyUser;
 
-	@Autowired
 	public UserRegisterVerificationController(VerifyUserEmailUsePort verifyUser) {
 		super();
 		this.verifyUser = verifyUser;

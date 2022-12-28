@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
@@ -12,7 +11,6 @@ public class SendVerificationEmailService implements SendVerificationEmailUsePor
 
 	private final EmailSender emailSender;
 
-	@Autowired
 	public SendVerificationEmailService(EmailSender emailSender) {
 		super();
 		this.emailSender = emailSender;

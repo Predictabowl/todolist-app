@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
@@ -14,7 +13,6 @@ public class DeleteVerificationTokenByUserJPA implements DeleteVerificatinTokenB
 
 	private VerificationTokenJPARepository tokenRepo;
 	
-	@Autowired
 	public DeleteVerificationTokenByUserJPA(VerificationTokenJPARepository tokenRepo) {
 		this.tokenRepo = tokenRepo;
 	}

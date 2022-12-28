@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.in.web.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -20,7 +19,6 @@ public class CreateProjectWebController {
 
 	private final CreateProjectUsePort createProject;
 	
-	@Autowired
 	public CreateProjectWebController(CreateProjectUsePort createProject) {
 		super();
 		this.createProject = createProject;

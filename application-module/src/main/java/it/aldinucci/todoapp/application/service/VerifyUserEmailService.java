@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.VerifyUserEmailUsePort;
@@ -30,7 +29,6 @@ public class VerifyUserEmailService implements VerifyUserEmailUsePort {
 	private final DeleteVerificationTokenDriverPort deleteToken;
 	private final AppGenericMapper<User, UserData> mapper; 
 
-	@Autowired
 	public VerifyUserEmailService(LoadVerificationTokenDriverPort loadToken, LoadUserByIdDriverPort loadUser,
 			UpdateUserDriverPort updateUser, DeleteVerificationTokenDriverPort deleteToken,
 			AppGenericMapper<User, UserData> mapper) {

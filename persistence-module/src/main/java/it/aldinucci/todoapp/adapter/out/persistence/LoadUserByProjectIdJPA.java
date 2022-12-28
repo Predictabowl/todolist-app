@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
@@ -21,7 +20,6 @@ public class LoadUserByProjectIdJPA implements LoadUserByProjectIdDriverPort {
 	private ProjectJPARepository projectRepo;
 	private ValidateId<Long> validator;
 
-	@Autowired
 	public LoadUserByProjectIdJPA(AppGenericMapper<UserJPA, User> mapper, ProjectJPARepository projectRepo,
 			ValidateId<Long> validator) {
 		super();

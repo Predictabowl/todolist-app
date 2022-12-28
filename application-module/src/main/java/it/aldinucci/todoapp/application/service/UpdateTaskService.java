@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.application.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.UpdateTaskUsePort;
@@ -18,7 +17,6 @@ public class UpdateTaskService implements UpdateTaskUsePort{
 	private final LoadTaskByIdDriverPort loadTask;
 	private final UpdateTaskDriverPort updateTask;
 	
-	@Autowired
 	public UpdateTaskService(LoadTaskByIdDriverPort loadTask, UpdateTaskDriverPort updateTask) {
 		super();
 		this.loadTask = loadTask;

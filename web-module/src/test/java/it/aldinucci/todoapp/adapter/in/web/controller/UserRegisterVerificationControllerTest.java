@@ -10,11 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.application.port.in.VerifyUserEmailUsePort;
@@ -22,7 +20,6 @@ import it.aldinucci.todoapp.application.port.in.dto.StringTokenDTOIn;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 
 @WebMvcTest (controllers = {UserRegisterVerificationController.class})
-@ExtendWith(SpringExtension.class)
 class UserRegisterVerificationControllerTest {
 
 	private static final String FIXTURE_RESULT_VIEW = "login/register.result";

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.LoadTasksByProjectUsePort;
@@ -19,7 +18,6 @@ public class LoadTasksByProjectIdService implements LoadTasksByProjectUsePort{
 
 	private final LoadTasksByProjectIdDriverPort loadTasks;
 	
-	@Autowired
 	public LoadTasksByProjectIdService(LoadTasksByProjectIdDriverPort loadTasks) {
 		this.loadTasks = loadTasks;
 	}

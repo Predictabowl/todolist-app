@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.VerificationTokenJPA;
@@ -17,7 +16,6 @@ public class DeleteVerificationTokenJPA implements DeleteVerificationTokenDriver
 	private VerificationTokenJPARepository tokenRepo;
 	private ValidateId<UUID> validator;
 
-	@Autowired
 	public DeleteVerificationTokenJPA(VerificationTokenJPARepository tokenRepo, ValidateId<UUID> validator) {
 		super();
 		this.tokenRepo = tokenRepo;

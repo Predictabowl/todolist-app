@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.in.web.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -27,7 +26,6 @@ public class UpdateTaskWebController {
 	private final UpdateTaskUsePort updateTask;
 	private final AppGenericMapper<TaskDataWebDto, TaskDataDTOIn> mapper;
 	
-	@Autowired
 	public UpdateTaskWebController(InputModelAuthorization<TaskIdDTO> authorize, UpdateTaskUsePort updateTask,
 			AppGenericMapper<TaskDataWebDto, TaskDataDTOIn> mapper) {
 		super();

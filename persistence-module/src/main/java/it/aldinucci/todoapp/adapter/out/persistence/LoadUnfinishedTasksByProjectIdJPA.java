@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.TaskJPA;
@@ -20,7 +19,6 @@ public class LoadUnfinishedTasksByProjectIdJPA implements LoadUnfinishedTasksDri
 	private TaskJPARepository repository;
 	private ValidateId<Long> validator;
 
-	@Autowired
 	public LoadUnfinishedTasksByProjectIdJPA(AppGenericMapper<TaskJPA, Task> mapper, TaskJPARepository repository,
 			ValidateId<Long> validator) {
 		super();

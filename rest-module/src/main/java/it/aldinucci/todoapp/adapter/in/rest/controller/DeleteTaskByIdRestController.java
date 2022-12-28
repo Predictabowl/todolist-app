@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,7 +23,6 @@ public class DeleteTaskByIdRestController {
 	private final DeleteTaskByIdUsePort deleteTask;
 	private final InputModelAuthorization<TaskIdDTO> authorize;
 
-	@Autowired
 	public DeleteTaskByIdRestController(DeleteTaskByIdUsePort deleteTask,
 			InputModelAuthorization<TaskIdDTO> authorize) {
 		this.deleteTask = deleteTask;

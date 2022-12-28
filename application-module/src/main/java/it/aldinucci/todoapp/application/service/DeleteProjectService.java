@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.application.service;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.DeleteProjectByIdUsePort;
@@ -15,7 +14,6 @@ public class DeleteProjectService implements DeleteProjectByIdUsePort{
 
 	private final DeleteProjectByIdDriverPort deleteProjectPort;
 	
-	@Autowired
 	public DeleteProjectService(DeleteProjectByIdDriverPort deleteProjectPort) {
 		this.deleteProjectPort = deleteProjectPort;
 	}

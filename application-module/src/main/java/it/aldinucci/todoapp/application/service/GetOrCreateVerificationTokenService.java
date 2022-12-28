@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.GetOrCreateVerificationTokenUsePort;
@@ -28,7 +27,6 @@ public class GetOrCreateVerificationTokenService implements GetOrCreateVerificat
 	private final CreateVerificationToken createToken;
 
 
-	@Autowired
 	public GetOrCreateVerificationTokenService(LoadUserByIdDriverPort loadUser,
 			LoadVerificationTokenByEmailDriverPort loadToken, DeleteVerificatinTokenByUserDriverPort deleteToken,
 			CreateVerificationToken createToken) {

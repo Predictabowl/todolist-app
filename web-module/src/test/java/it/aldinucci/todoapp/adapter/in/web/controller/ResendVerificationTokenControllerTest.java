@@ -14,11 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,7 +29,6 @@ import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
 
 @WebMvcTest(controllers = {ResendVerificationTokenController.class})
-@ExtendWith(SpringExtension.class)
 class ResendVerificationTokenControllerTest {
 
 	private static final String FIXTURE_EMAIL_REQUEST_VIEW = "login/email.request";

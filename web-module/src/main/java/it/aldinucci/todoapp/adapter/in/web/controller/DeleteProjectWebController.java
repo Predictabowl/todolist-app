@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +19,6 @@ public class DeleteProjectWebController {
 	private final DeleteProjectByIdUsePort deleteProject;
 	
 	
-	@Autowired
 	public DeleteProjectWebController(InputModelAuthorization<ProjectIdDTO> authorize,
 			DeleteProjectByIdUsePort deleteProject) {
 		super();

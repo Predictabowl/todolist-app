@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -30,7 +29,6 @@ public class UpdateProjectWebController {
 	private final InputModelAuthorization<ProjectIdDTO> authorize;
 	private final AppGenericMapper<ProjectDataWebDto, ProjectDataDTOIn> mapper;
 
-	@Autowired
 	public UpdateProjectWebController(UpdateProjectUsePort updateProject,
 			InputModelAuthorization<ProjectIdDTO> authorize,
 			AppGenericMapper<ProjectDataWebDto, ProjectDataDTOIn> mapper) {

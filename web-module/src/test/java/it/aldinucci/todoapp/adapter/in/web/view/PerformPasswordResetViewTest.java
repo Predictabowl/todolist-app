@@ -14,14 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.BindingResult;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -37,7 +35,6 @@ import it.aldinucci.todoapp.application.port.in.ChangeUserPasswordUsePort;
 import it.aldinucci.todoapp.application.port.in.VerifyResetPasswordTokenUsePort;
 import it.aldinucci.todoapp.webcommons.dto.InputPasswordsDto;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {PerformResetPasswordWebController.class})
 @PropertySource("classpath:messages.properties")
 @AutoConfigureMockMvc(addFilters = false)

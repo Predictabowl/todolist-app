@@ -12,7 +12,6 @@ import java.net.MalformedURLException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,7 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.BindingResult;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
@@ -50,7 +48,6 @@ import it.aldinucci.todoapp.webcommons.dto.RegisterUserDto;
  *
  */
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {RegisterUserWebController.class})
 @PropertySource("classpath:messages.properties")
 class RegisterUserWebViewTest {

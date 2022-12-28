@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
@@ -19,7 +18,6 @@ public class UpdateProjectJPA implements UpdateProjectDriverPort {
 	private AppGenericMapper<ProjectJPA, Project> mapper;
 	private ValidateId<Long> validator;
 
-	@Autowired
 	public UpdateProjectJPA(ProjectJPARepository projectRepo, AppGenericMapper<ProjectJPA, Project> mapper,
 			ValidateId<Long> validator) {
 		super();

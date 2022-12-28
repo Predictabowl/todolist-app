@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +22,6 @@ public class IndexWebController {
 	private final LoadUserByIdUsePort loadUser;
 	private final AppGenericMapper<User, UserWebDto> mapper;
 
-	@Autowired
 	public IndexWebController(LoadProjectsByUserUsePort loadProjects, LoadUserByIdUsePort loadUser,
 			AppGenericMapper<User, UserWebDto> mapper) {
 		this.loadProjects = loadProjects;

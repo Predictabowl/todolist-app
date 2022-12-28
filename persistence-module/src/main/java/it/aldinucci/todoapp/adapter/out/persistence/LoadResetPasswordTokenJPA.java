@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ResetPasswordTokenJPA;
@@ -20,7 +19,6 @@ public class LoadResetPasswordTokenJPA implements LoadResetPasswordTokenDriverPo
 	private AppGenericMapper<ResetPasswordTokenJPA, ResetPasswordToken> mapper;
 	private ValidateId<UUID> validator;
 
-	@Autowired
 	public LoadResetPasswordTokenJPA(ResetPasswordTokenJPARepository tokenRepo,
 			AppGenericMapper<ResetPasswordTokenJPA, ResetPasswordToken> mapper, ValidateId<UUID> validator) {
 		super();

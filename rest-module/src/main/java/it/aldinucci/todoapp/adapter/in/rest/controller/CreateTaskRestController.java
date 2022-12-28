@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.in.rest.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +25,6 @@ public class CreateTaskRestController {
 	private final CreateTaskUsePort createTask;
 	private final InputModelAuthorization<NewTaskDTOIn> authorize;
 
-	@Autowired
 	public CreateTaskRestController(CreateTaskUsePort createTask, InputModelAuthorization<NewTaskDTOIn> authorize) {
 		this.createTask = createTask;
 		this.authorize = authorize;

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.ToggleTaskCompleteStatusUsePort;
@@ -20,7 +19,6 @@ public class ToggleTaskCompleteStatusService implements ToggleTaskCompleteStatus
 	private final LoadTaskByIdDriverPort loadTask;
 	private final UpdateTaskDriverPort updateTask;
 	
-	@Autowired
 	public ToggleTaskCompleteStatusService(LoadTaskByIdDriverPort loadTask, UpdateTaskDriverPort updateTask) {
 		super();
 		this.loadTask = loadTask;

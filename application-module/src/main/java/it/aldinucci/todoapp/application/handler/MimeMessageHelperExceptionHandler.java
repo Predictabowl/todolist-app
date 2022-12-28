@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.application.handler;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import it.aldinucci.todoapp.exception.AppMessagingException;
@@ -15,7 +14,6 @@ public class MimeMessageHelperExceptionHandler
 
 	private MimeMessageHelper mimeMessageHelper;
 
-	@Autowired
 	public MimeMessageHelperExceptionHandler(MimeMessageHelper mimeMessageHelper) {
 		super();
 		this.mimeMessageHelper = mimeMessageHelper;

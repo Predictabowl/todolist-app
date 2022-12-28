@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
@@ -23,7 +22,6 @@ public class CreateVerificationTokenJPA implements CreateUserVerificationTokenDr
 	private UserJPARepository userRepo;
 	private AppGenericMapper<VerificationTokenJPA, VerificationToken> mapper;
 
-	@Autowired
 	public CreateVerificationTokenJPA(VerificationTokenJPARepository tokenRepo, UserJPARepository userRepo,
 			AppGenericMapper<VerificationTokenJPA, VerificationToken> mapper) {
 		this.tokenRepo = tokenRepo;

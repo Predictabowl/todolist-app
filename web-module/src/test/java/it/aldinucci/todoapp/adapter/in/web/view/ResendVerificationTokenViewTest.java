@@ -13,7 +13,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,7 +20,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.BindingResult;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
@@ -33,15 +31,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import it.aldinucci.todoapp.adapter.in.web.controller.ResendVerificationTokenController;
 import it.aldinucci.todoapp.application.port.in.GetOrCreateVerificationTokenUsePort;
 import it.aldinucci.todoapp.application.port.in.SendVerificationEmailUsePort;
-import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.application.port.in.dto.EmailLinkDTO;
+import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.VerificationToken;
 import it.aldinucci.todoapp.exception.AppEmailAlreadyRegisteredException;
 import it.aldinucci.todoapp.exception.AppUserEmailAlreadyVerifiedException;
 import it.aldinucci.todoapp.exception.AppUserNotFoundException;
 import it.aldinucci.todoapp.webcommons.dto.EmailWebDto;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {ResendVerificationTokenController.class})
 @PropertySource("classpath:messages.properties")
 class ResendVerificationTokenViewTest {

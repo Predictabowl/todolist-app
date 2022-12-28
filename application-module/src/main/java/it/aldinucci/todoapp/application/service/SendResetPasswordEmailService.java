@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.aldinucci.todoapp.application.port.in.SendResetPasswordEmailUsePort;
@@ -12,7 +11,6 @@ public class SendResetPasswordEmailService implements SendResetPasswordEmailUseP
 
 	private final EmailSender emailSender;
 
-	@Autowired
 	public SendResetPasswordEmailService(EmailSender emailSender) {
 		super();
 		this.emailSender = emailSender;

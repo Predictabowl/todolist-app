@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ProjectJPA;
@@ -20,7 +19,6 @@ public class LoadProjectsByUserJPA implements LoadProjectsByUserDriverPort{
 	
 	private AppGenericMapper<ProjectJPA, Project> mapper;
 	
-	@Autowired
 	public LoadProjectsByUserJPA(UserJPARepository userRepository, AppGenericMapper<ProjectJPA, Project> mapper) {
 		super();
 		this.userRepository = userRepository;

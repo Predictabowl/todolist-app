@@ -5,7 +5,6 @@ import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,7 +21,6 @@ public class HtmlEmailSender implements EmailSender {
 	private JavaMailSender emailSender;
 	private ExceptionHandler<MimeMessageHelper, MimeMessage, MessagingException> helperHandler;
 
-	@Autowired
 	public HtmlEmailSender(JavaMailSender emailSender,
 			ExceptionHandler<MimeMessageHelper, MimeMessage, MessagingException> helperHandler) {
 		super();

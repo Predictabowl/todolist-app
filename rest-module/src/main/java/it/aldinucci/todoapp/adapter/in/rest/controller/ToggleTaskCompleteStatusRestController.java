@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.in.rest.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ public class ToggleTaskCompleteStatusRestController {
 	private final InputModelAuthorization<TaskIdDTO> authorize;
 	private final ToggleTaskCompleteStatusUsePort toggleTaskStatus;
 	
-	@Autowired
 	public ToggleTaskCompleteStatusRestController(InputModelAuthorization<TaskIdDTO> authorize,
 			ToggleTaskCompleteStatusUsePort toggleTaskStatus) {
 		super();

@@ -16,12 +16,10 @@ import java.util.Calendar;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import it.aldinucci.todoapp.application.port.in.GetOrCreatePasswordResetTokenUsePort;
@@ -31,7 +29,6 @@ import it.aldinucci.todoapp.application.port.in.dto.UserIdDTO;
 import it.aldinucci.todoapp.domain.ResetPasswordToken;
 
 @WebMvcTest(controllers = {RequestResetPasswordWebController.class})
-@ExtendWith(SpringExtension.class)
 class RequestResetPasswordWebControllerTest {
 
 	private static final String FIXTURE_EMAIL = "email@test.it";

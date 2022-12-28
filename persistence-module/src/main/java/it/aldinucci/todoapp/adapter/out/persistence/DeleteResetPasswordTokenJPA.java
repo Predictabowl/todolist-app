@@ -3,7 +3,6 @@ package it.aldinucci.todoapp.adapter.out.persistence;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.ResetPasswordTokenJPA;
@@ -17,7 +16,6 @@ public class DeleteResetPasswordTokenJPA implements DeleteRestPasswordTokenDrive
 	private ResetPasswordTokenJPARepository tokenRepo;
 	private ValidateId<UUID> validator;
 
-	@Autowired
 	public DeleteResetPasswordTokenJPA(ResetPasswordTokenJPARepository tokenRepo, ValidateId<UUID> validator) {
 		super();
 		this.tokenRepo = tokenRepo;

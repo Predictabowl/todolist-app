@@ -1,6 +1,5 @@
 package it.aldinucci.todoapp.adapter.out.persistence;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.adapter.out.persistence.entity.UserJPA;
@@ -17,7 +16,6 @@ public class UpdateUserJPA implements UpdateUserDriverPort {
 	private UserJPARepository userRepo;
 	private AppGenericMapper<UserJPA, User> mapper;
 
-	@Autowired
 	public UpdateUserJPA(UserJPARepository userRepo, AppGenericMapper<UserJPA, User> mapper) {
 		this.userRepo = userRepo;
 		this.mapper = mapper;

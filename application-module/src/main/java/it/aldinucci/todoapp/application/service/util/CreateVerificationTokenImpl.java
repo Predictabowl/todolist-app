@@ -2,7 +2,6 @@ package it.aldinucci.todoapp.application.service.util;
 
 import static it.aldinucci.todoapp.config.ApplicationPropertyNames.VERIFICATION_TOKEN_DURATION;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.aldinucci.todoapp.application.port.out.CreateUserVerificationTokenDriverPort;
@@ -17,7 +16,6 @@ public class CreateVerificationTokenImpl implements CreateVerificationToken {
 	private CreateUserVerificationTokenDriverPort createVerificationToken;
 	private TokenExpiryDateGenerator dateGenerator;
 	
-	@Autowired
 	public CreateVerificationTokenImpl(CreateUserVerificationTokenDriverPort createVerificationToken,
 			TokenExpiryDateGenerator dateGenerator) {
 		super();
