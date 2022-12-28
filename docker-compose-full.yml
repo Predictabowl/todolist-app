@@ -6,7 +6,7 @@ version: "3.9"
 
 services:
    database:
-      image: postgres:14.2
+      image: postgres:15.1
       env_file:
          - database.env #configuration for postgres
       volumes:
@@ -14,7 +14,7 @@ services:
       ports:
          - "5432:5432"
    mailserver: #Will auto generate new users upon receiving mails
-      image: greenmail/standalone:1.6.7
+      image: greenmail/standalone:1.6.12
       environment:
          - JAVA_OPTS=-Dgreenmail.verbose
       ports:
@@ -26,7 +26,7 @@ services:
          - 3995:3995 # POP3S
          - 8081:8080 # API
    mailclient: #base user is "username" "password" for credentials
-      image: roundcube/roundcubemail:1.5.2-apache
+      image: roundcube/roundcubemail:1.6.0-apache
       depends_on:
          - mailserver
       ports:
