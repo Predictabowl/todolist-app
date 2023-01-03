@@ -17,7 +17,7 @@ mvn clean verify
 
 The executable jar will be found in `todolist-app/configuration-module/target`.
 ### Testing Profiles
-End to end tests can be run activating the profile `e2e-test`
+End to end tests can be run activating the profile `e2e-tests`
 ```shell
 mvn clean verify -Pe2e-tests
 ```
