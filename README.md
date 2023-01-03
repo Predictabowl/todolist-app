@@ -5,6 +5,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Predictabowl_todolist-app&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Predictabowl_todolist-app)
 
 # Todolist
+Example web application realized in an Hexagonal architecture.
 
 ## Maven build
 
@@ -15,6 +16,16 @@ mvn clean verify
 ```
 
 The executable jar will be found in `todolist-app/configuration-module/target`.
+### Testing Profiles
+End to end tests can be run activating the profile `e2e-test`
+```shell
+mvn clean verify -Pe2e-tests
+```
+
+Mutation testing  can be run activating the profile `mutation-test`
+```shell
+mvn clean verify -Pmutation-test
+```
 
 ## Run Locally for manual testing
 
@@ -28,7 +39,7 @@ To run the application in this fashion you'll need to launch the basic docker-co
 
 The application will be accessible with a browser at the port 8080.
 
-The mails sent by the application will be received by the mail serve which will take care to create an account for every new mail address.
+The mails sent by the application will be received by the mail server which will take care to create an account for every new mail address.
 
 An email client will be accessible at the port 8000 to check those emails.
 
